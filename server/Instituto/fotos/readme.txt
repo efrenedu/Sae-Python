@@ -1,0 +1,1 @@
+In this Folder the System Save the Photos of Users and Expedents

@@ -1,0 +1,819 @@
+{
+  "Pantalla_Name": "registroCalif",
+  "Widgets": [
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja1_ra",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 2,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "REGISTRO DE CALIFICACIÓN",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "sub_titulo",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja1_ra",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "caja1_ra",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja2",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "caja1_ra",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "estudiante:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "estudianteLabel",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cedula_estud",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Corner_Radious": "8",
+        "Master": "caja1_ra",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "Identificar",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "search_estud",
+        "Ev": "constantes.EV_SEARCH_ESTUD",
+        "Panel_Id": "registroCalif",
+        "Corner_Radious": "8",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "12",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "año:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "añoLabel",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "year_estud",
+        "Ev": "0",
+        "Panel_Id": "registroCalif",
+        "Corner_Radious": "8",
+        "Master": "caja1_ra",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "seccion:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "seccionLabel",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "seccion_estud",
+        "Ev": "0",
+        "Panel_Id": "registroCalif",
+        "Corner_Radious": "8",
+        "Master": "caja1_ra",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "momento:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "momentoLabel",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "elegir",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#FDD470"
+        ],
+        "Corner_Radious": "8",
+        "Id": "momento",
+        "Ev": "3",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "12",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#FFF4A8"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "area:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "areaLabel",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "elegir",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#FDD470"
+        ],
+        "Corner_Radious": "8",
+        "Id": "area",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "12",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#FFF4A8"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "calificacion:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "calificacionLabel",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "calificacion",
+        "Ev": "None",
+        "Panel_Id": "registroCalif",
+        "Corner_Radious": "8",
+        "Master": "caja1_ra",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "registrar",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "registro",
+        "Ev": "constantes.EV_REGISTRAR_CALIFICACION",
+        "Panel_Id": "registroCalif",
+        "Corner_Radious": "8",
+        "Master": "caja1_ra",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "12",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    }
+  ]
+}

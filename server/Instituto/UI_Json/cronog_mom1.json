@@ -1,0 +1,1611 @@
+{
+  "Pantalla_Name": "cronog_mom1",
+  "Widgets": [
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Main_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 2,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Internal_Box1",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "CRONOGRAMA MOMENTO I",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "title_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Internal_Box2",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "inicio momento",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "inicio_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "inicio",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre momento",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "cierre_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "inicio evaluacion continua",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "inicio_eval_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "evaluacion continua",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre evaluacion continua",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "cierre_eval_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre evaluacion continua",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "asueto navidad",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "asueto_momento1_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "asueto de navidad",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "fin asueto navidad",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "fin_asueto_mom1_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre asueto de navidad",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "semana aniversario",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "semana_aniversario_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "semana aniversario",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre semana aniversario",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "cierre_semana aniversario_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre semana aniversario",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "entrega calificaciones \n departamento evaluacion",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "entrega_calific_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 5
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "entrega de calificacion a departamento de evaluacion",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 5
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "entrega planificacion \n subdireccion academica",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "entrega_planific_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 5
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "entrega de planificaciones a subdireccion academica",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 5
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "consejo de curso",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "consejo_curso_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 6
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "consejo de curso",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 6
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "consejo docente",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "consejo_docente_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 6
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "consejo de docentes",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 6
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "reunion representantes",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "reunion_represent_abel",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 7
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "reunion de representantes",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 7
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre pedagogico ",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "cierre_pedag_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 7
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre pedagogico",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 7
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "entrega boletas\n representantes",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "entrega_boletas_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 8
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "entrega de boletas a representantes",
+        "Ev": "None",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 8
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "modificar",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "next2",
+        "Ev": "constantes.EV_GESTION_CRONOG3",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 10
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "    volver   ",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "volver",
+        "Ev": "constantes.EV_VOLVER",
+        "Panel_Id": "cronog_mom1",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 11
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    }
+  ]
+}

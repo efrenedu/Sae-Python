@@ -1,0 +1,642 @@
+{
+  "Pantalla_Name": "rendimiento_sabana",
+  "Widgets": [
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Main_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 2,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Title_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "REPORTES DE SÁBANA Y NOTAS FINALES DEL AÑO ESCOLAR",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "title_label",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Content_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 0.2,
+        "pady": 0.05,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+	{
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Btns_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "año seccion:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "secc_label_p5",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "elegir,1 año,2 año,3 año,4 año,5 año",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#FDD470"
+        ],
+        "Corner_Radious": "8",
+        "Id": "year_p5",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#FFF4A8"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "turno:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "turno_label",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row":2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "elegir,mañana,tarde",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#FDD470"
+        ],
+        "Corner_Radious": "8",
+        "Id": "turno",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#FFF4A8"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "letra seccion:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "year_label_p5",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "letra_p5",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_sabana",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "generar sabana",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "sabana_mom1",
+        "Ev": "constantes.EV_GENERAR_SABANA",
+        "Panel_Id": "rendimiento_sabana",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "notas de seccion",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "reporte de notas",
+        "Ev": "constantes.EV_REPORTE_NOTAS_AÑO",
+        "Panel_Id": "rendimiento_sabana",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "    volver   ",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "volver",
+        "Ev": "constantes.EV_VOLVER",
+        "Panel_Id": "rendimiento_sabana",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    }
+  ]
+}

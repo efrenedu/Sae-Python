@@ -1,0 +1,339 @@
+{
+  "Pantalla_Name": "welcome",
+  "Widgets": [
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": "transparent",
+        "Id": "Title_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": 20,
+        "pady": 0,
+        "sticky": "",
+        "columnspan": "3",
+        "column_weight": 1,
+        "row_weight": 0,
+        "porcent_parent": {
+          "Width": 0.5,
+          "Height": 0.3
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "BIENVENIDO",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "titulo",
+        "Ev": "None",
+        "Panel_Id": "welcome",
+        "Master": "Title_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": "transparent",
+        "Id": "Center_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 2,
+        "row": 2,
+        "padx": 20,
+        "pady": 80,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkImage",
+      "Propiedades": {
+        "Source": "images/logo_institucion.png",
+        "Width": "170",
+        "Heigth": "160",
+        "Interactuable": "False",
+        "Fg_Color": "transparent",
+        "Id": "logo_inicio2",
+        "Ev": "None",
+        "Panel_Id": "welcome",
+        "Corner_Radious": "0",
+        "Master": "Center_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 44,
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "User_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 3,
+        "row": 2,
+        "padx": 20,
+        "pady": 80,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 2,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkImage",
+      "Propiedades": {
+        "Source": "images/user_login.jpg",
+        "Width": "120",
+        "Heigth": "120",
+        "Interactuable": "False",
+        "Fg_Color": "transparent",
+        "Id": "logo_inicio",
+        "Ev": "None",
+        "Panel_Id": "welcome",
+        "Corner_Radious": "0",
+        "Master": "User_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        }
+      },
+      "Posicion": {
+        "column":1,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 34,
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": " ",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "mensaje",
+        "Ev": "None",
+        "Panel_Id": "welcome",
+        "Master": "User_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Historial_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 20,
+        "pady": 80,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 2,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "ACTIVIDAD DE LA SESION",
+        "Text_Color": [
+          "#373064",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "titulo_historial",
+        "Ev": "None",
+        "Panel_Id": "welcome",
+        "Master": "Historial_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Sin Actividad Reciente",
+        "Text_Color": [
+          "#000000",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "historial",
+        "Ev": "1",
+        "Panel_Id": "welcome",
+        "Master": "Historial_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    }
+  ]
+}

@@ -1,0 +1,835 @@
+{
+  "Pantalla_Name": "cronog_inscripciones",
+  "Widgets": [
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Main_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "True"
+      },
+      "Posicion": {
+        "column": 2,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Box_title",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+	{
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Box_Btns",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "CRONOGRAMA DE INSCRIPCIONES",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "title_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "Content_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 0.2,
+        "pady": 0.05,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "inicio año",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "año_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "inicio",
+        "Ev": "0",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre año",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "Año_cierre_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre",
+        "Ev": "0",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "inicio inscripcion\n nuevo Ingreso",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "fecha_incio_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "inscripcion nuevo ingreso",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 2
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre inscripcion\n nuevo Ingreso",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "fecha_cierre_nuevo_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre inscripcion nuevo ingreso",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 3
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "inicio inscripcion\n estudiante regular",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "fecha_inicio_regular_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "inscripcion estudiantes regulares",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "cierre inscripcion\n estudiante regular",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "fecha_cierre_regular_label",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 5
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "cierre inscripcion estudiantes regulares",
+        "Ev": "None",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 5
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "modificar",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "next2",
+        "Ev": "constantes.EV_GESTION_CRONOG1",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "Volver",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "volver",
+        "Ev": "constantes.EV_VOLVER",
+        "Panel_Id": "cronog_inscripciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    }
+  ]
+}

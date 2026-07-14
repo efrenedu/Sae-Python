@@ -1,0 +1,574 @@
+{
+  "Pantalla_Name": "consultaReportes",
+  "Widgets": [
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja1_cp",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 2,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "CONSULTAR HISTORIAL DE USUARIOS",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label1_cp",
+        "Ev": "None",
+        "Panel_Id": "consultaReportes",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja2_cp",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "caja1_cp",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "buscar por:",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label1_cp",
+        "Ev": "None",
+        "Panel_Id": "consultaReportes",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "identificador",
+        "Text_Color": [
+          "#373064",
+          "#FFF4A8"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label2_cp",
+        "Ev": "None",
+        "Panel_Id": "consultaReportes",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "elegir,fecha,tipo,usuario,categoria",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#FDD470"
+        ],
+        "Corner_Radious": "8",
+        "Id": "filtros_cp",
+        "Ev": "None",
+        "Panel_Id": "consultaReportes",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "12",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#323A7A"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#FFF4A8"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "identificador_cp",
+        "Ev": "None",
+        "Panel_Id": "consultaReportes",
+        "Corner_Radious": "8",
+        "Master": "caja1_cp",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "normal"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "buscar",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "buscar",
+        "Ev": "constantes.EV_CONSULTAR_REPORTES",
+        "Panel_Id": "consultaReportes",
+        "Corner_Radious": "8",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja3_cp",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "caja1_cp",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkTable",
+      "Propiedades": {
+        "data": "numero,usuario,fecha,hora,tipo,categoria",
+        "data_Ids": "#0,#1,#2,#3,#4,#5",
+        "Width_Column": "85",
+        "Heigth_Table": "10",
+        "Colors": {
+          "Bg": "#FFEF85",
+          "Fg": "#323A7A",
+          "Bg_Select": "#CDF3FF",
+          "Fg_Select": "#323A7A"
+        },
+        "Id": "table1_cp",
+        "Ev": "None",
+        "Panel_Id": "consultaReportes",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 20,
+        "pady": 16,
+        "sticky": "nsew"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#A7DFF5",
+          "#576EBB"
+        ],
+        "Id": "caja4_cp",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "caja1_cp",
+        "Scroll": "False"
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "generar reporte",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "buscar",
+        "Ev": "constantes. EV_REPORTE_ACCIONES_USUARIOS",
+        "Panel_Id": "consultaReportes",
+        "Corner_Radious": "8",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "13",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "  volver   ",
+        "Image_Sources": "",
+        "dimension_images": "",
+        "Colors": {
+          "Fg": [
+            "#FFF9CD",
+            "#FFEF85"
+          ],
+          "Text": [
+            "#323A7A",
+            "#323A7A"
+          ],
+          "Hover": [
+            "#FFD695",
+            "#EAAE61"
+          ],
+          "Text_Hover": [
+            "#3A2B2E",
+            "#FFF4A8"
+          ],
+          "Hover_Action": [
+            "#38A764",
+            "#38A764"
+          ],
+          "Text_Hover_Action": [
+            "#FFFFFF",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "volver",
+        "Ev": "constantes.EV_VOLVER",
+        "Panel_Id": "consultaReportes",
+        "Corner_Radious": "8",
+        "Master": "caja1_cp",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "12",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    }
+  ]
+}

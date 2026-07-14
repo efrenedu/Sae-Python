@@ -1,0 +1,1 @@
+In this Folder teh System Extract tmporally Zip Files for load Expedent Data of Stduents or Workers

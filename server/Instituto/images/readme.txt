@@ -1,0 +1,1 @@
+The files of This Folder are Used for Show Images or Logos 
