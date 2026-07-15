@@ -92,8 +92,8 @@
       "Posicion": {
         "column": 1,
         "row": 2,
-        "padx": 0.015,
-        "pady": 0.025,
+        "padx": 20,
+        "pady": 20,
         "sticky": "nsew",
         "columnspan": "None",
         "column_weight": 1,

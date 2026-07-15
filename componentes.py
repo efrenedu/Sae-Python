@@ -472,21 +472,6 @@ class Internal_Frame(componente):
             self.container.bind("<Configure>",self.update_scrolls)       
          else:
            self.container=ctk.CTkFrame(master.container,fg_color=self.color,corner_radius=corner_radius) 
-         self.Intelligent_pad=False
-         self.porcent_padX=1.0
-         self.porcent_padY=1.0
-         if(type(self.pos["pady"]).__name__=="float" or  type(self.pos["padx"]).__name__=="float"):
-            self.Intelligent_pad=True          
-            if(type(self.pos["padx"]).__name__=="list"):
-              self.porcent_padX=self.pos["padx"][0]
-            else:
-                self.porcent_padX=self.pos["padx"]
-            
-            if(type(self.pos["pady"]).__name__=="list"):
-               self.porcent_padY=self.pos["pady"][0]
-            else:
-                self.porcent_padY=self.pos["pady"]
-
          self.last_comp=0
          self.color=color
          self.comps=[]
@@ -534,25 +519,8 @@ class Internal_Frame(componente):
        for i in range(0,self.last_comp):
            if(self.tags[i]=="frame"):
                self.comps[i].limit_panel(w_limit,h_limit)
-               self.comps[i].calculate_pad(w_limit,h_limit)
-           elif(self.tags[i]=="label"):               
-                self.comps[i].resize_pad(w_limit,h_limit)
+      
          
-    #Calculate the Correct Pad for Frames with Intelligent Pad 
-    def calculate_pad(self,w_parent,h_parent):       
-        if(self.Intelligent_pad==False):
-            return
-        new_padx=w_parent*self.porcent_padX
-        new_pady=h_parent*self.porcent_padY
-        info_actual=self.container.grid_info()
-        pad_actualx=info_actual.get("padx",0)
-        pad_actualy=info_actual.get("pady",0)
-        dif_margin=2
-        if(abs(new_padx-pad_actualx)>dif_margin or abs(new_pady-pad_actualy)>dif_margin):            
-           self.pos["padx"]=new_padx
-           self.pos["pady"]=new_pady
-           self.container.grid(padx=new_padx,pady=new_pady)
-       
     #Return the Background    
     def get_background(self):
         return self.color
@@ -902,27 +870,11 @@ class Labl(componente):
       self.ev=evento
       self.colors=colors
       self.columnspan=None
-      self.Intelligent_pad=False
-      self.porcent_padX=1.0
-      self.porcent_padY=1.0
       if(self.pos["columnspan"]!="None"):
          temp_val=int(self.pos["columnspan"])
          if(temp_val>0):
              self.columnspan=temp_val
-      if(type(self.pos["pady"]).__name__=="float" or  type(self.pos["padx"]).__name__=="float"):
-            self.Intelligent_pad=True
-            
-            if(type(self.pos["padx"]).__name__=="list"):
-              self.porcent_padX=self.pos["padx"][0]
-            else:
-                self.porcent_padX=self.pos["padx"]
-            
-            if(type(self.pos["pady"]).__name__=="list"):
-               self.porcent_padY=self.pos["pady"][0]
-            else:
-                self.porcent_padY=self.pos["pady"]
-         
-                   
+                
       if(evento==constantes.LABEL_RECUPERAR_PASS):
         self.label.configure(cursor='hand2')
         self.label.bind("<Button-1>",self.on_click)
@@ -941,16 +893,6 @@ class Labl(componente):
         else:
             self.label.grid(in_=new_master,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])
     
-    #Resize the pad if it is Intelligent Pad
-    def resize_pad(self,w_parent,h_parent):
-        if(self.Intelligent_pad==False):
-               return
-        new_padx=round(w_parent*self.porcent_padX)
-        new_pady=round(h_parent*self.porcent_padY)
-        self.pos["padx"]=new_padx
-        self.pos["pady"]=new_pady
-        self.label.grid(padx=new_padx,pady=new_pady)
-            
     #Capitalize the Text Converting Only the First Character of each phrase to Upper
     def Capitalize_text(self,texto):
         if(texto.isupper()==False):

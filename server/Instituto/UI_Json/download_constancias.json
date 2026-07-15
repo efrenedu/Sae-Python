@@ -65,7 +65,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Instituto Nacional Nombre Instituto",
+        "Text": "Instituto Nacional Nombre Institucion",
         "Text_Color": [
           "#373064",
           "#FFFFFF"
@@ -119,9 +119,9 @@
       "Posicion": {
         "column": 2,
         "row": 2,
-        "padx": 0.2,
-        "pady": 0.1,
-        "sticky": "nsew",
+        "padx": 160,
+        "pady": 40,
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,

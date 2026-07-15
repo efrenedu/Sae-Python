@@ -62,8 +62,8 @@
       "Posicion": {
         "column": 1,
         "row": 1,
-        "padx": 0.05,
-        "pady": 0.05,
+        "padx": 20,
+        "pady": 20,
         "sticky": "ew",
         "columnspan": "None"
       }
@@ -89,8 +89,8 @@
       "Posicion": {
         "column": 1,
         "row": 3,
-        "padx": 0.1,
-        "pady": 0.1,
+        "padx": 20,
+        "pady": 20,
         "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
@@ -123,9 +123,9 @@
       "Posicion": {
         "column": 1,
         "row": 2,
-        "padx":0.1,
-        "pady": 0.05,
-        "sticky": "nsew",
+        "padx":20,
+        "pady": 20,
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,

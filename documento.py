@@ -206,7 +206,7 @@ class documento:
         path=path.replace("ñ","n")
         path=path.replace("Ñ","N")
         doc.save(path, garbage=3, deflate=True)
-        os.startfile(ruta)
+        os.startfile(path)
         cls.estatus=0
         cls.result=constantes.REQUEST_RESULT_OPERATION_SUCCEESS_NO_MESSAGE
         return 0

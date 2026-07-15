@@ -96,7 +96,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Instituto Nacional Nombre Instituto",
+        "Text": "Instituto Nacional Nombre Institucion",
         "Text_Color": "white",
         "Fg_Color": "transparent",
         "Id": "titulo_inicio",

@@ -159,8 +159,7 @@ class panel:
        for i in range(0,self.last_component):
            if(self.tags[i]=="frame"):
                comp=self.comps[i]
-               comp.limit_panel(w_limit,h_limit)
-               comp.calculate_pad(w_limit,h_limit)
+               comp.limit_panel(w_limit,h_limit)               
                
     #Destroy Component and Free Memory
     def free_Memory(self):

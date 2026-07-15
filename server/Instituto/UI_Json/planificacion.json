@@ -56,8 +56,8 @@
       "Posicion": {
         "column": 1,
         "row": 0,
-        "padx": 0.05,
-        "pady": 0.1,
+        "padx": 20,
+        "pady": 20,
         "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
@@ -90,8 +90,8 @@
       "Posicion": {
         "column": 0,
         "row": 1,
-        "padx": 0.05,
-        "pady": 0.1,
+        "padx": 20,
+        "pady": 40,
         "sticky": "",
         "columnspan": "None",
         "column_weight": 1,

@@ -56,8 +56,8 @@
       "Posicion": {
         "column": 1,
         "row": 1,
-        "padx": 0.1,
-        "pady": 0.025,
+        "padx": 29,
+        "pady": 20,
         "sticky": "nsew",
         "columnspan": "None",
         "column_weight": 1,
@@ -90,9 +90,9 @@
       "Posicion": {
         "column": 1,
         "row": 2,
-        "padx": 0.2,
-        "pady": 0.025,
-        "sticky": "nsew",
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -361,8 +361,8 @@
       "Propiedades": {
         "Text": "datos del password",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#000000",
+          "#FFFFFF"
         ],
         "Fg_Color": "transparent",
         "Id": "sub_titulo_pass",
@@ -397,8 +397,8 @@
       "Propiedades": {
         "Text": "dejar en blanco si no quiere modificarlo",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#000000",
+          "#FFFFFF"
         ],
         "Fg_Color": "transparent",
         "Id": "sub_titulo_pass2",
