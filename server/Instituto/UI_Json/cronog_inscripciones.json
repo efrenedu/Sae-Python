@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True"
+        "Scroll": "False",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -39,8 +51,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Box_title",
         "Ev": "None",
@@ -51,11 +63,20 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 0,
         "padx": 20,
         "pady": 20,
         "sticky": "",
@@ -69,12 +90,12 @@
         "propagate": "True"
       }
     },
-	{
+    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Box_Btns",
         "Ev": "None",
@@ -85,11 +106,20 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": 20,
         "pady": 20,
         "sticky": "",
@@ -128,8 +158,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
@@ -143,8 +173,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Content_Box",
         "Ev": "None",
@@ -155,14 +185,23 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": 0.2,
-        "pady": 0.05,
-        "sticky": "nsew",
+        "column": 0,
+        "row": 1,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -178,8 +217,8 @@
       "Propiedades": {
         "Text": "inicio año",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "año_label",
@@ -198,8 +237,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -238,7 +277,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -247,11 +286,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -268,8 +315,8 @@
       "Propiedades": {
         "Text": "cierre año",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "Año_cierre_label",
@@ -288,8 +335,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -328,7 +375,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -337,11 +384,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -358,8 +413,8 @@
       "Propiedades": {
         "Text": "inicio inscripcion\n nuevo Ingreso",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "fecha_incio_label",
@@ -378,8 +433,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -418,7 +473,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -427,11 +482,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -448,8 +511,8 @@
       "Propiedades": {
         "Text": "cierre inscripcion\n nuevo Ingreso",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "fecha_cierre_nuevo_label",
@@ -468,8 +531,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -508,7 +571,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -517,11 +580,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -538,8 +609,8 @@
       "Propiedades": {
         "Text": "inicio inscripcion\n estudiante regular",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "fecha_inicio_regular_label",
@@ -558,8 +629,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -598,7 +669,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -607,11 +678,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -628,8 +707,8 @@
       "Propiedades": {
         "Text": "cierre inscripcion\n estudiante regular",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "fecha_cierre_regular_label",
@@ -648,8 +727,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -688,7 +767,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -697,11 +776,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -717,31 +804,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "modificar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -762,8 +843,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": 10,
         "pady": [
           16,
@@ -776,31 +857,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Volver",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -821,8 +896,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": 10,
         "pady": [
           16,

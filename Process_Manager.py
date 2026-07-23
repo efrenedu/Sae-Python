@@ -1360,7 +1360,7 @@ class Process_Manager:
                    return
                 data_doc=[constantes.PANTALLA_PLANIF_FORMATO2,"cols_list",refe]
                 file_dat=response.content
-                documento.request(vent.raiz,file_dat,3,data_doc)
+                documento.request(vent.raiz,file_dat,constantes.REQUEST_READ_EXCEL,data_doc)
               else:
                 General.show_message("por favor seleccione un formato","formato no valido")        
           elif(accion=="eliminar formato"):
@@ -1406,7 +1406,7 @@ class Process_Manager:
                if(tipo_f=="PDF" or tipo_f=="pdf"):
                    extension=".pdf"
                ruta+="formato-"+dat[0][0]+extension
-               documento.request(vent.raiz,ruta,10,[src],True)
+               documento.request(vent.raiz,ruta,constantes.REQUEST_DOWNLOAD,[src],True)
              else:
                General.show_message("por favor seleccione un formato","formato no valido")
         else:

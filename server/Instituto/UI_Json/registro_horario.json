@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -72,8 +84,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "caja3",
         "Ev": "None",
@@ -84,7 +96,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -106,8 +127,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "caja4",
         "Ev": "None",
@@ -118,12 +139,21 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
         "row": 2,
-        "padx":20,
+        "padx": 20,
         "pady": 20,
         "sticky": "",
         "columnspan": "None",
@@ -141,8 +171,8 @@
       "Propiedades": {
         "Text": "horario para:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_type",
@@ -178,15 +208,15 @@
         "Data": "elegir,personal,seccion",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "tipo_rh",
@@ -206,19 +236,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -240,8 +282,8 @@
       "Propiedades": {
         "Text": "seccion a la que esta dirigido:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "secc_label",
@@ -277,15 +319,15 @@
         "Data": "elegir",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "secc_rh",
@@ -305,19 +347,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -339,8 +393,8 @@
       "Propiedades": {
         "Text": "turno",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "turnoSeccion_label",
@@ -399,7 +453,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -408,6 +462,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -429,8 +491,8 @@
       "Propiedades": {
         "Text": "personal al que esta dirigido:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "personal_label",
@@ -466,15 +528,15 @@
         "Data": "elegir",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "personal_rh",
@@ -494,19 +556,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -528,8 +602,8 @@
       "Propiedades": {
         "Text": "turno",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "turno_label",
@@ -565,15 +639,15 @@
         "Data": "elegir,mañana,tarde",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "turno_rh",
@@ -593,19 +667,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -627,8 +713,8 @@
       "Propiedades": {
         "Text": "documento del horario",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "area_label",
@@ -687,7 +773,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -696,6 +782,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -716,31 +810,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "buscar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -775,31 +863,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "registrar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -834,31 +916,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "actualizar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -893,31 +969,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Volver",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },

@@ -20,9 +20,8 @@ class panel:
         self.last_component=0
         self.id_panel=id_p
         self.container=ctk.CTkFrame(self.win,fg_color=color)
-        self.container.grid(row=1,column=0,sticky="nsew")
-        self.container.pack(fill=BOTH, expand=1)
-        self.set_active(True)
+       # self.container.grid(row=1,column=0,sticky="nsew")
+      #  self.set_active(True)
         self.set_TopLeft_margins()
     
     #Set top Left Margins on the Panel    
@@ -48,10 +47,8 @@ class panel:
 
     #Get the Background Color of the Panel
     def get_background(self):
-        if(self.img_background==None):
-             return self.background
-        else:
-             return self.img_background
+       return self.background
+       
         
     #Return the Comp By Index         
     def get_comp_byIndex(self,index):
@@ -159,6 +156,7 @@ class panel:
        for i in range(0,self.last_component):
            if(self.tags[i]=="frame"):
                comp=self.comps[i]
+               comp.container.update_idletasks()
                comp.limit_panel(w_limit,h_limit)               
                
     #Destroy Component and Free Memory

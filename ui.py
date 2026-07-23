@@ -12,11 +12,9 @@ import os
 #Build the Panels and Graphic Components
 class UI:
     @classmethod  
-    def init_UI(cls,ventana,splash):
+    def init_UI(cls,ventana):
         cls.vent=ventana
-        cls.splash=splash
         cls.add_menu()
-        cls.read_Jsondata("inicio")
      
     #Build the Menu and Add it to the Main Windows 
     @classmethod  
@@ -108,13 +106,9 @@ class UI:
            General.show_error("Panel not Found","Json File Not Found")
            return
         raw_data=response.content  
-       # filename=constantes.FOLDER_JSON+panel_name+".json"
-       # if(os.path.exists(filename)==False):
-       #     return
         from io import BytesIO
         temp_file=BytesIO(raw_data)  
-       # with open(filename,"r",encoding="utf-8") as file_json:
-        cls.vent.build_panel(("#6CA5E0","#323A7A"),panel_name)
+        cls.vent.build_panel(constantes.FG_DEFAULT_BACKGROUND,panel_name)
         data=json.load(temp_file)
         widgets=data["Widgets"]
         for element in widgets:
@@ -141,12 +135,17 @@ class UI:
              parent_comp=pnl.get_comp_byName(parent,False)
 
        if(widget_type=="CTkFrame"):
-          color=props["Color"]
+          border_color=props["Border_Color"]
+          scrollbar_color=props["ScrollBar_Color"]
+          scrollbar_hover_color=props["ScrollBar_Hover_Color"]
+          if(border_color=="None"):
+             border_color=None
+          colors={"Fg":props["Color"],"Border":border_color,"Scrollbar":scrollbar_color,"Scrollbar_Hover":scrollbar_hover_color}
           scrollable=False
           if(props["Scroll"]=="True"):
             scrollable=True                
           corner_radius=int(props["Corner_Radious"])
-          cls.vent.add_Internal_Panel(pos,color,id,corner_radius,ev,initial_state,parent_comp,internal_pos,scrollable)
+          cls.vent.add_Internal_Panel(pos,colors,id,corner_radius,ev,initial_state,parent_comp,internal_pos,scrollable)
        elif(widget_type=="CTkLabel"):
           
            text=props["Text"]
@@ -177,18 +176,21 @@ class UI:
           ev=cls.interprete_event(props["Ev"],None)
           corner_radius=int(props["Corner_Radious"])
           font_data=props["Font"]
-          cls.vent.add_button(pos,text,corner_radius,None,(),colors,font_data,id,ev,initial_state,parent_comp,internal_pos)
+          cls.vent.add_button(pos,text,corner_radius,colors,font_data,id,ev,initial_state,parent_comp,internal_pos)
        elif(widget_type=="CTkImage"):
           src=props["Source"]
           bg_color=props["Fg_Color"]
-          url=f"{constantes.SERVER}{src}"
+          for i in range(0,len(src)):
+             temp_src=src[i]
+             url=f"{constantes.SERVER}{temp_src}"
+             src[i]=url
           w=int(props["Width"])
           h=int(props["Heigth"])
           is_icon=False if props["Interactuable"]=="False" else True
-          cls.vent.add_image(pos,url,w,h,bg_color,is_icon,id,ev,initial_state,parent_comp,internal_pos)    
+          cls.vent.add_image(pos,src,w,h,bg_color,is_icon,id,ev,initial_state,parent_comp,internal_pos)    
        elif(widget_type=="CTkText_field"):
           placeholder_text=props["Placeholder_Text"]
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Placeholder_Text":props["Placeholder_Text_Color"],"Fg_Focus":props["Fg_Focus"],"Text_Focus":props["Text_Focus"]}
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Placeholder_Text":props["Placeholder_Text_Color"],"Fg_Focus":props["Fg_Focus"],"Text_Focus":props["Text_Focus"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"]}
           if(colors["Placeholder_Text"]==""):
             colors["Placeholder_Text"]="gray"
           corner_radius=int(props["Corner_Radious"])
@@ -197,7 +199,7 @@ class UI:
           cls.vent.add_text_field(pos,colors,font_data,corner_radius,placeholder_text,ev,id,initial_state,parent_comp,internal_pos)
        elif(widget_type=="CTkPass_field"):
           placeholder_text=props["Placeholder_Text"]
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Placeholder_Text":props["Placeholder_Text_Color"],"Fg_Focus":props["Fg_Focus"],"Text_Focus":props["Text_Focus"]}
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Placeholder_Text":props["Placeholder_Text_Color"],"Fg_Focus":props["Fg_Focus"],"Text_Focus":props["Text_Focus"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"]}
           if(colors["Placeholder_Text"]==""):
             colors["Placeholder_Text"]="gray"
           corner_radius=int(props["Corner_Radious"])
@@ -206,7 +208,7 @@ class UI:
           cls.vent.add_text_field(pos,colors,font_data,corner_radius,placeholder_text,ev,id,initial_state,parent_comp,internal_pos,True)
        elif(widget_type=="CTkCombobox"):
           data=props["Data"].split(",")
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Hover":props["Hover_Color"],"Fg_Item":props["Fg_Item"],"Text_Item":props["Text_Item"],"Button":props["Button_Color"]}
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Hover":props["Hover_Color"],"Fg_Item":props["Fg_Item"],"Text_Item":props["Text_Item"],"Button":props["Button_Color"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"],"Disabled_Button":props["Disabled_ButtonColor"]}
           corner_radius=int(props["Corner_Radious"])
           font_data=props["Font"]
           ev=cls.interprete_event(props["Ev"],None)
@@ -232,7 +234,7 @@ class UI:
           btn_count=int(props["Button_Count"])
           btns_texts=props["Buttons_Texts"]
           border_width={"Check":6,"Uncheck":12}
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Border":props["Border_Color"],"Hover":props["Hover_Color"]}
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Border":props["Border_Color"],"Hover":props["Hover_Color"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"]}
           font_data=props["Font"]
           cls.vent.add_radioButton(pos,direction,btn_count,btns_texts,colors,font_data,id,ev,initial_state,parent_comp,internal_pos,border_width)
        elif(widget_type=="CTkCheckbutton"):
@@ -245,11 +247,17 @@ class UI:
        elif(widget_type=="CTkListbox"):
           ev=cls.interprete_event(props["Ev"],None)
           values=[] if props["Data"]=="" else props["Data"].split(",")
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"]}
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Scrollbar":props["ScrollBar_Color"],"Scrollbar_Hover":props["ScrollBar_Hover_Color"]}
           heigth_list=int(props["Heigth"])
           font_data=props["Font"]
           cls.vent.add_ListBox(pos,values,font_data,colors,heigth_list,id,ev,initial_state,parent_comp,internal_pos)
-        
+       elif(widget_type=="CTkDate"):
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"]}
+          corner_radius=int(props["Corner_Radious"])
+          font_data=props["Font"]
+          ev=cls.interprete_event(props["Ev"],None)
+          cls.vent.add_date_field(pos,colors,font_data,corner_radius,ev,id,initial_state,parent_comp,internal_pos)
+     
          
        
   

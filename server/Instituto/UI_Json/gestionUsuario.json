@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "False"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -67,7 +79,7 @@
           5
         ],
         "pady": 4,
-        "sticky": "w",
+        "sticky": "ew",
         "columnspan": "None"
       }
     },
@@ -75,8 +87,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_Box",
         "Ev": "None",
@@ -87,7 +99,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -109,8 +130,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_Box2",
         "Ev": "None",
@@ -121,7 +142,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -147,10 +177,18 @@
         "Width_Column": "95",
         "Heigth_Table": "10",
         "Colors": {
-          "Bg": "#FFEF85",
-          "Fg": "#323A7A",
+          "Bg": "#8CA8DA",
+          "Fg": "#FFFFFF",
           "Bg_Select": "#CDF3FF",
-          "Fg_Select": "#323A7A"
+          "Fg_Select": "#323A7A",
+          "ScrollBar": [
+            "#8780B8",
+            "#F5EFF5"
+          ],
+          "ScrollBar_Hover": [
+            "#8597DB",
+            "#FFFFFF"
+          ]
         },
         "Id": "table1_cp",
         "Ev": "0",
@@ -174,31 +212,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "nuevo usuario",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -233,31 +265,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "borrar usuario",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -292,31 +318,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "desbloquear usuario",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -351,31 +371,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "reset password",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -410,31 +424,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "otorgar permiso",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -469,31 +477,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "   volver   ",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },

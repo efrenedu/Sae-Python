@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,14 +17,26 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
         "row": 2,
-        "padx": 0.2,
-        "pady": 0.05,
-        "sticky": "nsew",
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -48,7 +60,16 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -69,7 +90,10 @@
     {
       "Type": "CTkImage",
       "Propiedades": {
-        "Source": "images/logo_28_octubre.png",
+        "Source": [
+          "images/logo_institucion.png",
+          "images/logo_institucion_dark.png"
+        ],
         "Width": "120",
         "Heigth": "120",
         "Interactuable": "False",
@@ -96,10 +120,10 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Unidad Educativa 28 de Octubre",
+        "Text": "U.E.N Instituto de Prueba",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#FFFFFF",
+          "#FFFFFF"
         ],
         "Fg_Color": "transparent",
         "Id": "titulo_inicio",
@@ -134,8 +158,8 @@
       "Propiedades": {
         "Text": "RECUPERAR CONTRASEÑA",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#000000",
+          "#FFFFFF"
         ],
         "Fg_Color": "transparent",
         "Id": "sub_titulo_rp",
@@ -156,8 +180,8 @@
       "Posicion": {
         "column": 1,
         "row": 1,
-        "padx": 0.02,
-        "pady": 0.02,
+        "padx": 10,
+        "pady": 10,
         "sticky": "",
         "columnspan": "2"
       }
@@ -175,7 +199,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -196,7 +229,7 @@
     {
       "Type": "CTkFrame",
       "Propiedades": {
-        "Color":"transparent",
+        "Color": "transparent",
         "Id": "caja3",
         "Ev": "None",
         "Corner_Radious": "12",
@@ -206,7 +239,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -237,7 +279,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -268,7 +319,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -299,7 +359,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -322,8 +391,8 @@
       "Propiedades": {
         "Text": "usuario:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_user",
@@ -382,7 +451,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -391,6 +460,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -412,8 +489,8 @@
       "Propiedades": {
         "Text": "pregunta secreta:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pregunta",
@@ -472,7 +549,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -481,6 +558,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -502,8 +587,8 @@
       "Propiedades": {
         "Text": "respuesta:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_respuesta",
@@ -562,7 +647,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -571,6 +656,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -591,31 +684,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Continuar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -650,31 +737,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Volver",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -710,8 +791,8 @@
       "Propiedades": {
         "Text": "nuevo password:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pass",
@@ -770,15 +851,23 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#FFF9CD"
         ],
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -800,8 +889,8 @@
       "Propiedades": {
         "Text": "repita el password:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pass2",
@@ -860,15 +949,23 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#FFF9CD"
         ],
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -889,31 +986,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "actualizar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -948,31 +1039,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Volver",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },

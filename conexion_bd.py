@@ -28,7 +28,7 @@ class conexion_bd:
     #Init the Connection
     @classmethod	
     def init(cls):
-        data_b="Instituto"   
+        data_b=constantes.SERVER_BD
         try:        
           if(cls.connect(data_b)):
                cls.set_tabla(constantes.TABLA_USUARIO)

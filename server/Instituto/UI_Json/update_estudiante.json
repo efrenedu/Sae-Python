@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -39,8 +51,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "caja6_1",
         "Ev": "None",
@@ -51,7 +63,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 0,
@@ -109,8 +130,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "caja6",
         "Ev": "None",
@@ -121,7 +142,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 0,
@@ -139,12 +169,12 @@
         "propagate": "True"
       }
     },
-	{
+    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Buttons_Box",
         "Ev": "None",
@@ -155,7 +185,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 0,
@@ -178,8 +217,8 @@
       "Propiedades": {
         "Text": "estudiantes:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "estud_label",
@@ -215,15 +254,15 @@
         "Data": "elegir",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "estudiantes",
@@ -243,19 +282,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -277,8 +328,8 @@
       "Propiedades": {
         "Text": "CI estudiante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "ci_label",
@@ -337,7 +388,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -346,6 +397,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -367,8 +426,8 @@
       "Propiedades": {
         "Text": "nombres:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "nombre_label",
@@ -427,7 +486,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -436,6 +495,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -457,8 +524,8 @@
       "Propiedades": {
         "Text": "apellidos:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "apellido_label",
@@ -517,7 +584,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -526,6 +593,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -547,8 +622,8 @@
       "Propiedades": {
         "Text": "CI representante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "CIrepres_label",
@@ -607,7 +682,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -616,6 +691,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -637,8 +720,8 @@
       "Propiedades": {
         "Text": "telefono representante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "Telf_label",
@@ -697,7 +780,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -706,6 +789,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -727,8 +818,8 @@
       "Propiedades": {
         "Text": "fecha de\n nacimiento:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "fecha_label",
@@ -787,7 +878,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -796,6 +887,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -817,8 +916,8 @@
       "Propiedades": {
         "Text": "nombre representante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "nombreRepres_label",
@@ -877,7 +976,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -886,6 +985,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -907,8 +1014,8 @@
       "Propiedades": {
         "Text": "apellidos\n representante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "apellido_repres_label",
@@ -967,7 +1074,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -976,6 +1083,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -997,8 +1112,8 @@
       "Propiedades": {
         "Text": "direccion\n representante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "dir_representante_label",
@@ -1057,7 +1172,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1066,6 +1181,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1087,8 +1210,8 @@
       "Propiedades": {
         "Text": "correo\n representante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "correo_label",
@@ -1147,7 +1270,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1156,6 +1279,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1177,8 +1308,8 @@
       "Propiedades": {
         "Text": "parentesco:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "parentesco_label",
@@ -1237,7 +1368,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1246,6 +1377,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1267,8 +1406,8 @@
       "Propiedades": {
         "Text": "ocupacion:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "ocupacion_label",
@@ -1327,7 +1466,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1336,6 +1475,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1357,8 +1504,8 @@
       "Propiedades": {
         "Text": "salud:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "salud_label",
@@ -1394,15 +1541,15 @@
         "Data": "elegir,saludable,de reposo,desnutrido,con problemas",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "salud",
@@ -1422,19 +1569,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -1456,8 +1615,8 @@
       "Propiedades": {
         "Text": "estatus:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "estatus_label",
@@ -1516,7 +1675,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1525,6 +1684,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1546,8 +1713,8 @@
       "Propiedades": {
         "Text": "nuevo estatus:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "estatus2_label",
@@ -1583,15 +1750,15 @@
         "Data": "elegir,de reposo,graduado,intermitente",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "estatus2",
@@ -1611,19 +1778,31 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
@@ -1645,8 +1824,8 @@
       "Propiedades": {
         "Text": "establecer cedula del estudiante:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "cedulado_label",
@@ -1705,7 +1884,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1714,6 +1893,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1740,20 +1927,20 @@
           "Extranjero"
         ],
         "Text_Color": [
-          "#000000",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": [
           "#FFFFFF",
           "#FFF9CD"
         ],
         "Border_Color": [
-          "#ffffff",
-          "#FFF9CD"
+          "#70A2D1",
+          "#FFFFFF"
         ],
         "Hover_Color": [
-          "#ffffff",
-          "#ffffff"
+          "#FFFFFF",
+          "#FFF9CD"
         ],
         "Id": "nacionalidad",
         "Ev": "0",
@@ -1768,7 +1955,15 @@
           "Name": "Arial",
           "Size": "15",
           "Style": "bold"
-        }
+        },
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
       },
       "Posicion": {
         "column": 0,
@@ -1783,8 +1978,8 @@
       "Propiedades": {
         "Text": "direccion :",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "dir_label",
@@ -1843,7 +2038,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1852,6 +2047,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -1873,8 +2076,8 @@
       "Propiedades": {
         "Text": "genero:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "genero_label",
@@ -1914,20 +2117,20 @@
           "femenino"
         ],
         "Text_Color": [
-          "#000000",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": [
           "#FFFFFF",
           "#FFF9CD"
         ],
         "Border_Color": [
-          "#ffffff",
-          "#FFF9CD"
+          "#70A2D1",
+          "#FFFFFF"
         ],
         "Hover_Color": [
-          "#ffffff",
-          "#ffffff"
+          "#FFFFFF",
+          "#FFF9CD"
         ],
         "Id": "genero",
         "Ev": "0",
@@ -1942,7 +2145,15 @@
           "Name": "Arial",
           "Size": "15",
           "Style": "bold"
-        }
+        },
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
       },
       "Posicion": {
         "column": 0,
@@ -1957,8 +2168,8 @@
       "Propiedades": {
         "Text": "expediente digital:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "expediente_label",
@@ -2017,7 +2228,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -2026,6 +2237,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -2046,31 +2265,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Asignar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -2092,7 +2305,7 @@
       },
       "Posicion": {
         "column": 0,
-        "row":1,
+        "row": 1,
         "padx": 10,
         "pady": [
           16,
@@ -2106,8 +2319,8 @@
       "Propiedades": {
         "Text": "foto:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "foto_label",
@@ -2166,7 +2379,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -2175,6 +2388,14 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
@@ -2195,31 +2416,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "actualizar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -2254,31 +2469,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Volver",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },

@@ -4,6 +4,52 @@
     {
       "Type": "CTkFrame",
       "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "Main_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "None",
+        "Scroll": "False",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": 20,
+        "pady": 0,
+        "sticky": "nsew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
         "Color": "transparent",
         "Id": "Title_Box",
         "Ev": "None",
@@ -13,21 +59,30 @@
           "Column": 0,
           "Row": 0
         },
-        "Master": "None",
-        "Scroll": "False"
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": 20,
-        "pady": 0,
+        "pady": 20,
         "sticky": "",
-        "columnspan": "3",
+        "columnspan": "2",
         "column_weight": 1,
-        "row_weight": 0,
+        "row_weight": 1,
         "porcent_parent": {
-          "Width": 0.5,
-          "Height": 0.3
+          "Width": 0.8,
+          "Height": 0.8
         },
         "propagate": "True"
       }
@@ -44,7 +99,7 @@
         "Id": "titulo",
         "Ev": "None",
         "Panel_Id": "welcome",
-        "Master": "Title_Box",
+        "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
@@ -57,8 +112,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
@@ -72,70 +127,6 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": "transparent",
-        "Id": "Center_Box",
-        "Ev": "None",
-        "Corner_Radious": "12",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 0
-        },
-        "Master": "None",
-        "Scroll": "False"
-      },
-      "Posicion": {
-        "column": 2,
-        "row": 2,
-        "padx": 20,
-        "pady": 80,
-        "sticky": "nsew",
-        "columnspan": "None",
-        "column_weight": 1,
-        "row_weight": 1,
-        "porcent_parent": {
-          "Width": 0.8,
-          "Height": 0.8
-        },
-        "propagate": "True"
-      }
-    },
-    {
-      "Type": "CTkImage",
-      "Propiedades": {
-        "Source": "images/logo_institucion.png",
-        "Width": "170",
-        "Heigth": "160",
-        "Interactuable": "False",
-        "Fg_Color": "transparent",
-        "Id": "logo_inicio2",
-        "Ev": "None",
-        "Panel_Id": "welcome",
-        "Corner_Radious": "0",
-        "Master": "Center_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 0
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 44,
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkFrame",
-      "Propiedades": {
-        "Color": [
-          "#A7DFF5",
-          "#576EBB"
-        ],
         "Id": "User_Box",
         "Ev": "None",
         "Corner_Radious": "12",
@@ -144,17 +135,26 @@
           "Column": 0,
           "Row": 0
         },
-        "Master": "None",
-        "Scroll": "False"
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 3,
-        "row": 2,
-        "padx": 20,
-        "pady": 80,
+        "column": 1,
+        "row": 1,
+        "padx": 80,
+        "pady": 20,
         "sticky": "nsew",
         "columnspan": "None",
-        "column_weight": 2,
+        "column_weight": 15,
         "row_weight": 1,
         "porcent_parent": {
           "Width": 0.8,
@@ -166,7 +166,9 @@
     {
       "Type": "CTkImage",
       "Propiedades": {
-        "Source": "images/user_login.jpg",
+        "Source": [
+          "images/user_login.jpg"
+        ],
         "Width": "120",
         "Heigth": "120",
         "Interactuable": "False",
@@ -175,7 +177,7 @@
         "Ev": "None",
         "Panel_Id": "welcome",
         "Corner_Radious": "0",
-        "Master": "User_Box",
+        "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
@@ -183,7 +185,7 @@
         }
       },
       "Posicion": {
-        "column":1,
+        "column": 1,
         "row": 1,
         "padx": [
           20,
@@ -198,14 +200,14 @@
       "Propiedades": {
         "Text": " ",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "mensaje",
         "Ev": "None",
         "Panel_Id": "welcome",
-        "Master": "User_Box",
+        "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
@@ -219,7 +221,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 3,
+        "row": 1,
         "padx": [
           20,
           5
@@ -233,8 +235,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Historial_Box",
         "Ev": "None",
@@ -244,21 +246,30 @@
           "Column": 0,
           "Row": 0
         },
-        "Master": "None",
-        "Scroll": "False"
+        "Master": "Main_Box",
+        "Scroll": "True",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": 20,
-        "pady": 80,
-        "sticky": "nsew",
+        "pady": 20,
+        "sticky": "ns",
         "columnspan": "None",
-        "column_weight": 2,
+        "column_weight": 1,
         "row_weight": 1,
         "porcent_parent": {
-          "Width": 0.8,
-          "Height": 0.8
+          "Width": 0.1,
+          "Height": 0.1
         },
         "propagate": "True"
       }
@@ -268,14 +279,14 @@
       "Propiedades": {
         "Text": "ACTIVIDAD DE LA SESION",
         "Text_Color": [
-          "#373064",
+          "#000000",
           "#FFFFFF"
         ],
         "Fg_Color": "transparent",
         "Id": "titulo_historial",
         "Ev": "None",
         "Panel_Id": "welcome",
-        "Master": "Historial_Box",
+        "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
@@ -288,7 +299,7 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 1,
         "padx": [
           20,
@@ -304,18 +315,18 @@
       "Propiedades": {
         "Text": "Sin Actividad Reciente",
         "Text_Color": [
-          "#000000",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "historial",
         "Ev": "1",
         "Panel_Id": "welcome",
-        "Master": "Historial_Box",
+        "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -324,8 +335,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5

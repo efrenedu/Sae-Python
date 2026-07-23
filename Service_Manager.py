@@ -1,4 +1,3 @@
-from documento import documento
 from tiempo import tiempo
 from conexion_bd import conexion_bd
 from constantes import constantes
@@ -720,7 +719,7 @@ class Service_Manager:
        opcion=pnl.get_comp_byName("tipo_estad").get_selected_value()
        filtro=pnl.get_comp_byName("tipo_estad2").get_selected_value()
        valores=[]
-       colors=[]
+       colors_figure=[]
        items=[]
        title=""
        tipo_data=cls.STADISTICS_NONE
@@ -729,18 +728,16 @@ class Service_Manager:
             General.show_message("por favor elija un filtro para la grafica","elija un filtro")
             return
        if(opcion=="personal"):
-          label_msg="          total de\n trabajadores"
+          label_msg="total de\n trabajadores"
           conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
           data=conexion_bd.get_allData(None,None)
           if(data!=[]):
              if(filtro=="cargo de personal"):
                items=["docente","no docente"]
-               colors=["#EE6055","#60D394"]
                tipo_data=cls.STADISTICS_WORKERS_CARGO
                title=filtro
              elif(filtro=="estatus del personal"):
                items=["activo","inactivo","de reposo","posible retiro"]
-               colors=["#EE6055","#60D394","#AAF683","#FFD97D"]
                tipo_data=cls.STADISTICS_WORKER_STATUS
                title=filtro
              docente=0
@@ -776,21 +773,18 @@ class Service_Manager:
        elif(opcion=="estudiantes"):
           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
           data=conexion_bd.get_allData(None,None)
-          label_msg="         total de\n  estudiantes"
+          label_msg="total de\n  estudiantes"
           if(data!=[]):
              if(filtro=="tipo de cedula"):
                items=["cedulado","no cedulado"]
-               colors=["#EE6055","#60D394",]
                tipo_data=cls.STADISTICS_STUDENTS_ID
                title="tipo de cedula de estudiantes"
              elif(filtro=="estatus del estudiante"):
                items=["activo","inactivos","reposo","graduados","intermit."]
-               colors=["#EE6055","#60D394","#AAF683","#FFD97D","#FF9B85"]
                tipo_data=cls.STADISTICS_STUDENT_STATUS
                title=filtro
              elif(filtro=="genero"):
                items=["masculino","femenino"]
-               colors=["#EE6055","#60D394"]
                tipo_data=cls.STADISTIC_STUDENTS_GENDER
                title="genero de los estudiantes"
              cedulados=0
@@ -833,20 +827,18 @@ class Service_Manager:
              elif(tipo_data==cls.STADISTIC_STUDENTS_GENDER):
                 valores=[masculinos,femeninos]
        elif(opcion=="secciones"):
-          label_msg="        total de\n  secciones"
+          label_msg="total de\n secciones"
           conexion_bd.set_tabla(constantes.TABLA_SECCION)
           data=conexion_bd.get_allData(None,None)
           if(data!=[]):
-              if(filtro=="cantidad de secciones segun año de curso" or filtro=="cantidad de secciones"):
+              if(filtro=="cantidad de secciones"):
                 items=["1 año","2 año","3 año","4 año","5 año"]
-                colors=["#EE6055","#60D394","#AAF683","#FFD97D","#FF9B85"]
                 tipo_data=cls.STADISTICS_SECTIONS_COUNT
-                title=filtro
+                title=f"{filtro}\n Segun Año"
               elif(filtro=="turno"):
                 items=["mañana","tarde"]
-                colors=["#EE6055","#60D394"]
                 tipo_data=cls.STADISTICS_SECTIONS_TURNO
-                title="turno de las secciones segun turno"
+                title="Cantidad se Secciones \n Segun Turno"
               primer_año=0
               segundo_año=0
               tercer_año=0
@@ -884,18 +876,16 @@ class Service_Manager:
        elif(opcion=="matricula"):
           conexion_bd.set_tabla(constantes.TABLA_SECCION)
           data=conexion_bd.get_allData(None,None)
-          label_msg="         total de\n  estudiantes"
+          label_msg="total de\n estudiantes"
           if(data!=[]):
               if(filtro=="año"):
                 items=["1 año","2 año","3 año","4 año","5 año"]
-                colors=["#EE6055","#60D394","#AAF683","#FFD97D","#FF9B85"]
                 tipo_data=cls.STADISTICS_MATRICULA_ACADEMIC_YEAR
-                title="matricula de estudiantes segun año de curso"
+                title="matricula de estudiantes\n segun año de curso"
               elif(filtro=="turno"):
                 items=["mañana","tarde"]
-                colors=["#EE6055","#60D394"]
                 tipo_data=cls.STADISTICS_MATRICULA_TURNO
-                title="matricula de estudiantes segun turno"
+                title="matricula de estudiantes\n segun turno"
               primer_año=0
               segundo_año=0
               tercer_año=0
@@ -927,13 +917,12 @@ class Service_Manager:
               elif(tipo_data==cls.STADISTICS_MATRICULA_TURNO):
                  valores=[mañana,tarde]
        elif(opcion=="estudiantes con materias pendientes"):
-          label_msg="          total de\n  estudiantes"
+          label_msg="total de\n  estudiantes"
           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
           data=conexion_bd.get_allData(None,None)
           if(data!=[]):
               items=["no cursando","cursando"]
-              colors=["#EE6055","#60D394"]
-              title="materias pendientes en "+filtro
+              title="materias pendientes\n en "+filtro
               pendientes=0
               no_pendientes=0
               conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
@@ -948,11 +937,11 @@ class Service_Manager:
        if(len(valores)<=0):
           General.show_message("no hay datos que se puedan mostrar","sin datos para el diagrama")
           return
-       from ventana_sec import ventana_secundaria
-       sec=ventana_secundaria(vent,[580,500],["white","white"],True,True,[580,450])
-       sec.draw_text( [290,250],"Arial","bold",25,"Blue","Cargando por favor espere")
+       from ventana_sec import Stadistic_Windows
+       stadistic_win=Stadistic_Windows(vent,{"Width":580,"Height":500},["#97D3E7","#323757"])
+       stadistic_win.draw_text( {"X":290,"Y":250},{"Font_Name":"Arial","Font_Style":"bold","Font_Size":25},["#3B346A","#FFFFFF"],"Cargando por favor espere")
        import threading
-       hilo=threading.Thread(target=sec.draw_torta,args=(valores,title,items,colors,label_msg))
+       hilo=threading.Thread(target=stadistic_win.draw_torta,args=(valores,title,items,label_msg))
        hilo.start()
        
    

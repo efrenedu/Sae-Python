@@ -95,7 +95,7 @@ class Consult_Manager:
            filename=tipo+" "+clave+".xlsx"
            path=constantes.FOLDER_DOCUMENTS+filename
            msg_end=False
-           documento.request(pnl.win,[path,data_form],9,[num_estud,data_nomina,"Nº",2,data_replace,msg_end],True)    
+           documento.request(pnl.win,[path,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_estud,data_nomina,"Nº",2,data_replace,msg_end],True)    
        elif(tipo=="inscripcion"):
           conexion_bd.set_tabla(constantes.TABLA_FORMATO)
           data_form=conexion_bd.get_allData(["src_form"],1,[constantes.CLAVE_FORMATO],[tipo],["and"])
@@ -265,7 +265,7 @@ class Consult_Manager:
                         for ex in data_zip:
                             if(ex!=False):
                                 replace.append([ex,"X"])                
-          documento.request(raiz,[ruta,data_raw],9,[len(data_cells),data_cells,"NN",6,replace,False],True)
+          documento.request(raiz,[ruta,data_raw],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[len(data_cells),data_cells,"NN",6,replace,False],True)
        elif(tipo=="info estudiante"):
            clave=pnl.get_comp_byName("table1_cp").get_row_selectedData()[0]
            if(clave==" "):
@@ -393,7 +393,7 @@ class Consult_Manager:
            data_modif.append(["DIRECCION:",dire])
            filename=tipo+" "+str(clave)+".xlsx"
            ruta=constantes.FOLDER_DOCUMENTS+filename
-           documento.request(raiz,[ruta,data_form],9,[0,[],"CEDULA:",0,data_modif,False],True)
+           documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"CEDULA:",0,data_modif,False],True)
 
        elif(tipo=="lista de trabajadores"):
             conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
@@ -444,7 +444,7 @@ class Consult_Manager:
             filename=form_name[len(form_name)-1]+"_"+time_object.get_fecha()
             filename=filename.replace("/","-")
             ruta=constantes.FOLDER_DOCUMENTS+filename+".xlsx"
-            documento.request(raiz,[ruta,raw_data],9,[num_rows,data_nomina,"Nº",num_cols,data_replace,False],True) 
+            documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_rows,data_nomina,"Nº",num_cols,data_replace,False],True) 
        elif(tipo=="info trabajador"):
            clave=pnl.get_comp_byName("table1_cp").get_row_selectedData()[0]
            if(clave==" "):
@@ -551,7 +551,7 @@ class Consult_Manager:
                   data_modif.append(["FOTO:","not found"])  
            filename=tipo+" "+str(clave)+".xlsx"
            ruta=constantes.FOLDER_DOCUMENTS+filename
-           documento.request(raiz,[ruta,data_form],9,[0,[],"CEDULA:",0,data_modif,False],True)
+           documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"CEDULA:",0,data_modif,False],True)
 
        elif(tipo=="disp horario"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
@@ -603,7 +603,7 @@ class Consult_Manager:
                 data_replace.append(["periodo escolar:",data_cronog[0][0]])
             filename=tipo+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename
-            documento.request(raiz,[ruta,data_form],9,[num_trabaj,data_nomina,"Nº",8,data_replace,False],True)    
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_trabaj,data_nomina,"Nº",8,data_replace,False],True)    
        elif(tipo=="materia pendiente"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
             data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
@@ -678,7 +678,7 @@ class Consult_Manager:
                 data_replace.append(["periodo escolar:",data_cronog[0][0]])
             filename=tipo+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename
-            documento.request(raiz,[ruta,data_form],9,[num_materias,data_nomina,"Nº",13,data_replace,False],True)
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_materias,data_nomina,"Nº",13,data_replace,False],True)
        elif(tipo=="constancias" or tipo=="constancia"):
               is_estud=False
               is_out=False
@@ -742,9 +742,9 @@ class Consult_Manager:
               data_empleados=conexion_bd.get_allData(None,None)
               conexion_bd.set_tabla(constantes.TABLA_CARGO)
               found_dire=False
-              is_pdf=True
-              if(data_form[0][0].endswith(".pdf")==False):
-                  is_pdf=False 
+              if(data_form[0][0].endswith(".pdf")==True):
+                  General.show_message("No se puede Escribir una Constancia en un formato PDF, Por Favor Registrar un Arch","Formato del Archivo Invalido") 
+                  return
               #Get Directivo Id and Full Name
               for empl in data_empleados:
                  if(empl[0]!="000" and empl[0]!="001"):
@@ -760,41 +760,21 @@ class Consult_Manager:
                             nomb_directivo=""
                             if(data_nomb[0][directive_name_index]!="" and data_nomb[0][directive_name_index]!="..."):
                                nomb_directivo=data_nomb[0][directive_name_index]
-                            if(is_pdf==True):
-                                   if(directive_name_index==0):
-                                      replace.append(["yoselinn1",nomb_directivo.upper(),12,"bold"])
-                                      replace.append(["yoselinn2",nomb_directivo.upper(),12,"bold"])
-                                   elif(directive_name_index==1):
-                                      replace.append(["Colmenarz1",nomb_directivo.upper(),12,"bold"])
-                                      replace.append(["Colmenarz2",nomb_directivo.upper(),12,"bold"])
-                                   elif(directive_name_index==2):
-                                      replace.append(["yeseniaa1",nomb_directivo.upper(),12,"bold"])
-                                      replace.append(["yeseniaa2",nomb_directivo.upper(),12,"bold"])
-                                   else:
-                                     replace.append(["Hernandz1",nomb_directivo.upper(),12,"bold"])
-                                     replace.append(["Hernandz2",nomb_directivo.upper(),12,"bold"])
+                            if(directive_name_index==0):
+                               nombre_directivo=nomb_directivo.upper()                          
+                            elif(directive_name_index==1):
+                                apellido_directivo=nomb_directivo.upper()
+                            elif(directive_name_index==2):
+                                nombre_directivo=nombre_directivo+" "+nomb_directivo.upper()
                             else:
-                                   if(directive_name_index==0):
-                                      nombre_directivo=nomb_directivo.upper()                          
-                                   elif(directive_name_index==1):
-                                      apellido_directivo=nomb_directivo.upper()
-                                   elif(directive_name_index==2):
-                                     nombre_directivo=nombre_directivo+" "+nomb_directivo.upper()
-                                   else:
-                                      apellido_directivo=apellido_directivo+" "+nomb_directivo.upper()
-                            
-                                
+                                apellido_directivo=apellido_directivo+" "+nomb_directivo.upper()               
               if(found_dire==False):
                   General.show_message("no existe director rgistrado en el sistem","director inexistente")
                   return 
-              if(is_pdf):                  
-                  replace.append(["111111111",cedula_directivo,12,"bold"])
-              else:
-                  replace.append(["     Quien suscribe Prof(a),",apellido_directivo+" "+nombre_directivo,12,"bold"])
-                  replace.append(["Directivo",apellido_directivo+" "+nombre_directivo,12,"bold"])
-                  replace.append(["identidad ,",cedula_directivo,12,"bold"])
-                  replace.append(["CI dire",cedula_directivo,12,"bold"])                
-              
+              replace.append(["     Quien suscribe Prof(a),",apellido_directivo+" "+nombre_directivo,12,"bold"])
+              replace.append(["Directivo",apellido_directivo+" "+nombre_directivo,12,"bold"])
+              replace.append(["identidad ,",cedula_directivo,12,"bold"])
+              replace.append(["CI dire",cedula_directivo,12,"bold"])                
               fech=time_object.get_fecha().split("/")
               dia=fech[0]
               mes=fech[1]
@@ -822,42 +802,25 @@ class Consult_Manager:
                        nomb=""
                        if(data_nombre[0][i]!="" and data_nombre[0][i]!="..."):
                               nomb=data_nombre[0][i]
-                       if(is_pdf==True):
-                          if(i==0):
-                             replace.append(["yoselinnn",nomb.upper(),12,"bold"])
-                          elif(i==1):
-                             replace.append(["Colmenarez",nomb.upper(),12,"bold"])
-                          elif(i==2):
-                             replace.append(["yeseniaaa",nomb.upper(),12,"bold"])
-                          elif(i==3):
-                             replace.append(["Hernandeez",nomb.upper(),12,"bold"])
-                       else:
-                          if(i==0):
-                            nombre_estud=nomb.upper()
-                          elif(i==1):
-                             apellido_estud=nomb.upper()
-                          elif(i==2):
-                             nombre_estud=nombre_estud+" "+nomb.upper()
-                          elif(i==3):
-                            apellido_estud=apellido_estud+" "+nomb.upper()
-                   if(is_pdf==False):
-                        replace.append(["el(la) estudiante :",apellido_estud+" "+nombre_estud,12,"bold"])
+                       if(i==0):
+                          nombre_estud=nomb.upper()
+                       elif(i==1):
+                          apellido_estud=nomb.upper()
+                       elif(i==2):
+                          nombre_estud=nombre_estud+" "+nomb.upper()
+                       elif(i==3):
+                         apellido_estud=apellido_estud+" "+nomb.upper()
+                   
+                   replace.append(["el(la) estudiante :",apellido_estud+" "+nombre_estud,12,"bold"])
                    if(tipo=="constancia de estudio"):
                          año_escolar=""
                          conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA) 
                          data_cronog=conexion_bd.get_allData(None,None)
                          if(data_cronog!=[]):
                             año_escolar=data_cronog[0][0]
-                         if(is_pdf==True):
-                            replace.append(["AÑO_ESCOLAR",año_escolar,12,"bold"])
-                            replace.append(["AÑOESCOLAR",año_escolar,9,"bold"])
-                         else:
-                            replace.append(["del Año Escolar:",año_escolar,12,"bold"])
-                            replace.append(["Año Escolar:",año_escolar,12,"bold"])
-                         if(is_pdf==True):
-                             replace.append(["000000000",cedula,12,"bold"])
-                         else:
-                             replace.append(["escolar:",cedula,12,"bold"])
+                         replace.append(["del Año Escolar:",año_escolar,12,"bold"])
+                         replace.append(["Año Escolar:",año_escolar,12,"bold"])
+                         replace.append(["escolar:",cedula,12,"bold"])
                          curso=data_estatus[0][1]
                          if(curso=="1"):
                             curso="Primer"
@@ -869,10 +832,7 @@ class Consult_Manager:
                             curso="Cuarto"
                          else:
                             curso="Quinto"
-                         if(is_pdf==True):
-                             replace.append(["Segundo",curso,12,"bold"])
-                         else:
-                            replace.append(["cursa estudios en nuestra institucion en el:",curso+" Año ",12,"bold"])     
+                         replace.append(["cursa estudios en nuestra institucion en el:",curso+" Año ",12,"bold"])     
               else:
                    #Constancia for Workers
                    conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)              
@@ -895,26 +855,15 @@ class Consult_Manager:
                        nomb=""
                        if(data_nombre[0][i]!="" and data_nombre[0][i]!="..."):
                               nomb=data_nombre[0][i]
-                       if(is_pdf==True):
-                           if(i==0):
-                              replace.append(["yoselinnn",nomb.upper(),12,"bold"])
-                           elif(i==1):
-                              replace.append(["Colmenarez",nomb.upper(),12,"bold"])
-                           elif(i==2):
-                              replace.append(["yeseniaaa",nomb.upper(),12,"bold"])
-                           elif(i==3):
-                              replace.append(["Hernandeez",nomb.upper(),12,"bold"])
-                       else:
-                           if(i==0):
-                             nombre_t=nomb.upper()
-                           elif(i==1):
-                             apellido_t=nomb.upper()
-                           elif(i==2):
-                              nombre_t=nombre_t+" "+nomb.upper()
-                           elif(i==3):
-                              apellido_t=apellido_t+" "+nomb.upper()
-                   if(is_pdf==False):
-                       replace.append(["el(la) ciudadano(a) :",apellido_t+" "+nombre_t,12,"bold"])
+                       if(i==0):
+                          nombre_t=nomb.upper()
+                       elif(i==1):
+                          apellido_t=nomb.upper()
+                       elif(i==2):
+                          nombre_t=nombre_t+" "+nomb.upper()
+                       elif(i==3):
+                          apellido_t=apellido_t+" "+nomb.upper()
+                   replace.append(["el(la) ciudadano(a) :",apellido_t+" "+nombre_t,12,"bold"])
                    if(tipo=="constancia de trabajo" or tipo=="constancia de prestacion de servicios"):
                          temp_ingreso=data_estatus[0][1].split("/")
                          ingreso=""
@@ -925,10 +874,8 @@ class Consult_Manager:
                             ingreso=ingreso+valor_ingreso
                             if(ing<2):
                                ingreso=ingreso+"/"
-                         if(is_pdf==True):   
-                             replace.append(["xx/xx/xxxx",ingreso,12,"bold"])
-                         else:
-                            replace.append(["desde el:",ingreso,12,"bold"])
+                         
+                         replace.append(["desde el:",ingreso,12,"bold"])
                          conexion_bd.set_tabla(constantes.TABLA_CARGO)
                          data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[data_trabaj[0][6]],["and"])
                          cargo=""
@@ -938,57 +885,45 @@ class Consult_Manager:
                             cargo=data_cargo[0][1].upper()
                             codigo_cargo=data_cargo[0][4].upper()
                             cargo_minist=data_cargo[0][2].upper()
-                         if(is_pdf==True):
-                             replace.append(["CARGOOOOOOO",cargo,12,"bold"])
-                             replace.append(["CARGO_MINIST",cargo_minist,12,"bold"])
-                             replace.append(["CODIGO",codigo_cargo,12,"bold"])
-                             replace.append(["000000000",cedula,12,"bold"])
+                        
+                         cargo1=""
+                         cargo2=""
+                         if(cargo.lower().startswith("profesor") or cargo.lower().startswith("docente")):
+                            cargo1="DOCENTE"
+                            if(cargo.lower().endswith("aula")):
+                                cargo2="/AULA"
                          else:
-                             cargo1=""
-                             cargo2=""
-                             if(cargo.lower().startswith("profesor") or cargo.lower().startswith("docente")):
-                                cargo1="DOCENTE"
-                                if(cargo.lower().endswith("aula")):
-                                   cargo2="/AULA"
-                             else:
-                                 if(cargo.lower()=="director"):
-                                     cargo="DIRECTOR(A)"
-                                 elif(cargo.lower().startswith("sub director") or cargo.lower().startswith("subdirector")):
-                                      cargo1="SUB DIRECTOR(A)"
-                                      if(cargo.endswith("academico")):
-                                            cargo1=cargo1+" ACADEMICO"
-                                      else:
-                                            cargo1=cargo1+" ADMINISTRATIVO"
-                                 elif(cargo.lower().startswith("coordinador")):
-                                        cargo1="COORDINADOR(A)"
-                                        if(cargo.endswith("evaluacion")):
-                                           cargo1=cargo1+" DE EVALUACION"
-                                        else:
-                                            cargo1=cargo1+" DE ORIENTACION"    
-                                 cargo1=cargo.upper()
-                             cargof=cargo1
-                             if(cargo2!=""):
-                                 cargof=cargof+"/"+cargo2
-                             replace.append(["se desempeña como:",cargof,12,"bold"])
-                             replace.append(["code",codigo_cargo,12,"bold"])
-                             replace.append([" de la CI:",cedula,12,"bold"])                        
+                            if(cargo.lower()=="director"):
+                                cargo1="DIRECTOR(A)"
+                            elif(cargo.lower().startswith("sub director") or cargo.lower().startswith("subdirector")):
+                                cargo1="SUB DIRECTOR(A)"
+                                if(cargo.endswith("academico")):
+                                    cargo1=cargo1+" ACADEMICO"
+                                else:
+                                    cargo1=cargo1+" ADMINISTRATIVO"
+                            elif(cargo.lower().startswith("coordinador")):
+                                cargo1="COORDINADOR(A)"
+                                if(cargo.endswith("evaluacion")):
+                                    cargo1=cargo1+" DE EVALUACION"
+                                else:
+                                    cargo1=cargo1+" DE ORIENTACION"    
+                                cargo1=cargo.upper()
+                         cargof=cargo1
+                         if(cargo2!=""):
+                             cargof=cargof+"/"+cargo2
+                         replace.append(["se desempeña como:",cargof,12,"bold"])
+                         replace.append(["code",codigo_cargo,12,"bold"])
+                         replace.append([" de la CI:",cedula,12,"bold"])                        
                          if(is_out==True):
                              #Document Request is not from a User
                              conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
                              data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"constancia",time_object.get_fecha()]
                              conexion_bd.add_data(data_descarga)
-              if(data_form[0][0].endswith(".pdf")):
-                  replace.append(["166",dia,12,"bold"])
-                  replace.append(["Noviembre",mes,12,"bold"])
-                  replace.append(["22222",año,12,"bold"])
-                  ruta=constantes.FOLDER_DOCUMENTS+tipo+".pdf"
-                  documento.request(raiz,[ruta,raw_data],12,[[len(replace),replace]],True)  
-              else:
-                  new_date=dia+" de "+mes+" del "+año
-                  replace.append(["Aguas Calientes,",new_date,12,"bold"])
-                  replace.append(["a los",new_date,12,"bold"])
-                  ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"              
-                  documento.request(raiz,[ruta,raw_data],9,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)         
+              new_date=dia+" de "+mes+" del "+año
+              replace.append(["Aguas Calientes,",new_date,12,"bold"])
+              replace.append(["a los",new_date,12,"bold"])
+              ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"              
+              documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)         
        elif(tipo=="sabana de notas" or tipo=="notas finales del año"):
            if(receive_data==None):
                General.show_error("sin data para reporte","sin data")           
@@ -1020,7 +955,7 @@ class Consult_Manager:
            filename=tipo+" "+receive_data[2]+".xlsx"
            ruta=constantes.FOLDER_DOCUMENTS+filename  
            num_rows=len(info)              
-           documento.request(raiz,[ruta,data_form],9,[num_rows,info,"Nº",col_count,replace,False],True)
+           documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_rows,info,"Nº",col_count,replace,False],True)
        elif(tipo=="notas finales"):
             from estudiante import estudiante
             estud=estudiante()
@@ -1058,7 +993,7 @@ class Consult_Manager:
                 return
             filename="notas finales-"+res[0][0]+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename
-            documento.request(raiz,[ruta,data_form],11,[num_rows,data_send,["1 AÑO","2 AÑO","3 AÑO","4 AÑO","5 AÑO"],col_count,replace,False],True)
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_NOTAS_CERTIFICADAS,[num_rows,data_send,["1 AÑO","2 AÑO","3 AÑO","4 AÑO","5 AÑO"],col_count,replace,False],True)
        elif(tipo=="reporte de usuarios"):
            
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
@@ -1104,7 +1039,7 @@ class Consult_Manager:
             filename="reporte de usuarios,"+new_fecha+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename  
             num_rows=len(info)              
-            documento.request(raiz,[ruta,data_form],9,[num_rows,info,"Nº",col_count,replace,False],True)
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_rows,info,"Nº",col_count,replace,False],True)
   
        elif(tipo=="reporte de descargas"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
@@ -1150,7 +1085,7 @@ class Consult_Manager:
             filename="reporte de usuarios,"+new_fecha+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename  
             num_rows=len(info)              
-            documento.request(raiz,[ruta,data_form],9,[num_rows,info,"Nº",col_count,replace,False],True)
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_rows,info,"Nº",col_count,replace,False],True)
    
        elif(tipo=="notas del momento"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
@@ -1246,7 +1181,7 @@ class Consult_Manager:
             filename="reporte de calificaciones-"+momento+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename  
             num_rows=len(info)              
-            documento.request(raiz,[ruta,data_form],9,[num_rows,info,"Nº",col_count,replace,False],True)
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_rows,info,"Nº",col_count,replace,False],True)
 
        elif(tipo=="carnet"):
             
@@ -1402,7 +1337,7 @@ class Consult_Manager:
                     data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"carnet",time_object.get_fecha()]
                     conexion_bd.add_data(data_descarga)   
                 ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"
-                documento.request(raiz,[ruta,raw_data],9,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)
+                documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)
                 
             else: 
                 #Student Carnet
@@ -1461,7 +1396,7 @@ class Consult_Manager:
                 replace.append(["CARGO_C","ESTUDIANTE",12,"bold"])    
                 replace.append(["fecha_e",fech,12,""])
                 ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"
-                documento.request(raiz,[ruta,raw_data],9,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)
+                documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)
                    
        elif(tipo=="cronograma"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
@@ -1635,7 +1570,7 @@ class Consult_Manager:
             counts_rows[1]=len(data_content[1])
             counts_rows[2]=len(data_content[2])
             ruta=constantes.FOLDER_DOCUMENTS+tipo+data_cronog[0][0]+".xlsx"
-            documento.request(raiz,[ruta,data_form],13,[counts_rows,data_content,"Razon",1,data_replace,False],True)          
+            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_CRONOGRAM,[counts_rows,data_content,"Razon",1,data_replace,False],True)          
 
    #Download User Manual
    @classmethod

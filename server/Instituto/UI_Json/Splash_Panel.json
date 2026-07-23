@@ -1,0 +1,171 @@
+{
+  "Pantalla_Name": "Splash_Panel",
+  "Widgets": [
+     {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "BIENVENIDO",
+        "Text_Color": "#000000",
+        "Fg_Color": "transparent",
+        "Id": "title_message",
+        "Ev": "None",
+        "Panel_Id": "Splash_Panel",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "22",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 0,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+	{
+      "Type": "CTkImage",
+      "Propiedades": {
+        "Source": [
+          "images/logo_institucion.png"
+        ],
+        "Width": "120",
+        "Heigth": "120",
+        "Interactuable": "False",
+        "Fg_Color": "transparent",
+        "Id": "logo",
+        "Ev": "None",
+        "Panel_Id": "Splash_Panel",
+        "Corner_Radious": "0",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": 10,
+        "pady": 0,
+        "sticky": "nsew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Teléfono de contacto: 0000-0000000 / 0000-0000000",
+        "Text_Color": "#000000",
+        "Fg_Color": "transparent",
+        "Id": "label_phone",
+        "Ev": "None",
+        "Panel_Id": "Splash_Panel",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Correo de contacto: Correo@gmail.com",
+        "Text_Color": "#000000",
+        "Fg_Color": "transparent",
+        "Id": "label_correo",
+        "Ev": "None",
+        "Panel_Id": "Splash_Panel",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "Continuar",
+        "Colors": {
+          "Fg": "#6269A9",
+          "Text":"#F8F6F9",
+          "Hover":"#859AD5", 
+          "Text_Hover":"#794125",
+          "Border":"#FCF5D3" 
+        },
+        "Id": "btn_continue",
+        "Ev": "None",
+        "Panel_Id": "Splash_Panel",
+        "Corner_Radious": "8",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row":4,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": ""
+      }
+    }
+  ]
+}

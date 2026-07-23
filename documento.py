@@ -1,7 +1,6 @@
 import subprocess
 from subprocess import Popen
 import os
-from fitz import fitz, Rect
 import openpyxl
 import threading
 from constantes import constantes
@@ -10,7 +9,6 @@ from PIL import Image, ImageTk
 import math
 import random
 import time
-from ventana_sec import ventana_secundaria
 from openpyxl.styles import Font,Alignment
 from openpyxl_image_loader import SheetImageLoader
 from openpyxl.cell import Cell
@@ -135,10 +133,6 @@ class documento:
                 cls.thread_object=threading.Thread(target=cls.write_notas_certific,args=(file_name,content))
                 cls.thread_object.start() 
                 cls.check_ifDone(root,cls.thread_object) 
-            elif(request_type==constantes.REQUEST_MODIFIC_PDF):
-                cls.thread_object=threading.Thread(target=cls.modif_pdf,args=(file_name,content))
-                cls.thread_object.start() 
-                cls.check_ifDone(root,cls.thread_object) 
             elif(request_type==constantes.REQUEST_WRITE_CRONOGRAM):
                 cls.thread_object=threading.Thread(target=cls.write_cronograma,args=(file_name,content,open_file))                
                 cls.thread_object.start() 
@@ -174,43 +168,7 @@ class documento:
            cls.result=constantes.REQUEST_RESULT_DOWNLOAD_SUCCESS
            return constantes.REQUEST_RESULT_DOWNLOAD_SUCCESS
      
-     #Modific and Save a Pdf Doc
-     @classmethod  
-     def modif_pdf(cls,file_name,content):
-        cls.estatus=0
-        path=file_name[0]
-        doc=fitz.open(stream = file_name[1], filetype="pdf")
-        num_pages=len(content)
-        for temp_pag in range(0,num_pages):
-             page=doc[temp_pag]
-             replace=content[temp_pag][1]
-             num_replaces=content[temp_pag][0]
-             if(num_replaces>0):
-               for i in range(0,num_replaces):
-                 old=replace[i][0]
-                 better=replace[i][1]
-                 size_l=replace[i][2]
-                 bld=replace[i][3]
-                 is_bold=False
-                 if(bld=="bold"):
-                     is_bold=True
-                 hits = page.search_for(old)
-                 if(hits!=[]):
-                    if(old!="FOTO:"):
-                      for rect in hits:
-                         if(is_bold==False):
-                             annot = page.add_redact_annot(rect, text=better,fontsize=size_l)
-                         else:
-                             annot = page.add_redact_annot(rect, text=better,fontsize=size_l,fontname="courier-bold")
-                      page.apply_redactions()
-        path=path.replace("ñ","n")
-        path=path.replace("Ñ","N")
-        doc.save(path, garbage=3, deflate=True)
-        os.startfile(path)
-        cls.estatus=0
-        cls.result=constantes.REQUEST_RESULT_OPERATION_SUCCEESS_NO_MESSAGE
-        return 0
- 
+    
      #Modify Excel File
      @classmethod          
      def modif_excell(cls,file_name,content):

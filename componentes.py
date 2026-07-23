@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter.font import Font
 from PIL import Image,ImageDraw, ImageFont, ImageTk
 from constantes import constantes
+from CTkCalendar import CTkCalendar as CTkDatePicker
 
 #Component Base Class
 class componente:
@@ -46,7 +47,7 @@ class componente:
           
       #Destroy Component and Free Memory
       def free_Memory(self):
-        print("destroy")
+        print(f"destroy {self.nombre}")
       
 #Table Component
 class Tabla(componente):
@@ -230,13 +231,26 @@ class Tabla(componente):
               
 #Canvas Component                     
 class Lienzo_dibujo(componente):
-    def __init__(self,parent,bg_c,dim,nombre,tag,default_state=True):
+    def __init__(self,parent,pos,colors,dim,font_sizes,nombre,tag,default_state=True):
          super().__init__(nombre,tag,default_state,parent)
-         self.canvas=ctk.CTkCanvas(parent, bg=bg_c,width=dim[0], height=dim[1])
-         self.bg_default=bg_c
-         self.dim_lienzo=(dim[0],dim[1])
+         from event_manager import Event_manager
+         self.root=Event_manager.vent.raiz
+         self.colors=colors
+         self.font_sizes=font_sizes
+         self.canvas=ctk.CTkCanvas(parent,highlightthickness=0,bg=self.root._apply_appearance_mode(colors["Fg"]),width=dim["Width"], height=dim["Height"]) 
+         self.bg_default=colors
+         self.dim_lienzo=(dim["Width"],dim["Height"])
          self.img=None
-         
+         self.pos=pos
+    
+    #get the Size for Each Type of Text
+    def get_font_Sizes(self):
+        return self.font_sizes
+
+    #get the Colors of Canvas  
+    def get_colors(self):
+       return self.colors
+       
     #change the Component Master of Canvas component
     def change_master(self,new_master,intern_pos):
         if(new_master==None):
@@ -263,9 +277,9 @@ class Lienzo_dibujo(componente):
        self.canvas.create_rectangle(x, y, x+w, y-h, fill=color)
        
     #Draw a Text On Canvas   
-    def draw_text(self,pos,fuente_name,style_font,size_f,text_color,texto):
-       font_text=Font(family=fuente_name,weight=style_font, size=size_f) 
-       self.canvas.create_text(pos[0],pos[1],text=texto,fill=text_color,font=font_text)
+    def draw_text(self,pos,font_data,text_color,texto):
+       font_text=Font(family=font_data["Font_Name"],weight=font_data["Font_Style"], size=font_data["Font_Size"]) 
+       self.canvas.create_text(pos["X"],pos["Y"],text=texto,fill=self.root._apply_appearance_mode(text_color),font=font_text)
     
     #Reset the Content of Canvas
     def reset(self):
@@ -279,25 +293,22 @@ class Lienzo_dibujo(componente):
     #Set Active or Inactive the Canvas    
     def set_active(self,value):
         if(value==True):
-            self.canvas.pack() 
+            self.canvas.grid(row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"]) 
         else:
-            self.canvas.pack_forget()
+            self.canvas.grid_forget()
             self.reset()
             
 #Button Component
 class Boton(componente):
     #Build The Button
-    def __init__(self,pos,parent,text,font,colores,img_sources,num_images,dim_boton,nombre,tag,default_state,corner_radius):
+    def __init__(self,pos,parent,text,font,colors,nombre,tag,default_state,corner_radius):
         super().__init__(nombre,tag,default_state,parent)
-        self.boton=None
-        self.have_image=False
-        self.icons_sources=[]
-        self.icons=[]
-        self.num_images=0
-        self.dim_boton=()
-        self.colors=colores
+        text=self.Capitalize_Text(text)
+        self.colors=colors
+        self.boton=ctk.CTkButton(parent,text=text,fg_color=self.colors["Fg"],font=font,text_color=self.colors["Text"],hover_color=self.colors["Hover"],cursor='hand2',corner_radius=corner_radius,border_color=self.colors["Border"],border_width=1)       
+        self.boton.bind("<Enter>",self.on_mouse_enter)
+        self.boton.bind("<Leave>",self.on_mouse_leave)
         self.disabled=False
-        self.configure_button(img_sources,text,font,parent,corner_radius)
         self.pos=pos
  
     #change the Component Master of Button component
@@ -310,51 +321,34 @@ class Boton(componente):
         self.boton.grid_forget()
         self.boton.grid(in_=new_master,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])
     
-    #Configure the values of Button
-    def configure_button(self,img_sources,text,font,parent,corner_radius):
-        if(img_sources==None):
-            text=text.capitalize()
-            temp_text=text.split(" ")
-            if(len(temp_text)>=2):
-                text=""
-                for i in range(0,len(temp_text)):
-                    if(len(temp_text[i])>3):
-                           temp_text[i]=temp_text[i].capitalize()
-                           if(i>0):
-                               text=text+" "+temp_text[i].capitalize()
-                           else:
-                               text=temp_text[i].capitalize() 
-                    else:
-                        text=text+" "+temp_text[i]
+    #Capitalize the Text of Button
+    def Capitalize_Text(self,text):
+        if(text.isupper()==False):
+          #Set the first Character of each Paragraph as Upper  
+          temp_text=text.split(" ")
+          if(len(temp_text)<2):
+             return text.capitalize() 
+          text=""
+          for i in range(0,len(temp_text)):
+              next_text=temp_text[i]
+              if(next_text.isupper()==False):
+                 if(len(next_text)>=3):
+                    next_text=next_text.capitalize()
+              if(i>0):
+                  text=text+" "+next_text
                         
-            self.boton=ctk.CTkButton(parent,text=text,fg_color=self.colors["Fg"],font=font,text_color=self.colors["Text"],hover_color=self.colors["Hover"],cursor='hand2',corner_radius=corner_radius)       
-            self.boton.bind("<Enter>",self.on_mouse_enter)
-            self.boton.bind("<Leave>",self.on_mouse_leave)
-        else:
-            self.have_image=True 
-            self.dim_boton=dim_boton
-            self.set_icons(parent,font,img_sources,num_images)
-            if(self.num_images>0):            
-              self.boton=ctk.CTkButton(parent,image=self.icons[0],fg_color=self.colors["Fg"],hover_color=self.colors["Hover"],relief=FLAT,bd=0,cursor='hand2',corner_radius=corner_radius)
-              self.boton.bind("<Button-1>",self.on_click_down)
-              self.boton.bind("<ButtonRelease-1>",self.on_click_up)
-              self.boton.bind("<Enter>",self.on_mouse_enter)
-              self.boton.bind("<Leave>",self.on_mouse_leave)               
+              else:
+                  text=next_text
+        return text       
         
     #The Mouse Leave the Button
     def on_mouse_leave(self,event):
-         if(self.have_image):
-           self.boton.configure(image=self.icons[0])
-         else:
-           self.boton.configure(fg_color=self.colors["Fg"],text_color=self.colors["Text"])
+        self.boton.configure(fg_color=self.colors["Fg"],text_color=self.colors["Text"])
     
     #The Mouse is Over Button    
     def on_mouse_enter(self,event):
          if(self.disabled==False):
-           if(self.have_image):
-             self.boton.configure(image=self.icons[1])
-           else:
-              self.boton.configure(fg_color=self.colors["Hover"],text_color=self.colors["Text_Hover"])
+           self.boton.configure(fg_color=self.colors["Hover"],text_color=self.colors["Text_Hover"])
     
     #Change the State of Button    
     def set_state(self,st):
@@ -364,70 +358,6 @@ class Boton(componente):
             self.disabled=True
          self.boton.configure(state=st) 
 
-    #Change Icon for Click Down Event         
-    def on_click_down(self,event):
-        self.boton.configure(image=self.icons[2])
-    
-    #change Icon for Clik Up Event    
-    def on_click_up(self, event):
-       self.boton.configure(image=self.icons[1])
-    
-    #change source of Icons    
-    def change_images(self,img_sources,num_image):
-         self.set_icons(img_sources,num_images)
-         if(self.num_images>0):
-           self.configure(image=icons[0])
-    
-    #set and load the Icons     
-    def set_icons(self,parent,font,img_sources,num_images):
-        if(self.have_image):
-            self.icons_sources=[]
-            self.icons=[]
-            self.num_images=num_images
-            try:
-              import requests
-              from io import BytesIO             
-              for i in range(0,self.num_images): 
-                 temp_img=None
-                 if(img_sources[i].startswith("http")==False):              
-                     self.icons_sources.append(constantes.FOLDER_IMAGES+img_sources[i])
-                     temp_img=Image.open(self.icons_sources[i])
-                 else:
-                     self.icons_sources.append(img_sources[i])
-                     response=requests.get(self.icons_sources[i])
-                     correcto=True
-                     if(response.status_code>400):
-                        correcto=False                     
-                     if(correcto==True):
-                        data=response.content
-                        temp_img= Image.open(BytesIO(data))                        
-                 if(temp_img!=None):
-                    resized=temp_img.resize(self.dim_boton)
-                    self.icons.append(ImageTk.PhotoImage(resized)) 
-                 else:
-                    self.have_image=False     
-                    self.img_source=None   
-                    self.num_images=-1
-                    self.colors["Fg"]="white"
-                    self.colors["Text"]="black"
-                    self.boton=ctk.CTkButton(parent,text="error loading image",bg_color="white",font=font,fg_color="black",hover_color="red",cursor='hand2')       
-                    self.boton.bind("<Enter>",self.on_mouse_enter)
-                    self.boton.bind("<Leave>",self.on_mouse_leave)                
-                  
-            except:
-                self.have_image=False     
-                self.img_source=None   
-                self.num_images=-1
-                self.colors["Fg"]="white"
-                self.colors["Text"]="black"
-                self.boton=ctk.CTkButton(parent,text="error loading image",bg_color="white",font=font,fg_color="black",activeforeground="yellow",activebackground="red",cursor='hand2')       
-                self.boton.bind("<Enter>",self.on_mouse_enter)
-                self.boton.bind("<Leave>",self.on_mouse_leave)                
-    
-    #Return True if the Button use Icons    
-    def is_icon(self):
-       return self.have_image
-       
     #Destroy Component and Free Memory  
     def free_Memory(self):
         self.boton.grid_forget()
@@ -440,40 +370,48 @@ class Boton(componente):
             self.boton.grid(in_=self.get_parent(),row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])      
         else:
             self.boton.grid_remove()
-            if(self.is_icon()):
-              self.boton.configure(image=self.icons[0])
+            
   
 #Internal Panel
 class Internal_Frame(componente):
     #Build the Inner Panel
-    def __init__(self,posicion,master,color,nombre,tag,default_state,scroll,ev,corner_radius):
+    def __init__(self,posicion,master,colors,nombre,tag,default_state,scroll,ev,corner_radius):
          super().__init__(nombre,tag,default_state,master.container)  
          self.container=None 
          self.ev=ev
-         self.color=color
+         self.colors=colors
          self.scroll=scroll
          self.pos=posicion
+         border_w=1
+         border_color=self.colors["Border"]
+         if(border_color==None):
+            border_w=0        
          if(self.scroll):
+            self.frame=ctk.CTkFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
             from event_manager import Event_manager
             root=Event_manager.vent.raiz
-            self.frame=ctk.CTkFrame(master.container,fg_color=self.color,corner_radius=corner_radius) 
+            if(border_w>0):
+               self.frame.configure(border_width=border_w,border_color=border_color)
             self.frame.grid(row=self.pos["row"],column=self.pos["column"], padx=self.pos["padx"],pady=self.pos["pady"],sticky="nsew")
             self.frame.grid_columnconfigure(0,weight=1)
             self.frame.grid_rowconfigure(0,weight=1)
-            self.canvas=ctk.CTkCanvas(self.frame,highlightthickness=0,bg=root._apply_appearance_mode(self.color))
+            self.canvas=ctk.CTkCanvas(self.frame,highlightthickness=0,bg=root._apply_appearance_mode(self.colors["Fg"]))
             self.canvas.grid(row=0,column=0,sticky="nsew" ,padx=8,pady=8)
-            self.scroll_y=ctk.CTkScrollbar(self.frame,orientation="vertical",command=self.canvas.yview)
+            self.scroll_y=ctk.CTkScrollbar(self.frame,orientation="vertical",command=self.canvas.yview,fg_color="transparent")
+            self.scroll_y.configure(button_color=self.colors["Scrollbar"],button_hover_color=self.colors["Scrollbar_Hover"])
             self.scroll_y.grid(row=0,column=1,sticky="ns",padx=8,pady=8)
-            self.scroll_x=ctk.CTkScrollbar(self.frame,orientation="horizontal",command=self.canvas.xview)
+            self.scroll_x=ctk.CTkScrollbar(self.frame,orientation="horizontal",command=self.canvas.xview,fg_color="transparent")
+            self.scroll_x.configure(button_color=self.colors["Scrollbar"],button_hover_color=self.colors["Scrollbar_Hover"])          
             self.scroll_x.grid(row=1,column=0,sticky="ew",padx=8,pady=8)
             self.canvas.configure(yscrollcommand=self.scroll_y.set,xscrollcommand=self.scroll_x.set)
-            self.container=ctk.CTkFrame(self.canvas,fg_color=self.color)
+            self.container=ctk.CTkFrame(self.canvas,fg_color=self.colors["Fg"])
             id_vent=self.canvas.create_window((0,0),window=self.container,anchor="nw")
-            self.container.bind("<Configure>",self.update_scrolls)       
+            self.frame.bind("<Configure>",self.update_scrolls)       
          else:
-           self.container=ctk.CTkFrame(master.container,fg_color=self.color,corner_radius=corner_radius) 
+             self.container=ctk.CTkFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
+             if(border_w>0):
+                 self.container.configure(border_width=border_w,border_color=border_color)
          self.last_comp=0
-         self.color=color
          self.comps=[]
          self.tags=[]
          self.names=[]
@@ -499,9 +437,9 @@ class Internal_Frame(componente):
    
     #Update scroll for Scrollable Frames
     def update_scrolls(self,event):
-        from event_manager import Event_manager
-        vent=Event_manager.vent
-        vent.raiz.after_idle(lambda:self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+        root_element=self.canvas.winfo_toplevel()
+        root_element.update_idletasks()
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
        
         
     #Limit Panel Size
@@ -523,7 +461,7 @@ class Internal_Frame(componente):
          
     #Return the Background    
     def get_background(self):
-        return self.color
+        return self.colors["Fg"]
         
     #Return the Component in the Indicated position
     def check_pos(self,pos):
@@ -628,7 +566,26 @@ class Internal_Frame(componente):
         res=(temp_comps,temp_tags,temp_names)
         return res
         
-   
+    #Destroy Component and Free Memory
+    def free_Memory(self):
+        for i in range(0,self.last_comp):
+           self.comps[i].free_Memory()
+            
+        if(self.scroll):  
+            self.container.grid_forget()
+            self.container.destroy()
+            self.canvas.grid_forget()
+            self.canvas.destroy()
+            self.scroll_y.grid_forget()
+            self.scroll_y.destroy()
+            self.scroll_x.grid_forget()
+            self.scroll_x.destroy()
+            self.frame.grid_forget()
+            self.frame.destroy()
+        else:
+            self.container.grid_forget()
+            self.container.destroy()
+        
     #Set Active or Inactive the Inner Panel    
     def set_active(self,active):
       
@@ -673,6 +630,7 @@ class Radio(componente):
         self.values=[]
         self.pos=pos
         self.orient=orient
+        self.colors=colors
         for i in range(0,self.count):
           self.radios.append(ctk.CTkRadioButton(parent,variable=self.variable, text=textos[i],value=textos[i],fg_color=colors["Fg"],border_color=colors["Border"],text_color=colors["Text"],font=fuente,hover_color=colors["Hover"],border_width_checked=border_width["Check"],border_width_unchecked=border_width["Uncheck"]))
           self.values.append(textos[i])
@@ -699,7 +657,24 @@ class Radio(componente):
     #set the State of Radio Button    
     def set_state(self,valor):
         for rad in self.radios:
-              rad.configure(state=valor) 
+              rad.configure(state=valor)
+              if(valor=="disabled"):
+                 rad.configure(fg_color=self.colors["Disabled"])
+                 rad.configure(text_color=self.colors["Disabled_Text"])
+                 rad.configure(border_color=self.colors["Disabled"])
+                 rad.configure(hover_color=self.colors["Disabled"])
+              else:
+                if(valor=="readonly"):
+                    rad.configure(fg_color=self.colors["Disabled"])
+                    rad.configure(text_color=self.colors["Disabled_Text"])
+                    rad.configure(border_color=self.colors["Disabled"])
+                    rad.configure(hover_color=self.colors["Disabled"])
+                else:
+                    rad.configure(fg_color=self.colors["Fg"])
+                    rad.configure(text_color=self.colors["Text"])
+                    rad.configure(border_color=self.colors["Border"])
+                    rad.configure(hover_color=self.colors["Hover"])
+                 
     
     #On Select Event          
     def On_select(self):
@@ -763,7 +738,7 @@ class Combo_box(componente):
     #Build the ComboBox
     def __init__(self,pos,parent,items,fuente,nombre,tag,colors,default_state,evento,force_width,select_firstOnActive):
          super().__init__(nombre,tag,default_state,parent)
-         self.combo=ctk.CTkComboBox(parent,state="readonly",values=items,font=fuente,dropdown_font=fuente , command=self.On_select,fg_color=colors["Fg"],text_color=colors["Text"],button_color=colors["Button"],hover=False ,dropdown_fg_color=colors["Fg_Item"],dropdown_hover_color=colors["Hover"],dropdown_text_color=colors["Text_Item"],text_color_disabled="white")
+         self.combo=ctk.CTkComboBox(parent,state="readonly",values=items,font=fuente,dropdown_font=fuente , command=self.On_select,fg_color=colors["Fg"],text_color=colors["Text"],button_color=colors["Button"],hover=False ,dropdown_fg_color=colors["Fg_Item"],dropdown_hover_color=colors["Hover"],dropdown_text_color=colors["Text_Item"],text_color_disabled=colors["Disabled_Text"])
          
          self.count=len(items)
          self.items_list=items
@@ -791,9 +766,11 @@ class Combo_box(componente):
     #set the State of ComboBox
     def set_state(self,valor): 
           if(valor=="disabled"):
-            self.combo.configure(fg_color="red")
+            self.combo.configure(fg_color=self.colors["Disabled"])
+            self.combo.configure(button_color=self.colors["Disabled_Button"])
           else:
             self.combo.configure(fg_color=self.colors["Fg"])
+            self.combo.configure(button_color=self.colors["Button"])
           self.combo.configure(state=valor)   
     
     #On load Event
@@ -894,25 +871,24 @@ class Labl(componente):
             self.label.grid(in_=new_master,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])
     
     #Capitalize the Text Converting Only the First Character of each phrase to Upper
-    def Capitalize_text(self,texto):
-        if(texto.isupper()==False):
+    def Capitalize_text(self,text):
+        if(text.isupper()==False):
           #Set the first Character of each Paragraph as Upper  
-          temp_texto=texto.split(" ")
-          if(len(temp_texto)>=2):
-              texto=""
-              for i in range(0,len(temp_texto)):
-                  if(len(temp_texto[i])>=3):
-                         if(temp_texto[i].isupper()==False):
-                             temp_texto[i]=temp_texto[i].capitalize()
-                             if(i>0):
-                                 texto=texto+" "+temp_texto[i].capitalize()
-                             else:
-                                 texto=temp_texto[i].capitalize() 
-                  else:
-                      texto=texto+" "+temp_texto[i]
-          else:
-             texto=texto.capitalize() 
-        return texto 
+          temp_text=text.split(" ")
+          if(len(temp_text)<2):
+             return text.capitalize() 
+          text=""
+          for i in range(0,len(temp_text)):
+              next_text=temp_text[i]
+              if(next_text.isupper()==False):
+                 if(len(next_text)>=3):
+                    next_text=next_text.capitalize()
+              if(i>0):
+                  text=text+" "+next_text
+                        
+              else:
+                  text=next_text
+        return text 
         
     #On Click Event    
     def on_click(self,arg):
@@ -959,9 +935,17 @@ class Label_Image(componente):
       super().__init__(nombre,tag,default_state,parent)
       self.w=width
       self.h=heigth
+      self.images=None
+      self.temp_images=[]
       self.set_source(img_source)
-      if(self.img!=None):
-        self.label=ctk.CTkLabel(parent,image=self.img,fg_color=bg_color,text="")
+      if(self.images!=None):
+        self.label=ctk.CTkLabel(parent,fg_color=bg_color,text="")
+        self.label.configure(image=self.images)
+        import os
+        for i in range(0,2):
+           temp_path=f"temp_foto{i}.png"
+           if(os.path.exists(temp_path)):
+              os.remove(temp_path)
       else:
         self.label=ctk.CTkLabel(parent,text="error loading image",fg_color="transparent")
       self.pos=pos
@@ -981,33 +965,40 @@ class Label_Image(componente):
     
     #Set the Source of Image    
     def set_source(self,source):
-      try:
-        if(source.startswith("http")==False):
-          #imagen local
-          temp_img=Image.open(constantes.FOLDER_IMAGES+source)
-          resized=temp_img.resize((self.w,self.h))
-          self.img=ImageTk.PhotoImage(resized)
-        else:
-          #imagen en server
-          import requests
-          from io import BytesIO
-          response=requests.get(source)
-          if(response.status_code>400):
-            self.img=None  
-            return    
-          data=response.content
-          temp_img= Image.open(BytesIO(data))
-          f=open("temp_foto.png","wb")
-          f.write(data)
-          resized=temp_img.resize((self.w,self.h))
-          self.img=ImageTk.PhotoImage(resized)   
-      except:
-         self.img=None      
+      self.temp_images=[]
+      for i in range(0,len(source)):
+         next_source=source[i]
+         try:
+            if(next_source.startswith("http")==False):
+              #Local Image
+              with Image.open(constantes.FOLDER_IMAGES+next_source) as img_file:
+                 self.temp_images.append(img_file.copy())
+            else:
+              #Server Image
+              import requests
+              response=requests.get(next_source)
+              if(response.status_code>400):
+                 continue    
+              data=response.content
+              temp_filename=f"temp_foto{i}.png"
+              with open(temp_filename,"wb") as f:
+                  f.write(data)
+              with Image.open(temp_filename) as img_file:
+                 self.temp_images.append(img_file.copy())  
+         except:
+            continue   
+      if(len(self.temp_images)<=0):
+          self.images=None
+          return
+      elif(len(self.temp_images)<2 and len(self.temp_images)>=1):
+          self.temp_images.append(self.temp_images[0])
+      self.images=ctk.CTkImage(light_image=self.temp_images[0],dark_image=self.temp_images[1],size=(self.w,self.h))
     
     #Change the Image
     def change_image(self,source):
-         self.set_source(source)
-         self.label.configure(image=self.img)
+         
+         self.set_source([source])
+         self.label.configure(image=self.images)
     
     #Destroy Component and Free Memory  
     def free_Memory(self):
@@ -1135,12 +1126,15 @@ class TextField(componente):
          if(st=="disabled"):
             self.field_state="disabled"
             self.disabled=True
-            self.field.configure(fg_color="#B2B2B2")
+            self.field.configure(fg_color=self.colors["Disabled"])
+            self.field.configure(text_color=self.colors["Disabled_Text"])
          else:
             if(st=="readonly"):
-              self.field.configure(fg_color="#B2B2B2")
+              self.field.configure(fg_color=self.colors["Disabled"])
+              self.field.configure(text_color=self.colors["Disabled_Text"])
             else:
                self.field.configure(fg_color=self.colors["Fg"])
+               self.field.configure(text_color=self.colors["Text"])
             self.disabled=False         
         
     #set the Text Value     
@@ -1173,16 +1167,90 @@ class TextField(componente):
         if(event.keysym=="BackSpace"):
             self.set_text(self.field.get())
 
+#Text Fields           
+class DateField(componente):
+    #Build the Text Field
+    def __init__(self,pos,parent,fuente,colors,nombre,tag,default_state,evento,corner_radius):      
+        super().__init__(nombre,tag,default_state,parent)
+        self.fuente=fuente
+        self.colors=colors
+        self.date_field= CTkDatePicker(parent, fg_color=self.colors["Fg"],corner_radius=corner_radius)
+        self.pos=pos 
+        self.ev=evento
+        self.disabled=False
+        self.field_state="normal"
+
+  
+    #change the Component Master of TetField component
+    def change_master(self,new_master,intern_pos):
+        if(new_master==None):
+            return
+        self.set_parent(new_master)
+        self.pos["row"]=intern_pos[0]
+        self.pos["column"]=intern_pos[1]    
+        self.date_field.grid_forget()
+        self.date_field.grid(in_=new_master,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])
+     
+
+    #get the Text 
+    def get_text(self):
+        return self.date_field.get_date()
+    
+    #get the field state as string
+    def get_field_state(self):
+        return self.field_state
+      
+    #set the state of TextField      
+    def set_state(self,st):
+         self.field.configure(state=st)
+         self.field_state=st
+         if(st=="disabled"):
+            self.field_state="disabled"
+            self.disabled=True
+            self.field.configure(fg_color=self.colors["Disabled"])
+            self.field.configure(text_color=self.colors["Disabled_Text"])
+         else:
+            if(st=="readonly"):
+              self.field.configure(fg_color=self.colors["Disabled"])
+              self.field.configure(text_color=self.colors["Disabled_Text"])
+            else:
+               self.field.configure(fg_color=self.colors["Fg"])
+               self.field.configure(text_color=self.colors["Text"])
+            self.disabled=False         
+        
+    #set the Text Value     
+    def set_date(self,text):
+        old_st=self.field_state
+        self.field.configure(state="normal")
+        self.field.delete(0,"end")
+        if(text!=""):
+            self.field.insert(0,text)
+        self.field.configure(state=old_st)
+      
+    #Destroy Component and Free Memory  
+    def free_Memory(self):
+          self.date_field.grid_forget()
+          self.date_field.destroy()
+          
+    #set Active or Inactive the Component
+    def set_active(self,value):
+        self.state=value
+        if(value==True): 
+            self.date_field.grid(in_=self.get_parent(),row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"])
+        else:
+            self.date_field.grid_remove()
+    
 
 #list box component     
 class List_Box(componente):
     #Build the Component
-    def __init__(self,pos,parent,num_items,values,colores,fuente,alto,nombre,tag,default_state,evento):
+    def __init__(self,pos,parent,num_items,values,fg_master,colors,fuente,alto,nombre,tag,default_state,evento):
           super().__init__(nombre,tag,default_state,parent)
           self.container=ctk.CTkFrame(parent,fg_color="white")
-          self.lista=Listbox(self.container,bg=colores["Fg"],fg=colores["Text"],font=fuente)
+          self.lista=Listbox(self.container,bg=colors["Fg"],fg=colors["Text"],font=fuente)
           self.lista.grid(row=0,column=0)
-          self.scrollBar=ctk.CTkScrollbar(self.container, orientation="vertical",command=self.lista.yview)
+          self.scrollBar=ctk.CTkScrollbar(self.container, orientation="vertical",command=self.lista.yview,fg_color=fg_master)
+          self.scrollBar.configure(button_color=colors["Scrollbar"],button_hover_color=colors["Scrollbar_Hover"])
           self.scrollBar.grid(row=0, column=2, sticky='ns')
           self.lista.configure(yscrollcommand=self.scrollBar.set)
           self.count=0

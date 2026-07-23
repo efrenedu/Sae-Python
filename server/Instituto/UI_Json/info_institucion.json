@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -39,8 +51,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_Box",
         "Ev": "None",
@@ -51,7 +63,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -80,7 +101,7 @@
         "Fg_Color": "transparent",
         "Id": "title_label",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -105,12 +126,12 @@
         "columnspan": "None"
       }
     },
-	 {
+    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_Box_Logo",
         "Ev": "None",
@@ -121,7 +142,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 0,
@@ -142,14 +172,17 @@
     {
       "Type": "CTkImage",
       "Propiedades": {
-        "Source": "images/logo_institucion.png",
+        "Source": [
+          "images/logo_institucion.png",
+          "images/logo_institucion_dark.png"
+        ],
         "Width": "120",
         "Heigth": "120",
         "Interactuable": "False",
         "Fg_Color": "transparent",
         "Id": "logo_inst",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Corner_Radious": "0",
         "Master": "Main_Box",
         "Initial_state": "True",
@@ -170,8 +203,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_Box2",
         "Ev": "None",
@@ -182,7 +215,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -200,12 +242,12 @@
         "propagate": "True"
       }
     },
-	{
+    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_button",
         "Ev": "None",
@@ -216,7 +258,16 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 1,
@@ -239,13 +290,13 @@
       "Propiedades": {
         "Text": "nombre de la Institucion:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "institucion_label",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -275,13 +326,13 @@
       "Propiedades": {
         "Text": "codigo de la Institucion:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "codigo_label",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -311,13 +362,13 @@
       "Propiedades": {
         "Text": "telefono de contacto:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "telefono_label",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -347,13 +398,13 @@
       "Propiedades": {
         "Text": "correo de contacto:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "correo_label",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -383,13 +434,13 @@
       "Propiedades": {
         "Text": "ubicacion:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "ubicacion_label",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -417,15 +468,15 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Instituto Nacional Nombre Instituto",
+        "Text": "U.E.N Instituto de Prueba",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "institucion",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -453,15 +504,15 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Numero Codigo",
+        "Text": "00000000",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "codigo",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -491,13 +542,13 @@
       "Propiedades": {
         "Text": "0000 0000000 / 0000 0000000",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "telefono",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -525,15 +576,15 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Correo@gmail.com",
+        "Text": "Institutodeprueba@gmail.com",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "correo",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -561,15 +612,15 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Municipio,\n  parroquia,\n  Calle,\n  Sector",
+        "Text": "Municipio , parroquia , sector ",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "ubicacion",
         "Ev": "None",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -598,37 +649,31 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "Volver",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
         "Id": "volver",
         "Ev": "constantes.EV_VOLVER",
-        "Panel_Id": "info_insitucion",
+        "Panel_Id": "info_institucion",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",

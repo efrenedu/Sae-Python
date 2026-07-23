@@ -1,6 +1,5 @@
 from General import General
 from conexion_bd import conexion_bd
-from documento import documento
 from tiempo import tiempo
 from constantes import constantes
 import requests

@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "False"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -60,14 +72,14 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
         ],
         "pady": 4,
-        "sticky": "w",
+        "sticky": "ew",
         "columnspan": "None"
       }
     },
@@ -75,10 +87,10 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
-        "Id": "Internal_Box",
+        "Id": "UserData_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -87,10 +99,62 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
+        "row": 1,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "Secrets_Questions_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
         "row": 2,
         "padx": 20,
         "pady": 20,
@@ -109,10 +173,10 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
-        "Id": "Internal_Box2",
+        "Id": "Btns_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -121,14 +185,23 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -144,8 +217,8 @@
       "Propiedades": {
         "Text": "Usuario:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "usuario_Label",
@@ -164,8 +237,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -204,7 +277,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -213,11 +286,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -234,8 +315,8 @@
       "Propiedades": {
         "Text": "Password:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "pass_Label",
@@ -254,8 +335,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -294,20 +375,28 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#FFF9CD"
         ],
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -324,8 +413,8 @@
       "Propiedades": {
         "Text": "repita password:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "pass2_Label",
@@ -344,8 +433,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -384,20 +473,28 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#FFF9CD"
         ],
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -414,8 +511,8 @@
       "Propiedades": {
         "Text": "Trabajador:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "trabajador_label",
@@ -434,8 +531,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -451,15 +548,15 @@
         "Data": "elegir",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "lista_ru",
@@ -479,24 +576,36 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -533,15 +642,15 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
         ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
+        "pady": 24,
+        "sticky": "ew",
+        "columnspan": "4"
       }
     },
     {
@@ -549,8 +658,8 @@
       "Propiedades": {
         "Text": "pregunta 1:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pregunta1",
@@ -560,7 +669,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -569,8 +678,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -586,15 +695,15 @@
         "Data": "elegir,Mejor Amigo(a) de Infancia?,Lugar de Nacimiento?,Fecha de Nacimiento?,Artista Favorito?,Pelicula Favorita?,Comida Favorita?,Libro Favorito?,Nombre Personaje de Serie Favorito?",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "pregunta1",
@@ -604,7 +713,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -614,24 +723,36 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -648,8 +769,8 @@
       "Propiedades": {
         "Text": "pregunta 2:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pregunta2",
@@ -659,7 +780,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -668,8 +789,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -685,15 +806,15 @@
         "Data": "elegir,Mejor Amigo(a) de Infancia?,Lugar de Nacimiento?,Fecha de Nacimiento?,Artista Favorito?,Pelicula Favorita?,Comida Favorita?,Libro Favorito?,Nombre Personaje de Serie Favorito?",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "pregunta2",
@@ -703,7 +824,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -713,24 +834,36 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -747,8 +880,8 @@
       "Propiedades": {
         "Text": "pregunta 3:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pregunta3",
@@ -758,7 +891,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 2
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -767,8 +900,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -784,15 +917,15 @@
         "Data": "elegir,Mejor Amigo(a) de Infancia?,Lugar de Nacimiento?,Fecha de Nacimiento?,Artista Favorito?,Pelicula Favorita?,Comida Favorita?,Libro Favorito?,Nombre Personaje de Serie Favorito?",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "pregunta3",
@@ -802,7 +935,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 2
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -812,24 +945,36 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -846,8 +991,8 @@
       "Propiedades": {
         "Text": "pregunta 4:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_pregunta4",
@@ -857,7 +1002,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 3
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -866,8 +1011,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -883,15 +1028,15 @@
         "Data": "elegir,Mejor Amigo(a) de Infancia?,Lugar de Nacimiento?,Fecha de Nacimiento?,Artista Favorito?,Pelicula Favorita?,Comida Favorita?,Libro Favorito?,Nombre Personaje de Serie Favorito?",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "pregunta4",
@@ -901,7 +1046,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 3
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -911,24 +1056,36 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -943,10 +1100,10 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "respuesta 1:",
+        "Text": "respuesta:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_res1",
@@ -956,7 +1113,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -965,8 +1122,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -1000,12 +1157,12 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 3,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1014,11 +1171,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -1033,10 +1198,10 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "respuesta 2:",
+        "Text": "respuesta:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_res2",
@@ -1046,7 +1211,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -1055,8 +1220,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -1090,12 +1255,12 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 3,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1104,11 +1269,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -1123,10 +1296,10 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": " respuesta 3:",
+        "Text": " respuesta:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_res3",
@@ -1136,7 +1309,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 2
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -1145,8 +1318,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -1180,12 +1353,12 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 3,
-          "Row": 2
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1194,11 +1367,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -1213,10 +1394,10 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": " respuesta 4:",
+        "Text": " respuesta:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_res4",
@@ -1226,7 +1407,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 3
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -1235,8 +1416,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           20,
           5
@@ -1270,12 +1451,12 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 3,
-          "Row": 3
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -1284,11 +1465,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 2,
         "padx": [
           5,
           2
@@ -1304,31 +1493,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "registrar",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -1340,7 +1523,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 4
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -1349,8 +1532,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -1362,91 +1545,26 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "limpiar",
-        "Image_Sources": "",
-        "dimension_images": "",
+        "Text": "Volver",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "limpiar_btn",
-        "Ev": "constantes.EV_RESET",
-        "Panel_Id": "registroUsuario",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 4,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "   volver   ",
-        "Image_Sources": "",
-        "dimension_images": "",
-        "Colors": {
-          "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
-          ],
-          "Text": [
-            "#323A7A",
-            "#323A7A"
-          ],
-          "Hover": [
-            "#FFD695",
-            "#EAAE61"
-          ],
-          "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
-          ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -1458,7 +1576,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 5
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -1467,8 +1585,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,

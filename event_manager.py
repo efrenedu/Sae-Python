@@ -16,7 +16,7 @@ from componentes import Combo_box
 from componentes import Boton
 from componentes import List_Box
 from componentes import Lienzo_dibujo
-from ventana_sec import ventana_secundaria
+from ventana_sec import Expedent_Windows
 from General import General
 from conexion_bd import conexion_bd
 from documento import documento
@@ -353,7 +353,7 @@ class Event_manager:
         row=data_process[1][1]      
         data=[valores,reference,row,cls.vent.panelActual_str]
         file_dat=[response.content,old_file]
-        documento.request(cls.vent.raiz,file_dat,8,data)
+        documento.request(cls.vent.raiz,file_dat,constantes.REQUEST_MODIFIC_EXCEL,data)
         
     #Determine and Execute the Actions in Planifications of Formats Process
     @classmethod 
@@ -2018,7 +2018,7 @@ class Event_manager:
                if(cedula=="" or cedula==" "):
                  General.show_message("por favor indique el estudiante","cedula de estudiante no indicada")
                  return
-            sec=ventana_secundaria(cls.vent.raiz,[600,600],['#004AAD'],True,False,None,["#FFCE88","#060000","red","yellow","green","white"],"Arial",12,{"cedula":cedula,"Panel_Id":pantalla,"Is_Student":estudiante,"Nuevo_Ingreso":nuevo_ing})
+            expedent_win= Expedent_Windows(cls.vent.raiz,[600,600],pnl.get_background(),{"cedula":cedula,"Panel_Id":pantalla,"Is_Student":estudiante,"Nuevo_Ingreso":nuevo_ing})
     
     #Remove the Files of Zip Folder    
     @classmethod

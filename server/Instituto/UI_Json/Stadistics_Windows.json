@@ -1,0 +1,104 @@
+{
+  "Pantalla_Name": "Stadistics_Win",
+  "Widgets": [
+    {
+      "Type": "CanvasStadistics",
+      "Propiedades": {
+	    "Dimension":{
+		   "Width":500,
+		   "Height":450
+		},
+        "Colors": {
+          "Fg": [
+            "#97D3E7",
+            "#323757"
+          ],
+		  "Text":[
+		    "#3B346A",
+			"#FFFFFF"
+		  ], 
+          "Pie_Chart":{
+             "Light_Mode":["#C3EDA2","#FFBDAA","#B1F2EB","#FFD97D","#BBD0FC"],
+			 "Dark_Mode":["#8DA3D0","#E173BE","#64D3A8","#4EB152","#6D66CC"]
+           }		  
+        },
+        "Id": "canvas",
+        "Ev": "None",
+        "Panel_Id": "Stadistics_Win",
+        "Corner_Radious": "0",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font_Sizes": {
+          "Title":15,"Texts":14,"Labels":14
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 0,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "Cerrar",
+        "Colors": {
+          "Fg": [
+            "#6269A9",
+            "#C8D7E5"
+          ],
+          "Text": [
+            "#D9E4E5",
+            "#303E72"
+          ],
+          "Hover": [
+            "#FFF6DC",
+            "#B0F4F8"
+          ],
+          "Text_Hover": [
+            "#794125",
+            "#303C6F"
+          ],
+          "Border": [
+            "#FCF5D3",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "close",
+        "Ev": "None",
+        "Panel_Id": "Stadistics_Win",
+        "Corner_Radious": "8",
+        "Master": "None",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    }
+  ]
+}

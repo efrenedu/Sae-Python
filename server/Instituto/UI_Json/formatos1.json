@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "False"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -39,10 +51,10 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
-        "Id": "Intern_Frame1",
+        "Id": "Left_Content_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -51,15 +63,153 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": 20,
         "pady": 20,
         "sticky": "nsew",
         "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "RightContent_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "ew",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "Bottom_Content_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "2",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "Btns_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 3,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "2",
         "column_weight": 1,
         "row_weight": 1,
         "porcent_parent": {
@@ -94,15 +244,15 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
         ],
         "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
+        "sticky": "ew",
+        "columnspan": "3"
       }
     },
     {
@@ -110,8 +260,8 @@
       "Propiedades": {
         "Text": "lista formatos:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "list_f_label",
@@ -130,8 +280,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -162,11 +312,19 @@
           "Size": "15",
           "Style": "normal"
         },
-        "Force_Width": ""
+        "Force_Width": "",
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": 20,
         "pady": 16,
         "sticky": "nsew"
@@ -201,7 +359,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -210,11 +368,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           5,
           2
@@ -231,8 +397,8 @@
       "Propiedades": {
         "Text": "formato seleccionado:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "sel_label",
@@ -252,7 +418,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           20,
           5
@@ -291,7 +457,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -300,11 +466,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           5,
           2
@@ -321,8 +495,8 @@
       "Propiedades": {
         "Text": "tipo de documento:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "type_label",
@@ -342,7 +516,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           20,
           5
@@ -357,8 +531,8 @@
       "Propiedades": {
         "Text": "accion a realizar:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "accion_label",
@@ -377,7 +551,7 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 2,
         "padx": [
           20,
@@ -394,15 +568,15 @@
         "Data": "elegir,modificar contenido,eliminar formato,descargar formato",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "accion_box",
@@ -422,23 +596,35 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 2,
         "padx": [
           5,
@@ -456,8 +642,8 @@
       "Propiedades": {
         "Text": "nombre columna de referencia:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "ref_label",
@@ -477,7 +663,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           20,
           5
@@ -516,7 +702,7 @@
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -525,11 +711,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           5,
           2
@@ -545,35 +739,29 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "siguiente",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
-        "Id": "next2",
+        "Id": "btn_next",
         "Ev": "constantes.EV_GESTION_FORMATOS",
         "Panel_Id": "formatos1",
         "Corner_Radious": "8",
@@ -581,7 +769,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 6
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -590,8 +778,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -604,31 +792,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "   volver   ",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -640,7 +822,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 7
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -649,8 +831,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,

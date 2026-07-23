@@ -5,8 +5,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Main_Box",
         "Ev": "None",
@@ -17,7 +17,19 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "False"
+        "Scroll": "True",
+        "Border_Color": [
+          "#DCFFFF",
+          "#FFFFFF"
+        ],
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
         "column": 2,
@@ -60,14 +72,14 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
         ],
         "pady": 4,
-        "sticky": "w",
+        "sticky": "ew",
         "columnspan": "None"
       }
     },
@@ -75,8 +87,8 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
         "Id": "Intern_Box1",
         "Ev": "None",
@@ -87,14 +99,23 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -110,8 +131,8 @@
       "Propiedades": {
         "Text": "buscar por:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_filter",
@@ -130,8 +151,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -144,10 +165,10 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "identificador",
+        "Text": "Filtro",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_filterVal",
@@ -166,8 +187,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -183,15 +204,15 @@
         "Data": "elegir,cedula,cargo,estatus",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Text_Color": [
           "#5E53AD",
-          "#323A7A"
+          "#F0EAF1"
         ],
         "Hover_Color": [
           "#FFF9CD",
-          "#FDD470"
+          "#648CBB"
         ],
         "Corner_Radious": "8",
         "Id": "filtros_cp",
@@ -211,24 +232,36 @@
         "Force_Width": "",
         "Text_Item": [
           "#5E53AD",
-          "#323A7A"
+          "#FFFFFF"
         ],
         "Fg_Item": [
           "#FFFFFF",
-          "#FFF9CD"
+          "#48516F"
         ],
         "Button_Color": [
           "#FFF9CD",
-          "#FFF4A8"
+          "#7DB4F3"
         ],
         "Button__Hover_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -245,8 +278,8 @@
       "Propiedades": {
         "Text": "tipo de personal:",
         "Text_Color": [
-          "#373064",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": "transparent",
         "Id": "label_workType",
@@ -255,8 +288,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 1,
-          "Row": 2
+          "Column": 2,
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -265,8 +298,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           20,
           5
@@ -279,27 +312,27 @@
     {
       "Type": "CTkRadiobutton",
       "Propiedades": {
-        "Direction": "horizontal",
+        "Direction": "vertical",
         "Button_Count": "2",
         "Buttons_Texts": [
           "docente",
           "no docente"
         ],
         "Text_Color": [
-          "#000000",
-          "#FFF4A8"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": [
           "#FFFFFF",
           "#FFF9CD"
         ],
         "Border_Color": [
-          "#ffffff",
-          "#FFF9CD"
+          "#70A2D1",
+          "#FFFFFF"
         ],
         "Hover_Color": [
-          "#ffffff",
-          "#ffffff"
+          "#FFFFFF",
+          "#FFF9CD"
         ],
         "Id": "personal_cp",
         "Ev": "2",
@@ -308,17 +341,25 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 2
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
           "Style": "bold"
-        }
+        },
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": 25,
         "pady": 8,
         "sticky": "w"
@@ -347,13 +388,13 @@
         "Placeholder_Text": "Valor del Filtro",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
+          "Column": 1,
           "Row": 1
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
-          "Style": "normal"
+          "Style": "bold"
         },
         "Fg_Focus": [
           "#FFF9CD",
@@ -362,11 +403,19 @@
         "Text_Focus": [
           "#000000",
           "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 2,
+        "column": 0,
+        "row": 1,
         "padx": [
           5,
           2
@@ -379,72 +428,13 @@
       }
     },
     {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "buscar",
-        "Image_Sources": "",
-        "dimension_images": "",
-        "Colors": {
-          "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
-          ],
-          "Text": [
-            "#323A7A",
-            "#323A7A"
-          ],
-          "Hover": [
-            "#FFD695",
-            "#EAAE61"
-          ],
-          "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
-          ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "buscar",
-        "Ev": "constantes.EV_CONSULTAR_PERSONAL",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 1
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 2,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
-        "Id": "Intern_Box2",
+        "Id": "Table_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -453,11 +443,20 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 2,
         "padx": 20,
         "pady": 20,
         "sticky": "nsew",
@@ -479,10 +478,18 @@
         "Width_Column": "89",
         "Heigth_Table": "10",
         "Colors": {
-          "Bg": "#FFEF85",
-          "Fg": "#323A7A",
+          "Bg": "#8CA8DA",
+          "Fg": "#FFFFFF",
           "Bg_Select": "#CDF3FF",
-          "Fg_Select": "#323A7A"
+          "Fg_Select": "#323A7A",
+          "ScrollBar": [
+            "#8780B8",
+            "#F5EFF5"
+          ],
+          "ScrollBar_Hover": [
+            "#8597DB",
+            "#FFFFFF"
+          ]
         },
         "Id": "table1_cp",
         "Ev": "None",
@@ -495,8 +502,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 3,
+        "column": 0,
+        "row": 2,
         "padx": 20,
         "pady": 16,
         "sticky": "nsew"
@@ -506,10 +513,10 @@
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
-          "#A7DFF5",
-          "#576EBB"
+          "#93E4F5",
+          "#7381AF"
         ],
-        "Id": "Intern_Box3",
+        "Id": "Btns_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -518,11 +525,20 @@
           "Row": 0
         },
         "Master": "Main_Box",
-        "Scroll": "False"
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 20,
         "pady": 20,
         "sticky": "nsew",
@@ -539,32 +555,79 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "generar reporte:\\n trabajador",
-        "Image_Sources": "",
-        "dimension_images": "",
+        "Text": "buscar",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
+          "Border": [
+            "#FCF5D3",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "buscar",
+        "Ev": "constantes.EV_CONSULTAR_PERSONAL",
+        "Panel_Id": "consultaPersonal",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 3,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": "e"
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "generar reporte:\n trabajador",
+        "Colors": {
+          "Fg": [
+            "#6269A9",
+            "#C8D7E5"
           ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Text": [
+            "#D9E4E5",
+            "#303E72"
+          ],
+          "Hover": [
+            "#FFF6DC",
+            "#B0F4F8"
+          ],
+          "Text_Hover": [
+            "#794125",
+            "#303C6F"
+          ],
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -585,8 +648,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -599,31 +662,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "descargar expediente",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -644,8 +701,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -658,31 +715,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "descargar carnet",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -694,7 +745,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 3,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -703,8 +754,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -717,31 +768,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "descargar constancia",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -762,8 +807,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -776,31 +821,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "lista de\\n trabajadores",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -821,8 +860,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -835,31 +874,25 @@
       "Type": "CTkButton",
       "Propiedades": {
         "Text": "descargar horario",
-        "Image_Sources": "",
-        "dimension_images": "",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -880,8 +913,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,
@@ -893,32 +926,26 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "  volver   ",
-        "Image_Sources": "",
-        "dimension_images": "",
+        "Text": "Volver",
         "Colors": {
           "Fg": [
-            "#FFF9CD",
-            "#FFEF85"
+            "#6269A9",
+            "#C8D7E5"
           ],
           "Text": [
-            "#323A7A",
-            "#323A7A"
+            "#D9E4E5",
+            "#303E72"
           ],
           "Hover": [
-            "#FFD695",
-            "#EAAE61"
+            "#FFF6DC",
+            "#B0F4F8"
           ],
           "Text_Hover": [
-            "#3A2B2E",
-            "#FFF4A8"
+            "#794125",
+            "#303C6F"
           ],
-          "Hover_Action": [
-            "#38A764",
-            "#38A764"
-          ],
-          "Text_Hover_Action": [
-            "#FFFFFF",
+          "Border": [
+            "#FCF5D3",
             "#FFFFFF"
           ]
         },
@@ -930,7 +957,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 2
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -939,8 +966,8 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 4,
+        "column": 0,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,

@@ -1,1 +1,1 @@
-In this Folder teh System Extract tmporally Zip Files for load Expedent Data of Stduents or Workers
+Folder for Extract Temporally the Expedent Zip Files 
