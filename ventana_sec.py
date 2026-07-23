@@ -8,6 +8,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageTk
 from tkinter.font import Font
 from componentes import Lienzo_dibujo, Labl, TextField, Boton, componente, Internal_Frame
 from panel import panel
+import requests
+import json
 
 class Stadistic_Windows:
 
@@ -151,6 +153,7 @@ class Expedent_Windows:
         self.raiz.grid_columnconfigure(0, weight=1)
         self.raiz.bind("<Configure>", self.on_configure)
         self.assign_components(colors, data)
+        self.panel.set_active(True)
 
     def add_expedent_component(self, pos, props, widget_type):
         id = props["Id"]
@@ -176,18 +179,18 @@ class Expedent_Windows:
         if type(parent_comp).__name__ == "Internal_Frame":
             if widget_type != "CTkFrame":
                 parent_comp = parent_comp.container
-            if widget_type == "CTkFrame":
-                border_color = props["Border_Color"]
-                if border_color == "None":
-                    border_color = None
-                colors = {'Fg':props["Color"], 
-                 'Border':border_color,  'Scrollbar':props["ScrollBar_Color"],  'Scrollbar_Hover':props["ScrollBar_Hover_Color"]}
-                scrollable = False
-                if props["Scroll"] == "True":
-                    scrollable = True
-                corner_radius = int(props["Corner_Radious"])
-                frame = Internal_Frame(pos, parent_comp, colors, id, "frame", initial_state, scrollable, ev, corner_radius)
-                self.panel.add_comp(frame, id, "frame", have_master, pos_master, pos_comp, inter_pos)
+        
+        if widget_type == "CTkFrame":
+            border_color = props["Border_Color"]
+            if border_color == "None":
+                border_color = None
+            colors = {'Fg':props["Color"], 'Border':border_color,  'Scrollbar':props["ScrollBar_Color"],  'Scrollbar_Hover':props["ScrollBar_Hover_Color"]}
+            scrollable = False
+            if props["Scroll"] == "True":
+                scrollable = True
+            corner_radius = int(props["Corner_Radious"])
+            frame = Internal_Frame(pos, parent_comp, colors, id, "frame", initial_state, scrollable, ev, corner_radius)
+            self.panel.add_comp(frame, id, "frame", have_master, pos_master, pos_comp, inter_pos)
         if widget_type == "CTkLabel":
             tag = "label"
             text = props["Text"]
