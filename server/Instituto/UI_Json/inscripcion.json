@@ -255,7 +255,7 @@
           "#93E4F5",
           "#7381AF"
         ],
-        "Id": "caja5",
+        "Id": "Bottom_ContentBox",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -278,6 +278,49 @@
       "Posicion": {
         "column": 1,
         "row": 6,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "btns_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 7,
         "padx": 20,
         "pady": 20,
         "sticky": "",
@@ -770,9 +813,101 @@
       }
     },
     {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Inscribir como:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "nacionalidad_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 6,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkRadiobutton",
+      "Propiedades": {
+        "Direction": "horizontal",
+        "Button_Count": "2",
+        "Buttons_Texts": [
+          "Nuevo Ingreso",
+          "Regular"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Border_Color": [
+          "#70A2D1",
+          "#FFFFFF"
+        ],
+        "Hover_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Id": "Inscription_Type",
+        "Ev": "0",
+        "Panel_Id": "inscripcion",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 6,
+        "padx": 25,
+        "pady": 8,
+        "sticky": "w"
+      }
+    },
+    {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "Inscribir\n Nuevo Ingreso",
+        "Text": "Inscribir",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -795,8 +930,8 @@
             "#FFFFFF"
           ]
         },
-        "Id": "nuevo ingreso",
-        "Ev": "constantes.EV_INSCRIPCION_NUEVO_INGRESO",
+        "Id": "Inscribir_btn",
+        "Ev": "constantes.EV_INSCRIPCION",
         "Panel_Id": "inscripcion",
         "Corner_Radious": "8",
         "Master": "Main_Box",
@@ -813,60 +948,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 6,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "Inscribir estudiante\n Regular",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "regular",
-        "Ev": "constantes.EV_INSCRIPCION_REGULAR",
-        "Panel_Id": "inscripcion",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 6,
+        "row": 7,
         "padx": 10,
         "pady": [
           16,
@@ -919,7 +1001,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 6,
+        "row": 7,
         "padx": 10,
         "pady": [
           16,

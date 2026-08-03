@@ -533,40 +533,22 @@
       }
     },
     {
-      "Type": "CTkButton",
+      "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "generar sabana",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "sabana_mom1",
-        "Ev": "constantes.EV_GENERAR_SABANA",
+        "Text": "Tipo de Documento:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "doc_type_label",
+        "Ev": "None",
         "Panel_Id": "rendimiento_sabana",
-        "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 1,
-          "Row": 0
+          "Column": 0,
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -576,19 +558,76 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
+        "row": 2,
+        "padx": [
+          20,
+          5
         ],
-        "sticky": "e"
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkRadiobutton",
+      "Propiedades": {
+        "Direction": "vertical",
+        "Button_Count": "2",
+        "Buttons_Texts": [
+          "Sabana de Notas",
+          "Reportes de Notas del Año"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Border_Color": [
+          "#70A2D1",
+          "#FFFFFF"
+        ],
+        "Hover_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Id": "Document_Type",
+        "Ev": "0",
+        "Panel_Id": "rendimiento_sabana",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": 25,
+        "pady": 8,
+        "sticky": "w"
       }
     },
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "notas de seccion",
+        "Text": "Generar Reporte",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -612,7 +651,7 @@
           ]
         },
         "Id": "reporte de notas",
-        "Ev": "constantes.EV_REPORTE_NOTAS_AÑO",
+        "Ev": "constantes.EV_REPORTE_NOTAS_SECCION",
         "Panel_Id": "rendimiento_sabana",
         "Corner_Radious": "8",
         "Master": "Main_Box",
@@ -641,7 +680,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "    volver   ",
+        "Text": "Volver",
         "Colors": {
           "Fg": [
             "#6269A9",

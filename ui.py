@@ -141,9 +141,12 @@ class UI:
           if(border_color=="None"):
              border_color=None
           colors={"Fg":props["Color"],"Border":border_color,"Scrollbar":scrollbar_color,"Scrollbar_Hover":scrollbar_hover_color}
-          scrollable=False
-          if(props["Scroll"]=="True"):
-            scrollable=True                
+          scrollable="False"
+          if(props["Scroll"]=="True" or props["Scroll"]=="Full"):
+            scrollable="Full"  
+          elif(props["Scroll"]=="Y Axis"):
+            scrollable="Y Axis"
+                      
           corner_radius=int(props["Corner_Radious"])
           cls.vent.add_Internal_Panel(pos,colors,id,corner_radius,ev,initial_state,parent_comp,internal_pos,scrollable)
        elif(widget_type=="CTkLabel"):
@@ -247,16 +250,19 @@ class UI:
        elif(widget_type=="CTkListbox"):
           ev=cls.interprete_event(props["Ev"],None)
           values=[] if props["Data"]=="" else props["Data"].split(",")
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Scrollbar":props["ScrollBar_Color"],"Scrollbar_Hover":props["ScrollBar_Hover_Color"]}
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Scrollbar":props["ScrollBar_Color"],"Scrollbar_Hover":props["ScrollBar_Hover_Color"],"Selected_Fg":props["Selected_Color"],"Selected_Text":props["Selected_Text_Color"]}
           heigth_list=int(props["Heigth"])
           font_data=props["Font"]
           cls.vent.add_ListBox(pos,values,font_data,colors,heigth_list,id,ev,initial_state,parent_comp,internal_pos)
        elif(widget_type=="CTkDate"):
-          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"]}
+          placeholder_text=props["Placeholder_Text"]
+          colors={"Fg":props["Fg_Color"],"Text":props["Text_Color"],"Placeholder_Text":props["Placeholder_Text_Color"],"Fg_Focus":props["Fg_Focus"],"Text_Focus":props["Text_Focus"],"Disabled":props["Disabled_Color"],"Disabled_Text":props["Disabled_TextColor"]}
+          if(colors["Placeholder_Text"]==""):
+            colors["Placeholder_Text"]="gray"
           corner_radius=int(props["Corner_Radious"])
           font_data=props["Font"]
           ev=cls.interprete_event(props["Ev"],None)
-          cls.vent.add_date_field(pos,colors,font_data,corner_radius,ev,id,initial_state,parent_comp,internal_pos)
+          cls.vent.add_date_field(pos,colors,font_data,corner_radius,placeholder_text,ev,id,initial_state,parent_comp,internal_pos)
      
          
        

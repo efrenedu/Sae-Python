@@ -449,8 +449,8 @@ class estudiante:
              return -2 
         return True 
 
-    #Verify if The Modification in the St
-    def is__valid_modific(self,cedula,cedulado,data_estud,data_repres,data_exp,data_dir):
+    #Verify if The Modification in the Student
+    def is_valid_modific(self,cedula,cedulado,data_estud,data_repres,data_exp,data_dir):
         
         from General import General
         from conexion_bd import conexion_bd

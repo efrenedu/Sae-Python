@@ -953,7 +953,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "siguiente",
+        "Text": "Gestionar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -976,7 +976,7 @@
             "#FFFFFF"
           ]
         },
-        "Id": "next1",
+        "Id": "Accion_btn",
         "Ev": "constantes.EV_GESTIONAR_CALIF",
         "Panel_Id": "rendimiento_GestionCalifiaciones_Identific",
         "Corner_Radious": "8",
@@ -1006,60 +1006,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "generar reporte",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "report momento",
-        "Ev": "constantes.EV_REPORTE_NOTAS_MOMENTO",
-        "Panel_Id": "rendimiento_GestionCalifiaciones_Identific",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 6,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "    volver   ",
+        "Text": "Volver",
         "Colors": {
           "Fg": [
             "#6269A9",

@@ -220,7 +220,7 @@ class conexion_bd:
           data[1].append(constantes.TABLA_CARGO)
           data[1].append(constantes.TABLA_DIRECCION)
           data[1].append(constantes.TABLA_EXPEDIENTE)
-          documento.request(root,path,7,data)
+          documento.request(root,path,constantes.REQUEST_READ_CSV,data)
         
     #Build CSV Files withe Information of Data Base
     @classmethod
@@ -287,7 +287,7 @@ class conexion_bd:
           data[3].append(constantes.CAMPOS_ESTATUS_ESTUD)
           data[3].append(constantes.CAMPOS_INTENTOS_USUARIO)
           data[3].append(constantes.CAMPOS_AÑOS_INCORPORADOS)
-          documento.request(root,filename,6,data)
+          documento.request(root,filename,constantes.REQUEST_WRITE_CSV,data)
     
      #Set Default Values of Tables    
     @classmethod
@@ -352,6 +352,24 @@ class conexion_bd:
                     d_area=[odn,"No",inc[0],fecha]
                     cls.add_data(d_area)
 
+    #Check the Data Integrity of Tables , Return False if the Table Is Corrupt
+    @classmethod
+    def check_dataBase(cls,nomb_base,nomb_table):
+      try:
+          query=f"CHECK_ TABLE {nomb_base}.{nomb_table}"
+          cls.cursor.execute(query)
+          result=cls.cursor.fetchall()
+          res=False
+          for row in result:
+             msg_type=row[2]
+             msg_text=row[3]
+             if(msg_type=="status" and msg_text=="OK"):
+                res=True
+          return res
+      except Exception as e:
+         return False
+            
+            
     #Build the Data Base
     @classmethod
     def create_base(cls,nomb_base):
@@ -554,11 +572,7 @@ class conexion_bd:
         for j in range(0,len(constantes.FORANEOS_PROFESOR)):
             if(constantes.FORANEOS_PROFESOR[j]!=False):
                 query+=" , "
-                if(constantes.FORANEOS_PROFESOR[j]==constantes.TABLA_SECCION):
-                   query+="FOREIGN KEY("+constantes.CAMPOS_PROFESOR[j]+") REFERENCES "+constantes.FORANEOS_PROFESOR[j]+"("+constantes.CLAVE_SECCION+")"
-                    
-                else:
-                    query+="FOREIGN KEY("+constantes.CAMPOS_PROFESOR[j]+") REFERENCES "+constantes.FORANEOS_PROFESOR[j]+"("+constantes.CAMPOS_PROFESOR[j]+")"
+                query+="FOREIGN KEY("+constantes.CAMPOS_PROFESOR[j]+") REFERENCES "+constantes.FORANEOS_PROFESOR[j]+"("+constantes.CAMPOS_PROFESOR[j]+")"
                     
         query+=");"
         cls.cursor.execute(query)

@@ -17,7 +17,7 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True",
+        "Scroll": "Y Axis",
         "Border_Color": [
           "#DCFFFF",
           "#FFFFFF"
@@ -54,7 +54,7 @@
           "#93E4F5",
           "#7381AF"
         ],
-        "Id": "Intern_Box",
+        "Id": "Content_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -75,7 +75,7 @@
         ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 0,
         "padx": 20,
         "pady": 20,
@@ -115,15 +115,15 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 0,
         "padx": [
           20,
           5
         ],
         "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
+        "sticky": "ew",
+        "columnspan": "2"
       }
     },
     {
@@ -133,7 +133,7 @@
           "#93E4F5",
           "#7381AF"
         ],
-        "Id": "Intern_Box2",
+        "Id": "Actions_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -154,11 +154,11 @@
         ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 1,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -197,7 +197,7 @@
         ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 2,
         "padx": 20,
         "pady": 20,
@@ -215,7 +215,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "secciòn a modificar:",
+        "Text": "secciòn Principal:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
@@ -228,7 +228,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -237,14 +237,14 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
         ],
         "pady": 4,
-        "sticky": "w",
+        "sticky": "",
         "columnspan": "None"
       }
     },
@@ -265,14 +265,14 @@
           "#648CBB"
         ],
         "Corner_Radious": "8",
-        "Id": "accion",
+        "Id": "secc_main_list",
         "Ev": "16",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 1,
-          "Row": 0
+          "Column": 0,
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -310,8 +310,8 @@
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           5,
           2
@@ -326,20 +326,20 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "secciòn a \n intercambiar:",
+        "Text": "secciòn Secundaria:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "intercamb_lbl",
+        "Id": "sec_secc_lbl",
         "Ev": "None",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 0
+          "Column": 1,
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -348,14 +348,14 @@
         }
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           20,
           5
         ],
         "pady": 4,
-        "sticky": "w",
+        "sticky": "",
         "columnspan": "None"
       }
     },
@@ -376,14 +376,14 @@
           "#648CBB"
         ],
         "Corner_Radious": "8",
-        "Id": "intercambio",
+        "Id": "secc_sec_list",
         "Ev": "17",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 0
+          "Column": 1,
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -421,8 +421,8 @@
         ]
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": [
           5,
           2
@@ -442,13 +442,13 @@
         "Fg_Color": "white",
         "Heigth": "5",
         "Id": "secc1",
-        "Ev": "6",
+        "Ev": "None",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 1,
-          "Row": 2
+          "Column": 0,
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -463,11 +463,13 @@
         "ScrollBar_Color": [
           "#8780B8",
           "#F5EFF5"
-        ]
+        ],
+        "Selected_Color": "#CDF3FF",
+        "Selected_Text_Color": "#323A7A"
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": 20,
         "pady": 16,
         "sticky": "nsew"
@@ -481,13 +483,13 @@
         "Fg_Color": "white",
         "Heigth": "5",
         "Id": "secc2",
-        "Ev": "7",
+        "Ev": "None",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 2
+          "Column": 1,
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -502,33 +504,141 @@
         "ScrollBar_Color": [
           "#8780B8",
           "#F5EFF5"
-        ]
+        ],
+        "Selected_Color": "#CDF3FF",
+        "Selected_Text_Color": "#323A7A"
       },
       "Posicion": {
-        "column": 1,
-        "row": 1,
+        "column": 0,
+        "row": 0,
         "padx": 20,
         "pady": 16,
         "sticky": "nsew"
       }
     },
     {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": ">>",
+        "Colors": {
+          "Fg": [
+            "#6269A9",
+            "#C8D7E5"
+          ],
+          "Text": [
+            "#D9E4E5",
+            "#303E72"
+          ],
+          "Hover": [
+            "#FFF6DC",
+            "#B0F4F8"
+          ],
+          "Text_Hover": [
+            "#794125",
+            "#303C6F"
+          ],
+          "Border": [
+            "#FCF5D3",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "MoveA_btn",
+        "Ev": "constantes.EV_MOVE_STUDENTA_TO_SECTIONB",
+        "Panel_Id": "organizar_secciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 0,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": ""
+      }
+    },
+    {
+      "Type": "CTkButton",
+      "Propiedades": {
+        "Text": "<<",
+        "Colors": {
+          "Fg": [
+            "#6269A9",
+            "#C8D7E5"
+          ],
+          "Text": [
+            "#D9E4E5",
+            "#303E72"
+          ],
+          "Hover": [
+            "#FFF6DC",
+            "#B0F4F8"
+          ],
+          "Text_Hover": [
+            "#794125",
+            "#303C6F"
+          ],
+          "Border": [
+            "#FCF5D3",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "MoveB_btn",
+        "Ev": "constantes.EV_MOVE_STUDENTB_TO_SECTIONA",
+        "Panel_Id": "organizar_secciones",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 4
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 0,
+        "padx": 10,
+        "pady": [
+          16,
+          20
+        ],
+        "sticky": ""
+      }
+    },
+    {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "estudiante:",
+        "Text": "Accion:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "seccion_label_estuds1",
+        "Id": "accion_label",
         "Ev": "None",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 5
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -537,7 +647,7 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 1,
         "padx": [
           20,
@@ -549,141 +659,52 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkCombobox",
       "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
+        "Data": "elegir,Asignar Prof Guia,Actualizar Estudiantes",
         "Fg_Color": [
           "#FFFFFF",
-          "#FFFFFF"
+          "#48516F"
         ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
+        "Text_Color": [
+          "#5E53AD",
+          "#F0EAF1"
         ],
-        "Id": "estud",
-        "Ev": "0",
-        "Panel_Id": "organizar_secciones",
+        "Hover_Color": [
+          "#FFF9CD",
+          "#648CBB"
+        ],
         "Corner_Radious": "8",
+        "Id": "accion_List",
+        "Ev": "constantes.COMBOBOX_UPDATE_SECTIONS_MANAGER_ACTION",
+        "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 5
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
           "Style": "bold"
         },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "estudiante a \n intercambiar:",
-        "Text_Color": [
+        "Force_Width": "",
+        "Text_Item": [
           "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "seccion_label_estuds2",
-        "Ev": "None",
-        "Panel_Id": "organizar_secciones",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
           "#FFFFFF"
         ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
+        "Fg_Item": [
+          "#FFFFFF",
+          "#48516F"
         ],
-        "Id": "estud_intercambio",
-        "Ev": "0",
-        "Panel_Id": "organizar_secciones",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
+        "Button_Color": [
           "#FFF9CD",
-          "#FFF9CD"
+          "#7DB4F3"
         ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
         ],
         "Disabled_Color": [
           "#E3D3EF",
@@ -692,10 +713,14 @@
         "Disabled_TextColor": [
           "#5C4D66",
           "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 1,
         "padx": [
           5,
@@ -717,14 +742,14 @@
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "seccion_label1",
+        "Id": "prof_guialabel",
         "Ev": "None",
         "Panel_Id": "organizar_secciones",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 6
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -733,7 +758,7 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 1,
         "padx": [
           20,
@@ -768,7 +793,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 6
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -806,7 +831,7 @@
         ]
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 1,
         "padx": [
           5,
@@ -817,165 +842,6 @@
           6
         ],
         "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "mover estudiante",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "move_btn",
-        "Ev": "constantes.EV_MOVER_ESTUD",
-        "Panel_Id": "organizar_secciones",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 3
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 1,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "intercambiar estudiantes",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "intercamb_btn",
-        "Ev": "constantes.EV_INTERCAMBIAR_ESTUDS",
-        "Panel_Id": "organizar_secciones",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 3
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 1,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "incorporar estudiante",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "incorp_btn",
-        "Ev": "constantes.EV_INCORPORAR_ESTUD",
-        "Panel_Id": "organizar_secciones",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 1,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
       }
     },
     {
@@ -1021,7 +887,7 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 2,
         "padx": 10,
         "pady": [
@@ -1074,7 +940,7 @@
         }
       },
       "Posicion": {
-        "column": 1,
+        "column": 0,
         "row": 2,
         "padx": 10,
         "pady": [

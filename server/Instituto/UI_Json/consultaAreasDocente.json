@@ -17,7 +17,7 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True",
+        "Scroll": "False",
         "Border_Color": [
           "#DCFFFF",
           "#FFFFFF"
@@ -367,7 +367,7 @@
         "row": 3,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,

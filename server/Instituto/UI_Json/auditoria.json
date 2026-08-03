@@ -115,7 +115,7 @@
         "row": 2,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -257,7 +257,7 @@
         "Panel_Id": "auditoria",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": " Valor del Filtro",
+        "Placeholder_Text": " Indique el Filtro",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
@@ -297,6 +297,42 @@
           6
         ],
         "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Valor del Filtro:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label_filtroVal",
+        "Ev": "None",
+        "Panel_Id": "auditoria",
+        "Master": "Main_Box",
+        "Initial_state": "False",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
       }
     },
     {
@@ -372,7 +408,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -391,7 +427,7 @@
         "Panel_Id": "auditoria",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "Fecha",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "False",
         "Intern_Position": {
           "Column": 2,
@@ -434,7 +470,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -453,7 +489,7 @@
         "Panel_Id": "auditoria",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "Fecha de Fin",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "False",
         "Intern_Position": {
           "Column": 3,
@@ -571,59 +607,6 @@
       }
     },
     {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "buscar",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "buscar",
-        "Ev": "constantes.EV_AUDITORIA",
-        "Panel_Id": "auditoria",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 2,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
@@ -737,7 +720,7 @@
         "row": 4,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -749,9 +732,120 @@
       }
     },
     {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Accion :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label_Accion",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "Buscar,Generar Reporte de Usuarios,Limpiar Historial de Usuarios",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F0EAF1"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#648CBB"
+        ],
+        "Corner_Radious": "8",
+        "Id": "Accion_consulta",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#FFFFFF"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 4,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "generar reporte",
+        "Text": "Consultar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -775,67 +869,14 @@
           ]
         },
         "Id": "buscar",
-        "Ev": "constantes.EV_REPORTE_ACCIONES_USUARIOS",
+        "Ev": "constantes.EV_AUDITORIA",
         "Panel_Id": "auditoria",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 4,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "limpiar reportes",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "limpiar",
-        "Ev": "constantes.EV_LIMPIAR_REPORTES",
-        "Panel_Id": "auditoria",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",

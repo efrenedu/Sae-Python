@@ -77,8 +77,8 @@
       "Posicion": {
         "column": 1,
         "row": 1,
-        "padx": 0.025,
-        "pady": 0.05,
+        "padx": 20,
+        "pady": 20,
         "sticky": "",
         "columnspan": "None",
         "column_weight": 1,

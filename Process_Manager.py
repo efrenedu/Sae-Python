@@ -15,6 +15,13 @@ class Process_Manager:
     INSCRIPTION_NUEVO_INGRESO=0
     INSCRIPTION_REGULAR=1
     INSCRIPTION_UNDEFINED=-1
+    RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_GESTION_CALIFICATION=0
+    RENDIMIENTO_OPTION_ACCESS_SABANA_AND_CALIFICATIONS_YEAR_PANEL=1
+    RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_MATERIA_PENDIENTE=3
+    RENDIMIENTO_OPTION_IDENTIFIC_MATERIA_PENDIENTE=4
+    RENDIMIENTO_OPTION_IDENTIFIC_GESTION_CALIFICATIONS=5
+    RENDIMIENTO_OPTION_PROCESS_MATERIA_PENDIENTE=6
+    RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT=7
     
     #Return the Section to Assign the Student On the Inscription 
     @classmethod
@@ -276,6 +283,7 @@ class Process_Manager:
              data_seccion=cls.get_seccion(year_curso,turno)                      
              fields=pnl.get_comps_byTag("field")
              data_estud.append(fields)
+             data_estud.append(pnl.get_comp_byName("fecha").get_text())
              data_estud.append(pnl.get_comp_byName("salud").get_selected_value())
              data_estud.append(pnl.get_comp_byName("genero").get_selected_value())
              data_estud.append(year_curso)
@@ -302,8 +310,7 @@ class Process_Manager:
                 if(last_dat[0][2]!="True" and (data_pendiente[0]!="False" or data_repitiendo[0]!="False")):
                     vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_4)
                     pnl=vent.panelActual
-                    pnl.get_comp_byName("seccion").set_text("seccion:"+data_seccion[3])
-                    pnl.get_comp_byName("year").set_text("año:"+year_curso+" año")
+                    pnl.get_comp_byName("seccion").set_text(f"Seccion Asignada: {year_curso}-{data_seccion[3]}")
                     if(data_pendiente[0]!="False"):
                         temp_pendiente=[]
                         for i in range(1,len(data_pendiente)):
@@ -398,35 +405,35 @@ class Process_Manager:
         
         if(user_t!="admin" and user_t!="coordinador"):
             is_secretaria=True
-        if(opcion<=4):
+        if(opcion<=cls.RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT):
            cls.verificar_caudicidad(usr,vent)
         
-        if(opcion==0):
+        if(opcion==cls.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_GESTION_CALIFICATION):
             #gestion de calific 1
             vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA)
             usr.reset_data_process(0)            
-        elif(opcion==1):
+        elif(opcion==cls.RENDIMIENTO_OPTION_ACCESS_SABANA_AND_CALIFICATIONS_YEAR_PANEL):
             #sabana de notas
             if(is_secretaria==False):
                 vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_SABANA_NOTAS)
                 usr.reset_data_process(0)
             else:
                General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")
-        elif(opcion==3):
+        elif(opcion==cls.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_MATERIA_PENDIENTE):
             #materia pendiente 1
             if(is_secretaria==False):
                vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND)
                usr.reset_data_process(0)
             else:
                General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")
-        elif(opcion==4):
+        elif(opcion==cls.RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT):
             #notas finales.
              if(is_secretaria==False):
                  vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF_FINALES)
                  usr.reset_data_process(0)
              else:
                  General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")  
-        elif(opcion==5):
+        elif(opcion==cls.RENDIMIENTO_OPTION_IDENTIFIC_MATERIA_PENDIENTE):
             #materia pendiente 2
             data_proces=[]
             ced=pnl.get_comp_byName("cedula_p3").get_text()
@@ -463,7 +470,7 @@ class Process_Manager:
                    General.show_message("estudiante no inscrito","estudiante invalido")
                 elif(valido==-2):
                    General.show_message("por favor seleccione un area de formacion","estudiante invalido")
-        elif(opcion==6):
+        elif(opcion==cls.RENDIMIENTO_OPTION_IDENTIFIC_GESTION_CALIFICATIONS):
             #gestion de calific 2
             if(is_secretaria==True):
                 General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")
@@ -492,7 +499,7 @@ class Process_Manager:
                    General.show_message("por favor seleccione un area de formacion","estudiante invalido")
                elif(valido==-3):
                    General.show_message("por favor seleccione un momento academico","momento invalido")
-        elif(opcion==7):
+        elif(opcion==cls.RENDIMIENTO_OPTION_PROCESS_MATERIA_PENDIENTE):
              #materia pendiente 3
              estud=estudiante()
              time_object=tiempo()
@@ -530,33 +537,58 @@ class Process_Manager:
                 elif(valido[0]==-5):
                    General.show_message("no se puede registrar el intento el dia de hoy","dia invalido para registro")   
     
+    #Determine the Action to exectue from Calification Gestion Panel
+    @classmethod
+    def interprete_Calification_Gestion_Action(cls,usr,vent):
+       pnl=vent.panelActual
+       action_comp=pnl.get_comp_byName("Action_List")
+       action_str="elegir"
+       if(action_comp!=None):
+          action_str=action_comp.get_selected_value().lower()
+       if(action_str=="elegir"):
+          General.show_message("Por Favor Indique una Accion a Realizar","Accion Invalida")
+          return
+       if("calificacion" in action_str):
+          if(action_str=="nueva calificacion"):
+             from Register_Manager import Register_Manager
+             Register_Manager.registrar_calificacion(usr,vent)             
+          elif(action_str=="editar calificacion"):
+             cls.update_calification(usr,vent)
+          elif(action_str=="borrar calificacion"):
+             cls.delete_calification(usr,vent)
+       elif(action_str=="establecer estimulacion del area de formacion"):
+             cls.estimular_mom(usr,vent)
     
     #Remove a Calification Associated to an Academic Moment
     @classmethod
     def delete_calification(cls,usr,vent):
         pnl=vent.panelActual
-        field=pnl.get_comp_byName("calific_num_p2")
+        evaluation=""
+        tabl_califics=pnl.get_comp_byName("table_califics")
+        if(tabl_califics!=None):
+           selected_row=tabl_califics.get_row_selectedData()
+           if(selected_row!=" "):
+             if(len(selected_row)>0):
+                 evaluation=selected_row[0]
         motivo=pnl.get_comp_byName("motivo").get_text()
-        if(field.get_text()=="" or field.get_text()==" "):
-             General.show_message("por favor seleccione una calificacion de la lista","calificacion invalida")
+        if(evaluation==""):
+             General.show_message("por Indique la Calificacion a Borrar","calificacion invalida")
              return
         if(motivo=="" or motivo==" "):
              General.show_message("por favor escriba un motivo de la modificacion","motivo de modificacion invalido")
              return  
-        id_calific=field.get_text()
         time_object=tiempo()
         estud=estudiante()
         temp_dat=usr.get_data_process()[0]
-        data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],field.get_text()]
+        data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],evaluation]
         if(General.show_confirmDialog("esta seguro que desea borrar esta calificacion?","borrar calificacion")!=True):
             return  
         valido=estud.delete_calif(data_estud,time_object.get_fecha())
         if(valido[0]==True):
-           tabla=pnl.get_comp_byName("table1_p1")
-           tabla.reset()
+           tabl_califics.reset()
            calificaciones=valido[1]
            for i in range(0,len(calificaciones)):
-              tabla.add_row(calificaciones[i])
+              tabl_califics.add_row(calificaciones[i])
            prom_data=valido[2]
            cali=str(prom_data[1])
            defi=str(prom_data[3])
@@ -568,8 +600,7 @@ class Process_Manager:
            pnl.get_comp_byName("calific_m_p1_2").set_text("calificacion:"+cali+"pts")
            pnl.get_comp_byName("calific_m_p1_3").set_text("estimulacion:"+str(prom_data[2])+"pts")
            pnl.get_comp_byName("calific_m_p1_4").set_text("definitiva:"+defi+"pts")
-           field.set_text("")
-           pnl.get_comp_byName("calific_val_p2").set_text("")
+           pnl.get_comp_byName("calific_val").set_text("")
            pnl.get_comp_byName("motivo").set_text("")
            usr.add_action_historial(["borrar calificacion",time_object.get_tiempo()])
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
@@ -585,27 +616,36 @@ class Process_Manager:
     @classmethod
     def update_calification(cls,usr,vent):
         pnl=vent.panelActual
+        evaluation=""
+        tabl_califics=pnl.get_comp_byName("table_califics")
+        if(tabl_califics!=None):
+           selected_row=tabl_califics.get_row_selectedData()
+           if(selected_row!=" "):
+             if(len(selected_row)>0):
+                 evaluation=selected_row[0]
         motivo=pnl.get_comp_byName("motivo").get_text()
+        if(evaluation==""):
+             General.show_message("por Indique la Calificacion a Modificar","calificacion invalida")
+             return      
         if(motivo=="" or motivo==" "):
              General.show_message("por favor escriba un motivo de la modificacion","motivo de modificacion invalido")
              return
         if(General.show_confirmDialog("esta seguro que desea modificar esta calificacion?","modificar calificacion")!=True):
             return
-        field1=pnl.get_comp_byName("calific_val_p2")
-        field2=pnl.get_comp_byName("calific_num_p2")
-        next_calific=field1.get_text()
-        id_calif=field2.get_text()
+        calific_comp=pnl.get_comp_byName("calific_val")
+        next_calific=""
+        if(calific_comp!=None):
+           next_calific=calific_comp.get_text()
         time_object=tiempo()
         estud=estudiante()
         temp_dat=usr.get_data_process()[0]
-        data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],id_calif,next_calific]
+        data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],evaluation,next_calific]
         valido=estud.modific_calif(data_estud,time_object.get_fecha())
         if(valido[0]==True):
-           tabla=pnl.get_comp_byName("table1_p1")
-           tabla.reset()
+           tabl_califics.reset()
            calificaciones=valido[1]
            for i in range(0,len(calificaciones)):
-               tabla.add_row(calificaciones[i])
+               tabl_califics.add_row(calificaciones[i])
            prom_data=valido[2]
            cali=str(prom_data[1])
            defi=str(prom_data[3])
@@ -617,8 +657,7 @@ class Process_Manager:
            pnl.get_comp_byName("calific_m_p1_2").set_text("calificacion:"+cali+"pts")
            pnl.get_comp_byName("calific_m_p1_3").set_text("estimulacion:"+str(prom_data[2])+"pts")
            pnl.get_comp_byName("calific_m_p1_4").set_text("definitiva:"+defi+"pts")
-           field1.set_text("")
-           field2.set_text("")
+           calific_comp.set_text("")
            pnl.get_comp_byName("motivo").set_text("")
            usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
@@ -643,16 +682,16 @@ class Process_Manager:
          if(motivo=="" or motivo==" "):
              General.show_message("por favor escriba un motivo de la modificacion","motivo de modificacion invalido")
              return
-         field1=pnl.get_comp_byName("estimul_p2")
-         field2=pnl.get_comp_byName("estimul_p3")
+         estimuñ_prom_field=pnl.get_comp_byName("estimul_prom")
+         estimul_areas_field=pnl.get_comp_byName("estimul_areas")
          time_object=tiempo()
          estud=estudiante()
          temp_dat=usr.get_data_process()[0]
-         data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],field1.get_text(),field2.get_text()]
+         data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],estimuñ_prom_field.get_text(),estimul_areas_field.get_text()]
          valido=estud.estimular_area(data_estud,time_object.get_fecha())
          if(valido[0]==True):
-            field1.set_text("")
-            field2.set_text("")  
+            estimuñ_prom_field.set_text("")
+            estimul_areas_field.set_text("")  
             prom_data=valido[1]
             pnl.get_comp_byName("calific_m_p1_1").set_text("promedio:"+str(prom_data[0])+"pts")
             pnl.get_comp_byName("calific_m_p1_2").set_text("calificacion:"+str(prom_data[1])+"pts")
@@ -681,50 +720,36 @@ class Process_Manager:
             elif(valido[0]==-7):
               General.show_message("solo se puede aplicar un punto por cada razon de estimulacion","demasiados puntos de estimulacion")
                 
-    #Remove Estimulation Points Associated to an Academic Moment
+    
+    #process definitvecalification gestion Panel : Generate report or Set the Calification of Students from Another Institutes
     @classmethod
-    def remover_estimulacion_mom(cls,usr,vent):
-        pnl=vent.panelActual
-        motivo=pnl.get_comp_byName("motivo").get_text()
-        if(motivo=="" or motivo==" "):
-             General.show_message("por favor escriba un motivo de la modificacion","motivo de modificacion invalido")
-             return   
-        if(General.show_confirmDialog("esta seguro que desea remover la estimulacion de esta area?","borrar calificacion")!=True):
-            return  
-        time_object=tiempo()  
-        estud=estudiante()
-        temp_dat=usr.get_data_process()[0]
-        data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4]]
-        valido=estud.borrar_estimulacion(data_estud,time_object.get_fecha())
-        if(valido[0]==True):
-            prom_data=valido[1]
-            pnl.get_comp_byName("calific_m_p1_1").set_text("promedio:"+str(prom_data[0])+"pts")
-            pnl.get_comp_byName("calific_m_p1_2").set_text("calificacion:"+str(prom_data[1])+"pts")
-            pnl.get_comp_byName("calific_m_p1_3").set_text("estimulacion:"+str(prom_data[2])+"pts")
-            pnl.get_comp_byName("calific_m_p1_4").set_text("definitiva:"+str(prom_data[3])+"pts")
-            pnl.get_comp_byName("motivo").set_text("")
-            usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
-            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","eliminar estimulacion",motivo,time_object.get_fecha()]
-            conexion_bd.add_data(data_hist)
-            General.show_message("estimulacion removida satisafactoriamente","estimulacion removida")
-        else:
-          if(valido[0]==-1):
-            General.show_message("el area de formacion no tiene puntos de estimulacion que se puedan quitar","area sin puntos de estimulacion")
-          elif(valido[0]==-2):
-            General.show_message("el estudiante no tiene calificacion en esta area del momento academico indicado","estudiante sin calificacion")
-     
-    #Modify Definitive Calification fo Especial Cases
-    @classmethod
-    def modific_calif_final(cls,usr,vent):
+    def process_definitve_calification_gestion(cls,usr,vent):
        pnl=vent.panelActual
-       ced=pnl.get_comp_byName("identificador").get_text()
+       action_comp=pnl.get_comp_byName("action_list")
+       if(action_comp!=None):
+          action_value=action_comp.get_selected_value()
+          if(action_value=="Elegir"):
+             General.show_message("Por Favor Indique la Accion a Realizar","Accion Invalida")
+             return
+          elif(action_value=="Generar Reporte de Notas"):
+              from Consult_Manager import Consult_Manager
+              Consult_Manager.generar_reporte(pnl,"notas finales",usr)
+              return
+      
+       field_ced=pnl.get_comp_byName("cedula_estudiante")
+       nacionaliad_comp=pnl.get_comp_byName("nacionalidad")
+       cedula_estud=""
+       if(field_ced!=None and nacionaliad_comp!=None):
+          nacionalidad_value=nacionaliad_comp.get_selected_value()
+          if(nacionalidad_value.lower()=="venezolano"):
+              cedula_estud=f"V-{field_ced.get_text()}"
+          else:
+             cedula_estud=f"E-{field_ced.get_text()}"
        conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-       data_estud=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[ced],["and"])
+       data_estud=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[cedula_estud],["and"])
        area=pnl.get_comp_byName("area").get_text()
        year=pnl.get_comp_byName("year").get_text()
-       tabla=pnl.get_comp_byName("table1_p1")
+       tabla=pnl.get_comp_byName("table_califics")
        old_calif=tabla.get_row_selectedData()
        if(old_calif==" "):
          General.show_message("por favor seleccione una calificacion de la lista","calificacion no seleccionada")
@@ -733,7 +758,7 @@ class Process_Manager:
        new_calif=pnl.get_comp_byName("calif").get_text() 
        time_object=tiempo()
        estud=estudiante()
-       valido=estud.modific_calif_final([ced,area,year,old_calif,new_calif],time_object.get_fecha())        
+       valido=estud.modific_calif_final([cedula_estud,area,year,old_calif,new_calif],time_object.get_fecha())        
        if(valido>=0):
            flds=pnl.get_comps_byTag("field")
            for fl in flds:
@@ -741,7 +766,7 @@ class Process_Manager:
                   fl.set_text("")
            tabla.reset()
            conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-           data_calif=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION_FINAL,len(constantes.CAMPOS_CALIFICACION_FINAL),[constantes.CLAVE_ESTUDIANTE],[ced],["and"])
+           data_calif=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION_FINAL,len(constantes.CAMPOS_CALIFICACION_FINAL),[constantes.CLAVE_ESTUDIANTE],[cedula_estud],["and"])
            for i in range(0,len(data_calif)):
               tabla.add_row([data_calif[i][3],data_calif[i][2],data_calif[i][4]])
            if(valido==1):
@@ -878,7 +903,7 @@ class Process_Manager:
     @classmethod
     def verify_cronogram(cls,usr,vent,parte):
         pnl=vent.panelActual
-        fields=pnl.get_comps_byTag("field")
+        fields=pnl.get_comps_byTag("date")
         data_send=[] 
         razones_send=[]        
         time_object=tiempo()

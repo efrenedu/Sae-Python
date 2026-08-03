@@ -333,20 +333,27 @@ class Register_Manager:
        from event_manager import Event_manager
        pnl=vent.panelActual
        valido=0  
-       motivo=pnl.get_comp_byName("motivo").get_text()
-       valor=General.show_input_message("ingrese el valor de la calificacion","nueva calificacion")
-       if(valor==None):
-          return  
-       if(General.is_valid(valor,constantes.CADENA_SOLONUMERO,False,0)==False):
-           valido=-1
-       val_num=int(valor)
+       motivo_comp=pnl.get_comp_byName("motivo")
+       calif_comp=pnl.get_comp_byName("calific_val")
+       motivo=""
+       calif_val=""
+       if(motivo_comp!=None):
+         motivo=motivo_comp.get_text()
+       if(calif_comp!=None):
+          calif_val=calif_comp.get_text() 
+       if(General.is_valid(calif_val,constantes.CADENA_SOLONUMERO,False,0)==False):
+           valido=-1    
+       val_num=0    
+              
        if(valido==0):
+          val_num=int(calif_val)
           if((val_num>=0 and val_num<=20)==False):
              valido=-2
-       time_object=tiempo()
-       data=["","",valor,"",time_object.get_fecha()]
-       dat_rend=user.get_data_process()[0]
+       
        if(valido==0):
+            time_object=tiempo()
+            data=["","",calif_val,"",time_object.get_fecha()]
+            dat_rend=user.get_data_process()[0]
             if(General.show_confirmDialog("registrar Nueva Calificacion?","registrar")!=True):
                return
             estud=estudiante()
@@ -357,12 +364,16 @@ class Register_Manager:
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","nueva calificacion",motivo,time_object.get_fecha()]
                 conexion_bd.add_data(data_hist)
-                tabl=pnl.get_comp_byName("table1_p1")
+                tabl=pnl.get_comp_byName("table_califics")
                 fields=pnl.get_comps_byTag("field")
                 for fld in fields:
                     fld.set_text("")
                 tabl.On_load()
                 General.show_message("calificacion registrada satisafactoriamente","calificacion registrada")       
+                action_comp=pnl.get_comp_byName("Action_List")
+                if(action_comp!=None):
+                   action_comp.set_selected_index(0)
+                   action_comp.On_select(None)
             else:
                 if(res[0]==-1):
                     General.show_message("error al guardar data","error inesperado")
@@ -852,31 +863,42 @@ class Register_Manager:
        data_nombre=["","","","","",time_object.get_fecha()]
        data=["","","","","...","default","","",time_object.get_fecha()]
        fields=pnl.get_comps_byTag("field")
+       nacionalidad=pnl.get_comp_byName("nacionalidad").get_selected_value()
+       if(nacionalidad.lower()=="venezolano"):
+           nacionalidad="V"
+       else:
+           nacionalidad="E"
+       modify_id=False
+       cedula_comp=pnl.get_comp_byName("cedula")
+       list_works=pnl.get_comp_byName("empleado")
+       if(list_works.get_selected_value()!="nuevo"):
+          work_data=list_works.get_selected_value().split("-")
+          initial_id=work_data[1]
+          initial_nacionalidad=work_data[0]
+       if(cedula_comp!=None and list_works!=None):
+          valor=cedula_comp.get_text()
+          if(General.is_valid(valor,constantes.CADENA_SOLONUMERO,False,6)==False):
+             General.show_message("por escriba un valor valido a la cedula","cedula invalida")
+             return
+          valor=f"{nacionalidad}-{valor}"
+          if(update==False):
+              conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
+              id_exist=conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,valor)
+              if(id_exist==True):
+                   General.show_message("la CI del personal ya se ha registrado","CI ya existe")
+                   return
+              data[0]=valor
+          else:
+             if(nacionalidad=="V" and initial_nacionalidad=="E"):
+                modify_id=True
+             data[0]=valor
+             
        for i in range(0,len(fields)):
-          valor=fields[i].get_text()
-          if(valido==0):
-            if(fields[i].get_id()=="cedula"):
-                if(update==False):
-                  conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                  id_exist=conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,valor)
-                  if(General.is_valid(valor,constantes.CADENA_SOLONUMERO,False,6)==False):
-                       valido=-1
-                  elif(id_exist==True):
-                       valido=-6
-                  else:
-                       nacionalidad=pnl.get_comp_byName("nacionalidad").get_selected_value()
-                       if(nacionalidad.lower()=="venezolano"):
-                           nacionalidad="V-"
-                       elif(nacionalidad.lower()=="extranjero"):
-                           nacionalidad="E-"
-                       else:
-                          nacionalidad=""
-                       data[0]=nacionalidad+valor  
-                else:
-                  data[0]=valor   
-            elif(fields[i].get_id()=="nombre"):
+            valor=fields[i].get_text()
+            if(fields[i].get_id()=="nombre"):
                 if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True,3)==False):
                      valido=-2
+                     break
                 else:
                   temp_name=valor.split(" ")
                   if(len(temp_name)==2):
@@ -886,9 +908,11 @@ class Register_Manager:
                      data_nombre[1]=temp_name[0].lower()
                   else:
                      valido=-2
+                     break
             elif(fields[i].get_id()=="apellido"):
                 if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True,3)==False):
                      valido=-3
+                     break
                 else:
                   temp_apell=valor.split(" ")
                   if(len(temp_apell)==2):
@@ -898,12 +922,14 @@ class Register_Manager:
                      data_nombre[3]=temp_apell[0].lower()
                   else:
                      valido=-3
+                     break
             elif(fields[i].get_id()=="telefono"):
                 if(valor=="" or valor==" "):
                      data[3]="..."
                 else:
                     if(General.is_valid(valor,constantes.CADENA_TELEFONO,False)==False):
                            valido=-9
+                           break
                     else:                           
                        data[3]=valor
             elif(fields[i].get_id()=="correo"):
@@ -912,38 +938,37 @@ class Register_Manager:
                 else:
                      if(General.is_valid(valor,constantes.CADENA_CORREO,False)==False):
                            valido=-10 
+                           break
                      else:                           
                        data[2]=valor 
             elif(fields[i].get_id()=="destino_file"):
                  if(valor!=""):
                      valido=cls.validate_file_expedent(valor,data[0],False,update)
-                     if(valido==0):
-                         data_exp[1]=valor
-                        
+                     if(valido!=0):
+                        break
+                     data_exp[1]=valor
+                     
             elif(fields[i].get_id()=="destino_foto"):
                  if(valor!=""):
                     valido=cls.validate_file_expedent(valor,data[0],True,update)
-                    if(valido==0):
-                       data_exp[2]=valor
+                    if(valido!=0):
+                       break
+                    data_exp[2]=valor
                    
             elif(fields[i].get_id()=="cargo_cod"):
                 valido=cls.validate_name(valor)
-                if(valido==0):                
-                   data[6]=valor+":"            
-            elif(fields[i].get_id()=="service_years"):
-                if(General.is_valid(valor,constantes.CADENA_FECHA,False)==False):
-                    valido=-14
-                else:                           
-                    data_estatus[3]=valor 
-                    data_estatus[2]=time_object.get_diference_years(valor)    
+                if(valido!=0):
+                   break                
+                data[6]=valor+":"            
+              
        combo=pnl.get_comp_byName("cargo")
        minist=pnl.get_comp_byName("cargo_minist").get_selected_value()
-       if(minist=="elejir" or minist=="elegir"):
+       if((minist=="elejir" or minist=="elegir")and valido==0):
           valido= -13
        selected=combo.get_selected_value()
        data[6]=minist+":"+data[6]+selected+":"
        err_upload=False
-       if(update==True):
+       if(update==True and valido==0):
          combo_estatus=pnl.get_comp_byName("estatus").get_selected_value()
          if(combo_estatus!="elejir" and combo_estatus!="elegir"):
            data_estatus[1]=combo_estatus
@@ -971,12 +996,45 @@ class Register_Manager:
              if(areas_selected==[]):
                  valido=-7
 
+       fecha_ingreso=pnl.get_comp_byName("service_years")
+       if(fecha_ingreso!=None and valido==0):
+          fecha_value=fecha_ingreso.get_text()
+          if(General.is_valid(fecha_value,constantes.CADENA_FECHA,False)==False):
+              valido=-14
+          else:                           
+              data_estatus[3]=fecha_value
+              data_estatus[2]=time_object.get_diference_years(fecha_value)
+
        if(valido==0):
             res=0
             res2=0
-            if(update==False):
-               if(General.show_confirmDialog("registrar tarbajador?","registrar")!=True):
+            if(General.show_confirmDialog("registrar/Actualizar tarbajador?","registrar")!=True):
                   return
+            if(modify_id):
+                valor_id=data[0]               
+                initial_id=f"{initial_nacionalidad}-{initial_id}"
+                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
+                id_exist=conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,valor_id)
+                if(id_exist==True):
+                   General.show_message("no se puede modificar la cedula del trabajador por una ya existente","cedula ya existente")
+                   return
+                   
+                old_dat_work=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                if(len(old_dat_work)>0):
+                    next_data=list(old_dat_work[0])
+                    next_data[0]=valor_id
+                    conexion_bd.add_data(next_data)
+                    conexion_bd.set_tabla(constantes.TABLA_USUARIO)
+                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
+                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
+                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
+                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
+                    conexion_bd.delete_data([constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+            if(update==False):
                if(cls.upload_expedent(data_exp,1,2,update)==False):
                  General.show_message("Error al Subir El Expedient al servidor","Error del Expedient")
                  return
@@ -1010,8 +1068,6 @@ class Register_Manager:
                   General.show_message("registro exitoso del personal","registro exitoso")
                   vent.update_pantallas(constantes.PANTALLA_WELCOME)
             else:
-                if(General.show_confirmDialog("actualizar personal?","actualizar")!=True):
-                   return
                 if(cls.upload_expedent(data_exp,1,2,update,data[0]+".zip")==False):
                     General.show_message("Error al Subir El Expedient al servidor","Error del Expedient")
                     return   
@@ -1033,7 +1089,7 @@ class Register_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
                 conexion_bd.update_data(["nombre","s_nombre","apellido","s_apellido","modificado"],[data_nombre[1],data_nombre[2],data_nombre[3],data_nombre[4],time_object.get_fecha()],5,[constantes.CLAVE_NOMBRE],[id_nombre],["and"])
                 conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                conexion_bd.update_data(["estatus","service_years","modificado"],[data_estatus[1],data_estatus[2],time_object.get_fecha()],3,[constantes.CLAVE_ESTATUS_TRABAJ],[id_estatus],["and"])
+                conexion_bd.update_data(["estatus","service_years","fecha_ingreso","modificado"],[data_estatus[1],data_estatus[2],data_estatus[3],time_object.get_fecha()],4,[constantes.CLAVE_ESTATUS_TRABAJ],[id_estatus],["and"])
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
                 fields_u=["correo","telefono","modificado"]
                 conexion_bd.update_data(fields_u,[data[2],data[3],time_object.get_fecha()],len(fields_u),[constantes.CLAVE_TRABAJADOR],[data[0]],["and"])
@@ -1045,9 +1101,7 @@ class Register_Manager:
                 General.show_message("actualizacion exitosa del personal","actualizacion exitosa")
                 vent.update_pantallas(constantes.PANTALLA_WELCOME)
        else:
-          if(valido==-1):
-             General.show_message("por escriba un valor valido a la cedula","cedula invalida")
-          elif(valido==-2):
+          if(valido==-2):
              General.show_message("por escriba un valor valido al nombre","nombre invalido")
           elif(valido==-3):
              General.show_message("por escriba un valor valido al apellido","apellido invalido")
@@ -1055,8 +1109,6 @@ class Register_Manager:
              General.show_message("por escriba un seleccione un cargo","cargo del personal invalido")
           elif(valido==-5):
              General.show_message("por escriba indique el id del fichero a donde se guardara el expediente","expediente invalido")
-          elif(valido==-6):
-             General.show_message("la CI del personal ya se ha registrado","CI ya existe")
           elif(valido==-7):
               General.show_message("por favor agregue almenos 1 area de formacion a la lista","area de formacion no asignadas")
           elif(valido==-8):

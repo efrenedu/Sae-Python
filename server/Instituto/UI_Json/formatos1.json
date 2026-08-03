@@ -320,7 +320,9 @@
         "ScrollBar_Color": [
           "#8780B8",
           "#F5EFF5"
-        ]
+        ],
+        "Selected_Color": "#CDF3FF",
+        "Selected_Text_Color": "#323A7A"
       },
       "Posicion": {
         "column": 0,

@@ -195,12 +195,14 @@ class usuario:
        
           from General import General
           from conexion_bd import conexion_bd
-          data_estud=["","","","","","","","","",data[3],"",""]
+          data_estud=["","","","","","","","","",data[4],"",""]
           data_repres=["","","","","","","","","","","","","",""]
           data_dir=["","","",""]
           valido=0
           old_exp=[]
           fields=data[0]
+          fecha=data[1]
+          
           for i in range(0,len(fields)):
               id_f=fields[i].get_id()
               valor=fields[i].get_text()
@@ -336,11 +338,7 @@ class usuario:
                           else:
                                id_d=res[0][0]
                                data_dir=[False,id_d,data_d[0],data_d[1],data_d[2]]
-                  elif(id_f=="fecha"):
-                       if(General.is_valid(valor,constantes.CADENA_FECHA,False)==False):
-                           valido=-11
-                       else:
-                           data_estud[8]=valor
+
                   elif(id_f=="correo"):
                        if(General.is_valid(valor,constantes.CADENA_CORREO,False)==False):
                            valido=-16
@@ -393,14 +391,18 @@ class usuario:
                          if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True)==False):
                               valido=-19
                          else:
-                              data_repres[13]=valor.lower()               
-          data_estud[6]=data[2]
-          data_estud[4]=data[4]
-          if(data[1]=="elejir" or data[1]=="elegir"):
+                              data_repres[13]=valor.lower()
+          if(General.is_valid(fecha,constantes.CADENA_FECHA,False)==False):
+              valido=-11
+          else:
+             data_estud[8]=fecha                             
+          data_estud[6]=data[3]
+          data_estud[4]=data[5]
+          if(data[2]=="elejir" or data[2]=="elegir"):
              if(valido==0):
                valido=-9
           else:
-             data_estud[5]=data[1]
+             data_estud[5]=data[2]
           return [valido,data_estud,data_repres,data_dir]
 
     #Validate Cronogram
@@ -463,48 +465,7 @@ class usuario:
               return -3
         return True
         
-    #Organizate Sections A and B of Students   
-    def organizar_secciones(self,data):
-      
-       from conexion_bd import conexion_bd
-       conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-       #Organizate Section A
-       for i in range(0,len(data[1])):
-          id_estudent=data[1][i].split("-")
-          if(len(id_estudent)==3):
-             id_estudent=id_estudent[0]+"-"+id_estudent[1]
-          elif(len(id_estudent)==2):
-             id_estudent=id_estudent[0]
-          else:
-              id_estudent=""
-          conexion_bd.update_data([constantes.CLAVE_SECCION],[data[0]],1,[constantes.CLAVE_ESTUDIANTE],[id_estudent],["and"])
-       
-       #Organizate Section B
-       for j in range(0,len(data[4])):
-          id_estudent=data[4][j].split("-")
-          if(len(id_estudent)==3):
-             id_estudent=id_estudent[0]+"-"+id_estudent[1]
-          elif(len(id_estudent)==2):
-             id_estudent=id_estudent[0]
-          else:
-              id_estudent=""
-          conexion_bd.update_data([constantes.CLAVE_SECCION],[data[3]],1,[constantes.CLAVE_ESTUDIANTE],[id_estudent],["and"])
-       
-       conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-       conexion_bd.update_data(["seccion_guia"],["default"],1,["seccion_guia"],[data[0]],["and"])
-       id_prof=data[2].split("-")
-       if(len(id_prof)==3):
-          id_prof=id_prof[0]+"-"+id_prof[1]
-       elif(len(id_prof)==2):
-          id_prof=id_prof[0]
-       else:
-          id_prof=""
-          
-       conexion_bd.update_data(["seccion_guia"],[data[0]],1,[constantes.CLAVE_TRABAJADOR],[id_prof],["and"])
-       conexion_bd.set_tabla(constantes.TABLA_SECCION)
-       conexion_bd.update_data(["total_estud"],[str(len(data[1]))],1,[constantes.CLAVE_SECCION],[data[0]],["and"])
-       conexion_bd.update_data(["total_estud"],[str(len(data[4]))],1,[constantes.CLAVE_SECCION],[data[3]],["and"])
-        
+  
 #User with Access Level Coordinator       
 class coordinador(usuario):
     #Build a User with Level of Access :Coordinator

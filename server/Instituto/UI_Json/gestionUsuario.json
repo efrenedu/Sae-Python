@@ -158,7 +158,7 @@
         "row": 3,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -209,35 +209,61 @@
       }
     },
     {
-      "Type": "CTkButton",
+      "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "nuevo usuario",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
+        "Text": "Accion :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label_Accion",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
         },
-        "Id": "oermisos",
-        "Ev": "constantes.EV_NUEVO_USUARIO",
-        "Panel_Id": "gestionUsuario",
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "Nuevo Usuario,Desbloquear Usuario,Reset Password,Eliminar Usuario,Cambiar Permiso",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F0EAF1"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#648CBB"
+        ],
         "Corner_Radious": "8",
+        "Id": "Accion_consulta",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -248,23 +274,55 @@
           "Name": "Arial",
           "Size": "15",
           "Style": "bold"
-        }
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#FFFFFF"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
+        ]
       },
       "Posicion": {
         "column": 1,
         "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
+        "padx": [
+          5,
+          2
         ],
-        "sticky": "e"
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
       }
     },
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "borrar usuario",
+        "Text": "Gestionar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -287,114 +345,8 @@
             "#FFFFFF"
           ]
         },
-        "Id": "borrar",
-        "Ev": "constantes.EV_GESTION_USER_DELETE_USER",
-        "Panel_Id": "gestionUsuario",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "desbloquear usuario",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "desbloquear",
-        "Ev": "constantes.EV_GESTION_USER_DESBLOQUEAR",
-        "Panel_Id": "gestionUsuario",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "reset password",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "reset_pass",
-        "Ev": "constantes.EV_GESTION_USER_RESTORE_PASS",
+        "Id": "gestion_btn",
+        "Ev": "constantes.EV_GESTION_USER",
         "Panel_Id": "gestionUsuario",
         "Corner_Radious": "8",
         "Master": "Main_Box",
@@ -423,60 +375,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "otorgar permiso",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "permisos",
-        "Ev": "constantes.EV_GESTION_USER_CHANGE_PERMISOS",
-        "Panel_Id": "gestionUsuario",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 1
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "   volver   ",
+        "Text": "Volver",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -507,7 +406,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 2
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",

@@ -20,10 +20,8 @@ class panel:
         self.last_component=0
         self.id_panel=id_p
         self.container=ctk.CTkFrame(self.win,fg_color=color)
-       # self.container.grid(row=1,column=0,sticky="nsew")
-      #  self.set_active(True)
-        self.set_TopLeft_margins()
-    
+        self.set_TopLeft_margins()  
+              
     #Set top Left Margins on the Panel    
     def set_TopLeft_margins(self):
       self.container.grid_columnconfigure(0,minsize=constantes.MIN_SIZE_EMPTY_COLUMN,weight=0)

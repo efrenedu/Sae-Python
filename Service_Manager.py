@@ -23,24 +23,58 @@ class Service_Manager:
     STADISTICS_SECTIONS_TURNO=6
     STADISTICS_MATRICULA_ACADEMIC_YEAR=7
     STADISTICS_MATRICULA_TURNO=8
-    CHANGE_STUDENT_SECTION1_TO_SECTION2=0
-    INTERAMBIATE_STUDENTS=1
-    CHANGE_STUDENT_SECTION2_TO_SECTION1=2
-    UPDATE_SECTIONS=3
-    USER_UNLOCK=0
-    USER_RESET_PASSWORD=1
-    USER_REMOVE=2
-    USER_CHANGE_ACCESS_LEVEL=4
     RECOVER_PASS_REQUEST=0
-    RECOVER_PASS_LOAD_FIRST_PANEL=1
-    RECOVER_PASS_VERIFY_SECRET_QUESTIONS=2
-    RECOVER_PASS_CHANGE_PASSWORD=3
+    RECOVER_PASS_VERIFY_SECRET_QUESTIONS=1
+    RECOVER_PASS_CHANGE_PASSWORD=2
     
-    
+    #Determine Action on Auditoria Panel
+    @classmethod
+    def interprete_auditoria_action(cls,usr,vent):
+       from Consult_Manager import Consult_Manager
+       pnl=vent.panelActual
+       accion=pnl.get_comp_byName("Accion_consulta")
+       accion_str=""
+       if(accion!=None):
+          accion_str=accion.get_selected_value()
+       else:
+          accion_str="Buscar"
+       if(accion_str=="Buscar"):
+          Consult_Manager.consultar(vent,Consult_Manager.CONSULT_USERS_HISTORIAL)
+          return
+       if(accion_str=="Generar Reporte de Usuarios"):
+          Consult_Manager.generar_reporte(pnl,"reporte de usuarios",usr)
+       elif(accion_str=="Limpiar Historial de Usuarios"):
+          pass_admin=General.show_password_message("por favor escriba su password","password de administrado")
+          valid_admin=False
+          if(pass_admin=="" or pass_admin==" " or pass_admin==None):
+             return          
+          pass_user=General.desencriptar(usr.get_credentials()[4])      
+          if(pass_user==pass_admin):
+            valid_admin=True                                          
+          if(valid_admin==False):
+             General.show_error("operacion invalida, por favor confirme que es el administrador","password invalido")
+             return
+          if(General.show_confirmDialog("esta seguro que desea limpiar los reportes del sistema?","limpiar reportes")!=True):
+             return       
+          conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+          conexion_bd.reset_table()
+          pnl.get_comp_byName("table1_cp").reset()
+          General.show_message("reportes del sistema limpiados satisfactoriamente","reportes limpiados")
+          
+       
     #Manage the Operation in User Gestion Panel except Register New User
     @classmethod
-    def gestion_usuario(cls,usr,vent,opcion):
+    def gestion_usuario(cls,usr,vent):
        pnl=vent.panelActual
+       accion=pnl.get_comp_byName("Accion_consulta")
+       accion_str=""
+       if(accion!=None):
+          accion_str=accion.get_selected_value()
+       else:
+          accion_str="Nuevo Usuario"
+       if(accion_str=="Nuevo Usuario"):
+         vent.update_pantallas(constantes.PANTALLA_REGISTRO_USUARIO)
+         return
        tabl=pnl.get_comp_byTag("table")
        temp_clave=tabl.get_row_selectedData()
        fields_user=[constantes.CLAVE_USUARIO,"password",constantes.CLAVE_TRABAJADOR,"nivel_acceso",constantes.CLAVE_INTENTOS_USUARIO,"bloqueado"]
@@ -51,7 +85,7 @@ class Service_Manager:
           return
        else:
           clave=temp_clave[0]
-       if(opcion==cls.USER_UNLOCK):
+       if(accion_str=="Desbloquear Usuario"):
           pass_admin=General.show_password_message("por favor escriba su password","password de administrado")
           valid_admin=False
           if(pass_admin=="" or pass_admin==None):
@@ -67,7 +101,7 @@ class Service_Manager:
           old_d=conexion_bd.get_allData(["bloqueado"],1,[constantes.CLAVE_USUARIO],[clave],["and"])
           if(old_d!=[]):
             if(old_d[0][0]=="False"):
-                 General.show_error("el usuario no esta bloquead","usuario no bloquead")
+                 General.show_error("el usuario no esta bloqueado","usuario no bloquead")
                  return
           if(General.show_confirmDialog("estas seguro que desea desbloquear el usuario?","desbloquear usuario")!=True):
                return
@@ -105,7 +139,7 @@ class Service_Manager:
              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"gestion usuario","desbloquear usuario","",time_object.get_fecha()]
              conexion_bd.add_data(data_hist)
              General.show_message("usuario desbloqueado exitosamente","usuario desbloqueado")      
-       elif(opcion==cls.USER_RESET_PASSWORD):
+       elif(accion_str=="Reset Password"):
           #reset password
           pass_admin=General.show_password_message("por favor escriba su password","password de administrado")
           valid_admin=False
@@ -149,7 +183,7 @@ class Service_Manager:
              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"gestion usuario","reset pass","",time_object.get_fecha()]
              conexion_bd.add_data(data_hist)
              General.show_message("password reestablecido a "+constantes.PASS_USER_DEFAULT,"password reestablecido")
-       elif(opcion==cls.USER_REMOVE):
+       elif(accion_str=="Eliminar Usuario"):
             #borrar usuario
             pass_admin=General.show_password_message("por favor escriba su password","password de administrado")
             valid_admin=False
@@ -200,7 +234,7 @@ class Service_Manager:
                  data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"gestion usuario","borrar usuario","",time_object.get_fecha()]
                  conexion_bd.add_data(data_hist)
                  General.show_message("usuario eliminado exitosamente","usuario borrado")
-       elif(opcion==cls.USER_CHANGE_ACCESS_LEVEL):
+       elif(accion_str=="Cambiar Permiso"):
            pass_admin=General.show_password_message("por favor escriba su password","password de administrado")
            valid_admin=False
            if(pass_admin=="" or pass_admin==None):
@@ -421,11 +455,23 @@ class Service_Manager:
             icon_welcome=pnl.get_comp_byName("logo_inicio")
             icon_welcome.change_image(url_i)  
     
+    #Manage the Activation of Components on Recover Pass Panel
+    @classmethod
+    def activate_comps_recover_password(cls,pnl,fase):
+        if(fase==cls.RECOVER_PASS_REQUEST):
+            pnl.get_comp_byName("caja6",False).set_active(False)
+            pnl.get_comp_byName("caja7",False).set_active(False)
+            
+        elif(fase==cls.RECOVER_PASS_VERIFY_SECRET_QUESTIONS):
+            pnl.get_comp_byName("caja6",False).set_active(True)
+            pnl.get_comp_byName("caja7",False).set_active(True)
+            pnl.get_comp_byName("caja3",False).set_active(False)
+            pnl.get_comp_byName("caja5",False).set_active(False)
     #Manage the Password Recovery from a User
     @classmethod
     def recuperar_password(cls,usr,vent,fase):
         pnl=vent.panelActual
-        if(fase==cls.RECOVER_PASS_REQUEST or fase==cls.RECOVER_PASS_LOAD_FIRST_PANEL):
+        if(fase==cls.RECOVER_PASS_REQUEST):
            user_r=pnl.get_comp_byName("usuario_login").get_text()
            if(user_r=="" or user_r==" "):
                 General.show_message("por favor escriba el nombre de usuario","usuario no valido")
@@ -446,10 +492,10 @@ class Service_Manager:
                  size_p=len(data_pregs)-1
                  import random
                  index=random.randint(0,size_p) 
-                 question=data_pregs[index][3]              
+                 question=data_pregs[index][3]    
               pnl.get_comp_byName("pregunta").set_text(question)
-              pnl.get_comp_byName("caja6",False).set_active(False)
-              pnl.get_comp_byName("caja7",False).set_active(False)
+              vent.raiz.after(200,lambda:cls.activate_comps_recover_password(pnl,fase))
+             
            else:
               General.show_message("el usuario indicado es inexistente","usuario inexistente")        
         elif(fase==cls.RECOVER_PASS_VERIFY_SECRET_QUESTIONS):
@@ -463,10 +509,7 @@ class Service_Manager:
                  General.show_message("por favor escriba una respuesta","respuesta invalida")
                  return
               if(data_res!=[]):
-                pnl.get_comp_byName("caja6",False).set_active(True)
-                pnl.get_comp_byName("caja7",False).set_active(True)
-                pnl.get_comp_byName("caja3",False).set_active(False)
-                pnl.get_comp_byName("caja5",False).set_active(False)
+                  vent.raiz.after(200,lambda:cls.activate_comps_recover_password(pnl,fase))
               else:
                 General.show_message("la respuesta es incorrecta","respuesta incorrecta")
                 cls.vent.update_pantallas(constantes.PANTALLA_INICIO)
@@ -493,9 +536,7 @@ class Service_Manager:
             conexion_bd.update_data(["num_intentos","last_fecha","last_hora","modificado"],["0","","",time_object.get_fecha()],4,[constantes.CLAVE_INTENTOS_USUARIO],[data_intentos[0][0]],["and"])
             General.show_message("contraseña cambiada exitosamente","contraseña modificada")
             vent.update_pantallas(constantes.PANTALLA_INICIO)
-           
-            
-             
+                    
     #Register the User in User Gestion Panel
     @classmethod
     def registrar_usuario(cls,usr,vent):
@@ -944,8 +985,7 @@ class Service_Manager:
        hilo=threading.Thread(target=stadistic_win.draw_torta,args=(valores,title,items,label_msg))
        hilo.start()
        
-   
-                     
+                
     #Remove the Reactivation of an Academic Momentt
     @classmethod
     def reestablecer_momento(cls,usr,vent):
@@ -1087,108 +1127,126 @@ class Service_Manager:
     
     #Organizate the Sections 
     @classmethod
-    def organizar_secciones(cls,usr,vent,opcion):
+    def organizar_secciones(cls,usr,vent):
         pnl=vent.panelActual
-        id_secc1=pnl.get_comp_byName("accion").get_selected_value()
-        id_secc2=pnl.get_comp_byName("intercambio").get_selected_value()
+        accion_comp=pnl.get_comp_byName("accion_List")
+        accion_str=""
+        main_seccion=pnl.get_comp_byName("secc_main_list")
+        seccion_main_id=""
+        motivo=""
         secc1=pnl.get_comp_byName("secc1")
         secc2=pnl.get_comp_byName("secc2")
-        if(id_secc1=="elejir" or id_secc1=="elegir"):
-           General.show_message("por favor seleccione una seccion origen valida","seccion invalida")
-           return          
-        if((id_secc2=="elejir" or id_secc2=="elegir") and opcion!=cls.UPDATE_SECTIONS):
-           General.show_message("seleccione una seccion destino valida","seccion destino no valida")        
-           return  
-        if(opcion==cls.CHANGE_STUDENT_SECTION1_TO_SECTION2):
-           estud=pnl.get_comp_byName("estud").get_text()
-           if(estud!=""):
-              elements=secc1.get_all_values()
-              new_vals=[]
-              for i in range(0,len(elements)):
-                 if(elements[i]!=estud):
-                    new_vals.append(elements[i])
-              secc1.set_values(new_vals)
-              secc2.insert_value(estud)
-              pnl.get_comp_byName("estud").set_text("")
-              pnl.get_comp_byName("estud_intercambio").set_text("") 
-           else:
-             General.show_message("por favor elija el estudiante de la seccion origen a mover","estudiante no valido")                       
-        elif(opcion==cls.INTERAMBIATE_STUDENTS):
-           estud=pnl.get_comp_byName("estud").get_text()
-           intercambio=pnl.get_comp_byName("estud_intercambio").get_text()
-           if(estud!="" and intercambio!=""):
-              elements1=secc1.get_all_values()
-              new_vals1=[]
-              for i in range(0,len(elements1)):
-                 if(elements1[i]!=estud):
-                    new_vals1.append(elements1[i])  
-              elements2=secc2.get_all_values()
-              new_vals2=[]
-              for i in range(0,len(elements2)):
-                 if(elements2[i]!=intercambio):
-                   new_vals2.append(elements2[i])  
-              secc1.set_values(new_vals1)
-              secc1.insert_value(intercambio)
-              secc2.set_values(new_vals2)
-              secc2.insert_value(estud)
-              pnl.get_comp_byName("estud").set_text("")
-              pnl.get_comp_byName("estud_intercambio").set_text("") 
-           else:
-             General.show_message("por favor elija los estudiantes a intercambiar","estudiantes no validos")        
-        elif(opcion==cls.CHANGE_STUDENT_SECTION2_TO_SECTION1):
-           estud_i=pnl.get_comp_byName("estud_intercambio").get_text()
-           if(estud_i!=""):
-              elements=secc2.get_all_values()
-              new_vals=[]
-              for i in range(0,len(elements)):
-                 if(elements[i]!=estud_i):
-                    new_vals.append(elements[i])
-              secc2.set_values(new_vals)
-              secc1.insert_value(estud_i)
-              pnl.get_comp_byName("estud").set_text("")
-              pnl.get_comp_byName("estud_intercambio").set_text("") 
-           else:
-             General.show_message("por favor elija el estudiante de la seccion destino a incorporar en la origen","estudiante no valido")        
-        elif(opcion==cls.UPDATE_SECTIONS):
-              if(General.show_confirmDialog("actualizar seccion?","actualizar seccion")!=True):
-                  return
-              if(secc2.get_count()<=0 and (id_secc2!="elejir" and id_secc2!="elegir")):
-                   General.show_message("debe existir al menos un estudiante en cada seccion","proporcion de estudiantes no valida")              
-                   return
-              guia= pnl.get_comp_byName("guia").get_selected_value()
-              if(guia=="elejir" or guia=="elegir"):
-                  General.show_message("por favor elija un profesor guia valido","profesor guia no valido")              
-                  return
-              data=[id_secc1,secc1.get_all_values(),guia,id_secc2,secc2.get_all_values()]
-              usr.organizar_secciones(data)
-              secc1_name=id_secc1.split("(")
-              if(secc1_name[1].startswith("M")):
-                 secc1_name=secc1_name[0]+"(Mañana)"
-              else:
-                  secc1_name=secc1_name[0]+"(Tarde)"              
-              motivo="modificaciones sobre seccion:"+secc1_name
-              if(id_secc2!="elejir" and id_secc2!="elegir"):
-                 secc2_name=id_secc2.split("(")
-                 if(secc2_name[1].startswith("M")):
-                    secc2_name=secc2_name[0]+"(Mañana)"
-                 else:
-                    secc2_name=secc2_name[0]+"(Tarde)"
-                 motivo=motivo+" y "+secc2_name
-              time_object=tiempo()
-              usr.add_action_historial(["organizar secciones",time_object.get_tiempo()])
-              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-              id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"servicio","organizar secciones",motivo,time_object.get_fecha()]
-              conexion_bd.add_data(data_hist)
-              General.show_message("secciones actualizadas exitosamente","secciones actualizadas")
-              pnl.get_comp_byName("estud").set_text("")
-              pnl.get_comp_byName("estud_intercambio").set_text("") 
-              pnl.get_comp_byName("accion").set_selected_index(0)
-              pnl.get_comp_byName("intercambio").set_selected_index(0)
-              pnl.get_comp_byName("guia").set_selected_index(0)
-              secc1.set_values([])
-              secc2.set_values([])
-              
+        
+        if(main_seccion!=None):
+            secc_value=main_seccion.get_selected_value()
+            if(secc_value!="elegir"):
+               seccion_main_id=secc_value
+        if(accion_comp!=None):
+          accion_val=accion_comp.get_selected_value()
+          if(accion_val.lower()!="elegir"):
+              accion_str=accion_val
+        if(accion_str==""):
+           General.show_message("Por Favor Indique la Accion a Realizar","Accion Invalida")
+           return
+        if(seccion_main_id==""):
+           General.show_message("Por Favor Indique la Seccion a Modificar","Seccion Principal Invalida")
+           return
+        if(accion_str=="Asignar Prof Guia"):
+           guia_comp=pnl.get_comp_byName("guia")
+           guia_id=""
+           if(guia_comp!=None):
+              guia_value=guia_comp.get_selected_value()
+              if(guia_value.lower()!="elegir"):
+                 guia_value=guia_value.split("-")
+                 if(len(guia_value)>=3):
+                    guia_id=f"{guia_value[0]}-{guia_value[1]}"
+           if(guia_id==""):
+              General.show_message("Por Favor Indique el Prof Asignar como guia","Profesor Guia Invalido")
+              return
+           if(General.show_confirmDialog("Actualizar Profesor Guia","Actualizar Profesor")==False):
+              return
+           conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
+           old_prof_dat=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],1,["seccion_guia"],[seccion_main_id],["and"])
+           if(len(old_prof_dat)>0):
+              id_old_prof=old_prof_dat[0][0]
+              conexion_bd.update_data(["seccion_guia"],[""],1,[constantes.CLAVE_TRABAJADOR],[id_old_prof],["and"])
+           conexion_bd.update_data(["seccion_guia"],[seccion_main_id],1,[constantes.CLAVE_TRABAJADOR],[guia_id],["and"])
+           motivo="Actualizar Profesor Guia"
+           guia_comp.set_selected_index(0)
+           guia_comp.set_active(False)
+           pnl.get_comp_byName("prof_guialabel").set_active(False)
+           General.show_message("Profesor Guia Actualizado Exitosamente","Accion Exitosa")        
+        else:
+            seccion_sec_id=""
+            sec_seccion=pnl.get_comp_byName("secc_sec_list")
+            if(sec_seccion!=None):
+               secc_value=sec_seccion.get_selected_value()
+               if(secc_value!="elegir"):
+                   seccion_sec_id=secc_value
+            if(seccion_sec_id==""):
+                General.show_message("Por Favor Indique la Seccion Secundara","Seccion Secundaria Invalida")
+                return 
+          
+            if(General.show_confirmDialog("actualizar Estudiantes de las Secciones?","Actualizar Estudiantes")!=True):
+                 return 
+            data_secc1=secc1.get_all_values()
+            data_secc2=secc2.get_all_values()
+            cls.reasignar_secion(data_secc1,recuperar_pass,seccion_main_id,seccion_sec_id)           
+            General.show_message("secciones actualizadas exitosamente","secciones actualizadas")
+            secc1_name=seccion_main_id.split("(")
+            if(secc1_name[1].startswith("M")):
+                secc1_name=secc1_name[0]+"(Mañana)"
+            else:
+                secc1_name=secc1_name[0]+"(Tarde)"              
+            motivo="modificaciones sobre seccion:"+secc1_name
+            secc2_name=seccion_sec_id.split("(")
+            if(secc2_name[1].startswith("M")):
+                secc2_name=secc2_name[0]+"(Mañana)"
+            else:
+                secc2_name=secc2_name[0]+"(Tarde)"
+            motivo=motivo+" y "+secc2_name
+        time_object=tiempo()
+        usr.add_action_historial(["organizar secciones",time_object.get_tiempo()])
+        conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"servicio","organizar secciones",motivo,time_object.get_fecha()]
+        conexion_bd.add_data(data_hist)
+        pnl.get_comp_byName("secc_main_list").set_selected_index(0)
+        pnl.get_comp_byName("secc_sec_list").set_selected_index(0)
+        pnl.get_comp_byName("accion_List").set_selected_index(0)
+        secc1.set_values([])
+        secc2.set_values([])  
+     
+    #Reassign Students to the Required Sections
+    @classmethod
+    def reasignar_secion(cls,listA,listB,seccA,seccB):
+       conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+       #Organizate Section A
+       for i in range(0,len(listA)):
+          id_estudent=listA[i].split("-")
+          if(len(id_estudent)==3):
+             id_estudent=id_estudent[0]+"-"+id_estudent[1]
+          elif(len(id_estudent)==2):
+             id_estudent=id_estudent[0]
+          else:
+              id_estudent=""
+          conexion_bd.update_data([constantes.CLAVE_SECCION],[seccA],1,[constantes.CLAVE_ESTUDIANTE],[id_estudent],["and"])
+       
+       #Organizate Section B
+       for j in range(0,len(listB)):
+          id_estudent=listB[j].split("-")
+          if(len(id_estudent)==3):
+             id_estudent=id_estudent[0]+"-"+id_estudent[1]
+          elif(len(id_estudent)==2):
+             id_estudent=id_estudent[0]
+          else:
+              id_estudent=""
+          conexion_bd.update_data([constantes.CLAVE_SECCION],[seccB],1,[constantes.CLAVE_ESTUDIANTE],[id_estudent],["and"])
+       
+       conexion_bd.set_tabla(constantes.TABLA_SECCION)
+       conexion_bd.update_data(["total_estud"],[str(len(listA))],1,[constantes.CLAVE_SECCION],[seccA],["and"])
+       conexion_bd.update_data(["total_estud"],[str(len(listB))],1,[constantes.CLAVE_SECCION],[seccB],["and"])
+            
     #Update a Student from Service Panel
     @classmethod
     def update_estudiante(cls,usr,vent):
@@ -1203,6 +1261,7 @@ class Service_Manager:
         conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
         old_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_ESTUD,len(constantes.CAMPOS_ESTATUS_ESTUD),[constantes.CLAVE_ESTATUS_ESTUD],[estatus_id],["and"])
         cedulado=old_estatus[0][3]
+        fecha=pnl.get_comp_byName("fecha")
         fields=pnl.get_comps_byTag("field")
         data_estud=[cedula,"","","","","","",""]
         data_estatus=[""]
@@ -1228,8 +1287,6 @@ class Service_Manager:
                     data_exp[0]=fields[i].get_text()    
                 elif(fields[i].get_id()=="destino_foto"):
                     data_exp[1]=fields[i].get_text()       
-                elif(fields[i].get_id()=="fecha"):
-                    data_estud[3]=valor
                 elif(fields[i].get_id()=="direccion"):
                     data_dir=fields[i].get_text()
                 elif(fields[i].get_id()=="estatus"):
@@ -1244,7 +1301,9 @@ class Service_Manager:
                 elif(fields[i].get_id()=="parentesco"):
                     data_repres[6]=fields[i].get_text() 
                 elif(fields[i].get_id()=="ocupacion"):
-                     data_repres[7]=fields[i].get_text()      
+                     data_repres[7]=fields[i].get_text() 
+        if(fecha!=None):
+           data_estud[3]=fecha.get_text()       
         combos=pnl.get_comps_byTag("combo")
         for j in range(0,len(combos)):
             id_c=combos[j].get_id()
@@ -1255,7 +1314,7 @@ class Service_Manager:
         radio= pnl.get_comp_byName("genero") 
         data_estud[6]=radio.get_selected_value()
         estud=estudiante()
-        res=estud.is__valid_modific(cedula,cedulado,data_estud,data_repres,data_exp,data_dir)
+        res=estud.is_valid_modific(cedula,cedulado,data_estud,data_repres,data_exp,data_dir)
         if(res[0]==True):
            if(General.show_confirmDialog("modificar estudiante?","modificar estudiante")!=True):
               return

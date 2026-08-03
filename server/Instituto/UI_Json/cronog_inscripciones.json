@@ -249,7 +249,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -347,7 +347,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -445,7 +445,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -543,7 +543,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -641,7 +641,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -739,7 +739,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",

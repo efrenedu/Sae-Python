@@ -383,16 +383,17 @@ class Internal_Frame(componente):
          self.scroll=scroll
          self.pos=posicion
          border_w=1
+         self.canvas=None
          border_color=self.colors["Border"]
          if(border_color==None):
             border_w=0        
-         if(self.scroll):
+         if(self.scroll=="Full"):
             self.frame=ctk.CTkFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
             from event_manager import Event_manager
             root=Event_manager.vent.raiz
             if(border_w>0):
                self.frame.configure(border_width=border_w,border_color=border_color)
-            self.frame.grid(row=self.pos["row"],column=self.pos["column"], padx=self.pos["padx"],pady=self.pos["pady"],sticky="nsew")
+            self.frame.grid(row=self.pos["row"],column=self.pos["column"], padx=self.pos["padx"],pady=self.pos["pady"],sticky="")
             self.frame.grid_columnconfigure(0,weight=1)
             self.frame.grid_rowconfigure(0,weight=1)
             self.canvas=ctk.CTkCanvas(self.frame,highlightthickness=0,bg=root._apply_appearance_mode(self.colors["Fg"]))
@@ -400,13 +401,26 @@ class Internal_Frame(componente):
             self.scroll_y=ctk.CTkScrollbar(self.frame,orientation="vertical",command=self.canvas.yview,fg_color="transparent")
             self.scroll_y.configure(button_color=self.colors["Scrollbar"],button_hover_color=self.colors["Scrollbar_Hover"])
             self.scroll_y.grid(row=0,column=1,sticky="ns",padx=8,pady=8)
+            self.canvas.configure(yscrollcommand=self.scroll_y.set)
             self.scroll_x=ctk.CTkScrollbar(self.frame,orientation="horizontal",command=self.canvas.xview,fg_color="transparent")
             self.scroll_x.configure(button_color=self.colors["Scrollbar"],button_hover_color=self.colors["Scrollbar_Hover"])          
             self.scroll_x.grid(row=1,column=0,sticky="ew",padx=8,pady=8)
-            self.canvas.configure(yscrollcommand=self.scroll_y.set,xscrollcommand=self.scroll_x.set)
+            self.canvas.configure(xscrollcommand=self.scroll_x.set)
             self.container=ctk.CTkFrame(self.canvas,fg_color=self.colors["Fg"])
-            id_vent=self.canvas.create_window((0,0),window=self.container,anchor="nw")
-            self.frame.bind("<Configure>",self.update_scrolls)       
+            self.id_vent=self.canvas.create_window((0,0),window=self.container,anchor="nw")
+            self.frame.bind("<Configure>",self.update_scrolls) 
+            self.canvas.bind("<Configure>",self.center_panel)            
+            self.canvas.bind_all("<MouseWheel>", self.on_MouseWheel)
+            self.canvas.bind_all("<Shift-Button-4>",self.on_MouseWheel)
+            self.canvas.bind_all("<Shift-Button-5>",self.on_MouseWheel) 
+            self.container.bind("<Configure>",self.On_Container_Change)
+            
+         elif(self.scroll=="Y Axis"):
+             self.container=ctk.CTkScrollableFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
+             self.container._scrollbar.configure(button_color=self.colors["Scrollbar"],button_hover_color=self.colors["Scrollbar_Hover"])
+             if(border_w>0):
+                 self.container.configure(border_width=border_w,border_color=border_color)
+             self.container.bind_all("<MouseWheel>",self.on_MouseWheel,add="+")
          else:
              self.container=ctk.CTkFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
              if(border_w>0):
@@ -427,19 +441,55 @@ class Internal_Frame(componente):
             if(temp_val>0):
                 self.columnspan=temp_val
          if(self.columnspan!=None):
-             if(self.scroll==False):
+             if(self.scroll!="Full"):
                  self.container.grid(row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"],columnspan=self.columnspan)                 
          else:
-            if(self.scroll==False):
+            if(self.scroll!="Full"):
                 self.container.grid(row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])          
-         self.container.grid_propagate(self.propagate)
+         if(self.scroll=="False" or self.scroll=="Full"):
+              self.container.grid_propagate(self.propagate)
          self.first_Activation=True
-   
-    #Update scroll for Scrollable Frames
+
+    #MouseWheel Event for Canvas with Two Directions of Scrolls
+    def on_MouseWheel(self,event):
+       desplz=0
+       if(event.delta):
+         desplz=int(-1*(event.delta/120))
+       else:
+           if(event.num==4):
+              desplz=-1
+           elif(event.num==5):
+              desplz=1
+       if(self.canvas!=None):
+            self.canvas.yview_scroll(desplz,"units")
+       from event_manager import Event_manager
+       vent=Event_manager.vent
+       vent.date_win.hide_Windows(True)
+     
+    #Frame Container inside Canvas Change Size Event
+    def On_Container_Change(self,event):
+       if(self.canvas!=None):
+           self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    #Center the Panel Inside Canvas for Panels with Two ScrollBars
+    def center_panel(self,event):     
+        canvas_width=event.width
+        panel_width=self.container.winfo_reqwidth()
+        if(canvas_width<=1 or panel_width<=1):
+            return 
+        if(canvas_width>panel_width):
+           new_x=(canvas_width-panel_width)/2
+           self.canvas.coords(self.id_vent,new_x,0)
+        else:
+            self.canvas.coords(self.id_vent,0,0)
+        
+       
+    #Update scroll for Panels with Two ScrollBars
     def update_scrolls(self,event):
-        root_element=self.canvas.winfo_toplevel()
-        root_element.update_idletasks()
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        if(self.scroll=="Full"):
+           root_element=self.canvas.winfo_toplevel()
+           root_element.update_idletasks()
+           self.canvas.configure(scrollregion=self.canvas.bbox("all"))
        
         
     #Limit Panel Size
@@ -448,7 +498,7 @@ class Internal_Frame(componente):
            return
        new_w=round(w_limit*self.porcent_parent["Width"])
        new_h=round(h_limit*self.porcent_parent["Height"])
-       if(self.scroll==False):
+       if(self.scroll!="Full"):
           self.container.configure(width=new_w,height=new_h)
        else:       
           self.canvas.configure(width=new_w,height=new_h)
@@ -571,9 +621,12 @@ class Internal_Frame(componente):
         for i in range(0,self.last_comp):
            self.comps[i].free_Memory()
             
-        if(self.scroll):  
+        if(self.scroll=="Full"):  
             self.container.grid_forget()
             self.container.destroy()
+            self.canvas.unbind_all("<MouseWheel>")
+            self.canvas.unbind_all("<Shift-Button-4>")
+            self.canvas.unbind_all("<Shift-Button-5>")
             self.canvas.grid_forget()
             self.canvas.destroy()
             self.scroll_y.grid_forget()
@@ -592,10 +645,10 @@ class Internal_Frame(componente):
        if(active):
            
            if(self.columnspan!=None):
-              if(self.scroll==False):                                   
+              if(self.scroll!="Full"):                                   
                   self.container.grid(in_=self.master.container,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"],columnspan=self.columnspan)                   
            else:
-              if(self.scroll==False):           
+              if(self.scroll!="Full"):           
                  self.container.grid(in_=self.master.container,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])          
           
            for i in range(0,self.last_comp):
@@ -746,10 +799,24 @@ class Combo_box(componente):
          self.select_firstOnActive=select_firstOnActive
          self.ev=evento
          self.colors=colors
+         self.combo._canvas.bind("<ButtonPress-1>",self.automatic_Scroll,add="+")
          
          if(force_width!=None):
              self.combo.configure(width=force_width)
          self.set_selected_index(0)
+         
+    #Automatic Scroll When Mouse Button is Pressed
+    def automatic_Scroll(self,event):
+       pos_y=event.y
+       h_canvas=self.combo._canvas.winfo_height()
+       dir=0
+       if(pos_y<(h_canvas*0.15)):
+          dir=1
+       elif(pos_y>(h_canvas*0.85)):
+          dir=-1
+       else:
+         return
+       self.combo._canvas.yview_scroll(dir,"units")
     
     #change the Component Master of ComboBox component
     def change_master(self,new_master,intern_pos):
@@ -788,8 +855,8 @@ class Combo_box(componente):
     def On_select(self,event):
        from UI_Event import UI_Event
        if(self.ev!=None):
-          UI_Event.interprete_Combobox_Event("Select",self.get_id(),self.ev,self.get_selected_value(),self.get_state())
-        
+          UI_Event.interprete_Combobox_Event("Select",self.get_id(),self.ev,self.get_selected_value(),self.get_state())             
+    
     #get the selected value            
     def get_selected_value(self):
         return self.combo.get()
@@ -851,10 +918,6 @@ class Labl(componente):
          temp_val=int(self.pos["columnspan"])
          if(temp_val>0):
              self.columnspan=temp_val
-                
-      if(evento==constantes.LABEL_RECUPERAR_PASS):
-        self.label.configure(cursor='hand2')
-        self.label.bind("<Button-1>",self.on_click)
     
     #change the Component Master of Label component
     def change_master(self,new_master,intern_pos):
@@ -890,12 +953,6 @@ class Labl(componente):
                   text=next_text
         return text 
         
-    #On Click Event    
-    def on_click(self,arg):
-       from event_manager import Event_manager
-       if(self.ev==constantes.LABEL_RECUPERAR_PASS):
-            Event_manager.recuperar_pass(1)
-    
     #On Load Event 
     def On_load(self):
         from UI_Event import UI_Event
@@ -999,6 +1056,11 @@ class Label_Image(componente):
          
          self.set_source([source])
          self.label.configure(image=self.images)
+         import os
+         for i in range(0,2):
+            temp_path=f"temp_foto{i}.png"
+            if(os.path.exists(temp_path)):
+                os.remove(temp_path)
     
     #Destroy Component and Free Memory  
     def free_Memory(self):
@@ -1168,77 +1230,26 @@ class TextField(componente):
             self.set_text(self.field.get())
 
 #Text Fields           
-class DateField(componente):
+class DateField(TextField):
     #Build the Text Field
-    def __init__(self,pos,parent,fuente,colors,nombre,tag,default_state,evento,corner_radius):      
-        super().__init__(nombre,tag,default_state,parent)
-        self.fuente=fuente
-        self.colors=colors
-        self.date_field= CTkDatePicker(parent, fg_color=self.colors["Fg"],corner_radius=corner_radius)
-        self.pos=pos 
-        self.ev=evento
-        self.disabled=False
-        self.field_state="normal"
-
-  
-    #change the Component Master of TetField component
-    def change_master(self,new_master,intern_pos):
-        if(new_master==None):
-            return
-        self.set_parent(new_master)
-        self.pos["row"]=intern_pos[0]
-        self.pos["column"]=intern_pos[1]    
-        self.date_field.grid_forget()
-        self.date_field.grid(in_=new_master,row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"],sticky=self.pos["sticky"])
-     
-
-    #get the Text 
-    def get_text(self):
-        return self.date_field.get_date()
-    
-    #get the field state as string
-    def get_field_state(self):
-        return self.field_state
-      
-    #set the state of TextField      
-    def set_state(self,st):
-         self.field.configure(state=st)
-         self.field_state=st
-         if(st=="disabled"):
-            self.field_state="disabled"
-            self.disabled=True
-            self.field.configure(fg_color=self.colors["Disabled"])
-            self.field.configure(text_color=self.colors["Disabled_Text"])
-         else:
-            if(st=="readonly"):
-              self.field.configure(fg_color=self.colors["Disabled"])
-              self.field.configure(text_color=self.colors["Disabled_Text"])
-            else:
-               self.field.configure(fg_color=self.colors["Fg"])
-               self.field.configure(text_color=self.colors["Text"])
-            self.disabled=False         
+    def __init__(self,pos,parent,fuente,colors,nombre,tag,default_state,evento,placeholder_text,corner_radius,vent):      
+        super().__init__(pos,parent,fuente,colors,nombre,tag,default_state,evento,placeholder_text,corner_radius,False)
+        self.vent=vent
         
-    #set the Text Value     
-    def set_date(self,text):
-        old_st=self.field_state
-        self.field.configure(state="normal")
-        self.field.delete(0,"end")
-        if(text!=""):
-            self.field.insert(0,text)
-        self.field.configure(state=old_st)
-      
-    #Destroy Component and Free Memory  
-    def free_Memory(self):
-          self.date_field.grid_forget()
-          self.date_field.destroy()
-          
-    #set Active or Inactive the Component
-    def set_active(self,value):
-        self.state=value
-        if(value==True): 
-            self.date_field.grid(in_=self.get_parent(),row=self.pos["row"],column=self.pos["column"],padx=self.pos["padx"],pady=self.pos["pady"])
-        else:
-            self.date_field.grid_remove()
+    #Focus Enter
+    def focus_enter(self,event):
+       super().focus_enter(event)
+       if(self.field_state=="readonly" or self.field_state=="disabled"):
+          return
+       self.vent.date_win.show_Windows(self)       
+    
+    #Focus Exit
+    def focus_exit(self,event):
+       super().focus_exit(event)
+       self.vent.date_win.hide_Windows()
+       
+   
+        
     
 
 #list box component     
@@ -1247,7 +1258,8 @@ class List_Box(componente):
     def __init__(self,pos,parent,num_items,values,fg_master,colors,fuente,alto,nombre,tag,default_state,evento):
           super().__init__(nombre,tag,default_state,parent)
           self.container=ctk.CTkFrame(parent,fg_color="white")
-          self.lista=Listbox(self.container,bg=colors["Fg"],fg=colors["Text"],font=fuente)
+          self.colors=colors
+          self.lista=Listbox(self.container,bg=colors["Fg"],fg=colors["Text"],font=fuente ,selectbackground="red",selectforeground="blue",selectborderwidth=0,activestyle="none",highlightthickness=0,bd=0)
           self.lista.grid(row=0,column=0)
           self.scrollBar=ctk.CTkScrollbar(self.container, orientation="vertical",command=self.lista.yview,fg_color=fg_master)
           self.scrollBar.configure(button_color=colors["Scrollbar"],button_hover_color=colors["Scrollbar_Hover"])
@@ -1257,6 +1269,7 @@ class List_Box(componente):
           self.set_values(values)
           self.pos=pos
           self.ev=evento
+          self.selected_index=-1
           self.lista.bind("<<ListboxSelect>>",self.On_select)
           self.last_selected=None
    
@@ -1282,7 +1295,14 @@ class List_Box(componente):
     
     #On Select Event    
     def On_select(self,evento):
-         
+        for i in range(0,self.count):
+            self.lista.itemconfigure(i,bg=self.colors["Fg"],fg=self.colors["Text"])
+        index=self.lista.curselection()
+        self.selected_index=index     
+        for index_selct in index:
+          self.lista.itemconfigure(index_selct,bg=self.colors["Selected_Fg"],fg=self.colors["Selected_Text"])
+        if(len(self.selected_index)<=0):
+           self.selected_index=-1
         from UI_Event import UI_Event
         if(self.ev!=None):
             UI_Event.interprete_ListBox_Event("Select",self.get_id(),self.ev,self.get_selected_item())
@@ -1353,26 +1373,24 @@ class List_Box(componente):
     
     #Remove the Selected Item    
     def delete_selected_item(self):
-        index=self.lista.curselection()
-        if(len(index)>0):
-           self.delete_element(index)
+        if(self.selected_index!=-1):
+           self.delete_element(self.selected_index)
+           self.reset_selection()
            return 0
         else:
            return -1
     
     #get the Selected Item Index    
     def get_selected_index(self):
-        index=self.lista.curselection()
-        if(len(index)>0):
-          return index
+        if(self.selected_index!=-1):
+          return self.selected_index
         else: 
-          return " "
+          return -1
 
     #get the Selected Item as a String      
     def get_selected_item(self):
-        index=self.lista.curselection()
-        if(len(index)>0):
-          return self.get_value_at(index)
+        if(self.selected_index!=-1):
+          return self.get_value_at(self.selected_index)
         else: 
           return " "
     

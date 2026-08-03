@@ -122,51 +122,8 @@
           5
         ],
         "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkFrame",
-      "Propiedades": {
-        "Color": [
-          "#93E4F5",
-          "#7381AF"
-        ],
-        "Id": "Content_Box",
-        "Ev": "None",
-        "Corner_Radious": "12",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 0
-        },
-        "Master": "Main_Box",
-        "Scroll": "False",
-        "Border_Color": "None",
-        "ScrollBar_Color": [
-          "#8780B8",
-          "#F5EFF5"
-        ],
-        "ScrollBar_Hover_Color": [
-          "#8597DB",
-          "#FFFFFF"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 2,
-        "padx": 20,
-        "pady": 20,
-        "sticky": "",
-        "columnspan": "None",
-        "column_weight": 1,
-        "row_weight": 1,
-        "porcent_parent": {
-          "Width": 0.8,
-          "Height": 0.8
-        },
-        "propagate": "True"
+        "sticky": "ew",
+        "columnspan": "3"
       }
     },
     {
@@ -198,7 +155,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 3,
+        "row": 2,
         "padx": 20,
         "pady": 20,
         "sticky": "nsew",
@@ -219,7 +176,50 @@
           "#93E4F5",
           "#7381AF"
         ],
-        "Id": "Intern_Box6",
+        "Id": "Bottom_Box",
+        "Ev": "None",
+        "Corner_Radious": "12",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Master": "Main_Box",
+        "Scroll": "False",
+        "Border_Color": "None",
+        "ScrollBar_Color": [
+          "#8780B8",
+          "#F5EFF5"
+        ],
+        "ScrollBar_Hover_Color": [
+          "#8597DB",
+          "#FFFFFF"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": 20,
+        "pady": 20,
+        "sticky": "",
+        "columnspan": "None",
+        "column_weight": 1,
+        "row_weight": 1,
+        "porcent_parent": {
+          "Width": 0.8,
+          "Height": 0.8
+        },
+        "propagate": "True"
+      }
+    },
+    {
+      "Type": "CTkFrame",
+      "Propiedades": {
+        "Color": [
+          "#93E4F5",
+          "#7381AF"
+        ],
+        "Id": "Btns_Box",
         "Ev": "None",
         "Corner_Radious": "12",
         "Initial_state": "True",
@@ -264,14 +264,14 @@
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "ci_label_p6",
+        "Id": "cedula_label",
         "Ev": "None",
         "Panel_Id": "rendimiento_calif_finales",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -281,7 +281,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           20,
           5
@@ -306,7 +306,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "identificador",
+        "Id": "cedula_estudiante",
         "Ev": "None",
         "Panel_Id": "rendimiento_calif_finales",
         "Corner_Radious": "8",
@@ -315,7 +315,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -341,7 +341,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           5,
           2
@@ -356,7 +356,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "identificar",
+        "Text": "Identificar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -387,7 +387,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -397,7 +397,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": 10,
         "pady": [
           16,
@@ -409,20 +409,20 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "año del estudiante:",
+        "Text": "Nacionalidad:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "year_estud_label",
+        "Id": "Nacionalidad_lbl",
         "Ev": "None",
         "Panel_Id": "rendimiento_calif_finales",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -432,7 +432,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 1,
         "padx": [
           20,
           5
@@ -443,43 +443,144 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkRadiobutton",
       "Propiedades": {
+        "Direction": "horizontal",
+        "Button_Count": "2",
+        "Buttons_Texts": [
+          "Venezolano",
+          "Extranjero"
+        ],
         "Text_Color": [
-          "#000000",
-          "#000000"
+          "#5E53AD",
+          "#F5EFF5"
         ],
         "Fg_Color": [
           "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Border_Color": [
+          "#70A2D1",
           "#FFFFFF"
         ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
+        "Hover_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
         ],
-        "Id": "year_estud1",
-        "Ev": "0",
+        "Id": "nacionalidad",
+        "Ev": "2",
         "Panel_Id": "rendimiento_calif_finales",
-        "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
           "Size": "15",
           "Style": "bold"
         },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
         ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 1,
+        "padx": 25,
+        "pady": 8,
+        "sticky": "w"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Accion :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label_Accion",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_calif_finales",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "Elegir,Generar Reporte de Notas,Ingresar Calificaciones",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F0EAF1"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#648CBB"
+        ],
+        "Corner_Radious": "8",
+        "Id": "action_list",
+        "Ev": "constantes.COMBOBOX_UPDATE_OPTIONS_DEFINITE_CALIFICATIONS",
+        "Panel_Id": "rendimiento_calif_finales",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#FFFFFF"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
         ],
         "Disabled_Color": [
           "#E3D3EF",
@@ -488,11 +589,15 @@
         "Disabled_TextColor": [
           "#5C4D66",
           "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
         ]
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           5,
           2
@@ -520,7 +625,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 2
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -530,12 +635,12 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           20,
           5
         ],
-        "pady": 12,
+        "pady": 4,
         "sticky": "ew",
         "columnspan": "3"
       }
@@ -556,7 +661,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 4
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -566,7 +671,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           20,
           5
@@ -600,7 +705,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 4
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -626,7 +731,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           5,
           2
@@ -654,7 +759,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 6
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -664,7 +769,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           20,
           5
@@ -698,7 +803,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 6
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -724,7 +829,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           5,
           2
@@ -752,7 +857,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 5
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -762,7 +867,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           20,
           5
@@ -796,7 +901,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 5
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -822,7 +927,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
+        "row": 3,
         "padx": [
           5,
           2
@@ -855,7 +960,7 @@
             "#FFFFFF"
           ]
         },
-        "Id": "table1_p1",
+        "Id": "table_califics",
         "Ev": "2",
         "Panel_Id": "rendimiento_calif_finales",
         "Master": "Main_Box",
@@ -867,7 +972,7 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 3,
+        "row": 2,
         "padx": 20,
         "pady": 16,
         "sticky": "nsew"
@@ -876,7 +981,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "generar reporte",
+        "Text": "Procesar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -899,61 +1004,8 @@
             "#FFFFFF"
           ]
         },
-        "Id": "reporte",
-        "Ev": "constantes.EV_REPORTE_NOTAS",
-        "Panel_Id": "rendimiento_calif_finales",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 4,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "Modificar Calificacion",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "Modificar_btn",
-        "Ev": "constantes.EV_MODIFIC_CALIF_FINAL",
+        "Id": "accion_btn",
+        "Ev": "constantes.EV_PROCESS_DEFINITVE_CALIFICATION_GESTION_ACTION",
         "Panel_Id": "rendimiento_calif_finales",
         "Corner_Radious": "8",
         "Master": "Main_Box",

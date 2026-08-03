@@ -249,7 +249,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -268,7 +268,7 @@
         "Panel_Id": "cronog_mat_pendiente",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
@@ -347,7 +347,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -366,7 +366,7 @@
         "Panel_Id": "cronog_mat_pendiente",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
@@ -445,7 +445,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -464,7 +464,7 @@
         "Panel_Id": "cronog_mat_pendiente",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
@@ -543,7 +543,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -562,7 +562,7 @@
         "Panel_Id": "cronog_mat_pendiente",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
@@ -641,7 +641,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -660,7 +660,7 @@
         "Panel_Id": "cronog_mat_pendiente",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,

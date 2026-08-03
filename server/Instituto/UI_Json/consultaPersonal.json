@@ -17,7 +17,7 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True",
+        "Scroll": "False",
         "Border_Color": [
           "#DCFFFF",
           "#FFFFFF"
@@ -312,7 +312,7 @@
     {
       "Type": "CTkRadiobutton",
       "Propiedades": {
-        "Direction": "vertical",
+        "Direction": "horizontal",
         "Button_Count": "2",
         "Buttons_Texts": [
           "docente",
@@ -459,7 +459,7 @@
         "row": 2,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -541,7 +541,7 @@
         "row": 3,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -553,9 +553,120 @@
       }
     },
     {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Accion :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label_Accion",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "ew",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "Buscar,Descargar Expediente,Descargar Constancia,Descargar Carnet,Descargar Horario,Generar Reporte Lista de Trabajadores,Ver Informacion del Trabajador",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F0EAF1"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#648CBB"
+        ],
+        "Corner_Radious": "8",
+        "Id": "Accion_consulta",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#FFFFFF"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "buscar",
+        "Text": "Consultar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -580,324 +691,6 @@
         },
         "Id": "buscar",
         "Ev": "constantes.EV_CONSULTAR_PERSONAL",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 1
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "generar reporte:\n trabajador",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "reporte",
-        "Ev": "constantes.EV_REPORTE_INFO_TRABAJADOR",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "descargar expediente",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "reporte expediente",
-        "Ev": "constantes.EV_DOWNLOAD_EXPEDIENTE_PERSONAL",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "descargar carnet",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "carnet_cp",
-        "Ev": "constantes.EV_DESCARGA_CARNET",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "descargar constancia",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "constancia_cp",
-        "Ev": "constantes.EV_DESCARGAR_CONSTANCIA",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 1
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "lista de\\n trabajadores",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "nomina_cp",
-        "Ev": "constantes.EV_GENERAR_NOMINA_TRABAJ",
-        "Panel_Id": "consultaPersonal",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 3,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "descargar horario",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "reporte_horario",
-        "Ev": "constantes.EV_DESCARGAR_HORARIO",
         "Panel_Id": "consultaPersonal",
         "Corner_Radious": "8",
         "Master": "Main_Box",
@@ -957,7 +750,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",

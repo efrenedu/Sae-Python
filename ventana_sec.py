@@ -7,9 +7,11 @@ import os, sys
 from PIL import Image, ImageDraw, ImageFont, ImageTk
 from tkinter.font import Font
 from componentes import Lienzo_dibujo, Labl, TextField, Boton, componente, Internal_Frame
+from CTkCalendar import CTkCalendar as CTkDatePicker
 from panel import panel
 import requests
 import json
+import time
 
 class Stadistic_Windows:
 
@@ -627,3 +629,152 @@ class Frame_Loading:
 
     def hide_frame(self):
         self.frame.place_forget()
+
+class Date_Windows:   
+    def __init__(self, root, colors,initial_size,corner_radius):
+        self.colors=colors
+        self.date_container=ctk.CTkToplevel()
+        self.date_container.configure(fg_color=colors["Fg"])
+        self.date_container.geometry("%dx%d+%d+%d" % (initial_size[0],initial_size[1], 0, 0))
+        self.date_container.transient(root)
+        self.date_container.overrideredirect(1)
+        self.date_container.attributes("-topmost",True)
+        self.frame_container=ctk.CTkFrame(self.date_container,fg_color=colors["Fg"])
+        self.frame_container.pack()
+        values_years=[]
+        local_tm=time.localtime(time.time())
+        end_year=local_tm.tm_year 
+        start_year=end_year-120
+        count_years=0
+
+        for i in range(start_year,end_year):
+           values_years.append(str(end_year-count_years))
+           count_years=count_years+1
+        self.list_years=ctk.CTkOptionMenu(self.frame_container,values=values_years,command=self.set_year)
+        self.list_years.set(values_years[0])
+        self.list_years.pack()
+        self.comp_required=None
+        self.date_pick=CTkDatePicker(self.frame_container, fg_color=self.colors["Fg"],corner_radius=corner_radius)
+        self.date_pick.pack()
+        self.date_container.update_idletasks()
+        self.dim_date=(self.frame_container.winfo_reqwidth(),self.frame_container.winfo_reqheight())
+        self.date_container.withdraw()
+        self.prepare_navigators(self.date_pick)
+        self.link_buttons(self.date_pick)
+        self.list_years._canvas.bind("<ButtonPress-1>",self.automatic_Scroll,add="+")
+   
+         
+    #Automatic Scroll When Mouse Button is Pressed
+    def automatic_Scroll(self,event):
+       pos_y=event.y
+       h_canvas=self.list_years._canvas.winfo_height()
+       dir=0
+       if(pos_y<(h_canvas*0.15)):
+          dir=1
+       elif(pos_y>(h_canvas*0.85)):
+          dir=-1
+       else:
+         return
+       self.list_years._canvas.yview_scroll(dir,"units")
+       
+    #Calendar Change of Month or Year    
+    def on_change(self,initiaL_command):
+       if(initiaL_command):
+           initiaL_command()
+       self.date_container.after(30,lambda:self.link_buttons(self.date_pick))
+    
+    #Link Navegation Buttons to Re Call Link_buttons Fuction
+    def prepare_navigators(self,widget):
+        for child in widget.winfo_children():
+           if(isinstance(child,(ctk.CTkButton))):
+               text=child.cget("text")
+               if not (text.isdigit() and 1<=int(text)<=31):
+                  initial_command=child.cget("command")
+                  child.configure(command=lambda cmd=initial_command: self.on_change(cmd))
+           if(child.winfo_children()):
+               self.prepare_navigators(child)
+    
+    #Link Events to the Calendar Days Buttons    
+    def link_buttons(self,widget):
+       for child in widget.winfo_children():
+           if(isinstance(child,(ctk.CTkButton,ctk.CTkLabel))):
+               text=child.cget("text")
+               if(text and text.isdigit() and 1<=int(text)<=31):
+                   child.bind("<Button-1>",lambda event, btn=child:self.set_date_field(btn),add="+")
+           if(child.winfo_children()):
+               self.link_buttons(child)
+               
+    #Set the date On the Required Text Field           
+    def set_date_field(self,btn):
+       day=str(btn.cget("text")).zfill(2)
+       month=str(self.date_pick.current_month).zfill(2)
+       year=str(self.date_pick.current_year).zfill(2)
+       if(self.comp_required!=None):
+          self.comp_required.set_text(f"{day}/{month}/{year}")
+          self.comp_required.field.master.focus()
+       self.date_container.after(50,self.date_container.withdraw)
+       
+    #Click Event On Windows
+    def On_Click(self,event):
+       if(self.date_container==None or self.comp_required==None):
+          return
+       if not self.date_container.winfo_viewable(): 
+          return
+       clickx=event.widget.winfo_pointerx()
+       clicky=event.widget.winfo_pointery()
+       topx1=self.date_container.winfo_rootx()
+       topx2=topx1+self.date_container.winfo_width()
+       topy1=self.date_container.winfo_rooty()
+       topy2=topy1+self.date_container.winfo_height()
+       
+       field=self.comp_required.field
+       fldx1=field.winfo_rootx()
+       fldx2=fldx1+field.winfo_width()
+       fldy1=field.winfo_rooty()
+       fldy2=fldy1+field.winfo_height()
+       
+       on_top=(topx1<=clickx <=topx2) and (topy1<=clicky<=topy2)
+       on_entry=(fldx1<=clickx<=fldx2) and (fldy1<=clicky<=fldy2)
+       if not on_top and not on_entry:
+         event.widget.focus_force()
+         self.date_container.withdraw()
+         
+    #Set the Year 
+    def set_year(self,year_selected):
+       year=int(year_selected)
+       self.date_pick.current_year=year
+       self.date_pick.update_month_year()
+       self.date_pick._draw()
+       self.date_pick.update_idletasks()
+       self.prepare_navigators(self.date_pick)
+       self.link_buttons(self.date_pick)
+       
+    def show_Windows(self,comp_required):
+        self.comp_required=comp_required
+        field=comp_required.field
+        x=field.winfo_rootx()
+        y=field.winfo_rooty()
+        h=field.winfo_height()
+        w=field.winfo_width()
+        y=y+h
+        h_container=self.dim_date[0]+20
+        w_container=self.dim_date[1]
+        self.date_container.geometry(f"{w_container}x{h_container}+{x}+{y}")
+        self.date_container.deiconify()
+
+
+    def hide_Windows(self,force_focus=False):
+        if(self.comp_required!=None and force_focus):
+           self.comp_required.field.master.focus_force()
+           self.comp_required=None
+        self.date_container.withdraw()
+        
+    #Destroy Component and Free Memory  
+    def free_Memory(self):
+          self.date_pick.pack_forget()
+          self.date_pick.destroy()
+          self.frame_container.pack_forget()
+          self.frame_container.destroy()
+          self.date_container.destroy()
+          self.date_container=None
+          

@@ -12,7 +12,7 @@ from PIL import Image,ImageDraw, ImageFont, ImageTk
 from ui import UI
 import faulthandler
 from datetime import datetime
-from ventana_sec import Frame_Loading
+from ventana_sec import Frame_Loading,Date_Windows
 
 #the Main Windows of System
 class ventana:
@@ -21,6 +21,7 @@ class ventana:
         self.raiz=ctk.CTk() 
         self.loading_panel=False
         self.load_frame=None
+        self.date_win=Date_Windows(self.raiz,{"Fg":"white"},[100,100],18)
         
         self.active_panel=0
         self.last_panel=0
@@ -52,18 +53,34 @@ class ventana:
         self.menus=None
         self.panelActual=None
         self.panelActual_str=""
-       # faulthandler.enable()
+        self.raiz.bind_all("<Button-1>",self.on_click,add="+")
+        self.raiz.protocol("WM_DELETE_WINDOW",self.close)
+        self.last_state=None
         self.raiz.withdraw()    
+        
     
+    #On Click Event
+    def on_click(self,event):
+       widget=event.widget
+       if("toplevel" in str(widget)):
+          return
+       if(isinstance(widget,(ctk.CTkEntry))):
+           return
+       if(self.date_win!=None):
+           self.date_win.On_Click(event)
+       
     def limit_fromWindow(self):
         w_limit=self.raiz.winfo_width()
         h_limit=self.raiz.winfo_height()
         if(w_limit<=1 or h_limit<=1):
           self.last_size=[0,0]
+          self.last_state=None
           self.limit_fromWindow()
           return
-        if(w_limit!=self.last_size[0] or h_limit!=self.last_size[1]):
+        next_state=self.raiz.state()
+        if((w_limit!=self.last_size[0] or h_limit!=self.last_size[1])or self.last_state!=next_state):
            self.last_size=[w_limit,h_limit]   
+           self.last_state=self.raiz.state()
           
            if(self.panelActual!=None):
                self.panelActual.limit_Internal_panels(w_limit,h_limit)
@@ -71,15 +88,19 @@ class ventana:
            
     #Limit Panels Size
     def limit_panels(self,event):
+       
        if(event.widget==self.raiz):
            w_limit=event.width
            h_limit=event.height         
            if(w_limit<=1 or h_limit<=1):
                self.last_size=[0,0]
+               self.last_state=None
                self.limit_fromWindow()
                return
-           if(w_limit!=self.last_size[0] or h_limit!=self.last_size[1]):
+           next_state=self.raiz.state()
+           if((w_limit!=self.last_size[0] or h_limit!=self.last_size[1]) or self.last_state!=next_state):
               self.last_size=[w_limit,h_limit]  
+              self.last_state=next_state
                      
               if(self.panelActual!=None):
                   self.panelActual.limit_Internal_panels(w_limit,h_limit)
@@ -221,7 +242,7 @@ class ventana:
            if(type(master).__name__=="Internal_Frame"):
               master=master.container
            have_master=True
-        if(self.panelActual_str!=constantes.PANTALLA_UPDATE_USER):
+        if(self.panelActual_str!=constantes.PANTALLA_UPDATE_USER and self.panelActual_str!=constantes.PANTALLA_PROCESO_INSCRIPCION_3):
            select_firstOnActive=True
         combo = Combo_box(posicion,master,items,font,id_name,tag,colors,initial_state,ev,force_width,select_firstOnActive)
         self.panelActual.add_comp(combo,id_name,tag,have_master,pos_master,pos_comp,intern_pos_comp)
@@ -313,7 +334,7 @@ class ventana:
         self.panelActual.add_comp(lista,id_name,tag,have_master,pos_master,pos_comp,intern_pos_comp)
     
     #add a date field
-    def add_date_field(self,posicion,colors,font_data,corner_radius,ev,id_name,initial_state,parent,intern_pos):
+    def add_date_field(self,posicion,colors,font_data,corner_radius,placeholder_text,ev,id_name,initial_state,parent,intern_pos):
         font=ctk.CTkFont(family=font_data["Name"], size=int(font_data["Size"]),weight=font_data["Style"] ) 
         master=self.panelActual if parent==None else parent
         tag="date"
@@ -326,7 +347,7 @@ class ventana:
            if(type(master).__name__=="Internal_Frame"):
               master=master.container
            have_master=True
-        date_fld=DateField(posicion,master,font,colors,id_name,tag,initial_state,ev,corner_radius)
+        date_fld=DateField(posicion,master,font,colors,id_name,tag,initial_state,ev,placeholder_text,corner_radius,self)
         self.panelActual.add_comp(date_fld,id_name,tag,have_master,pos_master,pos_comp,intern_pos_comp)
     
          
@@ -352,8 +373,6 @@ class ventana:
            if(self.load_frame==None):
                self.load_frame=Frame_Loading(self.raiz,constantes.FG_DEFAULT_BACKGROUND,"Cargando...",32,["#FFFFFF","#FFFFFF"])           
            self.load_frame.show_frame()
-
-           #self.load_frame.bind("<Map>",self.redraw_load)
            self.raiz.update() 
                       
            UI.read_Jsondata(next_p)           
@@ -361,9 +380,14 @@ class ventana:
            self.raiz.event_generate("<Configure>")  
            
            self.raiz.after(100,self.hide_load_Panel)
-           if(from_menu and self.panelActual_str==constantes.PANTALLA_WELCOME):
+           if(self.panelActual_str==constantes.PANTALLA_WELCOME):
               Event_manager.show_data_user()
-        
+      
+       
     #Close the Windows    
     def close(self):
+        if(self.panelActual!=None):
+           self.panelActual.free_Memory()
+        if(self.date_win!=None):
+           self.date_win.free_Memory()
         self.raiz.destroy()

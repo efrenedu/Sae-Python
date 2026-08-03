@@ -757,10 +757,12 @@ class documento:
             filename=content[2]+tabla_name+".csv"
             conexion_bd.set_tabla(tabla_name)
             if(os.path.exists(filename)==False):
+               print(f"not found {filename}")
                cls.estatus=0
                cls.result=constantes.REQUEST_RESULT_ERROR_READ_CSV
                return constantes.REQUEST_RESULT_ERROR_READ_CSV
             if(conexion_bd.reset_table()==-1):
+               print(f"error reset table")
                cls.estatus=0
                cls.result=constantes.REQUEST_RESULT_ERROR_READ_CSV
                return constantes.REQUEST_RESULT_ERROR_READ_CSV
@@ -776,7 +778,8 @@ class documento:
             tabla_name=content[1][j]
             filename=content[2]+tabla_name+".csv"
             conexion_bd.set_tabla(tabla_name)
-            if(os.path.exists(filename)==False):        
+            if(os.path.exists(filename)==False): 
+               print(f"error reading {filename}")            
                cls.estatus=0
                cls.result=constantes.REQUEST_RESULT_ERROR_READ_CSV
                return constantes.REQUEST_RESULT_ERROR_READ_CSV  

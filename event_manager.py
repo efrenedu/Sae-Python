@@ -69,9 +69,8 @@ class Event_manager:
         elif(type_e>=constantes.EV_AUDITORIA and type_e<=constantes.EV_REESTABLECER_MOMENTO):
            #Service Event
            from Service_Manager import Service_Manager
-           from Consult_Manager import Consult_Manager
            if(type_e==constantes.EV_AUDITORIA):
-              cls.consultar(Consult_Manager.CONSULT_USERS_HISTORIAL)
+              Service_Manager.interprete_auditoria_action(cls.user,cls.vent)
            elif(type_e==constantes.EV_VER_ESTADITICA):
               cls.estadistica()
            elif(type_e==constantes.EV_ACTIVAR_MOM):
@@ -80,26 +79,18 @@ class Event_manager:
               cls.registrar_usuario()
            elif(type_e==constantes.EV_SERVICIO_RESPALDO_BD):
                cls.respaldar() 
-           elif(type_e==constantes.EV_GESTION_USER_DESBLOQUEAR):
-               cls.gestion_usuario(Service_Manager.USER_UNLOCK)
-           elif(type_e==constantes.EV_GESTION_USER_RESTORE_PASS):
-               cls.gestion_usuario(Service_Manager.USER_RESET_PASSWORD)
-           elif(type_e==constantes.EV_GESTION_USER_DELETE_USER):
-               cls.gestion_usuario(Service_Manager.USER_REMOVE)   
-           elif(type_e==constantes.EV_GESTION_USER_CHANGE_PERMISOS):
-               cls.gestion_usuario(Service_Manager.USER_CHANGE_ACCESS_LEVEL)
+           elif(type_e==constantes.EV_GESTION_USER):
+               Service_Manager.gestion_usuario(cls.user,cls.vent)
            elif(type_e==constantes.EV_UPDATE_ESTUDIANTE):
                cls.update_estudiante()    
            elif(type_e==constantes.EV_REESTABLECER_MOMENTO):
                cls.reestablecer_momento()
-           elif(type_e==constantes.EV_NUEVO_USUARIO):
-              cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_USUARIO)
            elif(type_e==constantes.EV_UPDATE_PASS):
                cls.recuperar_pass(Service_Manager.RECOVER_PASS_CHANGE_PASSWORD) 
            elif(type_e==constantes.EV_UPDATE_USER):
                cls.update_user()
            elif(type_e==constantes.EV_UPDATE_SECCION):      
-               cls.organizar_seccion(Service_Manager.UPDATE_SECTIONS) 
+               cls.organizar_seccion() 
         elif(type_e>=constantes.EV_ACTIVAR_ACTUALIZAR_PERSONAL and type_e<=constantes.EV_VOLVER):
            #UI Event
             from Service_Manager import Service_Manager
@@ -119,14 +110,14 @@ class Event_manager:
                cls.set_file(True)
             elif(type_e==constantes.EV_RESET):
                cls.reset()  
+            elif(type_e==constantes.EV_MOVE_STUDENTA_TO_SECTIONB):
+              cls.move_student_list("secc1","secc2")
+            elif(type_e==constantes.EV_MOVE_STUDENTB_TO_SECTIONA):
+              cls.move_student_list("secc2","secc1")
+            elif(type_e==constantes.EV_RECOVER_PASS):
+               cls.recuperar_pass(Service_Manager.RECOVER_PASS_REQUEST)
             elif(type_e==constantes.EV_VOLVER):
                cls.volver()   
-            elif(type_e==constantes.EV_MOVER_ESTUD):
-                cls.organizar_seccion(Service_Manager.CHANGE_STUDENT_SECTION1_TO_SECTION2) 
-            elif(type_e==constantes.EV_INTERCAMBIAR_ESTUDS):
-                cls.organizar_seccion(Service_Manager.INTERAMBIATE_STUDENTS)  
-            elif(type_e==constantes.EV_INCORPORAR_ESTUD):
-                cls.organizar_seccion(Service_Manager.CHANGE_STUDENT_SECTION2_TO_SECTION1) 
             elif(type_e==constantes.EV_ACTIVAR_ACTUALIZAR_PERSONAL):
                cls.activar_update(0)
             elif(type_e==constantes.EV_ACTIVAR_ACTUALIZAR_ESTUDIANTE):
@@ -136,9 +127,7 @@ class Event_manager:
             elif(type_e==constantes.EV_ACTIVAR_ACTUALIZAR_DISP):
                cls.activar_update(3)
             elif(type_e==constantes.EV_ACTIVAR_ACTUALIZAR_AREA):
-               cls.activar_update(4)  
-            elif(type_e==constantes.EV_ACTIVAR_RECUPERAR_PASS1):
-               cls.recuperar_pass(Service_Manager.RECOVER_PASS_LOAD_FIRST_PANEL)        
+               cls.activar_update(4)             
             elif(type_e==constantes.EV_ACTIVAR_RECUPERAR_PASS2):
                cls.recuperar_pass(Service_Manager.RECOVER_PASS_VERIFY_SECRET_QUESTIONS) 
             elif(type_e==constantes.EV_ACTIVAR_DOWNLOAD_FORMATOS):
@@ -171,23 +160,21 @@ class Event_manager:
                opcion=Consult_Manager.CONSULT_MATERIA_PENDIENTE
            elif(type_e==constantes.EV_CONSULTAR_DESCARGAS):
               opcion=Consult_Manager.CONSULT_DOWNLOADS
-           if(opcion!=-1):   
-              cls.consultar(opcion)
+           if(opcion!=-1):
+              Consult_Manager.interprete_consult(cls.vent,cls.user,opcion)           
         elif(type_e>=constantes.EV_FINALIZAR_PROCESO and type_e<=constantes.EV_SEARCH_ESTUD):
            #General process Event
            if(type_e==constantes.EV_SEARCH_ESTUD):
                cls.search_estud()
-        elif(type_e>=constantes.EV_INSCRIPCION_NUEVO_INGRESO and type_e<=constantes.EV_INIT_EXPEDIENTE):
+        elif(type_e>=constantes.EV_INSCRIPCION and type_e<=constantes.EV_INIT_EXPEDIENTE):
            #Inscription Event
            from Process_Manager import Process_Manager
-           if(type_e==constantes.EV_INSCRIPCION_NUEVO_INGRESO):
-               cls.inscribir(Process_Manager.INSCRIPTION_NUEVO_INGRESO)
-           elif(type_e==constantes.EV_INSCRIPCION_REGULAR):
-               cls.inscribir(Process_Manager.INSCRIPTION_REGULAR)
+           if(type_e==constantes.EV_INSCRIPCION):
+               cls.inscribir(Process_Manager.INSCRIPTION_VERIFY_ID)
            elif(type_e==constantes.EV_NEXT_INSCRIP):
-               cls.inscribir(Process_Manager.INSCRIPTION_UNDEFINED,Process_Manager.INSCRIPTION_VERIFY_DATA_STUDENT)
+               cls.inscribir(Process_Manager.INSCRIPTION_VERIFY_DATA_STUDENT)
            elif(type_e==constantes.EV_FINISH_INSCRIP):
-               cls.inscribir(Process_Manager.INSCRIPTION_UNDEFINED,Process_Manager.INSCRIPTION_CONFIRM_INSCRIPTION)
+               cls.inscribir(Process_Manager.INSCRIPTION_CONFIRM_INSCRIPTION)
            elif(type_e==constantes.EV_INIT_EXPEDIENTE):
                cls.asign_expediente()  
         elif(type_e>=constantes.EV_PLANIFIC_CRONOGRAMA and type_e<=constantes.EV_MODIFIC_CONTENT_FORMATO):
@@ -222,45 +209,32 @@ class Event_manager:
                cls.update_formato()    
            elif(type_e==constantes.EV_INIT_GESTION_CRONOG):
                cls.set_cronog()  
-        elif(type_e>=constantes.EV_RENDIMIENTO_GESTION_CALIFIC and type_e<=constantes.EV_REGISTRAR_CALIFICACION):
+        elif(type_e>=constantes.EV_RENDIMIENTO_GESTION_CALIFIC and type_e<=constantes.EV_REPORTE_NOTAS_SECCION):
            #Rendimiento Event
+           from Process_Manager import Process_Manager
            if(type_e==constantes.EV_RENDIMIENTO_GESTION_CALIFIC):
-              cls.set_rendimiento(0)
+              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_GESTION_CALIFICATION)
            elif(type_e==constantes.EV_RENDIMIENTO_SABANA):
-              cls.set_rendimiento(1)
+              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_ACCESS_SABANA_AND_CALIFICATIONS_YEAR_PANEL)
            elif(type_e==constantes.EV_RENDIMIENTO_MATERIA_PEND):
-              cls.set_rendimiento(3)
+              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_MATERIA_PENDIENTE)
            elif(type_e==constantes.EV_RENDIMIENTO_NOTAS_CERTIFIC):
-              cls.set_rendimiento(4)
+              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT)
            elif(type_e==constantes.EV_GESTIONAR_MAT_PEND):
-              cls.set_rendimiento(5)
+              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_IDENTIFIC_MATERIA_PENDIENTE)
            elif(type_e==constantes.EV_GESTIONAR_CALIF):
-               cls.set_rendimiento(6)
+               cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_IDENTIFIC_GESTION_CALIFICATIONS)
            elif(type_e==constantes.EV_REGISTRAR_INTENTO_MAT_PEND):
-              cls.set_rendimiento(7)
-           elif(type_e==constantes.EV_MODIFIC_CALIF_FINAL):
-             cls.modific_calif_final()
+              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_PROCESS_MATERIA_PENDIENTE)
+           elif(type_e==constantes.EV_PROCESS_DEFINITVE_CALIFICATION_GESTION_ACTION):
+              cls.definite_califics_gestion()
+           elif(type_e==constantes.EV_PROCESS_CALIFICATION_GESTION_ACTION):
+              Process_Manager.interprete_Calification_Gestion_Action(cls.user,cls.vent)
            elif(type_e==constantes.EV_REPORTE_NOTAS):
               cls.generar_reporte("notas finales")
-           elif(type_e==constantes.EV_REPORTE_NOTAS_AÑO):
-              cls.sabana_notas(True)
-           elif(type_e==constantes.EV_REPORTE_NOTAS_MOMENTO):
-              cls.generar_reporte("notas del momento")
-           elif(type_e==constantes.EV_REPORTE_EVALUACION_SECCION):
-              cls.generar_reporte("evaluacion continua")
-           elif(type_e==constantes.EV_REGISTRAR_CALIFICACION):
-              cls.registrar_calificacion()
-           elif(type_e==constantes.EV_MODIFIC_CALIFIC):
-              cls.modific_calific_mom()
-           elif(type_e==constantes.EV_ESTIMULAR_AREA):
-               cls.estimular_mom()
-           elif(type_e==constantes.EV_DELETE_CALIFIC):
-               cls.delete_calific()
-           elif(type_e==constantes.EV_REMOVE_ESTIMULACION):
-               cls.remover_estimulacion_mom()
-           elif(type_e==constantes.EV_GENERAR_SABANA):
-               cls.sabana_notas()  
-        elif(type_e>=constantes.EV_REPORTE_NOMINA_SECCION and type_e<=constantes.EV_LIMPIAR_REPORTES):
+           elif(type_e==constantes.EV_REPORTE_NOTAS_SECCION):
+              cls.reporte_notas_seccion()
+        elif(type_e>=constantes.EV_REPORTE_NOMINA_SECCION and type_e<=constantes.EV_DESCARGAR_HORARIO_SECCION):
            from Consult_Manager import Consult_Manager
            #Report and Download Event
            if(type_e==constantes.EV_REPORTE_ASISTENCIA_SECCION):
@@ -287,12 +261,8 @@ class Event_manager:
                cls.generar_reporte("constancias")        
            elif(type_e==constantes.EV_DESCARGA_CARNET):
               cls.generar_reporte("carnet")
-           elif(type_e==constantes.EV_REPORTE_ACCIONES_USUARIOS):
-              cls.generar_reporte("reporte de usuarios")
            elif(type_e==constantes.EV_REPORTE_DESCARGAS):
               cls.generar_reporte("reporte de descargas")    
-           elif(type_e==constantes.EV_LIMPIAR_REPORTES):
-              cls.clear_reportes()
            elif(type_e==constantes.EV_DESCARGAR_FORMATO_ANONIMO):
               cls.descargar_formato()
            elif(type_e==constantes.EV_GENERAR_NOMINA_TRABAJ):
@@ -388,48 +358,40 @@ class Event_manager:
            cls.vent.raiz.after(200,Process_Manager.show_planificar_cronogOption,cls.user,cls.vent,autollamado)
            return
         Process_Manager.show_planificar_cronogOption(cls.user,cls.vent,autollamado)
-    
-    #Remove a Calification Associated to an Academic Moment
-    @classmethod 
-    def delete_calific(cls):
-        from Process_Manager import Process_Manager
-        Process_Manager.delete_calification(cls.user,cls.vent)
-    
-    #Modify the Calification Associated to an Academic Moment  
-    @classmethod 
-    def modific_calific_mom(cls):
-        from Process_Manager import Process_Manager
-        Process_Manager.update_calification(cls.user,cls.vent)
-    
-    #Remove Estimulation Point Associated to an Academic Moment
-    @classmethod 
-    def remover_estimulacion_mom(cls):   
-        from Process_Manager import Process_Manager
-        Process_Manager.remover_estimulacion_mom(cls.user,cls.vent)
-    
-    #Assign Estimulation Point Associated to an Academic Moment   
-    @classmethod 
-    def estimular_mom(cls):        
-         from Process_Manager import Process_Manager
-         Process_Manager.estimular_mom(cls.user,cls.vent)
-                        
-    #Modify Definite Calification for Especials cases
+                       
+    #Process the Definite Calification Gestion Action
     @classmethod      
-    def modific_calif_final(cls):
+    def definite_califics_gestion(cls):
        from Process_Manager import Process_Manager
-       Process_Manager.modific_calif_final(cls.user,cls.vent)
+       Process_Manager.process_definitve_calification_gestion(cls.user,cls.vent)
                    
     #Generate the document "sabana de notas"
     @classmethod 
-    def sabana_notas(cls,con_notas=False):
+    def reporte_notas_seccion(cls):
        from Process_Manager import Process_Manager
-       Process_Manager.generate_sabana_notas(cls.user,cls.vent,con_notas)
+       fill_califications=True
+       pnl=cls.vent.panelActual
+       option_comp=pnl.get_comp_byName("Document_Type")
+       if(option_comp!=None):
+          selected_value=option_comp.get_selected_value().lower()
+          if(selected_value=="sabana de notas"):
+              fill_califications=False 
+       Process_Manager.generate_sabana_notas(cls.user,cls.vent,fill_califications)
      
     #Make a Inscription for a Student 
     @classmethod
-    def inscribir(cls,type_i,fase=0):
+    def inscribir(cls,fase):
       from Process_Manager import Process_Manager
-      Process_Manager.inscribir(cls.user,cls.vent,type_i,fase)
+      pnl=cls.vent.panelActual
+      inscrip_type=Process_Manager.INSCRIPTION_UNDEFINED
+      inscrip_type_comp=pnl.get_comp_byName("Inscription_Type")
+      if(inscrip_type_comp!=None):
+         inscrip_value=inscrip_type_comp.get_selected_value()
+         if(inscrip_value.lower()=="regular"):
+            inscrip_type=Process_Manager.INSCRIPTION_REGULAR
+         else:
+           inscrip_type=Process_Manager.INSCRIPTION_NUEVO_INGRESO      
+      Process_Manager.inscribir(cls.user,cls.vent,inscrip_type,fase)
             
     #Set the Data of Student in the required Components
     @classmethod
@@ -475,6 +437,7 @@ class Event_manager:
                 conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
                 data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_ESTUD,len(constantes.CAMPOS_ESTATUS_ESTUD),[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[5]],["and"])
                 fields=pnl.get_comps_byTag("field")
+                fecha=pnl.get_comp_byName("fecha")
                 for i in range(0,len(fields)):                
                     if(fields[i].get_id()=="cedula_estud"):
                         fields[i].set_text(data_estud[0])
@@ -531,6 +494,9 @@ class Event_manager:
                         fields[i].set_text(data_repres[5])
                     elif(fields[i].get_id()=="parentesco"):
                         fields[i].set_text(data_estud[12])
+                if(fecha!=None):
+                   fecha.set_text(data_estud[10])
+                   fecha.set_state("readonly")   
                 combos=pnl.get_comps_byTag("combo")
                 for i in range(0,len(combos)):
                     if(combos[i].get_id()=="salud"):
@@ -642,6 +608,8 @@ class Event_manager:
                              fields[i].set_text(temp_data)    
                 else:
                    fields[i].set_text(cedula_estud)                
+
+
     
     #Download the Data of a Format Indicated in the Respective ComboBox Component
     @classmethod 
@@ -788,35 +756,35 @@ class Event_manager:
              pnl.get_comp_byName("area_form").set_values(lista_areas)
              pnl.get_comp_byName("area_form").set_selected_index(0)
        elif(pantalla==constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF_FINALES):      
-            field_ced4=pnl.get_comp_byName("identificador")
+            field_ced=pnl.get_comp_byName("cedula_estudiante")
+            nacionaliad_comp=pnl.get_comp_byName("nacionalidad")
+            cedula_estud=""
+            if(field_ced!=None and nacionaliad_comp!=None):
+                nacionalidad_value=nacionaliad_comp.get_selected_value()
+                if(nacionalidad_value.lower()=="venezolano"):
+                    cedula_estud=f"V-{field_ced.get_text()}"
+                else:
+                   cedula_estud=f"E-{field_ced.get_text()}"
+                   
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            data_estud=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_ESTATUS_ESTUD],2,[constantes.CLAVE_ESTUDIANTE],[field_ced4.get_text()],["and"])          
+            data_estud=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_ESTATUS_ESTUD],2,[constantes.CLAVE_ESTUDIANTE],[cedula_estud],["and"])          
+            tabl=pnl.get_comp_byName("table_califics")
+            tabl.reset()
             if(data_estud!=[]):
                conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
                data_estatus=conexion_bd.get_allData(["last_year","estatus"],2,[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[0][1]],["and"])
                conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
                data_califs=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION_FINAL,len(constantes.CAMPOS_CALIFICACION_FINAL),[constantes.CLAVE_ESTUDIANTE],[data_estud[0][0]],["and"])
                if(data_califs!=[]):
-                   t=pnl.get_comp_byName("table1_p1")
-                   t.reset()
-                   for i in range(0,len(data_califs)):
+                    for i in range(0,len(data_califs)):
                       dat=[data_califs[i][3],data_califs[i][2],data_califs[i][4]]
-                      t.add_row(dat)
-                   pnl.get_comp_byName("year_estud1").set_text(data_estatus[0][0])
+                      tabl.add_row(dat)
                else:
-                 pnl.get_comp_byName("year_estud1").set_text("")
                  General.show_message("estudiante sin ningun registro de calificaciones","sin registros")
             else:
-              pnl.get_comp_byName("year_estud1").set_text("")
+              
               General.show_message("cedula del estudiante inexistente","cedula invalida")
    
-   
-   #Manage the Operation in User Gestion Panel except Register New User            
-    @classmethod 
-    def gestion_usuario(cls,opcion):
-       from Service_Manager import Service_Manager
-       Service_Manager.gestion_usuario(cls.user,cls.vent,opcion)
-       
     #Make a Consult to the Data Base Information        
     @classmethod 
     def consultar(cls,opcion):
@@ -858,9 +826,9 @@ class Event_manager:
     
     #Organizate The sections     
     @classmethod 
-    def organizar_seccion (cls,opcion):
+    def organizar_seccion (cls):
         from Service_Manager import Service_Manager
-        Service_Manager.organizar_secciones(cls.user,cls.vent,opcion)
+        Service_Manager.organizar_secciones(cls.user,cls.vent)
         
     #Set the Value of Teachuer Guia Component in the Panel for Organizate Sections
     @classmethod 
@@ -876,7 +844,22 @@ class Event_manager:
        Service_Manager.stadistics(cls.user,cls.vent)
            
     
-   
+    #Move the Selected student on the from list to the to_list
+    @classmethod
+    def move_student_list(cls,from_list,to_list):
+       pnl=cls.vent.panelActual
+       
+       listA=pnl.get_comp_byName(from_list)
+       listB=pnl.get_comp_byName(to_list)
+       if(listA==None or listB==None):
+          return
+       value_move=listA.get_selected_item()
+       if(value_move=="" or value_move==" "):
+          return
+       listB.insert_value(value_move)
+       listA.delete_selected_item()
+       
+       
     #Reset the Active Panel Components Values
     @classmethod
     def reset(cls):
@@ -1103,17 +1086,14 @@ class Event_manager:
     @classmethod   
     def borrar_area_docente(cls):
        pnl=cls.vent.panelActual
-       fld=pnl.get_comp_byName("field_delete")
-       valor=fld.get_text()
+       list_comp=pnl.get_comp_byName("lista_areas")
+       valor=""
+       if(list_comp!=None):
+         valor=list_comp.get_selected_item()
        if(valor=="" or valor==" "):
           General.show_message("por favor seleccione una area a quitar","elija un item")
           return
-       temp_d=valor.split("-")
-       index=temp_d[0]
-       valor_item=temp_d[1]
-       lista=pnl.get_comp_byName("lista_areas")
-       lista.delete_element(int(index))
-       fld.set_text("")
+       list_comp.delete_selected_item()
      
     #Set the File Source in a TextField 
     @classmethod
@@ -1311,7 +1291,6 @@ class Event_manager:
              cls.user.reset_data_process(0)
              next_p=constantes.PANTALLA_WELCOME
              cls.vent.update_pantallas(next_p)
-             cls.show_data_user()
           else:
               cls.user.reset_data_process(0)
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME)
@@ -1406,6 +1385,7 @@ class Event_manager:
        pnl=cls.vent.panelActual
        fields=pnl.get_comps_byTag("field") 
        combos=pnl.get_comps_byTag("combo")   
+       fecha=pnl.get_comp_byName("fecha")
        if(id_e!=""):           
             estud=estudiante()           
             dat=estud.get_data_estud(id_e,"")          
@@ -1471,8 +1451,6 @@ class Event_manager:
                              fields[i].set_text(data_exp[2])
                           else:
                             fields[i].set_text("")
-                    elif(fields[i].get_id()=="fecha"):
-                        fields[i].set_text(data_estud[10])
                     elif(fields[i].get_id()=="direccion"):
                          fields[i].set_text(dire)
                     elif(fields[i].get_id()=="estatus"):
@@ -1488,7 +1466,9 @@ class Event_manager:
                     elif(fields[i].get_id()=="parentesco"):
                          fields[i].set_text(data_estud[12])
                     elif(fields[i].get_id()=="ocupacion"):
-                         fields[i].set_text(data_repres[4])                      
+                         fields[i].set_text(data_repres[4])
+                if(fecha!=None):
+                    fecha.set_text(data_estud[10])                         
                 combos=pnl.get_comps_byTag("combo")
                 for j in range(0,len(combos)):
                     id_c=combos[j].get_id()
@@ -1510,6 +1490,8 @@ class Event_manager:
        else:       
          for i in range(0,len(fields)):
            fields[i].set_text("")
+         if(fecha!=None):
+            fecha.set_text("")
          for j in range(0,len(combos)):
            id_c=combos[j].get_id()
            if(id_c!="estudiantes"):
@@ -1522,10 +1504,25 @@ class Event_manager:
     @classmethod		   
     def load_data_trabajador(cls,id_t):
         pnl=cls.vent.panelActual
-        fields=pnl.get_comps_byTag("field")               
+        fields=pnl.get_comps_byTag("field") 
+        id_comp=pnl.get_comp_byName("cedula")
+       
         if(id_t!=""):
+           nacionalidad=""    
+           nacionalidad_comp=pnl.get_comp_byName("nacionalidad") 
+           if(id_t.lower().startswith("v")):
+               nacionalidad="venezolano"
+           else:
+               nacionalidad="extranjero"
+              
+           number_id=""
+           full_id=id_t
+           id_list=id_t.split("-")
+           if(len(id_list)<2):
+              return
+           number_id=id_list[1]
            conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-           data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[id_t],["and"])
+           data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[full_id],["and"])
            conexion_bd.set_tabla(constantes.TABLA_CARGO)
            data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[data_trabaj[0][6]],["and"])
            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
@@ -1536,13 +1533,19 @@ class Event_manager:
            conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
            data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_TRABAJ,len(constantes.CAMPOS_ESTATUS_TRABAJ),[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][7]],["and"])           
            conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-           if(conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,id_t)):
-             docente=True             
+           if(conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,full_id)):
+             docente=True
+           id_comp.set_text(number_id)  
+           nacionalidad_comp.set_value(nacionalidad)
+           if(nacionalidad=="venezolano"):
+               id_comp.set_state("readonly")   
+               nacionalidad_comp.set_state("disabled")               
+           else:
+               id_comp.set_state("normal")
+               nacionalidad_comp.set_state("normal")            
            for i in range(0,len(fields)):
-              id_f=fields[i].get_id()
-              if(id_f=="cedula"):
-                  fields[i].set_text(data_trabaj[0][0])
-              elif(id_f=="nombre"):
+              id_f=fields[i].get_id()             
+              if(id_f=="nombre"):
                   nomb=data_nombre[0][1].capitalize()
                   if(data_nombre[0][2]!=""):
                      nomb=nomb+" "+data_nombre[0][2].capitalize()
@@ -1552,8 +1555,6 @@ class Event_manager:
                   if(data_nombre[0][4]!=""):
                      apell=apell+" "+data_nombre[0][4].capitalize()
                   fields[i].set_text(apell)
-              elif(id_f=="service_years"):
-                  fields[i].set_text(data_estatus[0][3])
               elif(id_f=="cargo_cod"):
                   fields[i].set_text(data_cargo[0][4])              
               elif(id_f=="destino_file"):
@@ -1576,15 +1577,11 @@ class Event_manager:
                      fields[i].set_text(data_trabaj[0][2])
                  else:
                    fields[i].set_text("")
+           fecha_ingreso=pnl.get_comp_byName("service_years")
+           if(fecha_ingreso!=None):
+             fecha_ingreso.set_text(data_estatus[0][3])
            combos=pnl.get_comps_byTag("combo")   
-           radio=pnl.get_comp_byName("personal_tipo")
-           radio2=pnl.get_comp_byName("nacionalidad")
-           if(id_t.lower().startswith("v")):
-              radio2.set_value("venezolano")
-           elif(id_t.lower().startswith("e")):
-              radio2.set_value("extranjero")
-           else:
-              radio2.set_value("venezolano")
+           personal_type_comp=pnl.get_comp_byName("personal_tipo")
            box_titulo=pnl.get_comp_byName("caja3_rp",False)
            box_docente=pnl.get_comp_byName("caja_areas",False)
            list_materias=pnl.get_comp_byName("lista_areas")
@@ -1592,11 +1589,11 @@ class Event_manager:
            have_director=False
            cargo_t=data_cargo[0][1]
            minist_t=data_cargo[0][2]
+           personal_type_comp.set_state("normal")
            if(docente==True):
-               radio.set_value("docente")
+               personal_type_comp.set_value("docente")
                box_docente.set_active(True)
                box_titulo.set_active(True)
-               pnl.get_comp_byName("field_delete").set_active(True)
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
                id_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],1,[constantes.CLAVE_TRABAJADOR],[id_t],["and"])[0][0]
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
@@ -1629,63 +1626,56 @@ class Event_manager:
                   if(valid_carg==True):
                       values.append(posibl) 
            else:
-              radio.set_value("no docente")
+              personal_type_comp.set_value("no docente")
               box_docente.set_active(False)
               box_titulo.set_active(False)
               list_materias.set_values([])
-              pnl.get_comp_byName("field_delete").set_active(True)
               values=["elegir","Obrero","Secretaria"]
+           if(have_director):
+               personal_type_comp.set_state("disabled")
            for i in range(0,len(combos)):
                 id_comb=combos[i].get_id()
-              
                 if(id_comb!="empleado" and id_comb!="areas" and id_comb!="estatus"):              
                    if(docente==True):
                       if(id_comb!="cargo_minist"):              
+                           combos[i].set_state("normal")
                            combos[i].set_values(values)
+                           combos[i].set_value(cargo_t)  
                            if(have_director):
                                 #Is the Director
-                                combos[i].set_state("disabled")
-                                radio.set_state("disabled")
-                           else:
-                               combos[i].set_state("normal")
-                               radio.set_state("normal")
-                           combos[i].set_value(cargo_t)                               
+                                combos[i].set_state("disabled")                         
                       else:
+                           combos[i].set_state("normal")
                            combos[i].set_values(["elegir","Docente I","Docente II","Docente III","Docente IV","Docente V","Docente VI"])
-                           
+                           combos[i].set_value(minist_t)
                            if(have_director):
                                 #Is the Director
                                 combos[i].set_state("disabled")
-                           else:
-                               combos[i].set_state("normal")
-                           combos[i].set_value(minist_t)     
                    else:
                       #Not is a Teacher
                       if(id_comb!="cargo_minist"): 
                           combos[i].set_values(values)
                           combos[i].set_state("normal")
-                          radio.set_state("normal")  
                           combos[i].set_value(cargo_t)  
-                          
                       else:
                            combos[i].set_values(["elegir","Aseador I","Aseador II","Aseador III","Aseador IV","Bachiller I","Bachiller II","Bachiller III","Bachiller IV","TSU","Cocinera"])
                            combos[i].set_state("normal")
                            combos[i].set_value(minist_t)
                 elif(id_comb=="estatus"):
-                     combos[i].set_value(data_estatus[0][1])
-           
-           pnl.get_comp_byName("cedula").set_state("readonly")
-           pnl.get_comp_byName("nacionalidad").set_state("disabled")                   
+                     combos[i].set_value(data_estatus[0][1])                     
         else:
-           pnl.get_comp_byName("cedula").set_state("normal")
-           pnl.get_comp_byName("nacionalidad").set_state("normal")
+           id_comp.set_state("normal")
            for i in range(0,len(fields)):
                fields[i].set_text("")
-           radio=pnl.get_comp_byName("personal_tipo")
-           radio.set_value("docente")
-           radio2=pnl.get_comp_byName("nacionalidad")
-           radio2.set_value("venezolano")
-           combos=pnl.get_comps_byTag("combo")  
+           personal_type_comp=pnl.get_comp_byName("personal_tipo")
+           personal_type_comp.set_value("docente")
+           nacionalidad_comp=pnl.get_comp_byName("nacionalidad")
+           nacionalidad_comp.set_state("normal")
+           nacionalidad_comp.set_value("venezolano")
+           combos=pnl.get_comps_byTag("combo") 
+           fecha_ingreso=pnl.get_comp_byName("service_years")
+           if(fecha_ingreso!=None):
+                fecha_ingreso.set_text("")           
            for i in range(0,len(combos)):
                 id_comb=combos[i].get_id()
                 if(id_comb!="empleado" and id_comb!="areas" and id_comb!="estatus"):
@@ -1707,7 +1697,7 @@ class Event_manager:
                        combos[i].set_values(values)
                        combos[i].set_selected_index(0)
                        combos[i].set_state("readonly")
-                       radio.set_state("normal")
+                       personal_type_comp.set_state("normal")
                     else:                     
                        combos[i].set_values(["elegir","Docente I","Docente II","Docente III","Docente IV","Docente V","Docente VI"])
                        combos[i].set_selected_index(0)
@@ -1825,13 +1815,13 @@ class Event_manager:
                 comp.set_values(values)
                 if(type(comp).__name__=="Combo_box"):
                     comp.set_selected_index(0)
-                comp. On_select(None)
+                comp.On_select(None)
               else:
                 if(type(comp).__name__=="Combo_box"):
                    comp.set_value(values)
           elif(type(comp).__name__=="Labl"):
                comp.set_text(values)
-          elif(type(comp).__name__=="TextField"):
+          elif(type(comp).__name__=="TextField" or type(comp).__name__=="DateField"):
                comp.set_text(values) 
           elif(type(comp).__name__=="tabla_celda"):
               if(type(values).__name__=="list"):
@@ -1880,13 +1870,7 @@ class Event_manager:
     def registrar_personal(cls,update=False):
        from Register_Manager import Register_Manager
        Register_Manager.registrar_trabajador(cls.user,cls.vent,update)
-    
-    #Register a Calification    
-    @classmethod		
-    def registrar_calificacion(cls):
-       from Register_Manager import Register_Manager
-       Register_Manager.registrar_calificacion(cls.user,cls.vent)
-           
+              
     #Register or update a Format           
     @classmethod		
     def registrar_formato(cls,update=False):
@@ -2030,29 +2014,7 @@ class Event_manager:
               d_zp=os.path.join(constantes.FOLDER_ZIP,zp)
               os.remove(d_zp)
     
-    #Clear the User Reports of System( Actions of User) 
-    @classmethod          
-    def clear_reportes(cls):    
-       pass_admin=General.show_password_message("por favor escriba su password","password de administrado")
-       valid_admin=False
-       if(pass_admin=="" or pass_admin==None):
-             return          
-       if(pass_admin!=None and pass_admin!="" and pass_admin!=" "):
-            p_user=General.desencriptar(cls.user.get_credentials()[4])
-                   
-            if(p_user==pass_admin):
-                valid_admin=True                                          
-       if(valid_admin==False):
-            General.show_error("operacion invalida, por favor confirme que es el administrador","password invalido")
-            return
-       pnl=cls.vent.panelActual
-       if(General.show_confirmDialog("esta seguro que desea limpiar los reportes del sistema?","limpiar reportes")!=True):
-            return       
-       conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-       conexion_bd.reset_table()
-       pnl.get_comp_byName("table1_cp").reset()
-       General.show_message("reportes del sistema limpiados satisfactoriamente","reportes limpiados")
-       
+    
     #download the User Manual   
     @classmethod
     def download_manual(cls):

@@ -29,6 +29,62 @@ class Consult_Manager:
    DOCUMENT_TIMETABLES_SECTION=3
 
    
+   #Interpre the Action to execute for the Consult
+   @classmethod
+   def interprete_consult(cls,vent,usr,consult_type):
+       pnl=vent.panelActual
+       accion=pnl.get_comp_byName("Accion_consulta")
+       accion_str=""
+       if(accion!=None):
+          accion_str=accion.get_selected_value()
+       else:
+          accion_str="Buscar"
+       if(accion_str=="Buscar"):
+          cls.consultar(vent,consult_type)
+          return
+          
+       if(consult_type==cls.CONSULT_STUDENTS):
+           if(accion_str.startswith("Ver")):
+              cls.generar_reporte(pnl,"info estudiante",usr)
+           elif(accion_str.startswith("Generar")):
+               cls.generar_reporte(pnl,"notas del momento",usr)
+           else:
+              if(accion_str=="Descargar Constancia"):
+                 cls.generar_reporte(pnl,"constancia",usr)
+              elif(accion_str=="Descargar Carnet"):
+                 cls.generar_reporte(pnl,"carnet",usr)
+              elif(accion_str=="Descargar Expediente"):
+                 cls.download_doc(pnl,cls.DOCUMENT_EXPEDENT_STUDENT)
+       elif(consult_type==cls.CONSULT_WORKERS):
+           if(accion_str.startswith("Ver")):
+               cls.generar_reporte(pnl,"info trabajador",usr)
+           elif(accion_str.startswith("Generar")):
+               cls.generar_reporte(pnl,"lista de trabajadores",usr) 
+           else:
+               if(accion_str=="Descargar Constancia"):
+                 cls.generar_reporte(pnl,"constancia",usr)
+               elif(accion_str=="Descargar Carnet"):
+                 cls.generar_reporte(pnl,"carnet",usr)
+               elif(accion_str=="Descargar Horario"):
+                 cls.download_doc(pnl,cls.DOCUMENT_TIMETABLES_WORKER)
+               elif(accion_str=="Descargar Expediente"):
+                 cls.download_doc(pnl,cls.DOCUMENT_EXPEDENT_WORKER)          
+       elif(consult_type==cls.CONSULT_SECTIONS):
+           if(accion_str=="Descargar Horario"):
+              cls.download_doc(pnl,cls.DOCUMENT_TIMETABLES_SECTION)
+           elif(accion_str=="Descargar Lista de la Seccion"):
+              cls.generar_reporte(pnl,"lista de la seccion",usr)
+           elif(accion_str=="Descargar Lista de Asistencia"):
+              cls.generar_reporte(pnl,"asistencia seccion",usr)
+           elif(accion_str=="Descargar Lista de Evaluacion Continua"):
+              cls.generar_reporte(pnl,"evaluacion continua",usr)
+       elif(consult_type==cls.CONSULT_TIMETABLES_DISPONIBILITY):
+           cls.generar_reporte(pnl,"disp horario",usr)
+       elif(consult_type==cls.CONSULT_MATERIA_PENDIENTE):
+           cls.generar_reporte(pnl,"materia pendiente",usr)
+       elif(consult_type==cls.CONSULT_DOWNLOADS):
+            cls.generar_reporte(pnl,"reporte de descargas",usr)
+              
    #Generate a Report
    @classmethod
    def generar_reporte(cls,pnl,tipo,usr,receive_data=None,secc=None):
@@ -959,8 +1015,16 @@ class Consult_Manager:
        elif(tipo=="notas finales"):
             from estudiante import estudiante
             estud=estudiante()
-            ced=pnl.get_comp_byName("identificador").get_text()
-            res=estud.get_calif_certific(ced)
+            field_ced=pnl.get_comp_byName("cedula_estudiante")
+            nacionaliad_comp=pnl.get_comp_byName("nacionalidad")
+            cedula_estud=""
+            if(field_ced!=None and nacionaliad_comp!=None):
+               nacionalidad_value=nacionaliad_comp.get_selected_value()
+               if(nacionalidad_value.lower()=="venezolano"):
+                   cedula_estud=f"V-{field_ced.get_text()}"
+               else:
+                   cedula_estud=f"E-{field_ced.get_text()}"
+            res=estud.get_calif_certific(cedula_estud)
             if(res==-1):
                 General.show_message("cedula del estudiante inexistente","cedula invalida")
                 return
@@ -1100,22 +1164,34 @@ class Consult_Manager:
                 General.show_error("error obteniendo data del servidor","error de data del server")
                 return
             data_form=response.content 
-            cedula=pnl.get_comp_byName("cedula_p1").get_text()
+            cedula=pnl.get_comp_byName("table1_cp").get_row_selectedData()[0]
             if(cedula=="" or cedula==" "):
-                General.show_message("por favor indique el estudiante ","estudiante no identificado")
-                return
+              General.show_message("por favor seleccione un estudiante","estudiante no valido")
+              return
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            data_estud=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],1,[constantes.CLAVE_ESTUDIANTE],[cedula],["and"])
+            data_estud=conexion_bd.get_allData([constantes.CLAVE_NOMBRE,constantes.CLAVE_SECCION],2,[constantes.CLAVE_ESTUDIANTE],[cedula],["and"])
+            conexion_bd.set_tabla(constantes.TABLA_SECCION)
+            data_secc=conexion_bd.get_allData(["año"],1,[constantes.CLAVE_SECCION],[data_estud[0][1]],["and"]) 
             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
             data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_estud[0][0]],["and"])
             fullname="" 
-            for dn in data_nomb[0]:
-                if(dn!="" and dn!="..."):
-                      fullname=fullname+dn+" "                     
-            year=pnl.get_comp_byName("year").get_text()  
-            momento=pnl.get_comp_byName("mom_p1").get_selected_value()
+            year=""
+            if(len(data_nomb)>0):
+               for dn in data_nomb[0]:
+                   if(dn!="" and dn!="..."):
+                      fullname=fullname+dn+" " 
+            if(len(data_secc)>0):
+               year=data_secc[0][0] 
+            if(year=="" or fullname==""):
+               General.show_message("Error Obteniendo datos del Estudiante","estudiante no valido")
+               return            
+            conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
+            data_moms=conexion_bd.get_allData([constantes.CLAVE_MOMENTO],1,["abierto"],["true"],["and"]) 
+            momento=""
+            if(len(data_moms)>0):
+                momento=data_moms[0][0] 
             if(momento=="elejir" or momento=="elegir"):
-                General.show_message("por favor indique el momento academico ","momento invalido")
+                General.show_message("No Existe un Momento Academico Activo ","momento invalido")
                 return
             areas=[]
             conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)

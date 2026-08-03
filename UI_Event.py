@@ -98,13 +98,7 @@ class UI_Event:
    def interprete_Table_SelectEvent(cls,comp_id,ev_value,comp_value):
         from conexion_bd import conexion_bd
         from event_manager import Event_manager
-        if(ev_value==constantes.TABLE_LOAD_DATA_CALIFICATIONS_STUDENTS):
-           data=comp_value
-           if(data!=" "):
-             if(len(data)>0):
-                 Event_manager.set_comp_values("calific_num_p2",data[0])
-
-        elif(ev_value==constantes.TABLE_SET_DATA_DEFINITIVE_CALIFICATION_STUDENT):
+        if(ev_value==constantes.TABLE_SET_DATA_DEFINITIVE_CALIFICATION_STUDENT):
              data=comp_value
              if(data!=" "):
                if(len(data)>0):
@@ -218,13 +212,11 @@ class UI_Event:
             if(comp_id.endswith("2")):
                Event_manager.set_comp_values("val_delete_col2",comp_value)
             else:            
-              Event_manager.set_comp_values("val_delete_col",comp_value)
-        elif(ev_value==constantes.LISTBOX_SET_STUDENT_DATA_SELECTED): 
-            Event_manager.set_comp_values("estud",comp_value)
-        elif(ev_value==constantes.LISTBOX_SET_STUDENT_INTERCAMBIO_DATA_SELECTED):
-            Event_manager.set_comp_values("estud_intercambio",comp_value)
+              Event_manager.set_comp_values("val_delete_col",comp_value)    
         elif(ev_value==constantes.LISTBOX_SET_FIELD_TO_REMOVE_FORMATO):
-            Event_manager.set_comp_values("field_delete",str(comp.get_selected_index()[0])+"-"+comp_value) 
+            index=comp.get_selected_index()
+            if(index!=-1):
+                Event_manager.set_comp_values("field_delete",str(index)+"-"+comp_value) 
                    
    
    #trigger the events required for Text Fields
@@ -286,8 +278,7 @@ class UI_Event:
                 comp.set_text("Año Escolar: "+data_cronog[0][0])
            else:
                comp.set_text("Año Escolar: ")
-        
-   
+          
    #verify the type of event from Combobox and trigger the required event
    @classmethod
    def interprete_Combobox_Event(cls,ev_type,comp_id,ev_value,comp_value,state_comp):
@@ -316,38 +307,44 @@ class UI_Event:
           elif(ev_value==constantes.COMBOBOX_LOAD_DATA_AUDITORIA_STADITICAS):
              if(panel_id==constantes.PANTALLA_SERVICIO_AUDITORIA):
                 valor=comp_value
-                if(valor=="campo clave" or valor=="antes de" or valor=="despues de"):
+                if( valor=="antes de" or valor=="despues de"):
                      Event_manager.activar_element("fecha2",False,True)
                      Event_manager.activar_element("fecha1",True,True)
                      Event_manager.activar_element("label_dateFrom",True,True)
                      Event_manager.activar_element("label_dateTo",False,True)              
                      Event_manager.activar_element("identificador_cp",False,True)
+                     Event_manager.activar_element("label_filtroVal",False,True)
                      Event_manager.set_comp_values("field1","")    
-                     if(valor=="campo clave"):
-                        Event_manager.set_comp_values("label_dateFrom","valor campo:")                     
-                     else:
-                        Event_manager.set_comp_values("label_dateFrom","fecha")                     
+                     Event_manager.set_comp_values("fecha1","")    
+                     Event_manager.set_comp_values("fecha2","")    
+                     Event_manager.set_comp_values("label_dateFrom","fecha")                     
                 elif(valor=="desde - hasta"):
                      Event_manager.activar_element("fecha2",True,True)
                      Event_manager.activar_element("fecha1",True,True)
                      Event_manager.activar_element("label_dateFrom",True,True)
                      Event_manager.activar_element("label_dateTo",True,True)
-                     Event_manager.set_comp_values("label_dateFrom","desde")                     
+                     Event_manager.set_comp_values("label_dateFrom","desde") 
+                     Event_manager.activar_element("label_filtroVal",False,True)                     
                      Event_manager.set_comp_values("fecha1","")    
                      Event_manager.set_comp_values("fecha2","")  
                      Event_manager.activar_element("identificador_cp",False,True)
                 elif(valor=="accion realizada" or valor=="usuario"):
                      Event_manager.activar_element("fecha2",False,True)
                      Event_manager.activar_element("fecha1",False,True)
-                     Event_manager.activar_element("label_dateFrom",True,True)
+                     Event_manager.activar_element("label_filtroVal",True,True)   
+                     Event_manager.activar_element("label_dateFrom",False,True)
                      Event_manager.activar_element("label_dateTo",False,True)
-                     Event_manager.set_comp_values("label_dateFrom","valor") 
+                     if(valor=="usuario"):
+                         Event_manager.set_comp_values("label_filtroVal","Nombre del Usuario") 
+                     else:
+                         Event_manager.set_comp_values("label_filtroVal","Nombre de la Accion")
                      Event_manager.activar_element("identificador_cp",True,True)
                 elif((valor=="elejir" or valor=="elegir") or valor=="no filtrar"):
                      Event_manager.activar_element("fecha2",False,True)
                      Event_manager.activar_element("fecha1",False,True)
                      Event_manager.activar_element("label_dateFrom",False,True)
                      Event_manager.activar_element("label_dateTo",False,True)
+                     Event_manager.activar_element("label_filtroVal",False,True)                     
                      Event_manager.activar_element("identificador_cp",False,True)
                   
              elif(panel_id==constantes.PANTALLA_SERVICIO_ESTADISTICA):
@@ -578,9 +575,7 @@ class UI_Event:
            
           elif(ev_value==constantes.COMBOBOX_LOAD_SECCION):
                Event_manager.set_comp_values("secc2",[])
-               Event_manager.set_comp_values("intercambio",["elegir"])
-               Event_manager.set_comp_values("estud","")
-               Event_manager.set_comp_values("estud_intercambio","")
+               Event_manager.set_comp_values("secc_sec_list",["elegir"])
                if(comp_value!="elejir" and comp_value!="elegir"):
                   conexion_bd.set_tabla(constantes.TABLA_SECCION)
                   data_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),[constantes.CLAVE_SECCION],[comp_value],["and"])
@@ -637,11 +632,28 @@ class UI_Event:
                         Event_manager.set_guia(valor_prof)
                      else:
                          Event_manager.set_guia("elegir")    
-                  Event_manager.set_comp_values("intercambio",other_values)   
+                  Event_manager.set_comp_values("secc_sec_list",other_values)   
                else:
                   Event_manager.set_comp_values("secc1",[])
            
           elif(ev_value==constantes.COMBOBOX_SET_DATA_STUDENTES_SECCION):      
+              value_MainSecc=""
+              MainSecc=Event_manager.vent.panelActual.get_comp_byName("secc_main_list")
+              if(MainSecc!=None):
+                 val_secc=MainSecc.get_selected_value()
+                 if(val_secc!="elegir"):
+                      value_MainSecc=MainSecc.get_selected_value()
+              if(value_MainSecc!=""):
+                  conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+                  data_MainSeccion=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[value_MainSecc],["and"])
+                  data_Main=[]
+                  for j in range(0,len(data_MainSeccion)):
+                     conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
+                     data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_MainSeccion[j][1]],["and"])
+                     nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
+                     data_Main.append(data_MainSeccion[j][0]+"-"+nomb)           
+                  Event_manager.set_comp_values("secc1",data_Main)   
+              
               if(comp_value!="elejir" and comp_value!="elegir"):
                   conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
                   data_estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[comp_value],["and"])
@@ -652,7 +664,11 @@ class UI_Event:
                       nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                       data_box.append(data_estuds[j][0]+"-"+nomb)
                   Event_manager.set_comp_values("secc2",data_box)
+                  Event_manager.activar_element("MoveA_btn",True,True)
+                  Event_manager.activar_element("MoveB_btn",True,True)
               else:
+                  Event_manager.activar_element("MoveA_btn",False,True)
+                  Event_manager.activar_element("MoveB_btn",False,True)
                   Event_manager.set_comp_values("secc2",[])
            
           elif(ev_value==constantes.COMBOBOX_LOAD_PREGUNTAS_SECRETAS or ev_value==constantes.COMBOBOX_CHANGE_RESPUESTA_SECRETAS):
@@ -661,7 +677,7 @@ class UI_Event:
                  Event_manager.set_respuesta_secr("respuesta"+str(num),"")
               else:
                 Event_manager.set_respuesta_secr("respuesta"+str(num),".")
-       elif(ev_value>=constantes.COMBOBOX_SHOW_FORMATOS_DESCARGABLE_SECCION and ev_value<=constantes.COMBOBOX_REACTIVATE_MOMENTS_SHOW_OPTION):
+       elif(ev_value>=constantes.COMBOBOX_SHOW_FORMATOS_DESCARGABLE_SECCION and ev_value<=constantes.COMBOBOX_UPDATE_SECTIONS_MANAGER_ACTION):
         
           if(ev_value==constantes.COMBOBOX_SHOW_FORMATOS_DESCARGABLE_SECCION):
               if(comp_value=="evaluacion continua" or comp_value=="lista de la seccion" or comp_value=="asistencia seccion"):
@@ -852,7 +868,55 @@ class UI_Event:
             else:
                 Event_manager.activar_element("reactivar",True,True)
                 Event_manager.activar_element("reestablecer",False,True)
-                              
+          elif(ev_value==constantes.COMBOBOX_UPDATE_OPTIONS_DEFINITE_CALIFICATIONS):
+                target_comps=["calific_add_label","area_label","area","year_label","year","calif_label","calif"]
+                for target in  target_comps:
+                    next_state=False
+                    if(comp_value=="Ingresar Calificaciones"):
+                       next_state=True
+                    Event_manager.activar_element(target,next_state,True) 
+               
+          elif(ev_value==constantes.COMBOBOX_UPDATE_CALIFICATION_GESTION):
+               target_inactivate=["motiv_label","motivo","calific_label","calific_val","estimulacion_label_promedio","estimulacion_label_areas","estimul_prom","estimul_areas"]
+               for target in  target_inactivate:
+                  Event_manager.activar_element(target,False,True)
+               if(comp_value.lower()=="elegir"):
+                   return
+               targets_activations=["motiv_label","motivo"]
+               if("Calificacion" in comp_value):
+                  if(comp_value=="Nueva Calificacion"):
+                     targets_activations.append("calific_label")
+                     targets_activations.append("calific_val")                    
+                  elif(comp_value=="Editar Calificacion"):
+                     targets_activations.append("calific_label")
+                     targets_activations.append("calific_val") 
+               elif(comp_value=="Establecer Estimulacion del Area de Formacion"):
+                     targets_activations.append("estimulacion_label_promedio")
+                     targets_activations.append("estimulacion_label_areas")
+                     targets_activations.append("estimul_prom")
+                     targets_activations.append("estimul_areas")
+               for target in targets_activations:
+                  Event_manager.activar_element(target,True,True)
+          elif(ev_value==constantes.COMBOBOX_UPDATE_SECTIONS_MANAGER_ACTION):
+               targets_guia=["prof_guialabel","guia"]
+               targets_secc_sec=["sec_secc_lbl","secc2","secc_sec_list"]
+               secc_comp=Event_manager.vent.panelActual.get_comp_byName("secc_main_list")
+               for target in  targets_guia:
+                  state_value=False
+                  if(comp_value.lower()=="asignar prof guia"):
+                     state_value=True
+                  Event_manager.activar_element(target,state_value,True)
+               for target in  targets_secc_sec:
+                  state_value=False
+                  if(comp_value.lower()=="actualizar estudiantes"):
+                     state_value=True
+                  Event_manager.activar_element(target,state_value,True)
+               
+               secc_comp.On_select(True)
+                
+                
+               
+                             
    #trigger the events required when load a ComboBox
    @classmethod
    def interprete_Combobox_LoadEvent(cls,comp_id,ev_value,state):
@@ -936,7 +1000,7 @@ class UI_Event:
                for i in range(0,len(data_areas)):
                   new_data.append(data_areas[i][0])
                comp.set_values(new_data)   
-        elif(ev_value>=constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER and ev_value<=constantes.COMBOBOX_REACTIVATE_MOMENTS_SHOW_OPTION):
+        elif(ev_value>=constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER and ev_value<=constantes.COMBOBOX_UPDATE_SECTIONS_MANAGER_ACTION):
            if(ev_value==constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER):
                #carga lista de trabajadores en pantalla de registro de trbajadores
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
@@ -960,6 +1024,8 @@ class UI_Event:
                  if(data_secc[i][0]!="default"):
                     new_data.append(data_secc[i][0])
               comp.set_values(new_data)
+              Event_manager.vent.raiz.after(200,lambda:Event_manager.activar_element("MoveA_btn",False,True))
+              Event_manager.vent.raiz.after(200,lambda:Event_manager.activar_element("MoveB_btn",False,True))
            elif(ev_value==constantes.COMBOBOX_LOAD_PROFESORES):
               conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
               data_prof=conexion_bd.get_allData(constantes.CAMPOS_PROFESOR,len(constantes.CAMPOS_PROFESOR))
@@ -1088,9 +1154,10 @@ class UI_Event:
               else:
                   Event_manager.vent.raiz.after(200,comp.set_active,False)
                   Event_manager.activar_element("director_label",False,True)
-                
-
-                                    
+           elif(ev_value==constantes.COMBOBOX_UPDATE_CALIFICATION_GESTION or ev_value==constantes.COMBOBOX_UPDATE_OPTIONS_DEFINITE_CALIFICATIONS or ev_value==constantes.COMBOBOX_UPDATE_SECTIONS_MANAGER_ACTION):
+               Event_manager.vent.raiz.after(200,lambda:comp.On_select(None))
+         
+                                
    #trigger the event required when select a radio Button
    @classmethod
    def interprete_RadioButton_Event(cls,comp_id,comp_value):

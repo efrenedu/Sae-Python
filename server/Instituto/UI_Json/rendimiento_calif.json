@@ -122,7 +122,7 @@
         "row": 1,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -276,7 +276,7 @@
             "#FFFFFF"
           ]
         },
-        "Id": "table1_p1",
+        "Id": "table_califics",
         "Ev": "1",
         "Panel_Id": "rendimiento_calif",
         "Master": "Main_Box",
@@ -327,7 +327,7 @@
         ],
         "pady": 4,
         "sticky": "ew",
-        "columnspan": "None"
+        "columnspan": "4"
       }
     },
     {
@@ -475,40 +475,22 @@
       }
     },
     {
-      "Type": "CTkButton",
+      "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "nueva calificacion",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "nueva_calific_btn",
-        "Ev": "constantes.EV_REGISTRAR_CALIFICACION",
+        "Text": "estimulacion por promedio:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "estimulacion_label_promedio",
+        "Ev": "None",
         "Panel_Id": "rendimiento_calif",
-        "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 1,
-          "Row": 3
+          "Column": 0,
+          "Row": 6
         },
         "Font": {
           "Name": "Arial",
@@ -519,31 +501,32 @@
       "Posicion": {
         "column": 0,
         "row": 2,
-        "padx": 10,
-        "pady": [
-          16,
-          20
+        "padx": [
+          20,
+          5
         ],
-        "sticky": "e"
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
       }
     },
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Evaluacion:",
+        "Text": "estimulacion por\n aprobar areas:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "eval_label",
+        "Id": "estimulacion_label_areas",
         "Ev": "None",
         "Panel_Id": "rendimiento_calif",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 2
+          "Row": 7
         },
         "Font": {
           "Name": "Arial",
@@ -578,8 +561,8 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "calific_num_p2",
-        "Ev": "0",
+        "Id": "estimul_prom",
+        "Ev": "None",
         "Panel_Id": "rendimiento_calif",
         "Corner_Radious": "8",
         "Master": "Main_Box",
@@ -587,7 +570,278 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 2
+          "Row": 6
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "estimul_areas",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_calif",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 7
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": " Accion :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "accion_label",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_calif",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkCombobox",
+      "Propiedades": {
+        "Data": "Elegir,Nueva Calificacion,Editar Calificacion,Borrar Calificacion,Establecer Estimulacion del Area de Formacion",
+        "Fg_Color": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F0EAF1"
+        ],
+        "Hover_Color": [
+          "#FFF9CD",
+          "#648CBB"
+        ],
+        "Corner_Radious": "8",
+        "Id": "Action_List",
+        "Ev": "constantes.COMBOBOX_UPDATE_CALIFICATION_GESTION",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Force_Width": "",
+        "Text_Item": [
+          "#5E53AD",
+          "#FFFFFF"
+        ],
+        "Fg_Item": [
+          "#FFFFFF",
+          "#48516F"
+        ],
+        "Button_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Button__Hover_Color": [
+          "#FFF9CD",
+          "#7DB4F3"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ],
+        "Disabled_ButtonColor": [
+          "#E4E0E8",
+          "#E4E0E8"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "motivo modific.:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "motiv_label",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_calif",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 2,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "motivo",
+        "Ev": "None",
+        "Panel_Id": "rendimiento_calif",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -634,184 +888,14 @@
           "#F5EFF5"
         ],
         "Fg_Color": "transparent",
-        "Id": "calific_label_p1",
-        "Ev": "None",
-        "Panel_Id": "rendimiento_calif",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "calific_val_p2",
-        "Ev": "None",
-        "Panel_Id": "rendimiento_calif",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "estimulacion por\n promedio:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "estimulacion_label_promedio",
+        "Id": "calific_label",
         "Ev": "None",
         "Panel_Id": "rendimiento_calif",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "estimulacion por\n aprobar areas:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "estimulacion_label_areas",
-        "Ev": "None",
-        "Panel_Id": "rendimiento_calif",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "motivo modific.:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "motiv_label_p1",
-        "Ev": "None",
-        "Panel_Id": "rendimiento_calif",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 4
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -846,69 +930,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "motivo",
-        "Ev": "None",
-        "Panel_Id": "rendimiento_calif",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "estimul_p2",
+        "Id": "calific_val",
         "Ev": "None",
         "Panel_Id": "rendimiento_calif",
         "Corner_Radious": "8",
@@ -917,69 +939,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "estimul_p3",
-        "Ev": "None",
-        "Panel_Id": "rendimiento_calif",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 5
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -1020,7 +980,7 @@
     {
       "Type": "CTkButton",
       "Propiedades": {
-        "Text": "modificar calificacion",
+        "Text": "Ejecutar",
         "Colors": {
           "Fg": [
             "#6269A9",
@@ -1043,15 +1003,15 @@
             "#FFFFFF"
           ]
         },
-        "Id": "modify_calific_btn",
-        "Ev": "constantes.EV_MODIFIC_CALIFIC",
+        "Id": "action_btn",
+        "Ev": "constantes.EV_PROCESS_CALIFICATION_GESTION_ACTION",
         "Panel_Id": "rendimiento_calif",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 3
+          "Column": 1,
+          "Row": 0
         },
         "Font": {
           "Name": "Arial",
@@ -1061,113 +1021,7 @@
       },
       "Posicion": {
         "column": 0,
-        "row": 2,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "estimular",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "estimular_btn",
-        "Ev": "constantes.EV_ESTIMULAR_AREA",
-        "Panel_Id": "rendimiento_calif",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
-        "padx": 10,
-        "pady": [
-          16,
-          20
-        ],
-        "sticky": "e"
-      }
-    },
-    {
-      "Type": "CTkButton",
-      "Propiedades": {
-        "Text": "borrar calificacion",
-        "Colors": {
-          "Fg": [
-            "#6269A9",
-            "#C8D7E5"
-          ],
-          "Text": [
-            "#D9E4E5",
-            "#303E72"
-          ],
-          "Hover": [
-            "#FFF6DC",
-            "#B0F4F8"
-          ],
-          "Text_Hover": [
-            "#794125",
-            "#303C6F"
-          ],
-          "Border": [
-            "#FCF5D3",
-            "#FFFFFF"
-          ]
-        },
-        "Id": "search_2",
-        "Ev": "constantes.EV_DELETE_CALIFIC",
-        "Panel_Id": "rendimiento_calif",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 3
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 2,
+        "row": 3,
         "padx": 10,
         "pady": [
           16,

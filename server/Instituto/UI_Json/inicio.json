@@ -87,7 +87,7 @@
         "propagate": "False"
       }
     },
-	{
+    {
       "Type": "CTkFrame",
       "Propiedades": {
         "Color": [
@@ -644,21 +644,39 @@
           16,
           20
         ],
-        "sticky": "e"
+        "sticky": "nse"
       }
     },
     {
-      "Type": "CTkLabel",
+      "Type": "CTkButton",
       "Propiedades": {
-        "Text": "olvide la contraseña",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "recuperar_pass",
-        "Ev": "5",
+        "Text": "Olvide la\n Contraseña",
+        "Colors": {
+          "Fg": [
+            "#6269A9",
+            "#C8D7E5"
+          ],
+          "Text": [
+            "#D9E4E5",
+            "#303E72"
+          ],
+          "Hover": [
+            "#FFF6DC",
+            "#B0F4F8"
+          ],
+          "Text_Hover": [
+            "#794125",
+            "#303C6F"
+          ],
+          "Border": [
+            "#FCF5D3",
+            "#FFFFFF"
+          ]
+        },
+        "Id": "recover_passBtn",
+        "Ev": "constantes.EV_RECOVER_PASS",
         "Panel_Id": "inicio",
+        "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -673,14 +691,13 @@
       },
       "Posicion": {
         "column": 1,
-        "row": 2,
-        "padx": [
-          20,
-          5
+        "row": 3,
+        "padx": 10,
+        "pady": [
+          16,
+          20
         ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
+        "sticky": "e"
       }
     },
     {

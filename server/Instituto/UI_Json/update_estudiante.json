@@ -17,7 +17,7 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True",
+        "Scroll": "Y Axis",
         "Border_Color": [
           "#DCFFFF",
           "#FFFFFF"
@@ -158,7 +158,7 @@
         "row": 1,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -215,6 +215,42 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
+        "Text": "Datos del Estudiante:",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "datos_estud_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 20,
+        "sticky": "ew",
+        "columnspan": "3"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
         "Text": "estudiantes:",
         "Text_Color": [
           "#5E53AD",
@@ -227,8 +263,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 0
+          "Column": 0,
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -271,8 +307,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 0
+          "Column": 1,
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -339,7 +375,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -383,7 +419,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 0
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -437,7 +473,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 1
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -481,7 +517,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 1
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -534,8 +570,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 1
+          "Column": 0,
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -578,204 +614,8 @@
         "Placeholder_Text": "",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 1
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "CI representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "CIrepres_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "CIrepres",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
           "Column": 1,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "telefono representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "Telf_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 3
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "telef",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 3
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -828,8 +668,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 3
+          "Column": 0,
+          "Row": 5
         },
         "Font": {
           "Name": "Arial",
@@ -850,7 +690,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -872,596 +712,8 @@
         "Placeholder_Text": "",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 3
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "nombre representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "nombreRepres_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "nombre_repres",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "apellidos\n representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "apellido_repres_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "apellido_repres",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 4
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "direccion\n representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "dir_representante_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "dir_representante",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
           "Column": 1,
           "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "correo\n representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "correo_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "correo",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "parentesco:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "parentesco_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "parentesco",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "ocupacion:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "ocupacion_label",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 0,
-        "row": 1,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "ocupacion",
-        "Ev": "None",
-        "Panel_Id": "update_estudiante",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 6
         },
         "Font": {
           "Name": "Arial",
@@ -1515,7 +767,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 7
+          "Row": 6
         },
         "Font": {
           "Name": "Arial",
@@ -1559,7 +811,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 7
+          "Row": 6
         },
         "Font": {
           "Name": "Arial",
@@ -1625,7 +877,7 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
+          "Column": 0,
           "Row": 7
         },
         "Font": {
@@ -1669,7 +921,7 @@
         "Placeholder_Text": "",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
+          "Column": 1,
           "Row": 7
         },
         "Font": {
@@ -1711,7 +963,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "nuevo estatus:",
+        "Text": "Cambiar estatus:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
@@ -1723,7 +975,7 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
+          "Column": 0,
           "Row": 8
         },
         "Font": {
@@ -1767,7 +1019,7 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
+          "Column": 1,
           "Row": 8
         },
         "Font": {
@@ -1822,7 +1074,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "establecer cedula del estudiante:",
+        "Text": "establecer cedula\n del estudiante:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
@@ -1834,7 +1086,7 @@
         "Master": "Main_Box",
         "Initial_state": "False",
         "Intern_Position": {
-          "Column": 3,
+          "Column": 0,
           "Row": 9
         },
         "Font": {
@@ -1878,8 +1130,8 @@
         "Placeholder_Text": "",
         "Initial_state": "False",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 10
+          "Column": 1,
+          "Row": 9
         },
         "Font": {
           "Name": "Arial",
@@ -1920,7 +1172,7 @@
     {
       "Type": "CTkRadiobutton",
       "Propiedades": {
-        "Direction": "vertical",
+        "Direction": "horizontal",
         "Button_Count": "2",
         "Buttons_Texts": [
           "Venezolano",
@@ -1948,8 +1200,8 @@
         "Master": "Main_Box",
         "Initial_state": "False",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 11
+          "Column": 0,
+          "Row": 10
         },
         "Font": {
           "Name": "Arial",
@@ -1989,7 +1241,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 8
+          "Row": 11
         },
         "Font": {
           "Name": "Arial",
@@ -2033,7 +1285,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 8
+          "Row": 11
         },
         "Font": {
           "Name": "Arial",
@@ -2087,7 +1339,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 10
+          "Row": 12
         },
         "Font": {
           "Name": "Arial",
@@ -2110,7 +1362,7 @@
     {
       "Type": "CTkRadiobutton",
       "Propiedades": {
-        "Direction": "Vertical",
+        "Direction": "vertical",
         "Button_Count": "2",
         "Buttons_Texts": [
           "masculino",
@@ -2139,7 +1391,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 10
+          "Row": 12
         },
         "Font": {
           "Name": "Arial",
@@ -2179,7 +1431,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 12
+          "Row": 14
         },
         "Font": {
           "Name": "Arial",
@@ -2223,7 +1475,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 12
+          "Row": 14
         },
         "Font": {
           "Name": "Arial",
@@ -2295,7 +1547,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 2,
-          "Row": 12
+          "Row": 14
         },
         "Font": {
           "Name": "Arial",
@@ -2330,7 +1582,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 13
+          "Row": 15
         },
         "Font": {
           "Name": "Arial",
@@ -2374,7 +1626,827 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 13
+          "Row": 15
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Datos del Representante",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "title_represent",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 16
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 20,
+        "sticky": "ew",
+        "columnspan": "3"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "CI representante:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "CIrepres_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 17
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "CIrepres",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 17
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "nombres :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "nombreRepres_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 18
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "nombre_repres",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 18
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "apellidos:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "apellido_repres_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 19
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "apellido_repres",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 19
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "telefono :",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "Telf_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 20
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "telef",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 20
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "direccion:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "dir_representante_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 21
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "dir_representante",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 21
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "correo:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "correo_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 22
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "correo",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 22
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "parentesco:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "parentesco_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 23
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "parentesco",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 23
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Oficio:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "ocupacion_label",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 24
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "ocupacion",
+        "Ev": "None",
+        "Panel_Id": "update_estudiante",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 24
         },
         "Font": {
           "Name": "Arial",

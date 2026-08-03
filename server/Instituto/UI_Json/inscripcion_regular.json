@@ -17,7 +17,7 @@
           "Row": 0
         },
         "Master": "None",
-        "Scroll": "True",
+        "Scroll": "Y Axis",
         "Border_Color": [
           "#DCFFFF",
           "#FFFFFF"
@@ -158,7 +158,7 @@
         "row": 3,
         "padx": 20,
         "pady": 20,
-        "sticky": "nsew",
+        "sticky": "",
         "columnspan": "None",
         "column_weight": 1,
         "row_weight": 1,
@@ -172,7 +172,43 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "CI estudiante:",
+        "Text": "Datos del Estudiante",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "datos_estud_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 20,
+        "sticky": "ew",
+        "columnspan": "3"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Cedula:",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
@@ -185,7 +221,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -229,7 +265,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 0
+          "Row": 1
         },
         "Font": {
           "Name": "Arial",
@@ -283,7 +319,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -327,7 +363,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 1
+          "Row": 2
         },
         "Font": {
           "Name": "Arial",
@@ -380,8 +416,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 1
+          "Column": 0,
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -424,204 +460,8 @@
         "Placeholder_Text": "Apellidos del Estudiante",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 1
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "CI representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "CIrepres_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "CIrepres",
-        "Ev": "0",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "",
-        "Initial_state": "True",
-        "Intern_Position": {
           "Column": 1,
-          "Row": 5
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "telefono representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "Telf_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 7
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "telef",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Telefono del Representante",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 7
+          "Row": 3
         },
         "Font": {
           "Name": "Arial",
@@ -675,7 +515,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 2
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -696,7 +536,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type": "CTkDate",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -715,599 +555,11 @@
         "Panel_Id": "inscripcion_regular",
         "Corner_Radious": "8",
         "Master": "Main_Box",
-        "Placeholder_Text": "Dia-Mes-Año",
+        "Placeholder_Text": "Ingrese la Fecha",
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 2
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "nombre representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "nombreRepres_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "nombre_repres",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Nombres del Representante",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "apellidos\n representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "apellido_repres_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "apellido_repres",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Apellidos del Representante",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 6
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "direccion\n representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "dir_representante_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 0,
-          "Row": 8
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "dir_representante",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Municipio, Sector,Casa",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 1,
-          "Row": 8
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "correo\n representante:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "correo_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 7
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "correo",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Correo del Representante",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 7
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "parentesco:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "parentesco_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "parentesco",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Parentesco con el Estudiante",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 0
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        },
-        "Fg_Focus": [
-          "#FFF9CD",
-          "#FFF9CD"
-        ],
-        "Text_Focus": [
-          "#000000",
-          "#000000"
-        ],
-        "Disabled_Color": [
-          "#E3D3EF",
-          "#D6CFE5"
-        ],
-        "Disabled_TextColor": [
-          "#5C4D66",
-          "#594B62"
-        ]
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          5,
-          2
-        ],
-        "pady": [
-          0,
-          6
-        ],
-        "sticky": "ew"
-      }
-    },
-    {
-      "Type": "CTkLabel",
-      "Propiedades": {
-        "Text": "oficio:",
-        "Text_Color": [
-          "#5E53AD",
-          "#F5EFF5"
-        ],
-        "Fg_Color": "transparent",
-        "Id": "oficio_label",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Master": "Main_Box",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 2,
-          "Row": 8
-        },
-        "Font": {
-          "Name": "Arial",
-          "Size": "15",
-          "Style": "bold"
-        }
-      },
-      "Posicion": {
-        "column": 1,
-        "row": 3,
-        "padx": [
-          20,
-          5
-        ],
-        "pady": 4,
-        "sticky": "w",
-        "columnspan": "None"
-      }
-    },
-    {
-      "Type": "CTkText_field",
-      "Propiedades": {
-        "Text_Color": [
-          "#000000",
-          "#000000"
-        ],
-        "Fg_Color": [
-          "#FFFFFF",
-          "#FFFFFF"
-        ],
-        "Placeholder_Text_Color": [
-          "#AAAAAA",
-          "#AAAAAA"
-        ],
-        "Id": "oficio",
-        "Ev": "None",
-        "Panel_Id": "inscripcion_regular",
-        "Corner_Radious": "8",
-        "Master": "Main_Box",
-        "Placeholder_Text": "Oficio delRepresentante",
-        "Initial_state": "True",
-        "Intern_Position": {
-          "Column": 3,
-          "Row": 8
+          "Row": 4
         },
         "Font": {
           "Name": "Arial",
@@ -1361,7 +613,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 3
+          "Row": 5
         },
         "Font": {
           "Name": "Arial",
@@ -1405,7 +657,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 3
+          "Row": 5
         },
         "Font": {
           "Name": "Arial",
@@ -1471,8 +723,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 2
+          "Column": 0,
+          "Row": 6
         },
         "Font": {
           "Name": "Arial",
@@ -1515,8 +767,8 @@
         "Placeholder_Text": "Municipio, Sector, Casa",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 2
+          "Column": 1,
+          "Row": 6
         },
         "Font": {
           "Name": "Arial",
@@ -1570,7 +822,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 0,
-          "Row": 4
+          "Row": 7
         },
         "Font": {
           "Name": "Arial",
@@ -1593,7 +845,7 @@
     {
       "Type": "CTkRadiobutton",
       "Propiedades": {
-        "Direction": "horizontal",
+        "Direction": "vertical",
         "Button_Count": "2",
         "Buttons_Texts": [
           "masculino",
@@ -1622,7 +874,7 @@
         "Initial_state": "True",
         "Intern_Position": {
           "Column": 1,
-          "Row": 4
+          "Row": 7
         },
         "Font": {
           "Name": "Arial",
@@ -1661,8 +913,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 2,
-          "Row": 3
+          "Column": 0,
+          "Row": 9
         },
         "Font": {
           "Name": "Arial",
@@ -1705,8 +957,8 @@
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
-          "Column": 3,
-          "Row": 3
+          "Column": 1,
+          "Row": 9
         },
         "Font": {
           "Name": "Arial",
@@ -1741,6 +993,826 @@
         "Disabled_ButtonColor": [
           "#E4E0E8",
           "#E4E0E8"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Datos del Representante",
+        "Text_Color": [
+          "#000000",
+          "#FFFFFF"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "datos_represe_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 10
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 20,
+        "sticky": "ew",
+        "columnspan": "3"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "Cedula:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "CIrepres_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 11
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "CIrepres",
+        "Ev": "0",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 11
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "nombres:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "nombreRepres_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 12
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "nombre_repres",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Nombres del Representante",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 12
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "apellidos:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "apellido_repres_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 13
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "apellido_repres",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Apellidos del Representante",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 13
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "telefono:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "Telf_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 14
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "telef",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Telefono del Representante",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 14
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "direccion:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "dir_representante_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 15
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "dir_representante",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Municipio, Sector,Casa",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 15
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "correo:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "correo_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 16
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "correo",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Correo del Representante",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 16
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "parentesco:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "parentesco_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 17
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "parentesco",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Parentesco con el Estudiante",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 17
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
+        ]
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          5,
+          2
+        ],
+        "pady": [
+          0,
+          6
+        ],
+        "sticky": "ew"
+      }
+    },
+    {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "oficio:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "oficio_label",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 0,
+          "Row": 18
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 1,
+        "row": 3,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkText_field",
+      "Propiedades": {
+        "Text_Color": [
+          "#000000",
+          "#000000"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFFFFF"
+        ],
+        "Placeholder_Text_Color": [
+          "#AAAAAA",
+          "#AAAAAA"
+        ],
+        "Id": "oficio",
+        "Ev": "None",
+        "Panel_Id": "inscripcion_regular",
+        "Corner_Radious": "8",
+        "Master": "Main_Box",
+        "Placeholder_Text": "Oficio delRepresentante",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 1,
+          "Row": 18
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Fg_Focus": [
+          "#FFF9CD",
+          "#FFF9CD"
+        ],
+        "Text_Focus": [
+          "#000000",
+          "#000000"
+        ],
+        "Disabled_Color": [
+          "#E3D3EF",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#594B62"
         ]
       },
       "Posicion": {
