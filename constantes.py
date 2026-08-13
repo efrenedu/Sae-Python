@@ -39,7 +39,6 @@ class constantes:
   PANTALLA_REGISTRO_USUARIO="registroUsuario"
   PANTALLA_REGISTRO_PERSONAL="registroPersonal"
   PANTALLA_REGISTRO_FORMATO="registroForm"
-  PANTALLA_REGISTRO_CALIFICACION="registroCalif"
   PANTALLA_REGISTRO_DISP_HORARIO="registroDisp"
   PANTALLA_REGISTRO_AREA_FORMACION="registroAreas"
   PANTALLA_REGISTRO_HORARIO="registro_horario"
@@ -89,9 +88,6 @@ class constantes:
   PANTALLA_PLANIFIC_CRONOG4="cronog_mom1"
   PANTALLA_PLANIFIC_CRONOG5="cronog_mom2"
   PANTALLA_PLANIFIC_CRONOG6="cronog_mom3"
-  
-  TRANSPARENT_COLOR='magenta'
-  
   #Input Text Types
   CADENA_SOLOTEXTO=0
   CADENA_SOLONUMERO=1
@@ -329,38 +325,37 @@ class constantes:
   EV_DOWNLOAD_EXPEDIENTE_PERSONAL=122
   EV_DESCARGAR_HORARIO_SECCION=123
 
-  #data Base Tables Names
-  NUM_TABLAS=30 
-  TABLA_EXPEDIENTE="expediente"
-  TABLA_HORARIO="horario"
-  TABLA_TRABAJADOR="trabajador"
-  TABLA_USUARIO="usuario"
-  TABLA_PROFESOR="profesor"
-  TABLA_ESTUDIANTE="estudiante"
-  TABLA_CRONOGRAMA="cronograma"
-  TABLA_AREA_FORMACION="area_formacion"
-  TABLA_SECCION="seccion"
-  TABLA_FORMATO="formato"
-  TABLA_FECHA="fecha"
-  TABLA_REPORTE="reporte"
-  TABLA_PREGUNTA_SECRETA="pregunta_secreta"
-  TABLA_MOMENTO="momento"
-  TABLA_CALIFICACION="calificacion"
-  TABLA_CALIF_MOM="calif_momento"
-  TABLA_CALIFICACION_FINAL="calificacion_final"
-  TABLA_REPRESENTANTE="representante"
-  TABLA_AREA_DOCENTE="area_dictada_docentes"
-  TABLA_DISP_HORARIO="disponibilidad_horario"
-  TABLA_MATERIA_PENDIENTE="materia_pendiente"
-  TABLA_CALIF_PENDIENTE="calific_pendiente"
-  TABLA_DIRECCION="direccion";
-  TABLA_DESCARGA_DOCUMENTO="descarga_documentos"
-  TABLA_ESTATUS_TRABAJ="estatus_trabaj"
-  TABLA_ESTATUS_ESTUD="estatus_estud"
-  TABLA_INTENTOS_USUARIO="intentos_usuario"
-  TABLA_AÑOS_INCORPORADOS="años_incorporados"
-  TABLA_NOMBRE="nombre"
-  TABLA_CARGO="cargo"
+  #data Base Tables 
+  TABLA_DIRECCION=0
+  TABLA_CARGO=1
+  TABLA_ESTATUS_TRABAJ=2
+  TABLA_ESTATUS_ESTUD=3
+  TABLA_AÑOS_INCORPORADOS=4
+  TABLA_INTENTOS_USUARIO=5
+  TABLA_NOMBRE=6
+  TABLA_EXPEDIENTE=7
+  TABLA_HORARIO=8
+  TABLA_TRABAJADOR=9
+  TABLA_USUARIO=10
+  TABLA_REPRESENTANTE=11
+  TABLA_SECCION=12
+  TABLA_PROFESOR=13
+  TABLA_ESTUDIANTE=14
+  TABLA_AREA_FORMACION=15
+  TABLA_AREA_DOCENTE=16
+  TABLA_REPORTE=17
+  TABLA_FORMATO=18
+  TABLA_CRONOGRAMA=19
+  TABLA_MOMENTO=20
+  TABLA_FECHA=21
+  TABLA_PREGUNTA_SECRETA=22
+  TABLA_DESCARGA_DOCUMENTO=23
+  TABLA_CALIFICACION_FINAL=24
+  TABLA_CALIF_MOM=25
+  TABLA_CALIFICACION=26
+  TABLA_DISP_HORARIO=27
+  TABLA_MATERIA_PENDIENTE=28
+  TABLA_CALIF_PENDIENTE=29
   
   #Data Base Key Fields Ids
   CLAVE_EXPEDIENTE="id_exp"
@@ -394,66 +389,36 @@ class constantes:
   CLAVE_PREGUNTA_SECRETA="id_pregunta"
   CLAVE_CARGO="id_cargo"
   
-  #foregein Keys Ids
-  FORANEOS_EXPEDIENTE=[False,False,False,False,False]
+  #Fields Tables
   CAMPOS_EXPEDIENTE=[CLAVE_EXPEDIENTE,"src_exp","src_foto","fecha_registro","modificado"] 
-  FORANEOS_HORARIO=[False,False,False,False]
   CAMPOS_HORARIO=[CLAVE_HORARIO,"src_hor","turno","modificado"]
-  FORANEOS_TRABAJADOR=[False,TABLA_NOMBRE,False,False,TABLA_EXPEDIENTE,TABLA_HORARIO,TABLA_CARGO,TABLA_ESTATUS_TRABAJ,False]
   CAMPOS_TRABAJADOR=[CLAVE_TRABAJADOR,CLAVE_NOMBRE,"correo","telefono",CLAVE_EXPEDIENTE,CLAVE_HORARIO,CLAVE_CARGO,CLAVE_ESTATUS_TRABAJ,"modificado"] 
-  FORANEOS_CARGO=[False,False,False,False,False]
   CAMPOS_CARGO=[CLAVE_CARGO,"cargo","cargo_ministerio","modificado","codigo_cargo"]
-  FORANEOS_USUARIO=[False,False,TABLA_TRABAJADOR,False,False,TABLA_INTENTOS_USUARIO,False,False]
   CAMPOS_USUARIO=[CLAVE_USUARIO,"password",CLAVE_TRABAJADOR,"nivel_acceso","foto",CLAVE_INTENTOS_USUARIO,"bloqueado","modificado"]
-  FORANEOS_PROFESOR=[False,TABLA_TRABAJADOR,False,False]
   CAMPOS_PROFESOR=[CLAVE_PROFESOR,CLAVE_TRABAJADOR,"seccion_guia","modificado"]
-  FORANEOS_AREA_FORMACION=[False,False,TABLA_AÑOS_INCORPORADOS,False]
   CAMPOS_AREA_FORMACION=[CLAVE_AREA_FORMACION,"incorporada",CLAVE_AÑOS_INCORPORADOS,"modificado"]
-  FORANEOS_SECCION=[False,False,False,TABLA_HORARIO,False,False,False,False]
   CAMPOS_SECCION=[CLAVE_SECCION,"año","letra",CLAVE_HORARIO,"total_estud","maximo_estud","minimo_estud","modificado"]
-  FORANEOS_ESTUDIANTE=[False,TABLA_NOMBRE,TABLA_ESTATUS_ESTUD,TABLA_SECCION,TABLA_EXPEDIENTE,TABLA_REPRESENTANTE,False,False,TABLA_DIRECCION,False,False]
   CAMPOS_ESTUDIANTE=[CLAVE_ESTUDIANTE,CLAVE_NOMBRE,CLAVE_ESTATUS_ESTUD,CLAVE_SECCION,CLAVE_EXPEDIENTE,CLAVE_REPRESENTANTE,"genero","nacimiento",CLAVE_DIRECCION,"parentesco","modificado"]
-  FORANEOS_FORMATO=[False,False,False]
   CAMPOS_FORMATO=[CLAVE_FORMATO,"src_form","modificado"]
-  FORANEOS_CRONOGRAMA=[False,False,False,False]
   CAMPOS_CRONOGRAMA=[CLAVE_CRONOGRAMA,"inicio","cierre","modificado"]
-  FORANEOS_REPORTE=[False,TABLA_USUARIO,False,False,False,False,False,False]
   CAMPOS_REPORTE=[CLAVE_REPORTE,CLAVE_USUARIO,"fecha","hora","tipo","razon","motivo","modificado"]
-  FORANEOS_PREGUNTA_SECRETA=[False,TABLA_USUARIO,False,False,False,False]
   CAMPOS_PREGUNTA_SECRETA=[CLAVE_PREGUNTA_SECRETA,CLAVE_USUARIO,"respuesta","pregunta","numero","modificado"]
-  FORANEOS_MOMENTO=[False,False,False,False,False,False,False]
   CAMPOS_MOMENTO=[CLAVE_MOMENTO,"abierto","culminado","modificado","fecha_limite","hora_limite","fecha_inicio"]
-  FORANEOS_FECHA=[False,TABLA_MOMENTO,TABLA_CRONOGRAMA,False,False,False,False]
   CAMPOS_FECHA=[CLAVE_FECHA,CLAVE_MOMENTO,CLAVE_CRONOGRAMA,"razon","fecha","fecha_cierre","modificado"]
-  FORANEOS_CALIFICACION=[False,TABLA_CALIF_MOM,False,False,False]
   CAMPOS_CALIFICACION=[CLAVE_CALIFICACION,CLAVE_CALIF_MOM,"valor","numero","modificado"]
-  FORANEOS_CALIF_MOM=[False,TABLA_MOMENTO,TABLA_CALIFICACION_FINAL,False,False,False,False,False]
   CAMPOS_CALIF_MOM=[CLAVE_CALIF_MOM,CLAVE_MOMENTO,CLAVE_CALIFICACION_FINAL,"prom","definitiva","estimulacion","año","modificado"]
-  FORANEOS_CALIFICACION_FINAL=[False,TABLA_ESTUDIANTE,False,TABLA_AREA_FORMACION,False,False]
   CAMPOS_CALIFICACION_FINAL=[CLAVE_CALIFICACION_FINAL,CLAVE_ESTUDIANTE,"año",CLAVE_AREA_FORMACION,"valor","modificado"] 
-  FORANEOS_REPRESENTANTE=[False,TABLA_NOMBRE,False,False,False,TABLA_DIRECCION,False,]
   CAMPOS_REPRESENTANTE=[CLAVE_REPRESENTANTE,CLAVE_NOMBRE,"telef","correo","ocupacion",CLAVE_DIRECCION,"modificado"]
-  FORANEOS_AREA_DOCENTE=[False,TABLA_PROFESOR,TABLA_AREA_FORMACION,False]
   CAMPOS_AREA_DOCENTE=[CLAVE_AREA_DOCENTE,CLAVE_PROFESOR,CLAVE_AREA_FORMACION,"modificado"] 
-  FORANEOS_DISP_HORARIO=[False,TABLA_TRABAJADOR,False,False,False,False,False,False,False]
   CAMPOS_DISP_HORARIO=[CLAVE_DISP_HORARIO,CLAVE_TRABAJADOR,"turno","disp_lunes","disp_martes","disp_miercoles","disp_jueves","disp_viernes","modificado"]
-  FORANEOS_MATERIA_PENDIENTE=[False,TABLA_ESTUDIANTE,False,TABLA_AREA_FORMACION,False,False]
   CAMPOS_MATERIA_PENDIENTE=[CLAVE_MATERIA_PENDIENTE,CLAVE_ESTUDIANTE,"max_calif",CLAVE_AREA_FORMACION,"año","modificado"]
-  FORANEOS_CALIF_PENDIENTE=[False,TABLA_MATERIA_PENDIENTE,False,False,False,False]
   CAMPOS_CALIF_PENDIENTE=[CLAVE_CALIF_PENDIENTE,CLAVE_MATERIA_PENDIENTE,"intento","valor","fecha","modificado"]
-  FORANEOS_DIRECCION=[False,False,False,False,False]
   CAMPOS_DIRECCION=[CLAVE_DIRECCION,"sector","parroquia","casa","modificado"]
-  FORANEOS_INTENTOS_USUARIO=[False,False,False,False,False]
   CAMPOS_INTENTOS_USUARIO=[CLAVE_INTENTOS_USUARIO,"num_intentos","last_fecha","last_hora","modificado"]
-  FORANEOS_AÑOS_INCORPORADOS=[False,False,False,False,False,False,False]
   CAMPOS_AÑOS_INCORPORADOS=[CLAVE_AÑOS_INCORPORADOS,"1_año","2_año","3_año","4_año","5_año","modificado"]
-  FORANEOS_ESTATUS_ESTUD=[False,False,False,False,False,False,False,False,False]
   CAMPOS_ESTATUS_ESTUD=[CLAVE_ESTATUS_ESTUD,"estatus","salud","cedulado","last_year","fecha_inscrip","fecha_ingreso","plantel_procedencia","modificado"]  
-  FORANEOS_ESTATUS_TRABAJ=[False,False,False,False,False]
   CAMPOS_ESTATUS_TRABAJ=[CLAVE_ESTATUS_TRABAJ,"estatus","service_years","fecha_ingreso","modificado"]
-  FORANEOS_DESCARGA_DOCUMENTO=[False,TABLA_TRABAJADOR,TABLA_FORMATO,False,False,False,False]
   CAMPOS_DESCARGA_DOCUMENTO=[CLAVE_DESCARGA_DOCUMENTO,CLAVE_TRABAJADOR,CLAVE_FORMATO,"fecha","hora","tipo_descarga","modificado"]
-  FORANEOS_NOMBRE=[False,False,False,False,False,False]
   CAMPOS_NOMBRE=[CLAVE_NOMBRE,"nombre","s_nombre","apellido","s_apellido","modificado"]
 
   #default values Required 
@@ -461,5 +426,4 @@ class constantes:
   PASS_USER_DEFAULT="Axah5512$"
   DEFAULT_USER_ICON="fotos/user_login.jpg"
   SERVER="http://localhost/Instituto/"
-  SERVER_BD="Instituto"
 

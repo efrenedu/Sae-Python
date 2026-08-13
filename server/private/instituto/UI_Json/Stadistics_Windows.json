@@ -2,7 +2,7 @@
   "Pantalla_Name": "Stadistics_Win",
   "Widgets": [
     {
-      "Type": "CanvasStadistics",
+      "Type":"CanvasStadistics",
       "Propiedades": {
 	    "Dimension":{
 		   "Width":500,
@@ -22,7 +22,7 @@
 			 "Dark_Mode":["#8DA3D0","#E173BE","#64D3A8","#4EB152","#6D66CC"]
            }		  
         },
-        "Id": "canvas",
+        "Id":"canvas",
         "Ev": "None",
         "Panel_Id": "Stadistics_Win",
         "Corner_Radious": "0",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "Type": "CTkButton",
+      "Type":"CTkButton",
       "Propiedades": {
         "Text": "Cerrar",
         "Colors": {

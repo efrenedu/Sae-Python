@@ -1,1 +1,1 @@
-Folder for Extract Temporally the Expedent Zip Files 
+Folder for Extract temporally the Zip Files Content 

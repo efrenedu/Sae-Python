@@ -24,29 +24,23 @@ class UI_Event:
            if(panel_id!=constantes.PANTALLA_SERVICIO_GESTION_USUARIO):
               return
            conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-           flds=[constantes.CLAVE_USUARIO,"password",constantes.CLAVE_TRABAJADOR,"nivel_acceso",constantes.CLAVE_INTENTOS_USUARIO,"bloqueado"]
-           data=conexion_bd.get_allData(flds,len(flds))
+           flds=[constantes.CLAVE_USUARIO,constantes.CLAVE_TRABAJADOR,"nivel_acceso",constantes.CLAVE_INTENTOS_USUARIO,"bloqueado"]
+           data=conexion_bd.get_allData(flds)
            comp.reset()
            conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)        
            for i in range(0,len(data)):
-              temp_data=[]
-              for j in range(0,len(data[i])):
-                  if(j!=4):
-                     temp_data.append(data[i][j])
-                  else:
-                    data_intentos=conexion_bd.get_allData(["num_intentos"],1,[constantes.CLAVE_INTENTOS_USUARIO],[data[i][4]],["and"])
-                    temp_data.append(data_intentos[0][0])   
+              temp_data=[data[i][0],"********",data[i][1],data[i][2],"",data[i][4]]
+              cond_data={"conditions_Names":[constantes.CLAVE_INTENTOS_USUARIO],"condition_Types":["and"],"conditions_Values":[data[i][3]],"conditions_Verify":["="]} 
+              data_intentos=conexion_bd.get_allData(["num_intentos"],cond_data)
+              if(len(data_intentos)>0):
+                  temp_data[4]=data_intentos[0][0]   
               if(temp_data[3]!="admin"):
-                  passw=temp_data[1]
-                  new_pass=""
-                  for k in range(0,len(passw)):
-                      new_pass=new_pass+'*'
-                  temp_data[1]=new_pass
                   comp.add_row(temp_data)
        elif(ev_value==constantes.TABLE_LOAD_DATA_CALIFICATIONS_STUDENTS):  
              dat_rend=Event_manager.user.get_data_process()[0]
              conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-             dat_calif=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION_FINAL,len(constantes.CAMPOS_CALIFICACION_FINAL),[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],[dat_rend[0],dat_rend[1],dat_rend[4]],["and","and","and"])
+             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_rend[1],dat_rend[4]],"conditions_Verify":["=","=","="]} 
+             dat_calif=conexion_bd.get_allData([],cond_data)
              if(dat_calif==[]):
                 comp.reset()
                 value_momento=["","","",""]
@@ -60,17 +54,21 @@ class UI_Event:
                 return   
              id_calif=dat_calif[0][0]
              conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-             dat_calif_mom=conexion_bd.get_allData(constantes.CAMPOS_CALIF_MOM,len(constantes.CAMPOS_CALIF_MOM),[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],[id_calif,dat_rend[2]],["and","and"])
+             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_calif,dat_rend[2]],"conditions_Verify":["=","="]} 
+                    
+             dat_calif_mom=conexion_bd.get_allData([],cond_data)
              comp.reset()
              if(dat_calif_mom!=[]):
                conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
-               califications=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION,len(constantes.CAMPOS_CALIFICACION),[constantes.CLAVE_CALIF_MOM],[dat_calif_mom[0][0]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[dat_calif_mom[0][0]],"conditions_Verify":["="]}   
+               califications=conexion_bd.get_allData([],cond_data)
                if(califications!=[]):
                    for i in range(0,len(califications)):
                        dat_row=[califications[i][3], dat_rend[1],dat_rend[2],califications[i][2]]
                        comp.add_row(dat_row) 
                conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-               data_area_actual=conexion_bd.get_allData(constantes.CAMPOS_CALIF_MOM,len(constantes.CAMPOS_CALIF_MOM),[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_MOMENTO],[dat_rend[0],dat_rend[1],dat_rend[2]],["and","and","and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_MOMENTO],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_rend[1],dat_rend[2]],"conditions_Verify":["=","=","="]}    
+               data_area_actual=conexion_bd.get_allData([],cond_data)
                value_momento=["","","",""]
                value_momento[0]="promedio:\n"+dat_calif_mom[0][3]+"pts"
                value_momento[1]="calificacion:\n"+dat_calif_mom[0][4]+"pts"
@@ -96,7 +94,6 @@ class UI_Event:
    #Trigger the Event when Select a Item On the Table
    @classmethod
    def interprete_Table_SelectEvent(cls,comp_id,ev_value,comp_value):
-        from conexion_bd import conexion_bd
         from event_manager import Event_manager
         if(ev_value==constantes.TABLE_SET_DATA_DEFINITIVE_CALIFICATION_STUDENT):
              data=comp_value
@@ -125,7 +122,7 @@ class UI_Event:
             return   
          if(ev_value==constantes.LISTBOX_SET_WORKERS_USERS_CANDIDATOS_DATA or ev_value==constantes.LISTBOX_SET_WORKERS_DATA):
              conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-             res=conexion_bd.get_allData(None,None)
+             res=conexion_bd.get_allData([])
              data=[]
              for i in range(0,len(res)):
                 if(ev_value==constantes.LISTBOX_SET_WORKERS_USERS_CANDIDATOS_DATA):
@@ -138,7 +135,7 @@ class UI_Event:
                   comp.set_values(data)
          elif(ev_value==constantes.LISTBOX_SET_LIST_USERS_DATA):
              conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-             res=conexion_bd.get_allData(None,None)
+             res=conexion_bd.get_allData([])
              data=[]
              for i in range(0,len(res)):
                  if(res[i][0]!="admin"):
@@ -148,7 +145,7 @@ class UI_Event:
           
          elif(ev_value==constantes.LISTBOX_SET_DATA_FORMATO):
            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-           res=conexion_bd.get_allData(None,None)
+           res=conexion_bd.get_allData([])
            data=[]
            if(res!=[]):
                for i in range(0,len(res)):
@@ -180,10 +177,12 @@ class UI_Event:
            conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
            name=comp_value.split(" ")
            id_worker=""
-           id_worker=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),["nombre","apellido"],[name[0],name[1]],["and","and"])[0][0]
+           cond_data={"conditions_Names":["nombre","apellido"],"condition_Types":["and","and"],"conditions_Values":[name[0],name[1]],"conditions_Verify":["=","="]}   
+           id_worker=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,cond_data)[0][0]
            if(id_worker!=None and id_worker!=""):
               conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-              areas=conexion_bd.get_allData(constantes.CAMPOS_AREA_DOCENTE,len( constantes.CAMPOS_AREA_DOCENTE),[constantes.CLAVE_TRABAJADOR],[id_worker],["and"])             
+              cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_worker],"conditions_Verify":["="]}
+              areas=conexion_bd.get_allData([],cond_data)             
               if(areas==[]):
                  return
               data_areas=["elegir"]
@@ -196,7 +195,8 @@ class UI_Event:
            comp.last_selected=comp_value
            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
            id_format=comp_value
-           data_format=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO),[constantes.CLAVE_FORMATO],[id_format],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[id_format],"conditions_Verify":["="]}
+           data_format=conexion_bd.get_allData([],cond_data)
            if(data_format==[]):
               return
            file_format=""
@@ -222,7 +222,6 @@ class UI_Event:
    #trigger the events required for Text Fields
    @classmethod 
    def interprete_TextField_Events(cls,comp_id,ev_value,comp_value):
-        from conexion_bd import conexion_bd
         from event_manager import Event_manager
         comp=Event_manager.vent.panelActual.get_comp_byName(comp_id)
         panel_id=Event_manager.vent.panelActual_str
@@ -273,7 +272,7 @@ class UI_Event:
             comp.set_text(new_text)                            
         elif(ev_value==constantes.LABEL_LOAD_CRONOGRAM_INFO):
            conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-           data_cronog=conexion_bd.get_allData(None,None)
+           data_cronog=conexion_bd.get_allData([])
            if(data_cronog!=[]):
                 comp.set_text("Año Escolar: "+data_cronog[0][0])
            else:
@@ -364,7 +363,7 @@ class UI_Event:
                    elif("estudiantes con materias pendientes"):
                        new_vals=["elegir"]
                        conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-                       data_areas=conexion_bd.get_allData(None,None)
+                       data_areas=conexion_bd.get_allData([])
                        if(data_areas!=[]):
                           for i in range(0,len(data_areas)):
                              new_vals.append(data_areas[i][0])
@@ -377,10 +376,12 @@ class UI_Event:
                    data=Event_manager.user.get_data_process()[0]
                    area=data[1]
                    id_student=data[0]
-                   data_pen=conexion_bd.get_allData(constantes.CAMPOS_MATERIA_PENDIENTE,len(constantes.CAMPOS_MATERIA_PENDIENTE),[constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_ESTUDIANTE],[area,id_student],["and","and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION],"condition_Types":["and","and"],"conditions_Values":[id_student,area],"conditions_Verify":["=","="]}
+                   data_pen=conexion_bd.get_allData(constantes.CAMPOS_MATERIA_PENDIENTE,cond_data)
                    conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
                    if(valor!="revision"):
-                      mat_Pendent=conexion_bd.get_allData(constantes.CAMPOS_CALIF_PENDIENTE,len(constantes.CAMPOS_CALIF_PENDIENTE),[constantes.CLAVE_MATERIA_PENDIENTE,"intento"],[data_pen[0][0],valor],["and","and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE,"intento"],"condition_Types":["and","and"],"conditions_Values":[data_pen[0][0],valor],"conditions_Verify":["=","="]}
+                      mat_Pendent=conexion_bd.get_allData([],cond_data)
                       Event_manager.set_comp_values("fecha_p4","")
                       if(mat_Pendent!=[]):
                         Event_manager.set_comp_values("calif_p4",mat_Pendent[0][3])
@@ -388,7 +389,8 @@ class UI_Event:
                       else:
                         Event_manager.set_comp_values("calif_p4","")
                    else:
-                      mat_Pendent=conexion_bd.get_allData(constantes.CAMPOS_CALIF_PENDIENTE,len(constantes.CAMPOS_CALIF_PENDIENTE),[constantes.CLAVE_MATERIA_PENDIENTE,"revision"],[data_pen[0][0],valor],["and","and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE,"revision"],"condition_Types":["and","and"],"conditions_Values":[data_pen[0][0],valor],"conditions_Verify":["=","="]}
+                      mat_Pendent=conexion_bd.get_allData([],cond_data)
                       Event_manager.set_comp_values("fecha_p4","")
                       if(mat_Pendent!=[]):
                          Event_manager.set_comp_values("calif_p4",mat_Pendent[0][3])
@@ -425,7 +427,7 @@ class UI_Event:
              elif(valor=="seccion"): 
                             
                 conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                dat_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION))             
+                dat_secc=conexion_bd.get_allData([])             
                 data_field=["elegir"]
                 if(dat_secc==[]):
                    return
@@ -445,15 +447,17 @@ class UI_Event:
                 Event_manager.activar_element("turno_rh",False,True)
              else:
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                dat_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR))             
+                dat_trabaj=conexion_bd.get_allData([])             
                 data_field=["elegir"]
                 if(dat_trabaj==[]):
                    return
                 for i in range(0,len(dat_trabaj)):
                     conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                    data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[dat_trabaj[i][7]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[dat_trabaj[i][7]],"conditions_Verify":["="]}
+                    data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                    data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[dat_trabaj[i][1]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[dat_trabaj[i][1]],"conditions_Verify":["="]} 
+                    data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                     if(dat_trabaj[i][0]!="000" and dat_trabaj[i][0]!="001" and data_estatus[0][0]!="inactivo"):
                         #prevent get data from Admin Default Worker or Inactive workers
                         if(ev_value!=constantes.COMBOBOX_GET_DATA_SECCION_REGISTRO_HORARIO):
@@ -484,11 +488,13 @@ class UI_Event:
                
                if(comp_value!="elejir" and comp_value!="elegir" and comp_value!="nueva"):
                   conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-                  data_areas=conexion_bd.get_allData(constantes.CAMPOS_AREA_FORMACION,len(constantes.CAMPOS_AREA_FORMACION),[constantes.CLAVE_AREA_FORMACION],[comp_value],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_AREA_FORMACION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                  data_areas=conexion_bd.get_allData(constantes.CAMPOS_AREA_FORMACION,cond_data)
                   if(data_areas==[]):
                      return
                   conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
-                  data_in=conexion_bd.get_allData(["1_año","2_año","3_año","4_año","5_año"],5,[constantes.CLAVE_AÑOS_INCORPORADOS],[data_areas[0][2]],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS],"condition_Types":["and"],"conditions_Values":[data_areas[0][2]],"conditions_Verify":["="]}
+                  data_in=conexion_bd.get_allData(["1_año","2_año","3_año","4_año","5_año"],cond_data)
                   Event_manager.set_comp_values("incorporada",data_areas[0][1])
                   for i in range(0,5):
                      valor=data_in[0][i]
@@ -522,7 +528,8 @@ class UI_Event:
                   else:
                       id_temp=""
                   conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-                  data_disp=conexion_bd.get_allData(constantes.CAMPOS_DISP_HORARIO,len(constantes.CAMPOS_DISP_HORARIO),[constantes.CLAVE_TRABAJADOR],[id_temp],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_temp],"conditions_Verify":["="]}
+                  data_disp=conexion_bd.get_allData(constantes.CAMPOS_DISP_HORARIO,cond_data)
                   if(data_disp!=[]):
                      Event_manager.load_data_disp(id_temp)
                      Event_manager.activar_element("actualizar_rdh",True,True)
@@ -578,7 +585,8 @@ class UI_Event:
                Event_manager.set_comp_values("secc_sec_list",["elegir"])
                if(comp_value!="elejir" and comp_value!="elegir"):
                   conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                  data_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),[constantes.CLAVE_SECCION],[comp_value],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                  data_secc=conexion_bd.get_allData([],cond_data)
                   other_values=["elegir"]
                   if(data_secc!=[]):
                      year=data_secc[0][1]
@@ -588,7 +596,8 @@ class UI_Event:
                          turno="mañana"
                      else:
                         turno="tarde"
-                     next_data=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),["año"],[year],["and"])
+                     cond_data={"conditions_Names":["año"],"condition_Types":["and"],"conditions_Values":[year],"conditions_Verify":["="]}
+                     next_data=conexion_bd.get_allData([],cond_data)
                      if(next_data!=[]):
                        for i in range(0,len(next_data)):
                           turno_next=""
@@ -603,24 +612,29 @@ class UI_Event:
                              if(next_data[i][0]!="default"):
                                  other_values.append(next_data[i][0])            
                      conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                     data_estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[comp_value],["and"])
+                     cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                     data_estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,cond_data)
                      data_box=[]
                      for j in range(0,len(data_estuds)):
                         conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                        data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_estuds[j][1]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estuds[j][1]],"conditions_Verify":["="]}
+                        data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                         nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                         data_box.append(data_estuds[j][0]+"-"+nomb)
                      Event_manager.set_comp_values("secc1",data_box)
                      conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-                     data_guia=conexion_bd.get_allData(constantes.CAMPOS_PROFESOR,len(constantes.CAMPOS_PROFESOR),["seccion_guia"],[comp_value],["and"])
+                     cond_data={"conditions_Names":["seccion_guia"],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                     data_guia=conexion_bd.get_allData([],cond_data)
                      if(data_guia!=[]):
                         id_prof=data_guia[0][1]
                         nomb=""
                         conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                        data_temp=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[id_prof],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_prof],"conditions_Verify":["="]}
+                        data_temp=conexion_bd.get_allData([],cond_data)
                         if(data_temp!=[]):
                           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                          data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_temp[0][1]],["and"])
+                          cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_temp[0][1]],"conditions_Verify":["="]}
+                          data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                           if(data_nomb!=[]):
                               for nom in data_nomb[0]:
                                  if(nom!=""):
@@ -645,22 +659,26 @@ class UI_Event:
                       value_MainSecc=MainSecc.get_selected_value()
               if(value_MainSecc!=""):
                   conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                  data_MainSeccion=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[value_MainSecc],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[value_MainSecc],"conditions_Verify":["="]}
+                  data_MainSeccion=conexion_bd.get_allData([],cond_data)
                   data_Main=[]
                   for j in range(0,len(data_MainSeccion)):
                      conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                     data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_MainSeccion[j][1]],["and"])
+                     cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_MainSeccion[j][1]],"conditions_Verify":["="]}
+                     data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                      nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                      data_Main.append(data_MainSeccion[j][0]+"-"+nomb)           
                   Event_manager.set_comp_values("secc1",data_Main)   
               
               if(comp_value!="elejir" and comp_value!="elegir"):
                   conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                  data_estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[comp_value],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                  data_estuds=conexion_bd.get_allData([],cond_data)
                   data_box=[]
                   for j in range(0,len(data_estuds)):
                       conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                      data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_estuds[j][1]],["and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estuds[j][1]],"conditions_Verify":["="]}
+                      data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                       nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                       data_box.append(data_estuds[j][0]+"-"+nomb)
                   Event_manager.set_comp_values("secc2",data_box)
@@ -684,7 +702,7 @@ class UI_Event:
                 Event_manager.activar_element("seccion",True,True)
                 Event_manager.activar_element("secc_label",True,True)
                 conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                data_secc=conexion_bd.get_allData(None,None)
+                data_secc=conexion_bd.get_allData([])
                 new_data=["elegir"]
                 for i in range(0,len(data_secc)):
                    temp_dat=data_secc[i][0]
@@ -705,7 +723,8 @@ class UI_Event:
                   Event_manager.activar_element("nombre_val",False,True)
                   Event_manager.activar_element("nombre_val_label",False,True)
                if(conexion_bd.id_exist(constantes.CLAVE_FORMATO,comp_value)==True):
-                  data_form=conexion_bd.get_allData(["src_form"],1,[constantes.CLAVE_FORMATO],[comp_value],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                  data_form=conexion_bd.get_allData(["src_form"],cond_data)
                   if(data_form!=[]):
                      Event_manager.set_comp_values("destino_file",data_form[0][0])
                   Event_manager.activar_element("actualizar_ru",True,True)
@@ -727,7 +746,8 @@ class UI_Event:
               if(comp_id=="secc_rh"):
                  is_seccion=True
                  conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                 id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],1,[constantes.CLAVE_SECCION],[comp_value],["and"])[0][0]
+                 cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                 id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],cond_data)[0][0]
               else:
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
                 id_temp=comp_value.split("-")
@@ -737,10 +757,12 @@ class UI_Event:
                    id_temp=iid_temp[0]
                 else:
                    id_temp="" 
-                id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],1,[constantes.CLAVE_TRABAJADOR],[id_temp],["and"])[0][0]
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_temp],"conditions_Verify":["="]}   
+                id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],cond_data)[0][0]
               if(id_hor!="" and id_hor!="default"):
                 conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-                data_hor=conexion_bd.get_allData(constantes.CAMPOS_HORARIO,len(constantes.CAMPOS_HORARIO),[constantes.CLAVE_HORARIO],[id_hor],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[id_hor],"conditions_Verify":["="]}
+                data_hor=conexion_bd.get_allData(constantes.CAMPOS_HORARIO,cond_data)
                 if(data_hor!=[]):
                    val_hor=data_hor[0][1]
                    if(val_hor=="..."):
@@ -766,20 +788,24 @@ class UI_Event:
                
                if(comp_value!="elejir" and comp_value!="elegir"):
                    conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                   data_estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_ESTUD],3,[constantes.CLAVE_SECCION],[comp_value],["and"])             
+                   cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                   data_estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_ESTUD],cond_data)             
                    new_data=["elegir"]
                    for estuds in data_estuds:
                       conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                      data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_ESTUD],[estuds[2]],["and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[estuds[2]],"conditions_Verify":["="]}
+                      data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                       if(data_estatus[0][0]!="inactivo" and data_estatus[0][0]!="graduado"):
                           val=estuds[0]+"-"
                           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                          data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[estuds[1]],["and"])
+                          cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[estuds[1]],"conditions_Verify":["="]}
+                          data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                           val=val+data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                           new_data.append(val)
                    Event_manager.set_comp_values("estudiantes",new_data)
                    conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                   data_seccion=conexion_bd.get_allData(["año"],1,[constantes.CLAVE_SECCION],[comp_value],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                   data_seccion=conexion_bd.get_allData(["año"],cond_data)
                    Event_manager.set_comp_values("year",data_seccion[0][0])   
                else:
                    new_data=["elegir"]
@@ -803,23 +829,28 @@ class UI_Event:
           elif(ev_value==constantes.COMBOBOX_LOAD_SECCION_RENIDMIENTO_FILTER_MATERIA_PENDIENTE):
                if(comp_value!="elejir" and comp_value!="elegir"):
                   conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                  data_estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_ESTUD],3,[constantes.CLAVE_SECCION],[comp_value],["and"])             
+                  cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                  data_estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_ESTUD],cond_data)             
                   new_data=["elegir"]
                   for estuds in data_estuds:
                      conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                     data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_ESTUD],[estuds[2]],["and"])
+                     cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[estuds[2]],"conditions_Verify":["="]}
+                     data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                      if(data_estatus[0][0]!="inactivo" and data_estatus[0][0]!="graduado"):
                         conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-                        data_pend=conexion_bd.get_allData([constantes.CLAVE_MATERIA_PENDIENTE],1,[constantes.CLAVE_ESTUDIANTE],[estuds[0]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[estuds[0]],"conditions_Verify":["="]}
+                        data_pend=conexion_bd.get_allData([constantes.CLAVE_MATERIA_PENDIENTE],cond_data)
                         if(data_pend!=[]):
                            val=estuds[0]+"-"
                            conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                           data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[estuds[1]],["and"])
+                           cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[estuds[1]],"conditions_Verify":["="]}
+                           data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                            val=val+data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                            new_data.append(val)
                   Event_manager.set_comp_values("estudiantes",new_data)
                   conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                  data_seccion=conexion_bd.get_allData(["año"],1,[constantes.CLAVE_SECCION],[comp_value],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                  data_seccion=conexion_bd.get_allData(["año"],cond_data)
                   Event_manager.set_comp_values("year",data_seccion[0][0])     
                else:
                    new_data=["elegir"]
@@ -835,7 +866,7 @@ class UI_Event:
                   Event_manager.activar_element("cierre",True,True)
                   if(comp_value=="editar cronograma"):
                     conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-                    dat_cronog=conexion_bd.get_allData(None,None)
+                    dat_cronog=conexion_bd.get_allData([])
                     if(dat_cronog!=[]):
                         Event_manager.set_comp_values("inicio",dat_cronog[0][1])
                         Event_manager.set_comp_values("cierre",dat_cronog[0][2])       
@@ -856,7 +887,8 @@ class UI_Event:
           elif(ev_value==constantes.COMBOBOX_REACTIVATE_MOMENTS_SHOW_OPTION):
             if(comp_value!="elegir" and comp_value!="elejir"):
                 conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                dat=conexion_bd.get_allData([constantes.CLAVE_MOMENTO,"abierto"],2,[constantes.CLAVE_MOMENTO],[comp_value],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
+                dat=conexion_bd.get_allData([constantes.CLAVE_MOMENTO,"abierto"],cond_data)
                 if(dat!=[]):
                     mom_val=dat[0][1]
                     if(mom_val=="false"):
@@ -932,7 +964,7 @@ class UI_Event:
         
            if(ev_value==constantes.COMBOBOX_LOAD_AREA_FORMACION):
                conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-               data=conexion_bd.get_allData(None,None)
+               data=conexion_bd.get_allData([])
                vals=["elegir"]
                for i in range(0,len(data)):
                    vals.append(data[i][0])
@@ -943,7 +975,8 @@ class UI_Event:
            elif(ev_value==constantes.COMBOBOX_LOAD_MOMENTOS_ACADEMICOS ):
               Event_manager.verificar_caudicidad()
               conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-              data=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),["abierto"],["true"],["and"])
+              cond_data={"conditions_Names":["abierto"],"condition_Types":["and"],"conditions_Values":["true"],"conditions_Verify":["="]}
+              data=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,cond_data)
               if(data==[]):
                  return
               vals=["elegir"]
@@ -952,7 +985,7 @@ class UI_Event:
               comp.set_values(vals)
            elif(ev_value==constantes.COMBOBOX_LOAD_WORKERS_USERS or ev_value==constantes.COMBOBOX_LOAD_WORKERS_DISP_HORARIOS or ev_value==constantes.COMBOBOX_LOAD_WORKERS_HORARIOS):
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               data=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR))
+               data=conexion_bd.get_allData([])
                new_dat=["elegir"]
                
                if(data!=[]):
@@ -964,29 +997,35 @@ class UI_Event:
                         if(conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,data[i][0])==False): 
                             cargo_id=data[i][6] 
                             conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                            data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[cargo_id],["and"])                      
+                            cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[cargo_id],"conditions_Verify":["="]}
+                            data_cargo=conexion_bd.get_allData([],cond_data)                      
                             if(data_cargo!=[]):
                               cargo=data_cargo[0][1].lower()
                               if(cargo=="secretaria" or cargo=="director" or cargo.startswith("subdirector") or cargo.startswith("sub director") or cargo=="coordinador de evaluacion"):
                                   conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                                  data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data[i][1]],["and"])
+                                  cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data[i][1]],"conditions_Verify":["="]}
+                                  data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                                   new_dat.append(data[i][0]+"-"+data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize())
                     else:
                         conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                        data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_TRABAJ,len(constantes.CAMPOS_ESTATUS_TRABAJ),[constantes.CLAVE_ESTATUS_TRABAJ],[data[i][7]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data[i][7]],"conditions_Verify":["="]}
+                        data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_TRABAJ,cond_data)
                         conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
                         if(data[i][0]!="000" and data[i][0]!="001" and data_estatus[0][1]!="inactivo"):
                            #prevent include the worker assign to default admin or inactive workers
                            if(ev_value!=constantes.COMBOBOX_LOAD_WORKERS_HORARIOS):
                               conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                              data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data[i][1]],["and"])
+                              cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data[i][1]],"conditions_Verify":["="]}
+                              data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                               new_dat.append(data[i][0]+"-"+data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize())
                            else:
                              id_temp=data[i][0]
-                             dat_disponibility=conexion_bd.get_allData(constantes.CAMPOS_DISP_HORARIO,len(constantes.CAMPOS_DISP_HORARIO),[constantes.CLAVE_TRABAJADOR],[id_temp],["and"])
+                             cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_temp],"conditions_Verify":["="]}
+                             dat_disponibility=conexion_bd.get_allData([],cond_data)
                              if(dat_disponibility!=[]):
                                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                               data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data[i][1]],["and"])
+                               cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data[i][1]],"conditions_Verify":["="]}
+                               data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                                new_dat.append(data[i][0]+"-"+data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize())
                comp.set_values(new_dat)
            elif(ev_value==constantes.COMBOBOX_REMOVE_ALL_ITEMS_ON_LOAD): 
@@ -995,7 +1034,7 @@ class UI_Event:
            elif(ev_value==constantes.COMBOBOX_LOAD_DATA_AREA_FORMACION):
                #load the list of 'Areas de Formacion' in the Register in they Panel
                conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-               data_areas=conexion_bd.get_allData(None,None)
+               data_areas=conexion_bd.get_allData([])
                new_data=["nueva"]
                for i in range(0,len(data_areas)):
                   new_data.append(data_areas[i][0])
@@ -1004,13 +1043,14 @@ class UI_Event:
            if(ev_value==constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER):
                #carga lista de trabajadores en pantalla de registro de trbajadores
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR))
+               data_trabaj=conexion_bd.get_allData([])
                new_data=["nuevo"]
                for i in range(0,len(data_trabaj)):
                    if(data_trabaj[i][0]!="000" and data_trabaj[i][0]!="001" ):
                      #prevent to include the worker assign to the default admin
                      conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                     data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_trabaj[i][1]],["and"])
+                     cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[i][1]],"conditions_Verify":["="]}
+                     data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                      nombre=data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize()   
                      new_data.append(data_trabaj[i][0]+"-"+nombre)
                comp.set_values(new_data)    
@@ -1018,7 +1058,7 @@ class UI_Event:
                Event_manager.load_estuds_combobox()
            elif(ev_value==constantes.COMBOBOX_LOAD_SECCION):
               conexion_bd.set_tabla(constantes.TABLA_SECCION)
-              data_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION))
+              data_secc=conexion_bd.get_allData([])
               new_data=["elegir"]
               for i in range(0,len(data_secc)):
                  if(data_secc[i][0]!="default"):
@@ -1028,23 +1068,26 @@ class UI_Event:
               Event_manager.vent.raiz.after(200,lambda:Event_manager.activar_element("MoveB_btn",False,True))
            elif(ev_value==constantes.COMBOBOX_LOAD_PROFESORES):
               conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-              data_prof=conexion_bd.get_allData(constantes.CAMPOS_PROFESOR,len(constantes.CAMPOS_PROFESOR))
+              data_prof=conexion_bd.get_allData([])
               new_data=["elegir"]
               for i in range(0,len(data_prof)):
                  conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
                  id_prof=data_prof[i][1]
                  nomb=""
-                 data_temp=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[id_prof],["and"])
+                 cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_prof],"conditions_Verify":["="]}
+                 data_temp=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,cond_data)
                  if(data_temp!=[]):
                     conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                    data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_temp[0][1]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_temp[0][1]],"conditions_Verify":["="]}
+                    data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                     nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                  new_data.append(id_prof+"-"+nomb)
               comp.set_values(new_data)
            elif(ev_value==constantes.COMBOBOX_LOAD_PREGUNTAS_SECRETAS):
               num=comp_id[len(comp_id)-1]
               conexion_bd.set_tabla(constantes.TABLA_PREGUNTA_SECRETA)
-              dat=conexion_bd.get_allData(["pregunta","respuesta"],2,[constantes.CLAVE_USUARIO,"numero"],[Event_manager.user.user,str(num)],["and","and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_USUARIO,"numero"],"condition_Types":["and","and"],"conditions_Values":[Event_manager.user.user,str(num)],"conditions_Verify":["=","="]}
+              dat=conexion_bd.get_allData(["pregunta","respuesta"],cond_data)
               if(dat!=[]):
                   comp.set_value(dat[0][0])
                   Event_manager.set_respuesta_secr("respuesta"+str(num),dat[0][1])
@@ -1054,7 +1097,7 @@ class UI_Event:
            elif(ev_value==constantes.COMBOBOX_LOAD_WORKERS_CARNETS_AND_CONSTANCIAS):
                #workers for 'constancias' or 'carnets'
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               data_t=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_TRABAJ],3)
+               data_t=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_TRABAJ])
                new_data=["elegir"]
                for i in range(0,len(data_t)):
                   clave_estatus=data_t[i][2]
@@ -1062,11 +1105,13 @@ class UI_Event:
                   id_t=data_t[i][0]
                   if(id_t!="000" and id_t!="001"):
                       conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                      data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[clave_estatus],["AND"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[clave_estatus],"conditions_Verify":["="]}
+                      data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                       if(data_estatus!=[]):
                           if(data_estatus[0][0]!="inactivo"):
                               conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                              data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[clave_nombre],["AND"])
+                              cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[clave_nombre],"conditions_Verify":["="]}
+                              data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                               if(data_nomb!=[]):
                                   new_val=id_t+"-"+data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize()
                                   new_data.append(new_val)
@@ -1074,7 +1119,7 @@ class UI_Event:
            elif(ev_value==constantes.COMBOBOX_LOAD_SECCION_RENDIMIENTO or ev_value==constantes.COMBOBOX_LOAD_SECCION_RENIDMIENTO_FILTER_MATERIA_PENDIENTE):
               #carga secciones para las pantallas del rendimiento
               conexion_bd.set_tabla(constantes.TABLA_SECCION)
-              data_secciones=conexion_bd.get_allData([constantes.CLAVE_SECCION,"total_estud"],2)
+              data_secciones=conexion_bd.get_allData([constantes.CLAVE_SECCION,"total_estud"])
               new_data=["elegir"]
               for secc in data_secciones:
                  if(secc[0]!="default"):
@@ -1083,11 +1128,13 @@ class UI_Event:
                         if(ev_value==constantes.COMBOBOX_LOAD_SECCION_RENIDMIENTO_FILTER_MATERIA_PENDIENTE):
                            #prevent add students with 'materia pendientes' to the list
                            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                           estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE],1,[constantes.CLAVE_SECCION],[secc[0]],["and"])
+                           cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[secc[0]],"conditions_Verify":["="]}
+                           estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE],cond_data)
                            conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
                            num_pendientes=0
                            for estudent in estuds:
-                              pendientes=conexion_bd.get_allData([constantes.CLAVE_MATERIA_PENDIENTE],1,[constantes.CLAVE_ESTUDIANTE],[estudent[0]],["and"])
+                              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[estudent[0]],"conditions_Verify":["="]}
+                              pendientes=conexion_bd.get_allData([constantes.CLAVE_MATERIA_PENDIENTE],cond_data)
                               if(len(pendientes)>0):
                                   num_pendientes+=1    
                            if(num_pendientes==0):
@@ -1102,7 +1149,7 @@ class UI_Event:
            elif(ev_value==constantes.COMBOBOX_LOAD_LIST_FORMATOS):
                format_types=["elegir","nuevo","asistencia seccion","asistencia del personal","carnet","constancia de estudio","constancia de prestacion de servicios","cronograma","diario de clases","disp horario","evaluacion continua","inscripcion","info estudiante","info trabajador","lista de la seccion","lista de trabajadores","notas finales","notas finales del año","notas del momento","materia pendiente","planificacion","reporte de descargas","reporte de usuarios","sabana de notas"]
                conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-               data_formats=conexion_bd.get_allData(None,None)
+               data_formats=conexion_bd.get_allData([])
                for form in data_formats:
                   is_new=True
                   for temp_format in format_types:
@@ -1117,18 +1164,21 @@ class UI_Event:
               permiso=cred[2]
               usr=cred[0]
               conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-              dat_usr=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],1,[constantes.CLAVE_USUARIO],[usr],["and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_USUARIO],"condition_Types":["and"],"conditions_Values":[usr],"conditions_Verify":["="]}
+              dat_usr=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],cond_data)
               ced=dat_usr[0][0]
               if(permiso=="admin"):
                   Event_manager.activar_element("director_label",True,True)
                   conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                  data_trabaj=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR,constantes.CLAVE_CARGO,constantes.CLAVE_NOMBRE],3)
+                  data_trabaj=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR,constantes.CLAVE_CARGO,constantes.CLAVE_NOMBRE])
                   new_data=["sin asignar"]
                   if(ced!="000" and ced!="001"):
                       #prevent get data from default admin worker
-                      data_temp_user=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],1,[constantes.CLAVE_TRABAJADOR],[ced],["and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[ced],"conditions_Verify":["="]}
+                      data_temp_user=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],cond_data)
                       conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                      data_name_user=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_temp_user[0][0]],["and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_temp_user[0][0]],"conditions_Verify":["="]}
+                      data_name_user=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                       val=ced+"-"
                       for temp_name in data_name_user[0]:
                          if(temp_name!="" and temp_name!="..."):
@@ -1138,13 +1188,15 @@ class UI_Event:
                       if(trabaj[0]!="000" and trabaj[0]!="001" and trabaj[0]!=ced):
                           #prevent get data for default admin worker or the actual admin worker
                           conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                          data_cargo=conexion_bd.get_allData(["cargo","cargo_ministerio"],2,[constantes.CLAVE_CARGO],[trabaj[1]],["and"])
+                          cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[trabaj[1]],"conditions_Verify":["="]}
+                          data_cargo=conexion_bd.get_allData(["cargo","cargo_ministerio"],cond_data)
                           if(data_cargo!=[]):
                                if(data_cargo[0][0].lower()!="secretaria" and data_cargo[0][0].lower()!="obrero"):
                                     if(data_cargo[0][1].endswith("VI") or data_cargo[0][1].endswith("V") or data_cargo[0][1].endswith("IV")):
                                         valor_temp=trabaj[0]+"-"
                                         conexion_bd.set_tabla(constantes.TABLA_NOMBRE)                 
-                                        data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[trabaj[2]],["and"])
+                                        cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[trabaj[2]],"conditions_Verify":["="]}
+                                        data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                                         for name_temp in data_nomb[0]:
                                                if(name_temp!="" and name_temp!="..."):
                                                     valor_temp=valor_temp+name_temp.capitalize()+" "                                                
@@ -1167,13 +1219,14 @@ class UI_Event:
                 #action when indicate the worker is 'docente'
                 values=["elegir","Docente","Docente de Aula",]
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO],1)
+                lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO])
                 posibles=["Coordinador de Evaluacion","Coordinador de Orientacion","Sub Director Academico","Sub Director Administrativo"]
                 conexion_bd.set_tabla(constantes.TABLA_CARGO)
                 for posibl in posibles:
                    valid_carg=True
                    for trab in lista_trabaj:
-                     data_cargo=conexion_bd.get_allData(["cargo"],1,[constantes.CLAVE_CARGO],[trab[0]],["and"])
+                     cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[trab[0]],"conditions_Verify":["="]}
+                     data_cargo=conexion_bd.get_allData(["cargo"],cond_data)
                      if(data_cargo!=[]):
                          if(data_cargo[0][0].lower()==posibl.lower()):
                                 valid_carg=False
@@ -1190,10 +1243,12 @@ class UI_Event:
                       empl=empl[0]
                    else:
                       empl=""
-                   data_empl=conexion_bd.get_allData([constantes.CLAVE_CARGO],1,[constantes.CLAVE_TRABAJADOR],[empl],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[empl],"conditions_Verify":["="]}   
+                   data_empl=conexion_bd.get_allData([constantes.CLAVE_CARGO],cond_data)
                    if(data_empl!=[]):
                      conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                     carg_empl=conexion_bd.get_allData(["cargo"],1,[constantes.CLAVE_CARGO],[data_empl[0][0]],["and"])        
+                     cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_empl[0][0]],"conditions_Verify":["="]}
+                     carg_empl=conexion_bd.get_allData(["cargo"],cond_data)        
                      if(carg_empl!=[]):
                         existe=False
                         for vl in values:

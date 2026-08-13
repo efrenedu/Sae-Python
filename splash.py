@@ -29,22 +29,39 @@ class SplashP:
         self.root.grid_columnconfigure(0,weight=1)
         self.Mainframe=ctk.CTkFrame(self.root,fg_color="white",bg_color='white')
         self.Mainframe.grid(row=0,column=0,sticky="",padx=20,pady=20)
-        self.configure_splash()
-             
-        self.root.update_idletasks()
-        self.root.mainloop()
+        self.status="OK"
+        if(self.configure_splash()==False):
+           self.status="Fail"
+        else:     
+           self.root.update_idletasks()
+           self.root.mainloop()
 
+    #return the status of Init of Splash
+    def get_status_Init(self):
+        return self.status
     #Configure the Components
     def configure_splash(self):
-        url=f"{constantes.SERVER}UI_Json/Splash_Panel.json"
-        response=requests.get(url)
-        if(response.status_code>400):
-           General.show_error("Panel not Found","Json File Not Found")
-           return
-        raw_data=response.content  
-        from io import BytesIO
-        temp_file=BytesIO(raw_data)  
-        data=json.load(temp_file)
+        import time
+        timestamp=str(int(time.time()))
+        data_user={
+          "token":"",
+          "timestamp":timestamp,
+          "target_panel":"Splash_Panel"
+        }
+        from General import General
+        url_send=f"{constantes.SERVER}panel_manager.php"
+        response=requests.post(url_send,data=data_user)
+        json_content=json.loads(response.content)
+        if(json_content["status"]=="Error"):
+            General.show_error(json_content["message"],"Error")
+            return False
+        elif(json_content["status"]=="Invalid Access" or json_content["status"]=="Invalid Token"):
+           General.show_message(json_content["message"],"Alerta")
+           return False
+        redirect=json_content["Redirect_Panel"] 
+        if(redirect!="No Redirect"):
+            return False
+        data=json_content["data"] 
         widgets=data["Widgets"]
         for element in widgets:
           posicion=element["Posicion"]

@@ -45,46 +45,46 @@ class UI:
         items_helpMenu=2
         
         #Add the Items to the List of Menus and set it disabled as default value
-        m_usuario.add_command(label='inicio',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,True),accelerator="Ctrl+a",font=fuente)
+        m_usuario.add_command(label='inicio',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,None,True),accelerator="Ctrl+a",font=fuente)
         m_usuario.add_command(label='logout',command=Event_manager.logout,accelerator="Ctrl+a",font=fuente)
-        m_usuario.add_command(label='modificar informacion',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_UPDATE_USER),accelerator="Ctrl+a",font=fuente)
+        m_usuario.add_command(label='modificar informacion',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_UPDATE_USER,None,True),accelerator="Ctrl+a",font=fuente)
         for i in range(0,items_userMenu):
            m_usuario.entryconfig(i,state=tk.DISABLED)   
-        m_registros.add_command(label='registrar personal',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_PERSONAL),accelerator="Ctrl+a",font=fuente)
-        m_registros.add_command(label='registrar disponibilidad de horario',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_DISP_HORARIO),accelerator="Ctrl+a",font=fuente)
-        m_registros.add_command(label='registrar formato',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_FORMATO),accelerator="Ctrl+a",font=fuente)
-        m_registros.add_command(label='registrar area de formacion',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_AREA_FORMACION),accelerator="Ctrl+a",font=fuente)
-        m_registros.add_command(label='registrar horario',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_HORARIO),accelerator="Ctrl+a",font=fuente)
+        m_registros.add_command(label='registrar personal',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_PERSONAL,None,True),accelerator="Ctrl+a",font=fuente)
+        m_registros.add_command(label='registrar disponibilidad de horario',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_DISP_HORARIO,None,True),accelerator="Ctrl+a",font=fuente)
+        m_registros.add_command(label='registrar formato',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_FORMATO,None,True),accelerator="Ctrl+a",font=fuente)
+        m_registros.add_command(label='registrar area de formacion',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_AREA_FORMACION,None,True),accelerator="Ctrl+a",font=fuente)
+        m_registros.add_command(label='registrar horario',command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_REGISTRO_HORARIO,None,True),accelerator="Ctrl+a",font=fuente)
         for i in range(0,items_RegisterMenu):
            m_registros.entryconfig(i,state=tk.DISABLED) 
-        m_procesos.add_command(label="inscripcion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION),accelerator="Ctrl+a",font=fuente)
-        m_procesos.add_command(label="planificacion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION),accelerator="Ctrl+a",font=fuente)
-        m_procesos.add_command(label="rendimiento",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO),accelerator="Ctrl+a",font=fuente)
+        m_procesos.add_command(label="inscripcion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,None,True),accelerator="Ctrl+a",font=fuente)
+        m_procesos.add_command(label="planificacion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,None,True),accelerator="Ctrl+a",font=fuente)
+        m_procesos.add_command(label="rendimiento",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO,None,True),accelerator="Ctrl+a",font=fuente)
         for i in range(0,items_ProcessMenu):
            m_procesos.entryconfig(i,state=tk.DISABLED) 
-        m_consultas.add_command(label="personal",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_PERSONAL),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="estudiantes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_ESTUDIANTES),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="docentes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_PROFESORES),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="secciones",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_SECCIONES),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="momentos",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_MOMENTOS),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="disponibilidad de horarios",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_DISP_HORARIO),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="areas de formacion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_AREAS_FORMACION),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="areas dictadas por docentes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_AREAS_DOCENTE),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="materia pendiente",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_MAT_PEND),accelerator="Ctrl+a",font=fuente)
-        m_consultas.add_command(label="descargas de trabajadores",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_DESCARGAS),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="personal",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_PERSONAL,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="estudiantes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_ESTUDIANTES,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="docentes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_PROFESORES,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="secciones",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_SECCIONES,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="momentos",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_MOMENTOS,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="disponibilidad de horarios",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_DISP_HORARIO,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="areas de formacion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_AREAS_FORMACION,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="areas dictadas por docentes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_AREAS_DOCENTE,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="materia pendiente",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_MAT_PEND,None,True),accelerator="Ctrl+a",font=fuente)
+        m_consultas.add_command(label="descargas de trabajadores",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_CONSULTA_DESCARGAS,None,True),accelerator="Ctrl+a",font=fuente)
         for i in range(0,items_ConsultMenu):
            m_consultas.entryconfig(i,state=tk.DISABLED)
-        m_servicios.add_command(label="respaldo de bd",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_RESPALDO_BD),accelerator="Ctrl+a",font=fuente)
-        m_servicios.add_command(label="gestion de usuarios",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_GESTION_USUARIO),accelerator="Ctrl+a",font=fuente)
-        m_servicios.add_command(label="auditorias",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_AUDITORIA),accelerator="Ctrl+a",font=fuente)
-        m_servicios.add_command(label="estadisticas",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_ESTADISTICA),accelerator="Ctrl+a",font=fuente)
-        m_servicios.add_command(label="actualizar estudiantes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_UPDATE_ESTUDIANTE),accelerator="Ctrl+a",font=fuente)
-        m_servicios.add_command(label="reactivar momento",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_REACTIVAR_MOMENTO),accelerator="Ctrl+a",font=fuente)
-        m_servicios.add_command(label="reorganizar secciones",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_REORGANIZAR_SECCIONES),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="respaldo de bd",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_RESPALDO_BD,None,True),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="gestion de usuarios",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_GESTION_USUARIO,None,True),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="auditorias",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_AUDITORIA,None,True),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="estadisticas",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_ESTADISTICA,None,True),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="actualizar estudiantes",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_UPDATE_ESTUDIANTE,None,True),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="reactivar momento",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_REACTIVAR_MOMENTO,None,True),accelerator="Ctrl+a",font=fuente)
+        m_servicios.add_command(label="reorganizar secciones",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_REORGANIZAR_SECCIONES,None,True),accelerator="Ctrl+a",font=fuente)
         for i in range(0,items_ServiceMenu):
            m_servicios.entryconfig(i,state=tk.DISABLED)           
         m_ayuda.add_command(label="manual de usuario",command=lambda:Event_manager.download_manual(),accelerator="Ctrl+a",font=fuente)
-        m_ayuda.add_command(label="informacion de institucion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_AYUDA_INFORMACION),accelerator="Ctrl+a",font=fuente)
+        m_ayuda.add_command(label="informacion de institucion",command=lambda:cls.vent.update_pantallas(constantes.PANTALLA_AYUDA_INFORMACION,None,True),accelerator="Ctrl+a",font=fuente)
         for i in range(0,items_helpMenu):
            m_ayuda.entryconfig(i,state=tk.DISABLED)
         barra.entryconfig("usuario",state=tk.DISABLED)
@@ -98,18 +98,36 @@ class UI:
         
     #Read the data of a Json data of a panel
     @classmethod  
-    def read_Jsondata(cls,panel_name):
+    def read_Jsondata(cls,panel_name,usr):
+        import time
+        timestamp=str(int(time.time()))
+        data_user={
+          "token":"",
+          "timestamp":timestamp,
+          "target_panel":panel_name
+        }
+        if(usr!=None):
+           data_user["token"]=usr.get_credentials()[4] 
+        res=0
         import requests 
-        url=f"{constantes.SERVER}UI_Json/{panel_name}.json"
-        response=requests.get(url)
-        if(response.status_code>400):
-           General.show_error("Panel not Found","Json File Not Found")
-           return
-        raw_data=response.content  
-        from io import BytesIO
-        temp_file=BytesIO(raw_data)  
+        from General import General
+        url_send=f"{constantes.SERVER}panel_manager.php"
+        response=requests.post(url_send,data=data_user)
+        json_content=json.loads(response.content)
+        if(json_content["status"]=="Error"):
+            General.show_error(json_content["message"],"Error")
+            return -1
+        elif(json_content["status"]=="Invalid Access" or json_content["status"]=="Invalid Token"):
+           General.show_message(json_content["message"],"Alerta")
+           if(json_content["status"]=="Invalid Token"):
+               res=-3
+           else:
+              res=-2
+        redirect=json_content["Redirect_Panel"] 
+        if(redirect!="No Redirect"):
+            panel_name=redirect
+        data=json_content["data"]       
         cls.vent.build_panel(constantes.FG_DEFAULT_BACKGROUND,panel_name)
-        data=json.load(temp_file)
         widgets=data["Widgets"]
         for element in widgets:
               posicion=element["Posicion"]
@@ -117,6 +135,7 @@ class UI:
               widget_type=element["Type"]
               cls.add_component(posicion,widget_type,props)
         cls.vent.activate_MainPanel()
+        return res
    
     #add the component Required to the Panel 
     @classmethod  

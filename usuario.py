@@ -11,11 +11,7 @@ class usuario:
         self.permiso=""
         self.data_process=[]
         self.data_expediente=[]
-        self.passwd=""
-    
-    #change the password data
-    def change_password(self,new_val):
-        self.passwd=new_val
+        self.token=""
         
     #Save data from Process of System
     def recibe_data_process(self,dat):
@@ -39,151 +35,36 @@ class usuario:
     #Execute the Loggin Request from a User        
     def login(self,usr,passw):
         from General import General
-        passw=General.encriptar(passw)
-        conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-        res=conexion_bd.get_allData(constantes.CAMPOS_USUARIO,len(constantes.CAMPOS_USUARIO),conditions=["usuario","password"],values=[usr,passw],condition_types=["and","and"])
-        invalid_credentials=-1
-        bloqueado=False
-        valido=False
-        from tiempo import tiempo
-        time_object=tiempo()
-        hora=time_object.get_tiempo()
-        fecha=time_object.get_fecha()
-        
-        if(usr=="" and passw==""):
-             invalid_credentials=2   
-        elif(usr=="" and passw!=""):
-             invalid_credentials=0
-        elif(passw=="" and usr!=""):
-             invalid_credentials=1      
-        elif(res!=[]):
-           #verify User
-           if(res[0][6]=="False"):
-             #user No Locked
-             self.user=res[0][0] #id user
-             self.id_trabaj=res[0][2]  #cedula
-             self.permiso=res[0][3]  #permiso
-             self.icon=res[0][4]  #foto
-             self.passwd=res[0][1]
-             valido=True
-             conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)
-             data_intentos=conexion_bd.get_allData(constantes.CAMPOS_INTENTOS_USUARIO,len(constantes.CAMPOS_INTENTOS_USUARIO),[constantes.CLAVE_INTENTOS_USUARIO],[res[0][5]],["and"])
-             if(int(data_intentos[0][1])>0):
-                #Loggin Success ,Remove Failed Try to Loggin 
-                conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],[str(0),"",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res[0][5]],["and"])
-             conexion_bd.set_tabla(constantes.TABLA_USUARIO)       
-           else:
-                #user Locked, Verify if is Time to Unlock him
-                bloq=True
-                conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)
-                data_intentos=conexion_bd.get_allData(constantes.CAMPOS_INTENTOS_USUARIO,len(constantes.CAMPOS_INTENTOS_USUARIO),[constantes.CLAVE_INTENTOS_USUARIO],[res[0][5]],["and"])
-                last_tiempo=data_intentos[0][3]
-                last_fecha=data_intentos[0][2]
-                next_date=time_object.get_next_date3(last_fecha,last_tiempo,20)
-                next_date_bloq=time_object.get_next_date3(last_fecha,last_tiempo,60)
-                if(time_object.is_previous(next_date_bloq[0],fecha)):
-                    num_intentos=0
-                    bloq=False
-                    conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["0","",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res[0][5]],["and"])
-                    conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                    conexion_bd.update_data(["bloqueado",],["False"],1,["usuario"],[usr],["and"])              
-                elif(time_object.is_previous(next_date_bloq[0],fecha,False)):
-                     if(time_object.is_previous_time(next_date_bloq[1],hora)):
-                        num_intentos=0
-                        bloq=False
-                        conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["0","",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res[0][5]],["and"])
-                        conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                        conexion_bd.update_data(["bloqueado",],["False"],1,["usuario"],[usr],["and"])    
-                bloqueado=bloq
-                if(bloqueado==True):
-                   valido=False
-                else:
-                   self.user=res[0][0] #id user
-                   self.id_trabaj=res[0][2]  #cedula
-                   self.permiso=res[0][3]  #permiso
-                   self.icon=res[0][4]  #foto
-                   valido=True
-          
-        else:
-           #Failed Try to login, Veify if Add Failed Try to the Count or Lock Him
-           res2=conexion_bd.get_allData(constantes.CAMPOS_USUARIO,len(constantes.CAMPOS_USUARIO),conditions=["usuario"],values=[usr],condition_types=["and"])
-           if(res2!=[]):
-                conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)
-                data_intentos=conexion_bd.get_allData(constantes.CAMPOS_INTENTOS_USUARIO,len(constantes.CAMPOS_INTENTOS_USUARIO),[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                num_intentos=int(data_intentos[0][1])
-                bloq=res2[0][6]
-                last_tiempo=data_intentos[0][3]
-                last_fecha=data_intentos[0][2]
-                next_date=time_object.get_next_date3(last_fecha,last_tiempo,20)
-                next_date_bloq=time_object.get_next_date3(last_fecha,last_tiempo,60)
-                if(next_date!=" " and bloq=="False"):
-                    if(time_object.is_previous(next_date[0],fecha)):
-                        conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["0","",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                        num_intentos=0
-                    elif(time_object.is_previous(next_date[0],fecha,False)):
-                        if(time_object.is_previous_time(next_date[1],hora)):
-                            conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["0","",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                            num_intentos=0
-                elif(next_date_bloq!=" " and bloq=="True"): 
-                    if(time_object.is_previous(next_date_bloq[0],fecha)):
-                        num_intentos=0
-                        bloq="False"
-                        conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["0","",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                        conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                        conexion_bd.update_data(["bloqueado",],["False"],1,["usuario"],[usr],["and"])   
-                    elif(time_object.is_previous(next_date_bloq[0],fecha,False)):
-                        if(time_object.is_previous_time(next_date_bloq[1],hora)):
-                            num_intentos=0
-                            bloq="False"
-                            conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["0","",""],3,[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                            conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                            conexion_bd.update_data(["bloqueado",],["False"],1,["usuario"],[usr],["and"])
-                if(bloq=="True"):
-                    bloqueado=True
-                if(bloq=="False" and num_intentos>=3):
-                    conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)
-                    conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],["3",fecha,hora],3,[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                    conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                    conexion_bd.update_data(["bloqueado",],["True"],1,["usuario"],[usr],["and"])
-                    bloqueado=True
-                    conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                    conexion_bd.add_data([conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),usr,time_object.get_fecha(),time_object.get_tiempo(),"gestion usuario","bloqueo de usuario","",time_object.get_fecha()])
-                    conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                elif(bloq=="False" and num_intentos<3):
-                    conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)
-                    conexion_bd.update_data(["num_intentos","last_fecha","last_hora"],[str(num_intentos+1),fecha,hora],3,[constantes.CLAVE_INTENTOS_USUARIO],[res2[0][5]],["and"])
-                    conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                    conexion_bd.add_data([conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),usr,time_object.get_fecha(),time_object.get_tiempo(),"gestion usuario","inicio de sesion fallido","",time_object.get_fecha()])
-                    conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-        if(valido):
-           #login valid
-           return [0,self.permiso]
-        else:
-           #login invalid
-           if(bloqueado==False):
-              if(invalid_credentials!=-1):
-                   if(invalid_credentials==0):
-                       return [-1,None]
-                   elif(invalid_credentials==1):
-                        return [-2,None]
-                   else:
-                        return [-3,None]
-              else:
-                  return [-4,None]
-           else:
-                 return [-5,None]
-    
+        import time
+        import requests
+        import json
+        url_login=f"{constantes.SERVER}login.php"
+        timestamp=str(int(time.time()))
+        data_send={"password":passw,"timestamp":timestamp,"user_client":usr}
+        response=requests.post(url_login,data=data_send)
+        json_content=json.loads(response.content)
+        if(json_content["status"]=="Error"):
+            General.show_error(json_content["message"],"Error")
+            return [-1,None]
+        foto_user=json_content["Foto_User"]
+        nivel_acceso=json_content["Acces_User"]
+        self.user=usr 
+        self.id_trabaj=json_content["CI_trabaj"]
+        self.permiso=nivel_acceso  
+        self.icon=foto_user
+        self.token=json_content["TokenSession"]
+        return [0,self.permiso]        
+
     #Get the Credentials of User: Id, worker id, access level, icon , password
     def get_credentials(self):
-         return [self.user,self.id_trabaj,self.permiso,self.icon,self.passwd]
+         return [self.user,self.id_trabaj,self.permiso,self.icon,self.token]
 
     #Get the Historial of Actions of User  
     def get_historia(self):
          return self.historia.get_historia()
          
-    #Method for Overrid return the Permit Matrix of User
+    #Method for Overrid return the Permit Matrix of User for the Menus
     def get_permiso_matrix(self):
-      #matriz de permisos del usuario coordinador
       return[[False,False,False,False],[False,False,False,False,False,False],[False,False,False,False],[False,False,False,False,False,False,False,False,False,False,False,False],[False,False,False,False,False,False,False,False],[False,False,False]]
     
     #add an Action to the Historial of User
@@ -208,10 +89,12 @@ class usuario:
               valor=fields[i].get_text()
               if(id_f=="cedula_estud"):
                  conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                 d_e=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],1,[constantes.CLAVE_ESTUDIANTE],[valor],["and"])
+                 cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[valor],"conditions_Verify":["="]} 
+                 d_e=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
                  if(d_e!=[]):
                      conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                     d_exp=conexion_bd.get_allData(["src_exp","src_foto"],2,[constantes.CLAVE_EXPEDIENTE],[d_e[0][0]],["and"])
+                     cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[d_e[0][0]],"conditions_Verify":["="]} 
+                     d_exp=conexion_bd.get_allData(["src_exp","src_foto"],cond_data)
                      old_exp=[d_exp[0][0],d_exp[0][1]]
               if(valido==0 and id_f!="cedula_estud"):
                   if(id_f=="nombre"):
@@ -331,7 +214,8 @@ class usuario:
                              data_d[drt]=temp_dire.lower() 
                           id_d=""
                           conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                          res=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),["sector","parroquia","casa"],[data_d[0],data_d[1],data_d[2]],["and","and","and"])
+                          cond_data={"conditions_Names":["sector","parroquia","casa"],"condition_Types":["and","and","and"],"conditions_Values":[data_d[0],data_d[1],data_d[2]],"conditions_Verify":["=","=","="]} 
+                          res=conexion_bd.get_allData([],cond_data)
                           if(res==[]):
                               id_d=conexion_bd.generate_id(True,constantes.CLAVE_DIRECCION)
                               data_dir=[True,id_d,data_d[0],data_d[1],data_d[2]]
@@ -364,7 +248,8 @@ class usuario:
                              dir_r[t_dr]=temp_dire.lower()
                              
                            conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                           temp_domicilio=conexion_bd.get_allData([constantes.CLAVE_DIRECCION,"sector","parroquia","casa"],4,["sector","parroquia","casa"],[dir_r[0],dir_r[1],dir_r[2]],["and","and","and"])
+                           cond_data={"conditions_Names":["sector","parroquia","casa"],"condition_Types":["and","and","and"],"conditions_Values":[dir_r[0],dir_r[1],dir_r[2]],"conditions_Verify":["=","=","="]} 
+                           temp_domicilio=conexion_bd.get_allData([constantes.CLAVE_DIRECCION,"sector","parroquia","casa"],cond_data)
                            if(temp_domicilio!=[]):
                               data_repres[5] =True
                               data_repres[6]=temp_domicilio[0][0]
@@ -415,7 +300,7 @@ class usuario:
         if(len(data)<1):
            return -1
         conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        dat_cronog=conexion_bd.get_allData(None,None)
+        dat_cronog=conexion_bd.get_allData([])
         init_cronog=""
         if(dat_cronog!=[]): 
             init_cronog=dat_cronog[0][1]
@@ -479,7 +364,7 @@ class coordinador(usuario):
        self.id_trabaj=credentials[1]  
        self.permiso=credentials[2]  
        self.icon=credentials[3] 
-       self.passwd=credentials[4]
+       self.token=credentials[4]
        self.historia.set_user(self.user)
        
     #Return permit matrix of User   
@@ -499,7 +384,7 @@ class admin(usuario):
        self.id_trabaj=credentials[1]  
        self.permiso=credentials[2]  
        self.icon=credentials[3]
-       self.passwd=credentials[4]
+       self.token=credentials[4]
        self.historia.set_user(self.user)
     
     #Return permit matrix of User    
@@ -520,7 +405,7 @@ class directivo(usuario):
        self.id_trabaj=credentials[1]  
        self.permiso=credentials[2]  
        self.icon=credentials[3] 
-       self.passwd=credentials[4]
+       self.token=credentials[4]
        self.historia.set_user(self.user) 
     
     #Return permit matrix of User        
@@ -540,12 +425,12 @@ class secretaria(usuario):
        self.id_trabaj=credentials[1]  
        self.permiso=credentials[2]  
        self.icon=credentials[3]
-       self.passwd=credentials[4]
+       self.token=credentials[4]
        self.historia.set_user(self.user)
     
     #Return permit matrix of User    
     def get_permiso_matrix(self):
-      return[[True,True,True,True],[True,False,True,False,False,False],[True,True,False,True],[True,True,True,True,True,True,True,True,True,True,False],[True,False,False,False,True,False,False,False],[True,True,True]]
+      return[[True,True,True,True],[True,False,True,False,False,False],[True,True,False,False],[True,True,True,True,True,True,True,True,True,True,False],[True,False,False,False,True,False,False,False],[True,True,True]]
 
 #Save the Actions data of a User
 class historial:

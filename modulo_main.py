@@ -7,12 +7,13 @@ from splash import SplashP
 
 #Modulo Main : Init the System : Data Base, UI,Windows,
 def main():
+    conexion_bd.get_conector()
     if(conexion_bd.init()==True):
        vent=ventana("Sae Python")
        UI.init_UI(vent)
        splash=SplashP(vent,{"Width":520,"Height":450})
-    else:
-      General.show_error("error loading data from server","error")
+       if(splash.get_status_Init()!="OK"):
+         vent.close()
     return 0
 
 

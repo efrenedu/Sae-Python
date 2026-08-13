@@ -102,8 +102,9 @@ class Consult_Manager:
            if(clave==" "):
               General.show_message("por favor seleccione una seccion","seccion no valida")
               return
-           conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-           data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and"])
+           conexion_bd.set_tabla(constantes.TABLA_FORMATO)
+           cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                          
+           data_formato=conexion_bd.get_allData(["src_form"],cond_data)
            if(data_formato==[]):
               General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
               return
@@ -115,9 +116,11 @@ class Consult_Manager:
                return
            data_form=response.content
            conexion_bd.set_tabla(constantes.TABLA_SECCION)
-           curso=conexion_bd.get_allData(["año"],1,[constantes.CLAVE_SECCION],[clave],["and"])[0][0]
+           cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[clave],"conditions_Verify":["="]}              
+           curso=conexion_bd.get_allData(["año"],cond_data)[0][0]
            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-           data_seccion=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[clave],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[clave],"conditions_Verify":["="]}                 
+           data_seccion=conexion_bd.get_allData([],cond_data)
            conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
            if(data_seccion==[]):
                General.show_message("seccion sin estudiantes registrados","seccion vacia o inexistente")
@@ -126,7 +129,8 @@ class Consult_Manager:
            data_nomina=[]
            for i in range(0,num_estud):
                ci=data_seccion[i][0]
-               data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_seccion[i][1]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_seccion[i][1]],"conditions_Verify":["="]}              
+               data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
                fullname=""
                for j in range(0,4):
                    if(data_nombre[0][j]!="" and data_nombre[0][j]!=" "):
@@ -145,7 +149,7 @@ class Consult_Manager:
            data_replace.append(["Turno:",turno])
            data_replace.append(["Fecha:",time_object.get_fecha()])
            conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-           data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA],1)
+           data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA])
            if(data_cronog!=[]):
                data_replace.append(["periodo escolar:",data_cronog[0][0]])                     
            filename=tipo+" "+clave+".xlsx"
@@ -154,7 +158,8 @@ class Consult_Manager:
            documento.request(pnl.win,[path,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_estud,data_nomina,"Nº",2,data_replace,msg_end],True)    
        elif(tipo=="inscripcion"):
           conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-          data_form=conexion_bd.get_allData(["src_form"],1,[constantes.CLAVE_FORMATO],[tipo],["and"])
+          cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                 
+          data_form=conexion_bd.get_allData(["src_form"],cond_data)
           if(data_form==[]):
               General.show_error("sin formato de inscripcion","formato de isncripcion no registrado")
               return
@@ -167,10 +172,12 @@ class Consult_Manager:
           replace=[]
           if(receive_data[1][10]!="" and receive_data[1][10]!="..."):
               conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-              data_e=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],1,[constantes.CLAVE_ESTUDIANTE],[receive_data[0][0]],["and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[receive_data[0][0]],"conditions_Verify":["="]}              
+              data_e=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
               if(data_e!=[]):
                   conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                  data_f=conexion_bd.get_allData(["src_foto"],1,[constantes.CLAVE_EXPEDIENTE],[data_e[0][0]],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_e[0][0]],"conditions_Verify":["="]}              
+                  data_f=conexion_bd.get_allData(["src_foto"],cond_data)
                   if(data_f!=[]):
                       if(data_f[0][0]!="" and data_f[0][0]!="..."):
                           replace.append(["FOTO:",constantes.SERVER+data_f[0][0]])
@@ -235,7 +242,7 @@ class Consult_Manager:
           data_cells=[]
           year_inscription=int(receive_data[1][9])
           conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-          data_cronog=conexion_bd.get_allData(None,None)
+          data_cronog=conexion_bd.get_allData([])
           periodo=""
           if(data_cronog!=[]):
               periodo=data_cronog[0][0]
@@ -264,10 +271,12 @@ class Consult_Manager:
                       replace.append([ex,"X"])
           else:
               conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-              dat_expedent=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],1,[constantes.CLAVE_ESTUDIANTE],[receive_data[0][0]],["and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[receive_data[0][0]],"conditions_Verify":["="]}              
+              dat_expedent=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
               if(dat_expedent!=[]):
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                expedent=conexion_bd.get_allData(["src_exp"],1,[constantes.CLAVE_EXPEDIENTE],[dat_expedent[0][0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[dat_expedent[0][0]],"conditions_Verify":["="]}              
+                expedent=conexion_bd.get_allData(["src_exp"],cond_data)
                 if(expedent!=[]):
                     conseguido=False
                     proceder=False  
@@ -328,7 +337,8 @@ class Consult_Manager:
               General.show_message("por favor seleccione un estudiante","estudiante no valido")
               return
            conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-           data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+           cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+           data_formato=conexion_bd.get_allData(["src_form"],cond_data)
            if(data_formato==[]):
               General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
               return
@@ -340,14 +350,16 @@ class Consult_Manager:
                return
            data_form=response.content
            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-           data_estud=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[str(clave)],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[str(clave)],"conditions_Verify":["="]}                
+           data_estud=conexion_bd.get_allData([],cond_data)
            if(data_estud==[]):
                 General.show_message("cedula del estudiante no registrada","estudiante inexistente")
                 return
            num_estud=0
            data_modif=[]
            conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_estud[0][1]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estud[0][1]],"conditions_Verify":["="]}              
+           data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
            nombre=""
            apellido=""
            for index_name in range(0,len(data_nombre[0])):
@@ -358,7 +370,8 @@ class Consult_Manager:
                   if(data_nombre[0][index_name]!="" and data_nombre[0][index_name]!="..."):
                       apellido=apellido+data_nombre[0][index_name]+" "             
            conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-           data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_ESTUD,len(constantes.CAMPOS_ESTATUS_ESTUD),[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[0][2]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[0][2]],"conditions_Verify":["="]}                 
+           data_estatus=conexion_bd.get_allData([],cond_data)
            data_modif.append(["NOMBRES:",nombre])
            data_modif.append(["APELLIDOS:",apellido])
            data_modif.append(["CEDULA:",data_estud[0][0]])
@@ -388,31 +401,35 @@ class Consult_Manager:
                 secc=temp_secc+" "+"(Tarde)"
            data_modif.append(["SECCION:",secc])
            conexion_bd.set_tabla(constantes.TABLA_SECCION)
-           data_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),[constantes.CLAVE_SECCION],[data_estud[0][3]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[data_estud[0][3]],"conditions_Verify":["="]}                 
+           data_secc=conexion_bd.get_allData([],cond_data)
            if(data_secc!=[]):
                 if(data_secc[0][0].lower()!="default"):
                     conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-                    data_hor=conexion_bd.get_allData(constantes.CAMPOS_HORARIO,len(constantes.CAMPOS_HORARIO),[constantes.CLAVE_HORARIO],[data_secc[0][3]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data_secc[0][3]],"conditions_Verify":["="]}              
+                    data_hor=conexion_bd.get_allData([],cond_data)
                     if(data_hor!=[]):
                       data_modif.append(["TURNO:",data_hor[0][2]])
                 else:
                     data_modif.append(["TURNO:",""])
                 
            conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-           data_pendiente=conexion_bd.get_allData(constantes.CAMPOS_MATERIA_PENDIENTE,len(constantes.CAMPOS_MATERIA_PENDIENTE),[constantes.CLAVE_ESTUDIANTE],[data_estud[0][0]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_estud[0][0]],"conditions_Verify":["="]}              
+           data_pendiente=conexion_bd.get_allData([],cond_data)
            id_representant=data_estud[0][5]
            if(id_representant.startswith("v-")==False and id_representant.startswith("V-")==False and id_representant.startswith("e-")==False and id_representant.startswith("E-")==False):
                 id_representant="V-"+id_representant        
            data_modif.append(["MATERIAS PENDIENTE:",str(len(data_pendiente))+" materias"])
            data_modif.append(["CEDULA_R:",id_representant])
            conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
-           data_repres=conexion_bd.get_allData(constantes.CAMPOS_REPRESENTANTE,len(constantes.CAMPOS_REPRESENTANTE),[constantes.CLAVE_REPRESENTANTE],[data_estud[0][5]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[data_estud[0][5]],"conditions_Verify":["="]}              
+           data_repres=conexion_bd.get_allData([],cond_data)
            if(data_repres==[]):
                 General.show_error("error de datos del representante","representante invalido")
-                return
-                      
+                return        
            conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           data_nomb_r=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_repres[0][1]],["AND"])
+           cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_repres[0][1]],"conditions_Verify":["="]}                 
+           data_nomb_r=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
            nombre_r=""
            apellido_r=""
            for name_index in range(0,4):
@@ -428,11 +445,13 @@ class Consult_Manager:
            data_modif.append(["PARENTESCO:",data_estud[0][9]])
            data_modif.append(["OCUPACION:",data_repres[0][4]])
            conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-           data_dir_representant=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[data_repres[0][5]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[data_repres[0][5]],"conditions_Verify":["="]}               
+           data_dir_representant=conexion_bd.get_allData([],cond_data)
            direcc_repres=data_dir_representant[0][1]+","+data_dir_representant[0][2]+","+data_dir_representant[0][3]
            data_modif.append(["DIRECCION REPRESENTANTE:",direcc_repres])
            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-           data_exp=conexion_bd.get_allData(constantes.CAMPOS_EXPEDIENTE,len(constantes.CAMPOS_EXPEDIENTE),[constantes.CLAVE_EXPEDIENTE],[data_estud[0][4]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_estud[0][4]],"conditions_Verify":["="]}              
+           data_exp=conexion_bd.get_allData([],cond_data)
            if(data_exp==[]):
                 data_modif.append(["FOTO:","not found"])
            else:
@@ -441,7 +460,8 @@ class Consult_Manager:
                 else:
                    data_modif.append(["FOTO:","not found"])
            conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-           data_dir=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[data_estud[0][8]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[data_estud[0][8]],"conditions_Verify":["="]}              
+           data_dir=conexion_bd.get_allData([],cond_data)
            if(data_dir==[]):
                 General.show_error("error de datos de la direccion","representante invalido")
                 return
@@ -453,23 +473,26 @@ class Consult_Manager:
 
        elif(tipo=="lista de trabajadores"):
             conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-            trabajs=conexion_bd.get_allData(None,None)
+            trabajs=conexion_bd.get_allData([])
             data_nomina=[]
             if(trabajs==[]):
                 General.show_message("no existen trabajadores registrados")
                 return
             for tr in trabajs:
                 conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                dat_expedent=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[tr[7]],["and"])
-                if(dat_expedent!=[] and tr[0]!="000" and tr[0]!="001"):
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[tr[7]],"conditions_Verify":["="]}              
+                dat_estatus=conexion_bd.get_allData(["estatus"],cond_data)
+                if(dat_estatus!=[] and tr[0]!="000" and tr[0]!="001"):
                     #prevent get default worker of Admin User
-                    if(dat_expedent[0][0]!="inactivo"):
+                    if(dat_estatus[0][0]!="inactivo"):
+                        cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[tr[6]],"conditions_Verify":["="]}              
                         conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                        data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[tr[6]],["and"])
+                        data_cargo=conexion_bd.get_allData([],cond_data)
                         if(data_cargo!=[]):
                             data_row=[tr[0],"",data_cargo[0][1],data_cargo[0][4]]
                             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                            data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[tr[1]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[tr[1]],"conditions_Verify":["="]}              
+                            data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
                             nombre=""
                             if(data_nomb!=[]):
                                 nombre=data_nomb[0][0]
@@ -486,7 +509,8 @@ class Consult_Manager:
             data_replace=[]
             data_replace.append(["Fecha:",time_object.get_fecha()])
             conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-            data_form=conexion_bd.get_allData( ["src_form"],1,["tipo"],[tipo],["and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+            data_form=conexion_bd.get_allData( ["src_form"],cond_data)
             if(data_form==[]):
                 General.show_error("formato de nomina de trabajadores no registrado","formato no registrado")
                 return   
@@ -506,7 +530,8 @@ class Consult_Manager:
            if(clave==" "):
              General.show_message("por favor seleccione un trabajador","trabajador no valido")
            conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-           data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+           cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}               
+           data_formato=conexion_bd.get_allData(["src_form"],cond_data)
            if(data_formato==[]): 
                General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
                return
@@ -518,14 +543,19 @@ class Consult_Manager:
                return
            data_form=response.content
            conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-           data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[str(clave)],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[str(clave)],"conditions_Verify":["="]}              
+                
+           data_trabaj=conexion_bd.get_allData([],cond_data)
            if(data_trabaj==[]):
               General.show_message("cedula del trabajador no registrada","trabajador inexistente") 
               return
            conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-           data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_TRABAJ,len(constantes.CAMPOS_ESTATUS_TRABAJ),[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][7]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][7]],"conditions_Verify":["="]}              
+                
+           data_estatus=conexion_bd.get_allData([],cond_data)
            conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_trabaj[0][1]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}                
+           data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
            num_trabaj=0
            data_modif=[]
            nombre=""
@@ -547,11 +577,13 @@ class Consult_Manager:
            if(data_trabaj[0][3]!="" and data_trabaj[0][3]!="..."):
                data_modif.append(["TELEFONO:",data_trabaj[0][3]])  
            conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-           data_user=conexion_bd.get_allData(constantes.CAMPOS_USUARIO,len(constantes.CAMPOS_USUARIO),[constantes.CLAVE_TRABAJADOR],[data_trabaj[0][0]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][0]],"conditions_Verify":["="]}                
+           data_user=conexion_bd.get_allData([],cond_data)
            if(data_user!=[]):
                data_modif.append(["USUARIO ASIGNADO:",data_user[0][0]])
            conexion_bd.set_tabla(constantes.TABLA_CARGO)
-           data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[data_trabaj[0][6]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][6]],"conditions_Verify":["="]}                     
+           data_cargo=conexion_bd.get_allData([],cond_data)
            if(data_cargo==[]):
                 General.show_error("error en data del cargo","data de cargo invalida")
                 return                     
@@ -575,17 +607,20 @@ class Consult_Manager:
            data_modif.append(["AÑOS DE SERVICIO:",data_estatus[0][2]])
            data_modif.append(["FECHA DE INGRESO:",data_estatus[0][3]])
            conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-           data_hor=conexion_bd.get_allData(constantes.CAMPOS_HORARIO,len(constantes.CAMPOS_HORARIO),[constantes.CLAVE_HORARIO],[data_trabaj[0][5]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][5]],"conditions_Verify":["="]}                 
+           data_hor=conexion_bd.get_allData([],cond_data)
            if(data_hor!=[]):
               data_modif.append(["TURNO:",data_hor[0][2]])
            conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-           data_prof=conexion_bd.get_allData(constantes.CAMPOS_PROFESOR,len(constantes.CAMPOS_PROFESOR),[constantes.CLAVE_TRABAJADOR],[data_trabaj[0][0]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][0]],"conditions_Verify":["="]}              
+           data_prof=conexion_bd.get_allData([],cond_data)
            if(data_prof!=[]):
               data_modif.append(["DOCENTE:","Si"])
               if(data_prof[0][2]!="" and data_prof[0][2]!="..." and data_prof[0][2]!="default"):
                  data_modif.append(["SECCION GUIA:",data_prof[0][2]])
               conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-              data_areas=conexion_bd.get_allData(constantes.CAMPOS_AREA_DOCENTE,len(constantes.CAMPOS_AREA_DOCENTE),[constantes.CLAVE_PROFESOR],[data_prof[0][0]],["and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[data_prof[0][0]],"conditions_Verify":["="]}              
+              data_areas=conexion_bd.get_allData([],cond_data)
               if(data_areas!=[]):
                 areas_profesor=""
                 for i in range(0,len(data_areas)):
@@ -597,7 +632,8 @@ class Consult_Manager:
               data_modif.append(["DOCENTE:","No"])
                      
            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-           data_exp=conexion_bd.get_allData(constantes.CAMPOS_EXPEDIENTE,len(constantes.CAMPOS_EXPEDIENTE),[constantes.CLAVE_EXPEDIENTE],[data_trabaj[0][4]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][4]],"conditions_Verify":["="]}                             
+           data_exp=conexion_bd.get_allData([],cond_data)
            if(data_exp==[]):
                 data_modif.append(["FOTO:","not found"])
            else:
@@ -611,7 +647,8 @@ class Consult_Manager:
 
        elif(tipo=="disp horario"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
                return
@@ -623,7 +660,7 @@ class Consult_Manager:
                 return
             data_form=response.content
             conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-            disp_data=conexion_bd.get_allData(constantes.CAMPOS_DISP_HORARIO,len(constantes.CAMPOS_DISP_HORARIO))
+            disp_data=conexion_bd.get_allData([])
             if(disp_data==[]):
                 General.show_message("no hay disponibilidad de horarios registradas","disponibilidad de horarios inexistentes")
                 return
@@ -633,14 +670,17 @@ class Consult_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
                 id_trabaj=disp_data[i][1]
                 name=""
-                data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[id_trabaj],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_trabaj],"conditions_Verify":["="]}              
+                data_trabaj=conexion_bd.get_allData([],cond_data)
                 if(data_trabaj!=[]):
                     conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                    data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][7]],["AND"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][7]],"conditions_Verify":["="]}              
+                    data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                     if(data_estatus[0][0]!="inactivo"):
                         num_trabaj+=1
                         conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                        data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_trabaj[0][1]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}              
+                        data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
                         for j in range(0,4):
                             if(data_nombre[0][j]!="" and data_nombre[0][j]!="..."):
                                  name=name+data_nombre[0][j]+" "
@@ -654,7 +694,7 @@ class Consult_Manager:
             data_replace=[]
             data_replace.append(["Fecha:",time_object.get_fecha()])
             conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-            data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA],1)
+            data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA])
             if(data_cronog!=[]):
                 data_replace.append(["periodo escolar:",data_cronog[0][0]])
             filename=tipo+".xlsx"
@@ -662,7 +702,8 @@ class Consult_Manager:
             documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_trabaj,data_nomina,"Nº",8,data_replace,False],True)    
        elif(tipo=="materia pendiente"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                  General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
                  return
@@ -674,7 +715,7 @@ class Consult_Manager:
                 return
             data_form=response.content
             conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-            mat_pend=conexion_bd.get_allData(constantes.CAMPOS_MATERIA_PENDIENTE,len(constantes.CAMPOS_MATERIA_PENDIENTE))
+            mat_pend=conexion_bd.get_allData([])
             if(mat_pend==[]):
                 General.show_message("no hay Materias Pendientes Registradas","Materias Pendientes inexistentes")            
                 return
@@ -684,16 +725,19 @@ class Consult_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
                 id_estud=mat_pend[i][1]
                 name=""
-                data_estud=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],1,[constantes.CLAVE_ESTUDIANTE],[id_estud],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[id_estud],"conditions_Verify":["="]}              
+                data_estud=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],cond_data)
                 if(data_estud!=[]):
                     conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                    data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_estud[0][0]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estud[0][0]],"conditions_Verify":["="]}              
+                    data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
                     if(data_nombre!=[]):
                         for j in range(0,4):
                             if(data_nombre[0][j]!="" and data_nombre[0][j]!="..."):
                                 name=name+data_nombre[0][j]+" "
                 conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
-                data_intentos=conexion_bd.get_allData(constantes.CAMPOS_CALIF_PENDIENTE,len(constantes.CAMPOS_CALIF_PENDIENTE),[constantes.CLAVE_MATERIA_PENDIENTE],[mat_pend[i][0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE],"condition_Types":["and"],"conditions_Values":[mat_pend[i][0]],"conditions_Verify":["="]}              
+                data_intentos=conexion_bd.get_allData([],cond_data)
                 data_f=[]
                 data_f.append(id_estud)
                 data_f.append(name)
@@ -729,7 +773,7 @@ class Consult_Manager:
             data_replace=[]
             data_replace.append(["Fecha:",time_object.get_fecha()])
             conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-            data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA],1)
+            data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA])
             if(data_cronog!=[]):
                 data_replace.append(["periodo escolar:",data_cronog[0][0]])
             filename=tipo+".xlsx"
@@ -779,11 +823,13 @@ class Consult_Manager:
                       return  
                       
               conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-              data_form=conexion_bd.get_allData(["src_form"],1,[constantes.CLAVE_FORMATO],[tipo],["and"])
+              cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+              data_form=conexion_bd.get_allData(["src_form"],cond_data)
               raw_data=None
               if(data_form==[]):
                  General.show_message("formato de "+tipo+" no registrada","formato no registrado")
                  return
+             
               url=constantes.SERVER+data_form[0][0]
               response=requests.get(url)
               if(response.status_code>400):
@@ -794,8 +840,8 @@ class Consult_Manager:
               nombre_directivo=""
               apellido_directivo=""
               cedula_directivo=""
-              conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-              data_empleados=conexion_bd.get_allData(None,None)
+              conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR) 
+              data_empleados=conexion_bd.get_allData([])
               conexion_bd.set_tabla(constantes.TABLA_CARGO)
               found_dire=False
               if(data_form[0][0].endswith(".pdf")==True):
@@ -806,12 +852,15 @@ class Consult_Manager:
                  if(empl[0]!="000" and empl[0]!="001"):
                     #Prevent get the Default worker of Admin User
                     conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                    data_cargo=conexion_bd.get_allData(["cargo"],1,[constantes.CLAVE_CARGO],[empl[6]],["and"])      
+                    cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[empl[6]],"conditions_Verify":["="]}              
+                
+                    data_cargo=conexion_bd.get_allData(["cargo"],cond_data)      
                     if(data_cargo[0][0].lower()=="director"):
                         found_dire=True
                         cedula_directivo=empl[0]
                         conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                        data_nomb=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],4,[constantes.CLAVE_NOMBRE],[empl[1]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[empl[1]],"conditions_Verify":["="]}              
+                        data_nomb=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],cond_data)
                         for directive_name_index in range(0,4):
                             nomb_directivo=""
                             if(data_nomb[0][directive_name_index]!="" and data_nomb[0][directive_name_index]!="..."):
@@ -839,18 +888,21 @@ class Consult_Manager:
               if(is_estud):
                    #Constancia for Students
                    conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)              
-                   data_estud=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[cedula],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
+                   data_estud=conexion_bd.get_allData([],cond_data)
                    if(data_estud==[]):
                         General.show_message("la cedula indicada no pertenece a ningun estudiante","estudiante no valido")
                         return
                    else:
                        conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                       data_estatus=conexion_bd.get_allData(["estatus","last_year"],2,[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[0][2]],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[0][2]],"conditions_Verify":["="]}              
+                       data_estatus=conexion_bd.get_allData(["estatus","last_year"],cond_data)
                        if(data_estatus[0][0]=="inactivo" or data_estatus[0][0]=="graduado"):
                            General.show_message("el estudiante no es un estudiante activo","estudiante no valido")
                            return
                    conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                   data_nombre=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_estud[0][1]],["and"])                   
+                   cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estud[0][1]],"conditions_Verify":["="]}              
+                   data_nombre=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],cond_data)                   
                    nombr=""
                    nombre_estud=""
                    apellido_estud=""
@@ -871,7 +923,7 @@ class Consult_Manager:
                    if(tipo=="constancia de estudio"):
                          año_escolar=""
                          conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA) 
-                         data_cronog=conexion_bd.get_allData(None,None)
+                         data_cronog=conexion_bd.get_allData([])
                          if(data_cronog!=[]):
                             año_escolar=data_cronog[0][0]
                          replace.append(["del Año Escolar:",año_escolar,12,"bold"])
@@ -892,18 +944,21 @@ class Consult_Manager:
               else:
                    #Constancia for Workers
                    conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)              
-                   data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[cedula],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
+                   data_trabaj=conexion_bd.get_allData([],cond_data)
                    if(data_trabaj==[]):
                         General.show_message("la cedula indicada no pertenece a ningun miembro del personal","trabajdor no valido")
                         return
                    else:
                        conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                       data_estatus=conexion_bd.get_allData(["estatus","fecha_ingreso"],2,[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][7]],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][7]],"conditions_Verify":["="]}              
+                       data_estatus=conexion_bd.get_allData(["estatus","fecha_ingreso"],cond_data)
                        if(data_estatus[0][0]=="inactivo"):
                            General.show_message("el miembro del personal no esta activo","trabajador no valido")
                            return
                    conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                   data_nombre=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_trabaj[0][1]],["and"])                   
+                   cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}              
+                   data_nombre=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],cond_data)                   
                    nombre_t=""
                    apellido_t=""
                    nombr=""
@@ -933,7 +988,8 @@ class Consult_Manager:
                          
                          replace.append(["desde el:",ingreso,12,"bold"])
                          conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                         data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[data_trabaj[0][6]],["and"])
+                         cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][6]],"conditions_Verify":["="]}              
+                         data_cargo=conexion_bd.get_allData([],cond_data)
                          cargo=""
                          cargo_minist=""
                          codigo_cargo=""
@@ -941,7 +997,6 @@ class Consult_Manager:
                             cargo=data_cargo[0][1].upper()
                             codigo_cargo=data_cargo[0][4].upper()
                             cargo_minist=data_cargo[0][2].upper()
-                        
                          cargo1=""
                          cargo2=""
                          if(cargo.lower().startswith("profesor") or cargo.lower().startswith("docente")):
@@ -964,6 +1019,8 @@ class Consult_Manager:
                                 else:
                                     cargo1=cargo1+" DE ORIENTACION"    
                                 cargo1=cargo.upper()
+                            else:
+                               cargo1=cargo
                          cargof=cargo1
                          if(cargo2!=""):
                              cargof=cargof+"/"+cargo2
@@ -974,7 +1031,7 @@ class Consult_Manager:
                              #Document Request is not from a User
                              conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
                              data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"constancia",time_object.get_fecha()]
-                             conexion_bd.add_data(data_descarga)
+                             conexion_bd.add_data(data_descarga,True)
               new_date=dia+" de "+mes+" del "+año
               replace.append(["Aguas Calientes,",new_date,12,"bold"])
               replace.append(["a los",new_date,12,"bold"])
@@ -984,8 +1041,9 @@ class Consult_Manager:
            if(receive_data==None):
                General.show_error("sin data para reporte","sin data")           
                return
-           conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-           data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+           conexion_bd.set_tabla(constantes.TABLA_FORMATO)
+           cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                            
+           data_formato=conexion_bd.get_allData(["src_form"],cond_data)
            if(data_formato==[]):
                 General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
                 return
@@ -1004,7 +1062,7 @@ class Consult_Manager:
            replace.append(["Año:",receive_data[3]+" AÑO"])
            replace.append(["Fecha:",time_object.get_fecha()])
            conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-           data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA],1)
+           data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA])
            if(data_cronog!=[]):
                 replace.append(["periodo escolar:",data_cronog[0][0]])
            col_count=len(info[0])
@@ -1032,7 +1090,8 @@ class Consult_Manager:
                 General.show_message("estudiante sin calificaciones","calificaciones no registradas")
                 return
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                   
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                 General.show_error("formato de reporte de notas finales no registrado","formato no registrado")
                 return               
@@ -1061,7 +1120,8 @@ class Consult_Manager:
        elif(tipo=="reporte de usuarios"):
            
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                General.show_error("error no hay formato el reporte de "+tipo,"formato de reporte de usuarios inexistente")
                return
@@ -1073,12 +1133,12 @@ class Consult_Manager:
                 return
             data_form=response.content  
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            data_reporte=conexion_bd.get_allData(None,None)
+            data_reporte=conexion_bd.get_allData([])
             info=[]
             conexion_bd.set_tabla(constantes.TABLA_USUARIO)
             for i in range(0,len(data_reporte)):
-                data_user=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],1,[constantes.CLAVE_USUARIO],[data_reporte[i][1]],["and"])
-                    
+                cond_data={"conditions_Names":[constantes.CLAVE_USUARIO],"condition_Types":["and"],"conditions_Values":[data_reporte[i][1]],"conditions_Verify":["="]}              
+                data_user=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],cond_data)
                 data_row=[]
                 if(data_user!=[]):
                     if(data_user[0][0]!="000" and  data_user[0][0]!="001"):
@@ -1107,7 +1167,8 @@ class Consult_Manager:
   
        elif(tipo=="reporte de descargas"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}               
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                General.show_error("error no hay formato el reporte de "+tipo,"formato de reporte de descargas inexistente")
                return
@@ -1119,17 +1180,19 @@ class Consult_Manager:
                 return
             data_form=response.content  
             conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
-            data_reporte=conexion_bd.get_allData(None,None)
+            data_reporte=conexion_bd.get_allData([])
             info=[]
             for i in range(0,len(data_reporte)):
                 data_row=[]
                 data_row.append(data_reporte[i][1])
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                data_t=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],1,[constantes.CLAVE_TRABAJADOR],[data_reporte[i][1]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_reporte[i][1]],"conditions_Verify":["="]}              
+                data_t=conexion_bd.get_allData([constantes.CLAVE_NOMBRE],cond_data)
                 nombre=""
                 if(data_t!=[]):
                     conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                    data_n=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_t[0][0]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_t[0][0]],"conditions_Verify":["="]}              
+                    data_n=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
                     if(data_n!=[]):
                         for j in range(0,4):
                             if(data_n[0][j]!="" and data_n[0][j]!="..."):
@@ -1153,7 +1216,8 @@ class Consult_Manager:
    
        elif(tipo=="notas del momento"):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and","and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                 General.show_error("error no hay formato el reporte de "+tipo,"formato de nomina inexistente")
                 return
@@ -1168,12 +1232,15 @@ class Consult_Manager:
             if(cedula=="" or cedula==" "):
               General.show_message("por favor seleccione un estudiante","estudiante no valido")
               return
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            data_estud=conexion_bd.get_allData([constantes.CLAVE_NOMBRE,constantes.CLAVE_SECCION],2,[constantes.CLAVE_ESTUDIANTE],[cedula],["and"])
+            data_estud=conexion_bd.get_allData([constantes.CLAVE_NOMBRE,constantes.CLAVE_SECCION],cond_data)
             conexion_bd.set_tabla(constantes.TABLA_SECCION)
-            data_secc=conexion_bd.get_allData(["año"],1,[constantes.CLAVE_SECCION],[data_estud[0][1]],["and"]) 
+            cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[data_estud[0][1]],"conditions_Verify":["="]}              
+            data_secc=conexion_bd.get_allData(["año"],cond_data) 
             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-            data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_estud[0][0]],["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estud[0][0]],"conditions_Verify":["="]}                             
+            data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
             fullname="" 
             year=""
             if(len(data_nomb)>0):
@@ -1186,7 +1253,8 @@ class Consult_Manager:
                General.show_message("Error Obteniendo datos del Estudiante","estudiante no valido")
                return            
             conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-            data_moms=conexion_bd.get_allData([constantes.CLAVE_MOMENTO],1,["abierto"],["true"],["and"]) 
+            cond_data={"conditions_Names":["abierto"],"condition_Types":["and"],"conditions_Values":["true"],"conditions_Verify":["="]}                
+            data_moms=conexion_bd.get_allData([constantes.CLAVE_MOMENTO],cond_data) 
             momento=""
             if(len(data_moms)>0):
                 momento=data_moms[0][0] 
@@ -1195,11 +1263,13 @@ class Consult_Manager:
                 return
             areas=[]
             conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-            temp_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_AÑOS_INCORPORADOS],2,["incorporada"],["Si"],["and"])
+            cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}              
+            temp_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)
             conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
             for t_area in temp_areas:
                     field_y=year+"_año"
-                    data_y=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],1,[constantes.CLAVE_AÑOS_INCORPORADOS,field_y],[t_area[1],"True"],["and","and"])               
+                    cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS,field_y],"condition_Types":["and","and"],"conditions_Values":[t_area[1],"True"],"conditions_Verify":["=","="]}              
+                    data_y=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)               
                     if(data_y!=[]):
                          areas.append(t_area[0])
             orden=["lengua y literatura","castellano","idiomas","ingles","matematica","matematicas","ed fisica","educacion fisica","arte y patrimonio","biologia","biologia ambiente y tecnologia","fisica","quimica","cs tierra","ciencias de la tierra","ghc","fsn","ov","gcrp"]     
@@ -1211,13 +1281,16 @@ class Consult_Manager:
             info=[]             
             for dat_areas in data_areas:   
                 conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-                data_calif=conexion_bd.get_allData([constantes.CLAVE_CALIFICACION_FINAL],1,[constantes.CLAVE_ESTUDIANTE,"año",constantes.CLAVE_AREA_FORMACION],[cedula,year,dat_areas],["and","and","and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[cedula,dat_areas,year],"conditions_Verify":["=","=","="]}              
+                data_calif=conexion_bd.get_allData([constantes.CLAVE_CALIFICACION_FINAL],cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
                 if(data_calif!=[]):
-                    data_calific_moms=conexion_bd.get_allData([constantes.CLAVE_CALIF_MOM,"definitiva"],2,[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],[data_calif[0][0],momento],["and","and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[data_calif[0][0],momento],"conditions_Verify":["=","="]}              
+                    data_calific_moms=conexion_bd.get_allData([constantes.CLAVE_CALIF_MOM,"definitiva"],cond_data)
                     if(data_calific_moms!=[]):
                         conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
-                        data_calific=conexion_bd.get_allData(["valor","numero"],2,[constantes.CLAVE_CALIF_MOM],[data_calific_moms[0][0]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[data_calific_moms[0][0]],"conditions_Verify":["="]}              
+                        data_calific=conexion_bd.get_allData(["valor","numero"],cond_data)
                         new_data=[dat_areas]
                         for evaluation_index in range(0,constantes.MAXIMO_EVALUACIONES):
                              new_data.append("evaluacion "+str(evaluation_index+1)) 
@@ -1250,7 +1323,7 @@ class Consult_Manager:
             replace.append(["Año:",year+" año"])
             replace.append(["Fecha:",time_object.get_fecha()])
             conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-            data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA],1)
+            data_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA])
             if(data_cronog!=[]):
                replace.append(["periodo escolar:",data_cronog[0][0]])
             col_count=len(info[0])
@@ -1263,7 +1336,8 @@ class Consult_Manager:
             
             pnl=pnl
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and"])
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}              
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                 General.show_message("por favor registre un formato de carnet","formato de carnet no registrado")
                 return 
@@ -1314,7 +1388,7 @@ class Consult_Manager:
             nombre_directivo=""
             cedula_directivo=""
             conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-            data_empleados=conexion_bd.get_allData(None,None)
+            data_empleados=conexion_bd.get_allData([])
             conexion_bd.set_tabla(constantes.TABLA_CARGO)
             nomb_directivo=""
             found_directivo=False
@@ -1322,11 +1396,13 @@ class Consult_Manager:
                 if(empl[0]!="000" and empl[0]!="001"):
                     #Prevent get data form Default Worker of Admin User
                     conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                    data_cargo=conexion_bd.get_allData(["cargo"],1,[constantes.CLAVE_CARGO],[empl[6]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[empl[6]],"conditions_Verify":["="]}              
+                    data_cargo=conexion_bd.get_allData(["cargo"],cond_data)
                     if(data_cargo[0][0].lower()=="director"):
                         cedula_directivo=empl[0]
                         conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                        data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[empl[1]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[empl[1]],"conditions_Verify":["="]}              
+                        data_nomb=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
                         found_directivo=True
                         for directive_name_index in range(0,4):
                             nomb_d=""
@@ -1351,18 +1427,21 @@ class Consult_Manager:
             if(is_estud==False): 
                 #Worker Carnet  
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)              
-                data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[cedula],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
+                data_trabaj=conexion_bd.get_allData([],cond_data)
                 if(data_trabaj==[]):
                     General.show_message("la cedula indicada no pertenece a ningun miembro del personal","trabajdor no valido")
                     return
                 else:
                     conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                    data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][7]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][7]],"conditions_Verify":["="]}              
+                    data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                     if(data_estatus[0][0]=="inactivo"):
                         General.show_message("el miembro del personal no esta activo","trabajador no valido")
                         return
                 conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_trabaj[0][1]],["and"])                   
+                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}                             
+                data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)                   
                 nombr=""
                 nomb_trabaj=""
                 for i in range(0,4):
@@ -1380,7 +1459,8 @@ class Consult_Manager:
                 replace.append(["NOMBRES_C",nomb_trabaj])
                 replace.append(["CEDULA_C",cedula])
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                data_exp=conexion_bd.get_allData(["src_foto"],1,[constantes.CLAVE_EXPEDIENTE],[data_trabaj[0][4]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][4]],"conditions_Verify":["="]}              
+                data_exp=conexion_bd.get_allData(["src_foto"],cond_data)
                 foto_existe=False
                 if(data_exp!=[]):
                     if(data_exp[0][0]!="" and data_exp[0][0]!="..."):
@@ -1391,7 +1471,8 @@ class Consult_Manager:
                 url_foto=constantes.SERVER+data_exp[0][0]
                 replace.append(["FOTO:",url_foto])
                 conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[data_trabaj[0][6]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][6]],"conditions_Verify":["="]}              
+                data_cargo=conexion_bd.get_allData([],cond_data)
                 cargo=""
                 if(data_cargo!=[]):
                    cargo=data_cargo[0][1]
@@ -1411,25 +1492,28 @@ class Consult_Manager:
                     #Carnet Request is Not from User
                     conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
                     data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"carnet",time_object.get_fecha()]
-                    conexion_bd.add_data(data_descarga)   
+                    conexion_bd.add_data(data_descarga,True)   
                 ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"
                 documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)
                 
             else: 
                 #Student Carnet
                 conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)              
-                data_estud=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[cedula],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
+                data_estud=conexion_bd.get_allData([],cond_data)
                 if(data_estud==[]):
                     General.show_message("la cedula indicada no pertenece a ningun estudiante","estudiante no valido")
                     return
                 else:
                     conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                    data_estatus=conexion_bd.get_allData(["estatus","last_year"],2,[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[0][2]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[0][2]],"conditions_Verify":["="]}              
+                    data_estatus=conexion_bd.get_allData(["estatus","last_year"],cond_data)
                     if(data_estatus[0][0]=="inactivo" or data_estatus[0][0]=="graduado"):
                         General.show_message("el estudiante no es un estudiante activo","estudiante no valido")
                         return
                 conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],4,[constantes.CLAVE_NOMBRE],[data_estud[0][1]],["and"])                   
+                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estud[0][1]],"conditions_Verify":["="]}              
+                data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)                   
                 nombr=""
                 nombre_estud=""
                 for i in range(0,4):
@@ -1446,7 +1530,8 @@ class Consult_Manager:
                        nombre_estud=nombre_estud+data_nombre[0][i].upper()+" "
                        replace.append(["CEDULA_C",cedula])   
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                data_exp=conexion_bd.get_allData(["src_foto"],1,[constantes.CLAVE_EXPEDIENTE],[data_estud[0][4]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_estud[0][4]],"conditions_Verify":["="]}              
+                data_exp=conexion_bd.get_allData(["src_foto"],cond_data)
                 foto_existe=False
                 if(data_exp!=[]):
                     if(data_exp[0][0]!="" and data_exp[0][0]!="..."):
@@ -1475,8 +1560,9 @@ class Consult_Manager:
                 documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)
                    
        elif(tipo=="cronograma"):
-            conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
-            data_formato=conexion_bd.get_allData(["src_form"],1,["tipo"],[tipo],["and"])
+            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
+            cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                         
+            data_formato=conexion_bd.get_allData(["src_form"],cond_data)
             if(data_formato==[]):
                 General.show_error("sin formatos de cronograma ","formato de cronograma no registrado")
                 return
@@ -1488,7 +1574,7 @@ class Consult_Manager:
                 return
             data_form=response.content 
             conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-            data_cronog=conexion_bd.get_allData(constantes.CAMPOS_CRONOGRAMA,len(constantes.CAMPOS_CRONOGRAMA))
+            data_cronog=conexion_bd.get_allData([])
             data_replace=[[],[],[]]
             data_content=[[],[],[]]
             data_replace[0].append(["NN","",12,"bold"])
@@ -1503,7 +1589,7 @@ class Consult_Manager:
             conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
             pages=[]
             conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-            data_moms=conexion_bd.get_allData(None,None)
+            data_moms=conexion_bd.get_allData([])
             if(data_moms==[]):
                 General.show_error("error no hay momento registrados","error de cronograma")
                 return    
@@ -1551,14 +1637,16 @@ class Consult_Manager:
                     if(data_moms[i][0]=="momento 1"):
                         periodo=""
                         conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                        data_periodo=conexion_bd.get_allData(["fecha_inicio","fecha_limite"],2,[constantes.CLAVE_MOMENTO],[data_moms[i][0]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[data_moms[i][0]],"conditions_Verify":["="]}              
+                        data_periodo=conexion_bd.get_allData(["fecha_inicio","fecha_limite"],cond_data)
                         if(data_periodo!=[]):
                             periodo= data_periodo[0][0]+"-"+ data_periodo[0][1] 
                         conexion_bd.set_tabla(constantes.TABLA_FECHA)                       
                         for j in range(0,len(orden_mom1)):
                             if(j==4 or j==7):
                                 #materias pendientes
-                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO,constantes.CLAVE_CRONOGRAMA],[orden_mom1[j][1],data_moms[i][0],data_cronog[0][0]],["and","and","and"])
+                                cond_data={"conditions_Names":["razon",constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[orden_mom1[j][1],data_moms[i][0]],"conditions_Verify":["=","="]}              
+                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                                 if(data_fecha!=[] and orden_mom1[j][1]!=""):
                                     fecha=data_fecha[0][0]+" AL "+data_fecha[0][1]
                                     data_content[0].append([fecha])
@@ -1566,7 +1654,8 @@ class Consult_Manager:
                                     data_content[0].append([""])
                                    
                             else:
-                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO,constantes.CLAVE_CRONOGRAMA],[orden_mom1[j][1],data_moms[i][0],data_cronog[0][0]],["and","and","and"])
+                                cond_data={"conditions_Names":["razon",constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[orden_mom1[j][1],data_moms[i][0]],"conditions_Verify":["=","="]}
+                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                                 if(data_fecha!=[]):
                                     fecha=""
                                     if(data_fecha[0][0]==data_fecha[0][1]):
@@ -1580,21 +1669,24 @@ class Consult_Manager:
                     elif(data_moms[i][0]=="momento 2"):
                         periodo=""
                         conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                        data_periodo=conexion_bd.get_allData(["fecha_inicio","fecha_limite"],2,[constantes.CLAVE_MOMENTO],[data_moms[i][0]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[data_moms[i][0]],"conditions_Verify":["="]}              
+                        data_periodo=conexion_bd.get_allData(["fecha_inicio","fecha_limite"],cond_data)
                         if(data_periodo!=[]):
                             periodo= data_periodo[0][0]+"-"+ data_periodo[0][1] 
                         conexion_bd.set_tabla(constantes.TABLA_FECHA)                       
                         for j in range(0,len(orden_mom2)):
                             if(j==3):
                                 #materias pendientes
-                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO,constantes.CLAVE_CRONOGRAMA],[orden_mom2[j][1],"momento 1",data_cronog[0][0]],["and","and","and"])
+                                cond_data={"conditions_Names":["razon",constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[orden_mom2[j][1],"momento 1"],"conditions_Verify":["=","="]}
+                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                                 if(data_fecha!=[] and orden_mom1[j][1]!=""):
                                     fecha=data_fecha[0][0]+" AL "+data_fecha[0][1]
                                     data_content[1].append([fecha])
                                 else:
                                     data_content[1].append([""]) 
                             else:
-                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO,constantes.CLAVE_CRONOGRAMA],[orden_mom2[j][1],data_moms[i][0],data_cronog[0][0]],["and","and","and"])
+                                cond_data={"conditions_Names":["razon",constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[orden_mom2[j][1],data_moms[i][0]],"conditions_Verify":["=","="]}
+                                data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                                 if(data_fecha!=[]):
                                     fecha=""
                                     if(data_fecha[0][0]==data_fecha[0][1]):
@@ -1608,14 +1700,16 @@ class Consult_Manager:
                     elif(data_moms[i][0]=="momento 3"):
                         periodo=""
                         conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                        data_periodo=conexion_bd.get_allData(["fecha_inicio","fecha_limite"],2,[constantes.CLAVE_MOMENTO],[data_moms[i][0]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[data_moms[i][0]],"conditions_Verify":["="]}              
+                        data_periodo=conexion_bd.get_allData(["fecha_inicio","fecha_limite"],cond_data)
                         if(data_periodo!=[]):
                             periodo= data_periodo[0][0]+"-"+ data_periodo[0][1] 
                         conexion_bd.set_tabla(constantes.TABLA_FECHA)                       
                         for j in range(0,len(orden_mom3)):
                                if(j==3 or j==8):
                                  #materias pendientes
-                                 data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO,constantes.CLAVE_CRONOGRAMA],[orden_mom3[j][1],"momento 1",data_cronog[0][0]],["and","and","and"])
+                                 cond_data={"conditions_Names":["razon",constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[orden_mom3[j][1],"momento 1"],"conditions_Verify":["=","="]}
+                                 data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                                  if(data_fecha!=[] and orden_mom1[j][1]!=""):
                                    
                                     fecha=data_fecha[0][0]+" AL "+data_fecha[0][1]
@@ -1623,7 +1717,8 @@ class Consult_Manager:
                                  else:
                                     data_content[2].append([""])  
                                else:
-                                  data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO,constantes.CLAVE_CRONOGRAMA],[orden_mom3[j][1],data_moms[i][0],data_cronog[0][0]],["and","and","and"])
+                                  cond_data={"conditions_Names":["razon",constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[orden_mom3[j][1],data_moms[i][0]],"conditions_Verify":["=","="]}
+                                  data_fecha=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                                   if(data_fecha!=[]):
                                     fecha=""
                                     if(data_fecha[0][0]==data_fecha[0][1]):
@@ -1672,11 +1767,13 @@ class Consult_Manager:
             if(tipo==cls.DOCUMENT_EXPEDENT_STUDENT):
                #Student Expedent
                conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-               id_exp=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],1,[constantes.CLAVE_ESTUDIANTE],[str(id_selected[0])],["and"])[0][0]
+               cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[str(id_selected[0])],"conditions_Verify":["="]}                    
+               id_exp=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)[0][0]
             else:
                #Worker Expedent
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               id_exp=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],1,[constantes.CLAVE_TRABAJADOR],[str(id_selected[0])],["and"])[0][0]
+               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[str(id_selected[0])],"conditions_Verify":["="]}                                      
+               id_exp=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)[0][0]
             if(id_exp==""):
                 if(tipo==cls.DOCUMENT_EXPEDENT_STUDENT):
                    General.show_message("por favor seleccione un estudiante","estudiante no seleccionado")
@@ -1684,7 +1781,8 @@ class Consult_Manager:
                    General.show_message("por favor seleccione un trabajador","trabjador no seleccionado")
                 return
             conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-            data_exp=conexion_bd.get_allData(["src_exp"],1,[constantes.CLAVE_EXPEDIENTE],[id_exp],["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[id_exp],"conditions_Verify":["="]}                         
+            data_exp=conexion_bd.get_allData(["src_exp"],cond_data)
             if(data_exp==[]):
                 General.show_error("error de registro de expediente","expediente no registrado")
                 return
@@ -1717,11 +1815,13 @@ class Consult_Manager:
             if(tipo==cls.DOCUMENT_TIMETABLES_SECTION):
                 #Timetables for Sections
                 conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],1,[constantes.CLAVE_SECCION],[str(id_selected[0])],["and"])[0][0]
+                cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[str(id_selected[0])],"conditions_Verify":["="]}                                     
+                id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],cond_data)[0][0]
             else:
                  #Timetables for Workers
                  conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                 id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],1,[constantes.CLAVE_TRABAJADOR],[str(id_selected[0])],["and"])[0][0]
+                 cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[str(id_selected[0])],"conditions_Verify":["="]}                   
+                 id_hor=conexion_bd.get_allData([constantes.CLAVE_HORARIO],cond_data)[0][0]
             if(id_hor=="default"):
                 if(tipo==cls.DOCUMENT_TIMETABLES_SECTION):
                     General.show_message("la seccion no tiene horario asignado","seccion sin horario")
@@ -1729,7 +1829,8 @@ class Consult_Manager:
                     General.show_message("el trabajador no tiene horario asignado","trabjadorsin horario")
                 return
             conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-            data_hor=conexion_bd.get_allData(["src_hor"],1,[constantes.CLAVE_HORARIO],[id_hor],["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[id_hor],"conditions_Verify":["="]}                       
+            data_hor=conexion_bd.get_allData(["src_hor"],cond_data)
             if(data_hor==[]):
                  General.show_error("error de registro de expediente","expediente no registrado")
                  return
@@ -1763,7 +1864,7 @@ class Consult_Manager:
         data=[]
         fields=[]
         clave=[]
-        filter_list=[None,None,None]
+        filter_list=[None,None,None,None]
         alternative=pnl.get_comp_byName("identificador_cp2")
         if(alternative!=None):
              if(alternative.get_state()==True):
@@ -1795,16 +1896,6 @@ class Consult_Manager:
                  selected=constantes.CLAVE_MOMENTO
                  if(len(filtro_val)==1):
                      filtro_val="momento "+filtro_val
-            elif(selected=="lunes"):
-                 selected="disp_lunes"
-            elif(selected=="martes"):
-                 selected="disp_martes"
-            elif(selected=="miercoles"):
-                selected="disp_miercoles"
-            elif(selected=="jueves"):
-                selected="disp_jueves"
-            elif(selected=="viernes"):
-               selected="disp_viernes"
             elif(selected=="planif. al dia"):
                 selected="planific_dia"
             elif(selected.endswith("año") and opcion==cls.CONSULT_FORMATION_AREAS):
@@ -1836,8 +1927,6 @@ class Consult_Manager:
                selected="prof_guia"
             elif(selected=="momento"):
                selected="id_mom"
-            elif(selected=="numero de estudiantes"):
-               selected="total_estud"
             elif(selected=="calificacion"):
                  selected="definitiva"
             elif(selected=="año escolar"):
@@ -1853,41 +1942,46 @@ class Consult_Manager:
                    selected=constantes.CLAVE_SECCION
                 else:
                    selected=constantes.CLAVE_TRABAJADOR    
-            filter_list=[[selected],[filtro_val],["and"]]
+            filter_list=[[selected],[filtro_val],["and"],["="]]
             #filtros de radio buttons adicionales
             if(selected_radio=="cedulado"):
                filter_list[0].append(selected_radio)
                filter_list[1].append("True")
                filter_list[2].append("and")
+               filter_list[3].append("=")
             elif(selected_radio=="no cedulado"):
                filter_list[0].append("cedulado")
                filter_list[1].append("False")
                filter_list[2].append("and")
+               filter_list[3].append("=")
             elif(selected_radio=="incorporada"):
                filter_list[0].append("incorporada")
                filter_list[1].append("Si")
                filter_list[2].append("and")
+               filter_list[3].append("=")
             elif(selected_radio=="no incorporada"): 
                filter_list[0].append("incorporada")
                filter_list[1].append("No")
-               filter_list[2].append("and")  
+               filter_list[2].append("and")
+               filter_list[3].append("=")               
             elif(selected_radio=="docente" or selected_radio=="docente" or selected_radio=="seccion"):
                 filter_list[0].append("tipo")
                 filter_list[1].append(selected_radio)
-                filter_list[2].append("and")              
+                filter_list[2].append("and") 
+                filter_list[3].append("=")                
         else:
             #No filters from ComboBox and TextField
             #Verify Radio Buttons Filter
             if(selected_radio=="cedulado"):
-                filter_list=[["cedulado"],["True"],["and"]]
+                filter_list=[["cedulado"],["True"],["and"],["="]]
             elif(selected_radio=="no cedulado"):
-               filter_list=[["cedulado"],["False"],["and"]]
+               filter_list=[["cedulado"],["False"],["and"],["="]]
             elif(selected_radio=="incorporada"):
-               filter_list=[["incorporada"],["Si"],["and"]]
+               filter_list=[["incorporada"],["Si"],["and"],["="]]
             elif(selected_radio=="no incorporada"): 
-               filter_list=[["incorporada"],["No"],["and"]] 
+               filter_list=[["incorporada"],["No"],["and"],["="]] 
             elif(selected_radio=="docente" or selected_radio=="no docente" or selected_radio=="seccion"):
-                 filter_list=[["tipo"],[selected_radio],["and"]] 
+                 filter_list=[["tipo"],[selected_radio],["and"],["="]] 
         return filter_list
    #Consults to the Data Base Information
    @classmethod
@@ -1924,7 +2018,7 @@ class Consult_Manager:
                   elif(filter_list[0][i]=="estatus"):
                         requiere_estatus=True                  
                         estatus_val=filter_list[1][i]
-                        filter_list=[None,None,None]                        
+                        filter_list=[None,None,None,None]                        
           if(requiere_cargos):
              #Filter By 'cargo'
              valid_cargo=False
@@ -1940,21 +2034,26 @@ class Consult_Manager:
              valid_cargo=False
              for i in range(0,len(cargos)):
                if(cargos[i]==valor_carg.lower()):
-                  data_cargs=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),["cargo"],[cargos[i]],["and"])            
+                  cond_data={"conditions_Names":["cargo"],"condition_Types":["and"],"conditions_Values":[cargos[i]],"conditions_Verify":["="]}                  
+                  data_cargs=conexion_bd.get_allData([],cond_data)            
                   for j in range(0,len(data_cargs)):
                      codes.append(data_cargs[j][0])
                      valores.append(data_cargs[j][1])
              conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)  
              for k in range(0,len(codes)):
-                 dat_worker=conexion_bd.get_allData(fields,len(fields),[constantes.CLAVE_CARGO],[codes[k]],["and"])
+                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
+                 cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[codes[k]],"conditions_Verify":["="]}                                     
+                 dat_worker=conexion_bd.get_allData(fields,cond_data)
                  if(dat_worker!=[]):
                     if(dat_worker[0][0]!="000" and dat_worker[0][0]!="001"):
                        #Prevent get data from Default Worker of User Admin
                        temp_dat=list(dat_worker[0])
                        conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                       data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[dat_worker[0][1]],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[dat_worker[0][1]],"conditions_Verify":["="]}              
+                       data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                        conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                       data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[dat_worker[0][5]],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[dat_worker[0][5]],"conditions_Verify":["="]}              
+                       data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                        temp_dat[2]=valores[k]
                        temp_dat[1]=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()
                        temp_dat[5]=data_estatus[0][0]
@@ -1969,7 +2068,8 @@ class Consult_Manager:
             codes=[]
             cargs=[]
             for i in range(0,len(cargos)):
-              data_cargs=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),["cargo"],[cargos[i]],["and"])            
+              cond_data={"conditions_Names":["cargo"],"condition_Types":["and"],"conditions_Values":[cargos[i]],"conditions_Verify":["="]}                      
+              data_cargs=conexion_bd.get_allData([],cond_data)            
               for j in range(0,len(data_cargs)):
                  codes.append(data_cargs[j][0])
                  cargs.append(data_cargs[j][1])    
@@ -1978,17 +2078,22 @@ class Consult_Manager:
                    if(cargo_index[1]!=-1):
                        filter_list[1][cargo_index[1]]=codes[k]
                    else:
-                     filter_list=[[constantes.CLAVE_CARGO],[codes[k]],["and"]]
+                     filter_list=[[constantes.CLAVE_CARGO],[codes[k]],["and"],["="]]
                    conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR) 
-                   dat_worker=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
+                   cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                
+                   if(filter_list[0]==None):
+                      cond_data=None
+                   dat_worker=conexion_bd.get_allData(fields,cond_data)
                    if(dat_worker!=[]):
     
                      if(dat_worker[0][0]!="000" and dat_worker[0][0]!="001"):
                        #Prevent get data from Default Worker of User Admin
                        conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                       data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[dat_worker[0][1]],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[dat_worker[0][1]],"conditions_Verify":["="]}              
+                       data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                        conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                       data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[dat_worker[0][5]],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[dat_worker[0][5]],"conditions_Verify":["="]}              
+                       data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                        if(requiere_estatus and estatus_val!=""):
                            if(data_estatus[0][0]==estatus_val):
                               temp_dat=list(dat_worker[0])
@@ -2009,27 +2114,26 @@ class Consult_Manager:
            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
            fields=[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_ESTUD,constantes.CLAVE_SECCION,constantes.CLAVE_REPRESENTANTE,"genero"]           
            data=[]
-           second_filter=[None,None,None]
+           second_filter=[None,None,None,None]
            filter_estatus=None
-           filter_year=None
            if(filter_list[0]!=None):
                if(len(filter_list[0])>1 and len(filter_list[1])>1):
-                   if(filter_list[0][0]!="estatus" and filter_list[0][0]!="salud" and filter_list[0][0]!="año"):
-                        second_filter=[[filter_list[0][0]],[filter_list[1][0]],["and"]]
+                   if(filter_list[0][0]!="estatus"):
+                        second_filter=[[filter_list[0][0]],[filter_list[1][0]],[filter_list[2][0]],[filter_list[3][0]]]
                    else:
-                      if(filter_list[0][0]=="estatus"):
-                        filter_estatus=["estatus",filter_list[1][0]]
-                      elif(filter_list[0][0]=="salud"):
-                         filter_estatus=["salud",filter_list[1][0]]
-                      elif(filter_list[0][0]=="año"):
-                          filter_year=["año",filter_list[1][0]]
-           tempdata=conexion_bd.get_allData(fields,len(fields),second_filter[0],second_filter[1],second_filter[2])
+                      filter_estatus=["estatus",filter_list[1][0]]
+           cond_data={"conditions_Names":second_filter[0],"condition_Types":second_filter[2],"conditions_Values":second_filter[1],"conditions_Verify":second_filter[3]}                                            
+           if(second_filter[0]==None):
+              cond_data=None
+           tempdata=conexion_bd.get_allData(fields,cond_data)
            if(tempdata!=[]):
               for estud in tempdata:
                   conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                  data_estatus=conexion_bd.get_allData(["estatus","cedulado","salud"],3,[constantes.CLAVE_ESTATUS_ESTUD],[estud[2]],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[estud[2]],"conditions_Verify":["="]}                                     
+                  data_estatus=conexion_bd.get_allData(["estatus","cedulado","salud"],cond_data)
                   conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                  data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],4,[constantes.CLAVE_NOMBRE],[estud[1]],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[estud[1]],"conditions_Verify":["="]}                                     
+                  data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
                   nombre=""
                   apellido=""
                   for name_index in range(0,len(data_nombre[0])):
@@ -2046,18 +2150,13 @@ class Consult_Manager:
                             if(filter_estatus[0]=="estatus"):
                                if(data_estatus[0][0]!=filter_estatus[1]):
                                   valido=False
-                            elif(filter_estatus[0]=="salud"):
-                              if(data_estatus[0][2]!=filter_estatus[1]):
-                                  valido=False
-                        elif(filter_year!=None):
-                            conexion_bd.set_tabla(constantes.TABLA_SECCION)
-                            data_secc=conexion_bd.get_allData([constantes.CLAVE_SECCION],1,["año",constantes.CLAVE_SECCION],[ filter_year[1],estud[3]],["and","and"])
-                            if(data_secc==[]):
-                                valido=False
+
+
                         if(valido):
                             conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
                             fields2=[constantes.CLAVE_REPRESENTANTE,"telef"]
-                            data2=conexion_bd.get_allData(fields2,len(fields2),[constantes.CLAVE_REPRESENTANTE],[estud[4]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[estud[4]],"conditions_Verify":["="]}                                     
+                            data2=conexion_bd.get_allData(fields2,cond_data)
                             secc_asign=""
                             if(estud[3]!="default"):
                                secc_asign=estud[3]
@@ -2074,23 +2173,28 @@ class Consult_Manager:
             if(filter_list[0]!=None):
                if(filter_list[0][0]=="estatus"):
                   estatus_val=filter_list[1][0]
-                  filter_list=[None,None,None]
+                  filter_list=[None,None,None,None]
                elif(filter_list[0][0]=="seccion_guia"):
                   seccion_val=filter_list[1][0]
-                  filter_list=[None,None,None]               
+                  filter_list=[None,None,None,None]               
             data_temp=[]
             conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-            data_tr=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),filter_list[0],filter_list[1],filter_list[2])
+            cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+            if(filter_list[0]==None):
+               cond_data=None
+            data_tr=conexion_bd.get_allData([],cond_data)
             if(data_tr!=[]):
                 for i in range(0,len(data_tr)):
                     if(data_tr[i][0]!="000" and data_tr[i][0]!="001"):
                         #Prevent get data from Default worker of Admin User
                         cargo=data_tr[i][6]
                         conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                        dat_cargo=conexion_bd.get_allData(["cargo"],1,[constantes.CLAVE_CARGO],[cargo],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[cargo],"conditions_Verify":["="]}                                     
+                        dat_cargo=conexion_bd.get_allData(["cargo"],cond_data)
                         if(dat_cargo[0][0]!="secretaria" and dat_cargo[0][0]!="obrero" ):
                             conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-                            dat_prof=conexion_bd.get_allData(constantes.CAMPOS_PROFESOR,len(constantes.CAMPOS_PROFESOR),[constantes.CLAVE_TRABAJADOR],[data_tr[i][0]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_tr[i][0]],"conditions_Verify":["="]}                                     
+                            dat_prof=conexion_bd.get_allData([],cond_data)
                             if(dat_prof!=[]):
                                 if(seccion_val=="" or seccion_val==dat_prof[0][2]):
                                     dat=[data_tr[i][0],dat_prof[0][2]]
@@ -2100,13 +2204,16 @@ class Consult_Manager:
                 fields_trabaj=[constantes.CLAVE_TRABAJADOR,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_TRABAJ]
                 for i in range(0,len(data_temp)):
                     conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                    data_trabaj=conexion_bd.get_allData(fields_trabaj,len(fields_trabaj),[constantes.CLAVE_TRABAJADOR],[data_temp[i][0]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_temp[i][0]],"conditions_Verify":["="]}                                     
+                    data_trabaj=conexion_bd.get_allData(fields_trabaj,cond_data)
                     if(data_trabaj!=[]):
                       if(data_trabaj[0][0]!="000" and data_trabaj[0][0]!="001"):
                           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                          data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_trabaj[0][1]],["and"])
+                          cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}                                     
+                          data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                           conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                          data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][2]],["and"])
+                          cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][2]],"conditions_Verify":["="]}                                     
+                          data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                           secc_guia=""
                           if(data_temp[i][1]!="default" and data_temp[i][1]!="..."):
                               secc_guia=data_temp[i][1]
@@ -2123,7 +2230,10 @@ class Consult_Manager:
             fields=[constantes.CLAVE_SECCION,"año","letra","total_estud"] 
             data=[]   
             conexion_bd.set_tabla(constantes.TABLA_SECCION)
-            temp_data=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])  
+            cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+            if(filter_list[0]==None):
+               cond_data=None
+            temp_data=conexion_bd.get_allData(fields,cond_data)  
             for i in range(0,len(temp_data)):
                if(temp_data[i][0]!="default"):
                   data.append(temp_data[i])               
@@ -2142,7 +2252,10 @@ class Consult_Manager:
                            elif(val_filter=="cerrado"):
                               filter_list[1][i]="false"                  
             data=[]
-            temp_data=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])    
+            cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+            if(filter_list[0]==None):
+                cond_data=None
+            temp_data=conexion_bd.get_allData(fields,cond_data)    
             if(temp_data!=[]):
                  for i in range(0,len(temp_data)):
                      data_row=[]
@@ -2166,23 +2279,24 @@ class Consult_Manager:
             fields=[constantes.CLAVE_TRABAJADOR,"turno","disp_lunes","disp_martes","disp_miercoles","disp_jueves","disp_viernes"]
             if(filter_list[0]!=None):
               if(filter_list[0][0].startswith("disp") and filter_list[1][0]=="disponible"):
-                 d=conexion_bd.get_allData(fields,len(fields))
+                 dats=conexion_bd.get_allData(fields)
                  camp=filter_list[0][0]
-                 for va in d:
-                    if(va[2]!="no disponible" and camp=="disp_lunes"):
-                      temp_dat.append(va)
-                    elif(va[3]!="no disponible" and camp=="disp_martes"):
-                       temp_dat.append(va)
-                    elif(va[4]!="no disponible" and camp=="disp_miercoles"):
-                      temp_dat.append(va)
-                    elif(va[5]!="no disponible" and camp=="disp_jueves"):
-                      temp_dat.append(va)
-                    elif(va[6]!="no disponible" and camp=="disp_viernes"):
-                      temp_dat.append(va)
+                 for val in dats:
+                    if(val[2]!="no disponible" and camp=="disp_lunes"):
+                      temp_dat.append(val)
+                    elif(val[3]!="no disponible" and camp=="disp_martes"):
+                       temp_dat.append(val)
+                    elif(val[4]!="no disponible" and camp=="disp_miercoles"):
+                      temp_dat.append(val)
+                    elif(val[5]!="no disponible" and camp=="disp_jueves"):
+                      temp_dat.append(val)
+                    elif(val[6]!="no disponible" and camp=="disp_viernes"):
+                      temp_dat.append(val)
               else:
-                temp_dat=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
-            else:
-                temp_dat=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
+                cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+                temp_dat=conexion_bd.get_allData(fields,cond_data)
+            else:               
+                temp_dat=conexion_bd.get_allData(fields,None)
             for k in range(0,len(temp_dat)):
                   row=[]
                   for l in range(0,len(temp_dat[k])):
@@ -2199,13 +2313,17 @@ class Consult_Manager:
 
             conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
             fields_area=[constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_AÑOS_INCORPORADOS]
-            data=[]   
-            temp_data=conexion_bd.get_allData(fields_area,len(fields_area),filter_list[0],filter_list[1],filter_list[2])
+            data=[]  
+            cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+            if(filter_list[0]==None):
+               cond_data=None            
+            temp_data=conexion_bd.get_allData(fields_area,cond_data)
             conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
             if(temp_data!=[]):
                for i in range(0,len(temp_data)):
                    data_row=[temp_data[i][0]]
-                   years=conexion_bd.get_allData(constantes.CAMPOS_AÑOS_INCORPORADOS,len(constantes.CAMPOS_AÑOS_INCORPORADOS),[constantes.CLAVE_AÑOS_INCORPORADOS],[temp_data[i][1]],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS],"condition_Types":["and"],"conditions_Values":[temp_data[i][1]],"conditions_Verify":["="]}                                     
+                   years=conexion_bd.get_allData(constantes.CAMPOS_AÑOS_INCORPORADOS,cond_data)
                    for j in range(1,len(years[0])-1):
                       val_field=years[0][j]
                       if(val_field=="True"):
@@ -2235,12 +2353,12 @@ class Consult_Manager:
                if(filter_list[0][0]=="accion" or filter_list[0][0]=="accion realizada"):
                   buscar_razon=True
                   razon_ingresada=filter_list[1][0]
-                  filter_list=[None,None,None]       
+                  filter_list=[None,None,None,None]       
                if(is_date):
                     buscar_fecha=True
                     fecha_inicio=pnl.get_comp_byName("fecha1").get_text()
                     fecha_cierre=pnl.get_comp_byName("fecha2").get_text()
-                    filter_list=[None,None,None]
+                    filter_list=[None,None,None,None]
             else:
                 is_date=False
                 if(selected=="desde - hasta" or selected=="antes de" or selected=="despues de"):
@@ -2251,7 +2369,7 @@ class Consult_Manager:
                       buscar_fecha=True
                       fecha_inicio=pnl.get_comp_byName("fecha1").get_text()
                       fecha_cierre=pnl.get_comp_byName("fecha2").get_text()
-                      filter_list=[None,None,None]
+                      filter_list=[None,None,None,None]
                 else:
                    val_identify=pnl.get_comp_byName("identificador_cp2").get_selected_value()
                    if(val_identify=="elejir" or val_identify=="elegir"):
@@ -2263,7 +2381,10 @@ class Consult_Manager:
                           return          
             data=[]
             fields=[constantes.CLAVE_USUARIO,"fecha","hora","tipo","razon"]
-            data_temp=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
+            cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+            if(filter_list[0]==None):
+               cond_data=None
+            data_temp=conexion_bd.get_allData(fields,cond_data)
             for d_temp in data_temp:
                temp_categoria=d_temp[3]
                temp_razon=d_temp[4]
@@ -2319,11 +2440,10 @@ class Consult_Manager:
                  if(filter_list[0][0]==constantes.CLAVE_TRABAJADOR):
                     filtro_ci=True
               if(filtro_ci):
-                data_prof=conexion_bd.get_allData(fields_prof,len(fields_prof),[constantes.CLAVE_TRABAJADOR],filter_list[1],filter_list[2])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":filter_list[1],"conditions_Verify":["="]}                                     
+                data_prof=conexion_bd.get_allData(fields_prof,cond_data)
               else:
-                data_prof=conexion_bd.get_allData(fields_prof,len(fields_prof))
-              if(data_prof==[]):
-                 return
+                data_prof=conexion_bd.get_allData(fields_prof)
               data=[]  
               for i in range(0,len(data_prof)):
                  id_prof=data_prof[i][0]
@@ -2332,18 +2452,24 @@ class Consult_Manager:
                  fields=[constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_PROFESOR]
                  data_temp=[]
                  if(filtro_ci==False):
-                   data_temp=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
+                   cond_data={"conditions_Names":filter_list[0],"condition_Types":["and"],"conditions_Values":filter_list[1],"conditions_Verify":["="]}                                     
+                   if(filter_list[0]==None):
+                      cond_data=None
+                   data_temp=conexion_bd.get_allData(fields,cond_data)
                  else:
-                   data_temp=conexion_bd.get_allData(fields,len(fields),[constantes.CLAVE_PROFESOR],[id_prof],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[id_prof],"conditions_Verify":["="]}                                     
+                   data_temp=conexion_bd.get_allData(fields,cond_data)
                  if(data_temp!=[]):
                    for dat_a in data_temp:
                      if(dat_a[1]==id_prof):
                        conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
                        fields_trabaj=[constantes.CLAVE_NOMBRE]
-                       data_trabaj=conexion_bd.get_allData(fields_trabaj,len(fields_trabaj),[constantes.CLAVE_TRABAJADOR],[ci_prof],["and"])
+                       cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[ci_prof],"conditions_Verify":["="]}                                     
+                       data_trabaj=conexion_bd.get_allData(fields_trabaj,cond_data)
                        if( data_trabaj!=[]):
                          conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                         data_nombre=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[data_trabaj[0][0]],["AND"])
+                         cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][0]],"conditions_Verify":["="]}                                     
+                         data_nombre=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                          nomb=data_nombre[0][0].capitalize()+" "+data_nombre[0][1].capitalize()          
                          data_row=[ci_prof,nomb,dat_a[0]]
                          data.append(data_row)
@@ -2352,7 +2478,10 @@ class Consult_Manager:
              data=[]
              conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
              fields=[constantes.CLAVE_MATERIA_PENDIENTE,constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"]
-             data_temp=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
+             cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+             if(filter_list[0]==None):
+                cond_data=None
+             data_temp=conexion_bd.get_allData(fields,cond_data)
              if(data_temp!=[]):
                 for i in range(0,len(data_temp)):
                    data_row=[]
@@ -2360,7 +2489,8 @@ class Consult_Manager:
                    data_row.append(data_temp[i][2])
                    data_row.append(data_temp[i][3])
                    conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
-                   data_calif=conexion_bd.get_allData(constantes.CAMPOS_CALIF_PENDIENTE,len(constantes.CAMPOS_CALIF_PENDIENTE),[constantes.CLAVE_MATERIA_PENDIENTE],[data_temp[i][0]],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE],"condition_Types":["and"],"conditions_Values":[data_temp[i][0]],"conditions_Verify":["="]}                                     
+                   data_calif=conexion_bd.get_allData(constantes.CAMPOS_CALIF_PENDIENTE,cond_data)
                    if(data_calif!=[]):
                      sz=len(data_calif)
                      data_row.append("pendiente") 
@@ -2398,7 +2528,10 @@ class Consult_Manager:
                   filter_list[0][0]=constantes.CLAVE_TRABAJADOR
              data=[]
              fields=[constantes.CLAVE_TRABAJADOR,constantes.CLAVE_FORMATO,"tipo_descarga","fecha","hora"]
-             data=conexion_bd.get_allData(fields,len(fields),filter_list[0],filter_list[1],filter_list[2])
+             cond_data={"conditions_Names":filter_list[0],"condition_Types":filter_list[2],"conditions_Values":filter_list[1],"conditions_Verify":filter_list[3]}                                     
+             if(filter_list[0]==None):
+                cond_data=None
+             data=conexion_bd.get_allData(fields,cond_data)
             
         tabla.reset()
         if(data!=[]):

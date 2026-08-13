@@ -87,7 +87,8 @@ class Register_Manager:
         if(update==False ):
           if(valido==0):
             conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-            data_hors=conexion_bd.get_allData(constantes.CAMPOS_DISP_HORARIO,len(constantes.CAMPOS_DISP_HORARIO),[constantes.CLAVE_TRABAJADOR],[data[1]],["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[1]],"conditions_Verify":["="]}              
+            data_hors=conexion_bd.get_allData([],cond_data)
             if(data_hors==[]):
               data[0]=conexion_bd.generate_id()
             else:
@@ -95,7 +96,8 @@ class Register_Manager:
         else:
            if(valido==0 and data[1]!=""):
               conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-              data[0]=conexion_bd.get_allData([constantes.CLAVE_DISP_HORARIO],1,[constantes.CLAVE_TRABAJADOR],[data[1]],["and"])[0][0]
+              cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[1]],"conditions_Verify":["="]}              
+              data[0]=conexion_bd.get_allData([constantes.CLAVE_DISP_HORARIO],cond_data,["and"])[0][0]
         data[2]=radios.get_selected_value()
         
         #Verifications over days
@@ -166,23 +168,23 @@ class Register_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","disponib. horario","",time_object.get_fecha()]
-                conexion_bd.add_data(data_hist)
+                conexion_bd.add_data(data_hist,True)
                 General.show_message("disponibilidad de horario registrada satisfactoriamente","registro exitoso")
-                vent.update_pantallas(constantes.PANTALLA_WELCOME)
+                vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
                 
             else:
                 #Make the Register
                 conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-                fields_u=["turno","disp_lunes","disp_martes","disp_miercoles","disp_jueves","disp_viernes","modificado"]
-                vals_u=[data[2],data[3],data[4],data[5],data[6],data[7],time_object.get_fecha()]
-                conexion_bd.update_data(fields_u,vals_u,len(fields_u),[constantes.CLAVE_DISP_HORARIO],[data[0]],["and"])
+                vals_update={"turno":data[2],"disp_lunes":data[3],"disp_martes":data[4],"disp_miercoles":data[5],"disp_jueves":data[6],"disp_viernes":data[7],"modificado":time_object.get_fecha()}
+                cond_data={"conditions_Names":[constantes.CLAVE_DISP_HORARIO],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+                conexion_bd.update_data(vals_update,cond_data)
                 user.add_action_historial(["actualizar disponib. horario",time_object.get_tiempo()])
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","disponib. horario","",time_object.get_fecha()]
-                conexion_bd.add_data(data_hist)
+                conexion_bd.add_data(data_hist,True)
                 General.show_message("disponibilidad de horario actualizada satisfactoriamente","registro exitoso")
-                vent.update_pantallas(constantes.PANTALLA_WELCOME) 
+                vent.update_pantallas(constantes.PANTALLA_WELCOME,user) 
         else:
             if(valido==-1):
                General.show_message("error,no hay personal registrado  ","no existe personal")
@@ -224,12 +226,14 @@ class Register_Manager:
                     temp_name=valor.split("/")
                     temp_valor="formatos/"+ temp_name[len(temp_name)-1]
                     conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-                    temp_dat=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO),["src_form"],[temp_valor],["and"])
+                    cond_data={"conditions_Names":["src_form"],"condition_Types":["and"],"conditions_Values":[temp_valor],"conditions_Verify":["="]}              
+                    temp_dat=conexion_bd.get_allData([],cond_data)
                     if(len(temp_dat)>=1):   
                         if(update==False):
                             valido=-8
                         else:
-                            data_form=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO),[constantes.CLAVE_FORMATO],[ data[0]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+                            data_form=conexion_bd.get_allData([],cond_data)
                             if((data_form[0][1]==temp_valor)==False):
                                 valido=-8
                     if(valido==0):
@@ -245,7 +249,8 @@ class Register_Manager:
           if(update==False):
             conexion_bd.set_tabla(constantes.TABLA_FORMATO)
             if(valido==0):
-              if(conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO),[constantes.CLAVE_FORMATO],[tipo_value],["and"])!=[]):
+              cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[tipo_value],"conditions_Verify":["="]}              
+              if(conexion_bd.get_allData([],cond_data)!=[]):
                  valido=-7
               else:
                 data[0]=tipo_value   
@@ -273,15 +278,17 @@ class Register_Manager:
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
             data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","formato","",time_object.get_fecha()]
-            conexion_bd.add_data(data_hist) 
+            conexion_bd.add_data(data_hist,True) 
             General.show_message("formato registrado satisfactoriamente","registro exitoso" )     
-            vent.update_pantallas(constantes.PANTALLA_WELCOME)
+            vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
           else:
              if(General.show_confirmDialog("Modificar archivos del formato?","modificar")!=True):
                return
-             old_src=conexion_bd.get_allData(["src_form"],1,[constantes.CLAVE_FORMATO],[data[0]],["and"])[0][0]           
+             cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}                 
+             old_src=conexion_bd.get_allData(["src_form"],cond_data)[0][0]           
              conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-             data_form=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO),["src_form"],[old_src],["and"])
+             cond_data={"conditions_Names":["src_form"],"condition_Types":["and"],"conditions_Values":[old_src],"conditions_Verify":["="]}              
+             data_form=conexion_bd.get_allData([],cond_data)
              if(data[1].startswith("formatos")==False):
                 if(len(data_form)<=1):
                   url_delete=constantes.SERVER+"delete_file.php"
@@ -296,17 +303,17 @@ class Register_Manager:
                     data[1]=res  
              id_form=data[0]             
              conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-             campos=["src_form","modificado"]
-             values=[data[1],data[2]]
-             conexion_bd.update_data(campos,values,len(campos),[constantes.CLAVE_FORMATO],[data[0]],["and"])
+             values={"src_form":data[1],"modificado":data[2]}
+             cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+             conexion_bd.update_data(values,cond_data)
              user.add_action_historial(["actualizar formato",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
              id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
              data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","formato","",time_object.get_fecha()]
-             conexion_bd.add_data(data_hist)
+             conexion_bd.add_data(data_hist,True)
              General.show_message("formato actualizado satisfactoriamente","registro exitoso" )     
              user.reset_data_process(0)
-             vent.update_pantallas(constantes.PANTALLA_WELCOME)
+             vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
        else:
            if(valido==-1):
                 General.show_message("por favor escriba un nombre valido para el formato","nombre de formato no valido" )
@@ -363,7 +370,7 @@ class Register_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","nueva calificacion",motivo,time_object.get_fecha()]
-                conexion_bd.add_data(data_hist)
+                conexion_bd.add_data(data_hist,True)
                 tabl=pnl.get_comp_byName("table_califics")
                 fields=pnl.get_comps_byTag("field")
                 for fld in fields:
@@ -449,11 +456,11 @@ class Register_Manager:
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","area form.","",time_object.get_fecha()]
-               conexion_bd.add_data(data_hist) 
+               conexion_bd.add_data(data_hist,True) 
                General.show_message("area de formacion registrada satisfactoriamente","registro exitoso")
                if(modificada!=""):
                   General.show_message("el nombre del area fue modificado de "+old_a+" a "+modificada,"nombre de area modificado")
-               vent.update_pantallas(constantes.PANTALLA_WELCOME)
+               vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
            else:
                if(General.show_confirmDialog("actualizar area de formacion?","actualizar")!=True):
                  return
@@ -461,7 +468,9 @@ class Register_Manager:
                  
                if(data[0]!=selected_area):
                   #Modify Id of Formation Area
-                  old_dat=conexion_bd.get_allData(constantes.CAMPOS_AREA_FORMACION,len(constantes.CAMPOS_AREA_FORMACION),[constantes.CLAVE_AREA_FORMACION],[selected_area],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_AREA_FORMACION],"condition_Types":["and"],"conditions_Values":[selected_area],"conditions_Verify":["="]}              
+                
+                  old_dat=conexion_bd.get_allData([],cond_data)
                   if(old_dat==[]):
                     General.show_message("Error al Actualizar Nombre del Area","Nombre del Area Invalido")
                     return
@@ -469,30 +478,29 @@ class Register_Manager:
                   
                   conexion_bd.add_data(next_data)
                   conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-                  conexion_bd.update_data([constantes.CLAVE_AREA_FORMACION],[data[0]],1,[constantes.CLAVE_AREA_FORMACION],[selected_area],["and"])
+                  conexion_bd.update_data({constantes.CLAVE_AREA_FORMACION:data[0]},cond_data)
                   conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-                  conexion_bd.update_data([constantes.CLAVE_AREA_FORMACION],[data[0]],1,[constantes.CLAVE_AREA_FORMACION],[selected_area],["and"])
+                  conexion_bd.update_data({constantes.CLAVE_AREA_FORMACION:data[0]},cond_data)
                   conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-                  conexion_bd.update_data([constantes.CLAVE_AREA_FORMACION],[data[0]],1,[constantes.CLAVE_AREA_FORMACION],[selected_area],["and"])
+                  conexion_bd.update_data({constantes.CLAVE_AREA_FORMACION:data[0]},cond_data)
                   conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
+                  conexion_bd.delete_data(cond_data)
 
-                  conexion_bd.delete_data([constantes.CLAVE_AREA_FORMACION],[selected_area],["and"])
-                   
-               fields=["incorporada","modificado"]
-               fields_values=[data[1],time_object.get_fecha()]
-               conexion_bd.update_data(fields,fields_values,len(fields),[constantes.CLAVE_AREA_FORMACION],[data[0]],["and"])
-               id_inc=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],1,[constantes.CLAVE_AREA_FORMACION],[data[0]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_AREA_FORMACION],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+               fields_values={"incorporada":data[1],"modificado":time_object.get_fecha()}
+               conexion_bd.update_data(fields_values,cond_data)
+               id_inc=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)
                conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
-               fields2=["1_año","2_año","3_año","4_año","5_año","modificado"]
-               values2=[data_disp_areas[1],data_disp_areas[2],data_disp_areas[3],data_disp_areas[4],data_disp_areas[5],time_object.get_fecha()]
-               conexion_bd.update_data(fields2,values2,len(fields2),[constantes.CLAVE_AÑOS_INCORPORADOS],[id_inc[0][0]],["and"])
+               values_years={"1_año":data_disp_areas[1],"2_año":data_disp_areas[2],"3_año":data_disp_areas[3],"4_año":data_disp_areas[4],"5_año":data_disp_areas[5],"modificado":time_object.get_fecha()}
+               cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS],"condition_Types":["and"],"conditions_Values":[id_inc[0][0]],"conditions_Verify":["="]}              
+               conexion_bd.update_data(values_years,cond_data)
                user.add_action_historial(["actualizar area de formacion",time_object.get_tiempo()])
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","area form.","",time_object.get_fecha()]
-               conexion_bd.add_data(data_hist) 
+               conexion_bd.add_data(data_hist,True) 
                General.show_message("area de formacion actualizada satisfactoriamente","actualizacion exitosa")
-               vent.update_pantallas(constantes.PANTALLA_WELCOME)
+               vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
        else:
            if(valido==-1):
                General.show_message("por favor ingrese un nombre valido","valor invalido")
@@ -567,7 +575,8 @@ class Register_Manager:
                  id_t=""
               tabla_dest=constantes.TABLA_TRABAJADOR
               conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-              data_t=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[id_t],["and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_t],"conditions_Verify":["="]}              
+              data_t=conexion_bd.get_allData([],cond_data)
               if(update==False):
                   id_dest=id_t
                   id_name=constantes.CLAVE_TRABAJADOR
@@ -579,7 +588,8 @@ class Register_Manager:
             if(valido==0):
               data[2]=pnl.get_comp_byName("turno_seccion").get_text()
               conexion_bd.set_tabla(constantes.TABLA_SECCION)
-              data_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),[constantes.CLAVE_SECCION],[destinatario],["and","and"])  
+              cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[destinatario],"conditions_Verify":["="]}              
+              data_secc=conexion_bd.get_allData([],cond_data)  
               tabla_dest=constantes.TABLA_SECCION
               if(data_secc!=[]):
                   if(update==False):
@@ -609,14 +619,16 @@ class Register_Manager:
                   data[1]=res
                conexion_bd.add_data(data)
                conexion_bd.set_tabla(tabla_dest)
-               conexion_bd.update_data([constantes.CLAVE_HORARIO,"modificado"],[data[0], time_object.get_fecha()],2,[id_name],[id_dest],["and"])
+               cond_data={"conditions_Names":[id_name],"condition_Types":["and"],"conditions_Values":[id_dest],"conditions_Verify":["="]}              
+                
+               conexion_bd.update_data({constantes.CLAVE_HORARIO:data[0],"modificado":time_object.get_fecha()},cond_data)
                user.add_action_historial(["registrar horario",time_object.get_tiempo()])
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","horario","",time_object.get_fecha()]
-               conexion_bd.add_data(data_hist)
+               conexion_bd.add_data(data_hist,True)
                General.show_message("registro del horarior realizado satisfactoriamente","horario registrado")
-               vent.update_pantallas(constantes.PANTALLA_WELCOME)
+               vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
             else:
                #Update
                if(General.show_confirmDialog("actualizar horario?","actualizar")!=True):
@@ -625,7 +637,8 @@ class Register_Manager:
                if(data[1].startswith("horarios")==False):
                   filename=data[1].split("/")
                   if(conexion_bd.id_exist("src_hor","horarios/"+filename[len(filename)-1])):
-                    dat_hrs=conexion_bd.get_allData([constantes.CLAVE_HORARIO],1,[constantes.CLAVE_HORARIO,"src_hor"],[data[0],"horarios/"+filename[len(filename)-1]],["and","and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_HORARIO,"src_hor"],"condition_Types":["and","and"],"conditions_Values":[data[0],"horarios/"+filename[len(filename)-1]],"conditions_Verify":["=","="]}              
+                    dat_hrs=conexion_bd.get_allData([constantes.CLAVE_HORARIO],cond_data)
                     if(dat_hrs==[]):
                          General.show_message("el documento del horario esta ya registrado en el servidor, cambie el nombre e intentelo de nuevo","documento ya existente")
                          return 
@@ -636,16 +649,16 @@ class Register_Manager:
                      res=response.text.strip()
                      data[1]=res
                   
-               fields=["src_hor","turno","modificado"]
-               values_fields=[data[1],data[2],time_object.get_fecha()]
-               conexion_bd.update_data(fields,values_fields,len(fields),[constantes.CLAVE_HORARIO],[data[0]],["and"])
+               values_fields={"src_hor":data[1],"turno":data[2],"modificado":time_object.get_fecha()}
+               cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+               conexion_bd.update_data(values_fields,cond_data)
                user.add_action_historial(["actualizar horario",time_object.get_tiempo()])
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","horario","",time_object.get_fecha()]
-               conexion_bd.add_data(data_hist)
+               conexion_bd.add_data(data_hist,True)
                General.show_message("Actualizacion del horarior realizado satisfactoriamente","horario registrado")
-               vent.update_pantallas(constantes.PANTALLA_WELCOME)
+               vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
         else:
             if(valido==-1):
                 General.show_message("por favor seleccione el tipo de horario","seleccion un tipo de horario")
@@ -703,7 +716,8 @@ class Register_Manager:
         if(data[index_photo]=="..." or data[index_photo]=="" ):
             if(data[0]!="" and data[0]!="..." ):
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                dat_expedent=conexion_bd.get_allData(["src_foto"],1,[constantes.CLAVE_EXPEDIENTE],[data[0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}                             
+                dat_expedent=conexion_bd.get_allData(["src_foto"],cond_data)
                 if(dat_expedent!=[] ):
                     val_f=dat_expedent[0][0]
                     if(val_f.startswith("fotos/")):
@@ -723,7 +737,7 @@ class Register_Manager:
                     return False       
         return True                   
     
-    #update the worker 'cargo
+    #update the worker 
     @classmethod
     def update_profesor_data(cls,cargo_val,data_cargo,data,areas_selected,update):
         time_object=tiempo()
@@ -756,17 +770,21 @@ class Register_Manager:
                    conexion_bd.add_data(data_areas)  
            elif(is_docente==True and (data_cargo[1].lower()=="obrero" or data_cargo[1].lower()=="secretaria")==True):
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)     
-               data_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],1,[constantes.CLAVE_TRABAJADOR],[data[0]],["and"])       
-               conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],["default"],1,[constantes.CLAVE_PROFESOR],[data_prof[0][0]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+               data_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],cond_data)       
+               cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[data_prof[0][0]],"conditions_Verify":["="]}              
+               conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:"default"},cond_data)
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-               conexion_bd.delete_data([constantes.CLAVE_PROFESOR],[data_prof[0][0]],["and"])
+               conexion_bd.delete_data(cond_data)
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)   
-               conexion_bd.delete_data([constantes.CLAVE_PROFESOR],[data_prof[0][0]],["and"])
+               conexion_bd.delete_data(cond_data)
            elif(is_docente==True and(data_cargo[1].lower()!="obrero" and data_cargo[1].lower()!="secretaria")==True):
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)     
-               data_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],1,[constantes.CLAVE_TRABAJADOR],[data[0]],["and"])       
+               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+               data_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],cond_data)       
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-               conexion_bd.delete_data([constantes.CLAVE_PROFESOR],[data_prof[0][0]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[data_prof[0][0]],"conditions_Verify":["="]}              
+               conexion_bd.delete_data(cond_data)
                for i in range(0,len(areas_selected)):
                    data_areas=[data_prof[0][0]+"-"+areas_selected[i],data_prof[0][0],areas_selected[i],time_object.get_fecha()]
                    conexion_bd.add_data(data_areas)                           
@@ -831,15 +849,16 @@ class Register_Manager:
                    return  -18
             else:
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                dat_worker=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],1,[constantes.CLAVE_TRABAJADOR],[id_value],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_value],"conditions_Verify":["="]}              
+                dat_worker=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                expedent=conexion_bd.get_allData([field_verify_expedent],1,[constantes.CLAVE_EXPEDIENTE],[dat_worker[0][0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[dat_worker[0][0]],"conditions_Verify":["="]}              
+                expedent=conexion_bd.get_allData([field_verify_expedent],cond_data)
                 if(( expedent[0][0]==value_verify_expedent)==False):
                     if(is_photo==False):
                         return -19 
                     else:
                         return -18
-                 
         return 0                        
        
     #Register or Update a worker
@@ -1018,22 +1037,23 @@ class Register_Manager:
                 if(id_exist==True):
                    General.show_message("no se puede modificar la cedula del trabajador por una ya existente","cedula ya existente")
                    return
-                   
-                old_dat_work=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                 
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[initial_id],"conditions_Verify":["="]}                             
+                old_dat_work=conexion_bd.get_allData([],cond_data)
                 if(len(old_dat_work)>0):
                     next_data=list(old_dat_work[0])
                     next_data[0]=valor_id
                     conexion_bd.add_data(next_data)
                     conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:valor_id},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:valor_id},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:valor_id},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
-                    conexion_bd.update_data([constantes.CLAVE_TRABAJADOR],[valor_id],1,[constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:valor_id},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                    conexion_bd.delete_data([constantes.CLAVE_TRABAJADOR],[initial_id],["and"])
+                    conexion_bd.delete_data(cond_data)
             if(update==False):
                if(cls.upload_expedent(data_exp,1,2,update)==False):
                  General.show_message("Error al Subir El Expedient al servidor","Error del Expedient")
@@ -1064,42 +1084,49 @@ class Register_Manager:
                   conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                   id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                   data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","personal","",time_object.get_fecha()]
-                  conexion_bd.add_data(data_hist)
+                  conexion_bd.add_data(data_hist,True)
                   General.show_message("registro exitoso del personal","registro exitoso")
-                  vent.update_pantallas(constantes.PANTALLA_WELCOME)
+                  vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
             else:
                 if(cls.upload_expedent(data_exp,1,2,update,data[0]+".zip")==False):
                     General.show_message("Error al Subir El Expedient al servidor","Error del Expedient")
                     return   
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                dat_t=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE,constantes.CLAVE_CARGO,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_TRABAJ],4,[constantes.CLAVE_TRABAJADOR],[data[0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+                dat_t=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE,constantes.CLAVE_CARGO,constantes.CLAVE_NOMBRE,constantes.CLAVE_ESTATUS_TRABAJ],cond_data)
                 id_exp=dat_t[0][0]
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)        
                 data_exp[0]=id_exp
                 id_cargo=dat_t[0][1]
                 id_nombre=dat_t[0][2]
                 id_estatus=dat_t[0][3]
-                conexion_bd.update_data(["src_exp","src_foto","modificado"],[data_exp[1],data_exp[2],time_object.get_fecha()],3,[constantes.CLAVE_EXPEDIENTE],[data_exp[0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_exp[0]],"conditions_Verify":["="]}              
+                conexion_bd.update_data({"src_exp":data_exp[1],"src_foto":data_exp[2],"modificado":time_object.get_fecha()},cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                temp_t=conexion_bd.get_allData([constantes.CLAVE_CARGO],1,[constantes.CLAVE_TRABAJADOR],[data[0]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+                temp_t=conexion_bd.get_allData([constantes.CLAVE_CARGO],cond_data)
                 actual_cargo=temp_t[0][0]
                 cls.update_profesor_data(selected,data_cargo,data,areas_selected,update)    
                 conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                conexion_bd.update_data(["cargo","cargo_ministerio","modificado","codigo_cargo"],[data_cargo[1],data_cargo[2],time_object.get_fecha(),data_cargo[4]],4,[constantes.CLAVE_CARGO],[actual_cargo],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[actual_cargo],"conditions_Verify":["="]}              
+                conexion_bd.update_data({"cargo":data_cargo[1],"cargo_ministerio":data_cargo[2],"modificado":time_object.get_fecha(),"codigo_cargo":data_cargo[4]},cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                conexion_bd.update_data(["nombre","s_nombre","apellido","s_apellido","modificado"],[data_nombre[1],data_nombre[2],data_nombre[3],data_nombre[4],time_object.get_fecha()],5,[constantes.CLAVE_NOMBRE],[id_nombre],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[id_nombre],"conditions_Verify":["="]}                   
+                conexion_bd.update_data({"nombre":data_nombre[1],"s_nombre":data_nombre[2],"apellido":data_nombre[3],"s_apellido":data_nombre[4],"modificado":time_object.get_fecha()},cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-                conexion_bd.update_data(["estatus","service_years","fecha_ingreso","modificado"],[data_estatus[1],data_estatus[2],data_estatus[3],time_object.get_fecha()],4,[constantes.CLAVE_ESTATUS_TRABAJ],[id_estatus],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[id_estatus],"conditions_Verify":["="]}              
+                conexion_bd.update_data({"estatus":data_estatus[1],"service_years":data_estatus[2],"fecha_ingreso":data_estatus[3],"modificado":time_object.get_fecha()},cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                fields_u=["correo","telefono","modificado"]
-                conexion_bd.update_data(fields_u,[data[2],data[3],time_object.get_fecha()],len(fields_u),[constantes.CLAVE_TRABAJADOR],[data[0]],["and"])
+                values_update={"correo":data[2],"telefono":data[3],"modificado":time_object.get_fecha()}
+                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
+                conexion_bd.update_data(values_update,cond_data)
                 user.add_action_historial(["actualizar personal",time_object.get_tiempo()])
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","personal","",time_object.get_fecha()]
-                conexion_bd.add_data(data_hist)
+                conexion_bd.add_data(data_hist,True)
                 General.show_message("actualizacion exitosa del personal","actualizacion exitosa")
-                vent.update_pantallas(constantes.PANTALLA_WELCOME)
+                vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
        else:
           if(valido==-2):
              General.show_message("por escriba un valor valido al nombre","nombre invalido")

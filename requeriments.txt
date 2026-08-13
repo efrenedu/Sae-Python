@@ -1,3 +1,4 @@
+bcrypt==4.2.1
 certifi==2026.6.17
 charset-normalizer==3.4.9
 CTKCalendar==0.0.1

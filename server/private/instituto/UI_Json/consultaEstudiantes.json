@@ -1,5 +1,5 @@
 {
-  "Pantalla_Name": "consultar_descargas",
+  "Pantalla_Name": "consultaEstudiantes",
   "Widgets": [
     {
       "Type": "CTkFrame",
@@ -50,7 +50,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "CONSULTAR DESCARGAS DE TRABAJADORES",
+        "Text": "CONSULTAR ESTUDIANTES",
         "Text_Color": [
           "#000000",
           "#FFFFFF"
@@ -58,7 +58,7 @@
         "Fg_Color": "transparent",
         "Id": "label_title",
         "Ev": "None",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -137,7 +137,7 @@
         "Fg_Color": "transparent",
         "Id": "label_filter",
         "Ev": "None",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -165,7 +165,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "filtro",
+        "Text": "Filtro",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
@@ -173,7 +173,7 @@
         "Fg_Color": "transparent",
         "Id": "label_filterVal",
         "Ev": "None",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -201,7 +201,7 @@
     {
       "Type": "CTkCombobox",
       "Propiedades": {
-        "Data": "elegir,tipo formato,CI trabajador,tipo doc,fecha,hora",
+        "Data": "elegir,cedula,seccion,estatus,genero",
         "Fg_Color": [
           "#FFFFFF",
           "#48516F"
@@ -217,7 +217,7 @@
         "Corner_Radious": "8",
         "Id": "filtros_cp",
         "Ev": "None",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -274,6 +274,98 @@
       }
     },
     {
+      "Type": "CTkLabel",
+      "Propiedades": {
+        "Text": "tipo de estudiante:",
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": "transparent",
+        "Id": "label_studentType",
+        "Ev": "None",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 0
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        }
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": [
+          20,
+          5
+        ],
+        "pady": 4,
+        "sticky": "w",
+        "columnspan": "None"
+      }
+    },
+    {
+      "Type": "CTkRadiobutton",
+      "Propiedades": {
+        "Direction": "horizontal",
+        "Button_Count": "2",
+        "Buttons_Texts": [
+          "cedulado",
+          "no cedulado"
+        ],
+        "Text_Color": [
+          "#5E53AD",
+          "#F5EFF5"
+        ],
+        "Fg_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Border_Color": [
+          "#70A2D1",
+          "#FFFFFF"
+        ],
+        "Hover_Color": [
+          "#FFFFFF",
+          "#FFF9CD"
+        ],
+        "Id": "personal_cp",
+        "Ev": "2",
+        "Panel_Id": "consultaEstudiantes",
+        "Master": "Main_Box",
+        "Initial_state": "True",
+        "Intern_Position": {
+          "Column": 2,
+          "Row": 1
+        },
+        "Font": {
+          "Name": "Arial",
+          "Size": "15",
+          "Style": "bold"
+        },
+        "Disabled_Color": [
+          "#B2B6D1",
+          "#D6CFE5"
+        ],
+        "Disabled_TextColor": [
+          "#5C4D66",
+          "#C0BAC5"
+        ]
+      },
+      "Posicion": {
+        "column": 0,
+        "row": 1,
+        "padx": 25,
+        "pady": 8,
+        "sticky": "w"
+      }
+    },
+    {
       "Type": "CTkText_field",
       "Propiedades": {
         "Text_Color": [
@@ -288,9 +380,9 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "identificador_cp",
+        "Id": "identificador",
         "Ev": "None",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Placeholder_Text": "Valor del Filtro",
@@ -381,9 +473,9 @@
     {
       "Type": "CTkTable",
       "Propiedades": {
-        "data": "numero,CI trabaj,tipo formato,tipo doc,fecha,hora",
-        "data_Ids": "#0,#1,#2,#3,#4,#5",
-        "Width_Column": "125",
+        "data": "numero,CI,apellido,nombre,seccion,CI representante,estatus,salud,genero",
+        "data_Ids": "#0,#1,#2,#3,#4,#5,#6,#7,#8,#9",
+        "Width_Column": "92",
         "Heigth_Table": "10",
         "Colors": {
           "Bg": "#8CA8DA",
@@ -401,7 +493,7 @@
         },
         "Id": "table1_cp",
         "Ev": "None",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -499,7 +591,7 @@
     {
       "Type": "CTkCombobox",
       "Propiedades": {
-        "Data": "Buscar,Generar Reporte Descargas de Documentos",
+        "Data": "Buscar,Descargar Expediente,Descargar Constancia,Descargar Carnet,Generar Reporte de Notas del Momento Activo,Ver Informacion del Estudiante",
         "Fg_Color": [
           "#FFFFFF",
           "#48516F"
@@ -598,8 +690,8 @@
           ]
         },
         "Id": "buscar",
-        "Ev": "constantes.EV_CONSULTAR_DESCARGAS",
-        "Panel_Id": "consultar_descargas",
+        "Ev": "constantes.EV_CONSULTAR_ESTUDIANTE",
+        "Panel_Id": "consultaEstudiantes",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
@@ -621,7 +713,7 @@
           16,
           20
         ],
-        "sticky": "e"
+        "sticky": ""
       }
     },
     {
@@ -652,7 +744,7 @@
         },
         "Id": "volver",
         "Ev": "constantes.EV_VOLVER",
-        "Panel_Id": "consultar_descargas",
+        "Panel_Id": "consultaEstudiantes",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
@@ -674,7 +766,7 @@
           16,
           20
         ],
-        "sticky": "e"
+        "sticky": ""
       }
     }
   ]

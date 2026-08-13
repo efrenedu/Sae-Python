@@ -709,8 +709,8 @@ class documento:
               Event_manager.set_comp_values("cargando","Escribiendo Datos: 0 %")
            tabla_name=content[1][i]
            filename=content[2]+tabla_name+".csv"
-           conexion_bd.set_tabla(tabla_name)
-           data_tabla=conexion_bd.get_allData(None,None)
+           conexion_bd.set_tabla_byName(tabla_name)
+           data_tabla=conexion_bd.get_allData([])
            line=""
            file_tabla=None
            try:
@@ -755,7 +755,7 @@ class documento:
               Event_manager.set_comp_values("cargando","preparandose para cargar los datos: 0 %")
             tabla_name=content[1][i]
             filename=content[2]+tabla_name+".csv"
-            conexion_bd.set_tabla(tabla_name)
+            conexion_bd.set_tabla_byName(tabla_name)
             if(os.path.exists(filename)==False):
                print(f"not found {filename}")
                cls.estatus=0
@@ -777,7 +777,7 @@ class documento:
               Event_manager.set_comp_values("cargando","cargando los datos: 0 %")       
             tabla_name=content[1][j]
             filename=content[2]+tabla_name+".csv"
-            conexion_bd.set_tabla(tabla_name)
+            conexion_bd.set_tabla_byName(tabla_name)
             if(os.path.exists(filename)==False): 
                print(f"error reading {filename}")            
                cls.estatus=0

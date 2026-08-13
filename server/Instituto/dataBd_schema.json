@@ -1,0 +1,207 @@
+{
+    "seed_data":{
+     "horario":[{"id_hor":"default","src_hor":"","turno":"mañana","modificado":"Calculate_date"}],
+	 "seccion":[{"id_secc":"default","año":"0","letra":"A","id_hor":"default",
+	            "total_estud":"0","maximo_estud":"0","minimo_estud":"0","modificado":"Calculate_date"}
+	 ],
+	 "cargo":[{"id_cargo":"default","cargo":"","cargo_ministerio":"","modificado":"Calculate_date","codigo_cargo":""}],
+     "expediente":[{ "id_exp":"default","src_exp":"","src_foto":"","fecha_registro":"","modificado":"Calculate_date"}],
+     "trabajador":[{ "CI_trabaj":"000","id_nombre":["nombre",{"id_nombre":"","nombre":"default","s_nombre":"","apellido":"default","s_apellido":"","modificado":"Calculate_date"}],
+	                  "correo":"","telefono":"","id_exp":"default","id_hor":"default","id_cargo":"default",
+					 "id_est_trabaj":["estatus_trabaj",{"id_est_trabaj":"","estatus":"inactivo","service_years":"","fecha_ingreso":"","modificado":"Calculate_date"}],
+					 "modificado":"Calculate_date"
+				    },
+					{ "CI_trabaj":"001","id_nombre":["nombre",{"id_nombre":"","nombre":"default admin","s_nombre":"","apellido":"default admin","s_apellido":"","modificado":"Calculate_date"}],"correo":"","telefono":"",
+	                 "id_exp":"default","id_hor":"default","id_cargo":"default",
+					 "id_est_trabaj":["estatus_trabaj",{"id_est_trabaj":"","estatus":"inactivo","service_years":"","fecha_ingreso":"","modificado":"Calculate_date"}],
+					 "modificado":"Calculate_date"
+				    }
+	 ],
+     "usuario":[{"usuario":"admin01",
+	             "password":"$2y$10$Gf9z592oruv.1izskvWORebooQRyCcYy4oppluf7.2FHRbYcQGsqW",
+				 "CI_trabaj":"001","nivel_acceso":"admin",
+	             "foto":"fotos/user_login.jpg","id_intentos":["intentos_usuario",{"id_intentos":"","num_intentos":"0","last_fecha":"","last_hora":"","modificado":"Calculate_date"}],"bloqueado":"False",
+				 "modificado":"Calculate_date"
+				}
+	 ],
+	 "area_formacion":[
+	   {"nomb_area":"Lengua y Literatura","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Idiomas","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Matematicas","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Educacion Fisica","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Arte y Patrimonio","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Biologia Ambiente y Tecnologia","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Fisica","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Quimica","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"Ciencias de la Tierra","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"GHC","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"FSN","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"OV","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"},
+	   {"nomb_area":"GCRP","incorporada":"Si","id_years_in":["años_incorporados",{"id_years_in":"","1_año":"True","2_año":"False",
+	     "3_año":"False","4_año":"False","5_año":"False","modificado":"Calculate_date"}],"modificado":"Calculate_date"}
+	 ]
+  },
+  "tables_names":[
+    "direccion","cargo","estatus_trabaj","estatus_estud","años_incorporados",
+    "intentos_usuario","nombre","expediente","horario","trabajador","usuario",
+    "representante","seccion","profesor","estudiante","area_formacion",
+    "area_dictada_docentes","reporte","formato","cronograma","momento","fecha",
+    "pregunta_secreta","descarga_documentos","calificacion_final","calif_momento",
+    "calificacion","disponibilidad_horario","materia_pendiente","calific_pendiente"
+  ],
+  "Alias_Tables":{
+      "direccion":"dr","cargo":"cg","estatus_trabaj":"et","estatus_estud":"ee","años_incorporados":"ain",
+	  "intentos_usuario":"iu","nombre":"n","expediente":"exp","horario":"h","trabajador":"t","usuario":"u",
+	  "representante":"r","seccion":"s","profesor":"p","estudiante":"e","area_formacion":"af",
+	  "area_dictada_docentes":"ard","reporte":"rp","formato":"f","cronograma":"c","momento":"m","fecha":"fch",
+	  "pregunta_secreta":"ps","descarga_documentos":"dd","calificacion_final":"cf","calif_momento":"cm","calificacion":"cal",
+	  "disponibilidad_horario":"dh","materia_pendiente":"mp","calific_pendiente":"cp"
+  },
+  "fields_tables":{
+    "direccion":[{"name":"id_dir","field-type":"PRIMARY KEY"},{"name":"sector","field-type":"field"},
+                 {"name":"parroquia","field-type":"field"},{"name":"casa","field-type":"field"},
+                 {"name":"modificado","field-type":"field"}
+    ],
+    "cargo":[{"name":"id_cargo","field-type":"PRIMARY KEY"},{"name":"cargo","field-type":"field"},
+	         {"name":"cargo_ministerio","field-type":"field"},{"name":"modificado","field-type":"field"},
+			 {"name":"codigo_cargo","field-type":"field"}
+	],
+	"estatus_trabaj":[{"name":"id_est_trabaj","field-type":"PRIMARY KEY"},{"name":"estatus","field-type":"field"},
+	                  {"name":"service_years","field-type":"field"},{"name":"fecha_ingreso","field-type":"field"},
+					  {"name":"modificado","field-type":"field"}
+	],
+	"estatus_estud":[{"name":"id_est","field-type":"PRIMARY KEY"},{"name":"estatus","field-type":"field"},
+	                 {"name":"salud","field-type":"field"},{"name":"cedulado","field-type":"field"},
+					 {"name":"last_year","field-type":"field"},{"name":"fecha_inscrip","field-type":"field"},
+					 {"name":"fecha_ingreso","field-type":"field"},{"name":"plantel_procedencia","field-type":"field"},
+					 {"name":"modificado","field-type":"field"}
+	 ],
+	"años_incorporados":[{"name":"id_years_in","field-type":"PRIMARY KEY"},{"name":"1_año","field-type":"field"},
+	                  {"name":"2_año","field-type":"field"},{"name":"3_año","field-type":"field"},
+					  {"name":"4_año","field-type":"field"},{"name":"5_año","field-type":"field"},
+					  {"name":"modificado","field-type":"field"}
+	],
+    "intentos_usuario":[{"name":"id_intentos","field-type":"PRIMARY KEY"},{"name":"num_intentos","field-type":"field"},
+	                    {"name":"last_fecha","field-type":"field"},{"name":"last_hora","field-type":"field"},
+						{"name":"modificado","field-type":"field"}
+	],
+	"nombre":[{"name":"id_nombre","field-type":"PRIMARY KEY"},{"name":"nombre","field-type":"field"},
+	        {"name":"s_nombre","field-type":"field"},{"name":"apellido","field-type":"field"},
+			{"name":"s_apellido","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"expediente":[{"name":"id_exp","field-type":"PRIMARY KEY"},{"name":"src_exp","field-type":"field"},
+	              {"name":"src_foto","field-type":"field"},{"name":"fecha_registro","field-type":"field"},
+				  {"name":"modificado","field-type":"field"}
+	],
+	"horario":[{"name":"id_hor","field-type":"PRIMARY KEY"},{"name":"src_hor","field-type":"field"},
+	          {"name":"turno","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"trabajador":[{"name":"CI_trabaj","field-type":"PRIMARY KEY"},{"name":"id_nombre","field-type":"FOREIGN KEY-nombre:id_nombre"},
+	              {"name":"correo","field-type":"field"},{"name":"telefono","field-type":"field"},
+				  {"name":"id_exp","field-type":"FOREIGN KEY-expediente:id_exp"},{"name":"id_hor","field-type":"FOREIGN KEY-horario:id_hor"},
+				  {"name":"id_cargo","field-type":"FOREIGN KEY-cargo:id_cargo"},{"name":"id_est_trabaj","field-type":"FOREIGN KEY-estatus_trabaj:id_est_trabaj"},
+				  {"name":"modificado","field-type":"field"}
+	],
+	"usuario":[{"name":"usuario","field-type":"PRIMARY KEY"},{"name":"password","field-type":"field"},
+             {"name":"CI_trabaj","field-type":"FOREIGN KEY-trabajador:CI_trabaj"},{"name":"nivel_acceso","field-type":"field"},
+	         {"name":"foto","field-type":"field"}, {"name":"id_intentos","field-type":"FOREIGN KEY-intentos_usuario:id_intentos"},
+			 {"name":"bloqueado","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+    "representante":[{"name":"CI_repres","field-type":"PRIMARY KEY"},{"name":"id_nombre","field-type":"FOREIGN KEY-nombre:id_nombre"},
+	          {"name":"telef","field-type":"field"}, {"name":"correo","field-type":"field"}, {"name":"ocupacion","field-type":"field"},
+			  {"name":"id_dir","field-type":"FOREIGN KEY-direccion:id_dir"},{"name":"modificado","field-type":"field"}
+	],
+	"seccion":[{"name":"id_secc","field-type":"PRIMARY KEY"},{"name":"año","field-type":"field"},
+	           {"name":"letra","field-type":"field"}, {"name":"id_hor","field-type":"FOREIGN KEY-horario:id_hor"},
+			   {"name":"total_estud","field-type":"field"},{"name":"maximo_estud","field-type":"field"},
+			   {"name":"minimo_estud","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"profesor":[{"name":"id_prof","field-type":"PRIMARY KEY"},{"name":"CI_trabaj","field-type":"FOREIGN KEY-trabajador:CI_trabaj"},
+	           {"name":"seccion_guia","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"estudiante":[{"name":"CI_estud","field-type":"PRIMARY KEY"},{"name":"id_nombre","field-type":"FOREIGN KEY-nombre:id_nombre"},
+	     {"name":"id_est","field-type":"FOREIGN KEY-estatus_estud:id_est"},{"name":"id_secc","field-type":"FOREIGN KEY-seccion:id_secc"},
+         {"name":"id_exp","field-type":"FOREIGN KEY-expediente:id_exp"},{"name":"CI_repres","field-type":"FOREIGN KEY-representante:CI_repres"},
+         {"name":"genero","field-type":"field"},{"name":"nacimiento","field-type":"field"},	
+         {"name":"id_dir","field-type":"FOREIGN KEY-direccion:id_dir"},{"name":"parentesco","field-type":"field"},	
+         {"name":"modificado","field-type":"field"}		 
+	],
+	"area_formacion":[{"name":"nomb_area","field-type":"PRIMARY KEY"},{"name":"incorporada","field-type":"field"},
+	    {"name":"id_years_in","field-type":"FOREIGN KEY-años_incorporados:id_years_in"},{"name":"modificado","field-type":"field"}
+	],
+    "area_dictada_docentes":[{"name":"id_docente_Area","field-type":"PRIMARY KEY"},{"name":"id_prof","field-type":"FOREIGN KEY-profesor:id_prof"},
+	                        {"name":"nomb_area","field-type":"FOREIGN KEY-area_formacion:nomb_area"},{"name":"modificado","field-type":"field"}
+	],
+	"reporte":[{"name":"id_reporte","field-type":"PRIMARY KEY"},{"name":"usuario","field-type":"FOREIGN KEY-usuario:usuario"},
+	   {"name":"fecha","field-type":"field"},{"name":"hora","field-type":"field"},{"name":"tipo","field-type":"field"},
+	   {"name":"razon","field-type":"field"},{"name":"motivo","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"formato":[{"name":"tipo","field-type":"PRIMARY KEY"},{"name":"src_form","field-type":"field"},
+	          {"name":"modificado","field-type":"field"}
+	],
+	"cronograma":[{"name":"año_escolar","field-type":"PRIMARY KEY"},{"name":"inicio","field-type":"field"},
+	             {"name":"cierre","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"momento":[{"name":"id_mom","field-type":"PRIMARY KEY"},{"name":"abierto","field-type":"field"},
+	          {"name":"culminado","field-type":"field"},{"name":"modificado","field-type":"field"},
+			  {"name":"fecha_limite","field-type":"field"},{"name":"hora_limite","field-type":"field"},
+			  {"name":"fecha_inicio","field-type":"field"}
+	],
+	"fecha":[{"name":"id_fecha","field-type":"PRIMARY KEY"},{"name":"id_mom","field-type":"FOREIGN KEY-momento:id_mom"},
+	        {"name":"año_escolar","field-type":"FOREIGN KEY-cronograma:año_escolar"},{"name":"razon","field-type":"field"},
+			{"name":"fecha","field-type":"field"},{"name":"fecha_cierre","field-type":"field"},
+			{"name":"modificado","field-type":"field"}
+	],
+    "pregunta_secreta":[{"name":"id_pregunta","field-type":"PRIMARY KEY"},{"name":"usuario","field-type":"FOREIGN KEY-usuario:usuario"},
+	                  {"name":"respuesta","field-type":"field"},{"name":"pregunta","field-type":"field"},
+					  {"name":"numero","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"descarga_documentos":[{"name":"id_descarg","field-type":"PRIMARY KEY"},{"name":"CI_trabaj","field-type":"FOREIGN KEY-trabajador:CI_trabaj"},
+	                     {"name":"tipo","field-type":"FOREIGN KEY-formato:tipo"},{"name":"fecha","field-type":"field"},
+						 {"name":"hora","field-type":"field"},{"name":"tipo_descarga","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"calificacion_final":[{"name":"id_final_c","field-type":"PRIMARY KEY"},{"name":"CI_estud","field-type":"FOREIGN KEY-estudiante:CI_estud"},
+	          {"name":"año","field-type":"field"},{"name":"nomb_area","field-type":"FOREIGN KEY-area_formacion:nomb_area"},
+			  {"name":"valor","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"calif_momento":[{"name":"id_mom_c","field-type":"PRIMARY KEY"},{"name":"id_mom","field-type":"FOREIGN KEY-momento:id_mom"},
+	                {"name":"id_final_c","field-type":"FOREIGN KEY-calificacion_final:id_final_c"},{"name":"prom","field-type":"field"},
+	                {"name":"definitiva","field-type":"field"},{"name":"estimulacion","field-type":"field"},
+					{"name":"año","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+    "calificacion":[{"name":"id_calif","field-type":"PRIMARY KEY"},{"name":"id_mom_c","field-type":"FOREIGN KEY-calif_momento:id_mom_c"},
+	               {"name":"valor","field-type":"field"},{"name":"numero","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"disponibilidad_horario":[{"name":"id_disp","field-type":"PRIMARY KEY"},{"name":"CI_trabaj","field-type":"FOREIGN KEY-trabajador:CI_trabaj"},
+	                         {"name":"turno","field-type":"field"},{"name":"disp_lunes","field-type":"field"},
+							 {"name":"disp_martes","field-type":"field"},{"name":"disp_miercoles","field-type":"field"},
+							 {"name":"disp_jueves","field-type":"field"},{"name":"disp_viernes","field-type":"field"},
+							 {"name":"modificado","field-type":"field"}
+	],
+	"materia_pendiente":[{"name":"id_pend","field-type":"PRIMARY KEY"},{"name":"CI_estud","field-type":"FOREIGN KEY-estudiante:CI_estud"},
+	                    {"name":"max_calif","field-type":"field"},{"name":"nomb_area","field-type":"FOREIGN KEY-area_formacion:nomb_area"},
+						{"name":"año","field-type":"field"},{"name":"modificado","field-type":"field"}
+	],
+	"calific_pendiente":[{"name":"id_calif_pen","field-type":"PRIMARY KEY"},{"name":"id_pend","field-type":"FOREIGN KEY-materia_pendiente:id_pend"},
+	                    {"name":"intento","field-type":"field"},{"name":"valor","field-type":"field"},{"name":"fecha","field-type":"field"},
+						{"name":"modificado","field-type":"field"}
+	]                       
+  },
+  "add_indexs":{
+    "materia_pendiente":["idx_MatFullIdentific","CI_estud,nomb_area,año"],
+    "calificacion_final":["idx_CompleteCalific","CI_estud,nomb_area,año"],
+    "fecha":["idx_razon","razon,id_mom"]
+  }
+}

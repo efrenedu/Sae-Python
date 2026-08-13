@@ -2,7 +2,7 @@
   "Pantalla_Name": "Expediente_Students",
   "Widgets": [
     {
-      "Type": "CTkFrame",
+      "Type":"CTkFrame",
       "Propiedades": {
         "Color": [
           "#93E4F5",
@@ -48,7 +48,7 @@
       }
     },
 	{
-      "Type": "CTkFrame",
+      "Type":"CTkFrame",
       "Propiedades": {
         "Color": [
           "#93E4F5",
@@ -91,7 +91,7 @@
       }
     },
 	{
-      "Type": "CTkFrame",
+      "Type":"CTkFrame",
       "Propiedades": {
         "Color": [
           "#93E4F5",
@@ -134,7 +134,7 @@
       }
     },
     {
-      "Type": "CTkLabel",
+      "Type":"CTkLabel",
       "Propiedades": {
         "Text": "DOCUMENTOS DEL EXPEDIENTE",
         "Text_Color": [
@@ -170,7 +170,7 @@
       }
     },
 	{
-      "Type": "CTkLabel",
+      "Type":"CTkLabel",
       "Propiedades": {
         "Text": "Campos con * Son Obligatorios",
         "Text_Color": [
@@ -206,7 +206,7 @@
       }
     },
     {
-      "Type": "CTkLabel",
+      "Type":"CTkLabel",
       "Propiedades": {
         "Text": "fotocopia de la cedula * ",
         "Text_Color": [
@@ -242,7 +242,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type":"CTkText_field",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -304,7 +304,7 @@
       }
     },
 	{
-      "Type": "CTkButton",
+      "Type":"CTkButton",
       "Propiedades": {
         "Text": "abrir",
         "Colors": {
@@ -357,7 +357,7 @@
       }
     },
     {
-      "Type": "CTkLabel",
+      "Type":"CTkLabel",
       "Propiedades": {
         "Text": "copia de la partida \n de nacimiento * ",
         "Text_Color": [
@@ -393,7 +393,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type":"CTkText_field",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -455,7 +455,7 @@
       }
     },
 	{
-      "Type": "CTkButton",
+      "Type":"CTkButton",
       "Propiedades": {
         "Text": "abrir",
         "Colors": {
@@ -508,7 +508,7 @@
       }
     },
     {
-      "Type": "CTkLabel",
+      "Type":"CTkLabel",
       "Propiedades": {
         "Text": "Documento de Aprobacion \n de sexto grado",
         "Text_Color": [
@@ -544,7 +544,7 @@
       }
     },
     {
-      "Type": "CTkText_field",
+      "Type":"CTkText_field",
       "Propiedades": {
         "Text_Color": [
           "#000000",
@@ -606,7 +606,7 @@
       }
     },
 	{
-      "Type": "CTkButton",
+      "Type":"CTkButton",
       "Propiedades": {
         "Text": "abrir",
         "Colors": {
@@ -659,7 +659,7 @@
       }
     },
     {
-      "Type": "CTkLabel",
+      "Type":"CTkLabel",
       "Propiedades": {
         "Text": "calificaciones certificadas\n de Años cursados",
         "Text_Color": [
@@ -757,7 +757,7 @@
       }
     },
 	{
-      "Type": "CTkButton",
+      "Type":"CTkButton",
       "Propiedades": {
         "Text": "abrir",
         "Colors": {

@@ -364,7 +364,10 @@ class ventana:
            self.raiz.after(10,self.redraw_load)
        
     #update the Panels states 
-    def update_pantallas(self,next_p,from_menu=False):
+    def update_pantallas(self,next_p,user_data=None,from_menu=False):
+        res=-1
+        if(user_data==None and from_menu==True):
+            user_data=Event_manager.user
         if(next_p!=""): 
            
            self.loading_panel=True
@@ -374,14 +377,14 @@ class ventana:
                self.load_frame=Frame_Loading(self.raiz,constantes.FG_DEFAULT_BACKGROUND,"Cargando...",32,["#FFFFFF","#FFFFFF"])           
            self.load_frame.show_frame()
            self.raiz.update() 
-                      
-           UI.read_Jsondata(next_p)           
+           res=UI.read_Jsondata(next_p,user_data)           
            self.raiz.update_idletasks()     
            self.raiz.event_generate("<Configure>")  
            
            self.raiz.after(100,self.hide_load_Panel)
            if(self.panelActual_str==constantes.PANTALLA_WELCOME):
               Event_manager.show_data_user()
+        return res
       
        
     #Close the Windows    

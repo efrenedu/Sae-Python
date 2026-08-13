@@ -34,7 +34,8 @@ class Process_Manager:
         min_secc="15"
         data_seccion_estud=[]
         if(conexion_bd.is_empty()==False):
-            data_seccs=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),["año"],[year],["and"])
+            cond_data={"conditions_Names":["año"],"condition_Types":["and"],"conditions_Values":[year],"conditions_Verify":["="]}      
+            data_seccs=conexion_bd.get_allData([],cond_data)
             num_seccs=len(data_seccs)
             if(data_seccs!=[]):
                 asignada=-1
@@ -42,7 +43,9 @@ class Process_Manager:
                 code_letra=-1
                 for i in range(0,len(data_seccs)):
                     conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-                    data_hor=conexion_bd.get_allData(constantes.CAMPOS_HORARIO,len(constantes.CAMPOS_HORARIO),[constantes.CLAVE_HORARIO],[data_seccs[i][3]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data_seccs[i][3]],"conditions_Verify":["="]}    
+                
+                    data_hor=conexion_bd.get_allData([],cond_data)
                     if(data_hor[0][2]==turno and data_seccs[i][0]!="default" and asignada==-1):
                         total1=data_seccs[i][4]
                         limite1=data_seccs[i][5]
@@ -55,7 +58,8 @@ class Process_Manager:
                         letra2=""
                         for j in range(0,len(data_seccs)):
                             if(data_seccs[i][0]!=data_seccs[j][0] and another_seccion==False and data_seccs[j][0]!="default"):
-                                data_hor2=conexion_bd.get_allData(constantes.CAMPOS_HORARIO,len(constantes.CAMPOS_HORARIO),[constantes.CLAVE_HORARIO],[data_seccs[j][3]],["and"])
+                                cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data_seccs[j][3]],"conditions_Verify":["="]}    
+                                data_hor2=conexion_bd.get_allData([],cond_data)
                                 if(data_hor2[0][2]==turno):
                                     total2=data_seccs[j][4]
                                     limite2=data_seccs[j][5]
@@ -160,11 +164,11 @@ class Process_Manager:
         
         #verificamos cronograma si existe
         conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        data_cronog=conexion_bd.get_allData(constantes.CAMPOS_CRONOGRAMA,len(constantes.CAMPOS_CRONOGRAMA))
+        data_cronog=conexion_bd.get_allData([])
         if(data_cronog!=[]):
            data_fechas=[]
            conexion_bd.set_tabla(constantes.TABLA_FECHA)
-           data_fechas=conexion_bd.get_allData(["razon","fecha","fecha_cierre"],3,[constantes.CLAVE_CRONOGRAMA],[data_cronog[0][0]],["and"] )                
+           data_fechas=conexion_bd.get_allData(["razon","fecha","fecha_cierre"])                
            if(data_fechas!=[]):
               for i in range(0,len(data_fechas)):
                  if(data_fechas[i][0]=="inscripcion nuevo ingreso"):
@@ -212,10 +216,10 @@ class Process_Manager:
           data_valid=estud.get_data_inscrip()
           usr.recibe_data_process(data_valid)
           if(type_i==cls.INSCRIPTION_NUEVO_INGRESO):
-                vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_2)
+                vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_2,usr)
                 Event_manager.set_data_estud(data_valid[0],False,data_estud[3])   
           else:
-                vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3)
+                vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3,usr)
                 Event_manager.set_data_estud(data_valid[0],True,data_estud[3])                           
         else:
           if(valido==-1):
@@ -265,7 +269,8 @@ class Process_Manager:
                  
              #Verify Formation Areas  
              conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-             areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_AÑOS_INCORPORADOS],2,["incorporada"],["Si"],["and"])
+             cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}    
+             areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)
              if(areas==[]):
                     General.show_error("error no existen areas de formacion incorporadas","sin areas de formacion disponibles")
                     return
@@ -273,7 +278,8 @@ class Process_Manager:
              cants=[0,0,0,0,0]                                
              for ar in areas:
                 for i in range(0,int(year_curso)):
-                    ar_in=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],1,[constantes.CLAVE_AÑOS_INCORPORADOS,str(i+1)+"_año"],[ar[1],"True"],["and","and"]) 
+                    cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS,str(i+1)+"_año"],"condition_Types":["and","and"],"conditions_Values":[ar[1],"True"],"conditions_Verify":["=","="]}    
+                    ar_in=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data) 
                     if(ar_in!=[]):
                          cants[i]=cants[i]+1
              for j in range(0,int(year_curso)):
@@ -303,12 +309,13 @@ class Process_Manager:
                 data_areas=[]
                 year_area=year_curso+"_año"
                 conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-                areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],1,["incorporada"],["Si"],["and"])           
+                cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}    
+                areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data)           
                 usr.recibe_data_process(data_areas)
                 usr.recibe_data_process(data_repitiendo)
                 
                 if(last_dat[0][2]!="True" and (data_pendiente[0]!="False" or data_repitiendo[0]!="False")):
-                    vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_4)
+                    vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_4,usr)
                     pnl=vent.panelActual
                     pnl.get_comp_byName("seccion").set_text(f"Seccion Asignada: {year_curso}-{data_seccion[3]}")
                     if(data_pendiente[0]!="False"):
@@ -333,7 +340,7 @@ class Process_Manager:
                     data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
                     conexion_bd.add_data(data_hist)
                     General.show_message("inscripcion realizada satisfactoriamente","inscripcion finalizada")
-                    vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION)
+                    vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,usr)
                     usr.reset_data_process(0)
              else:
                  if(valido==-1):
@@ -383,16 +390,17 @@ class Process_Manager:
                
             estud=estudiante()
             estud.inscribir(usr.get_data_process())
-            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-            Event_manager.generar_reporte("inscripcion",usr.get_data_process())                    
             time_object=tiempo()           
             usr.add_action_historial(["inscripcion de estudiante",time_object.get_tiempo()])
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
             data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
-            conexion_bd.add_data(data_hist)
+            conexion_bd.add_data(data_hist,True)
+            
+            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
+            Event_manager.generar_reporte("inscripcion",usr.get_data_process())                    
             General.show_message("inscripcion realizada satisfactoriamente","inscripcion finalizada")
-            vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION)
+            vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,usr)
             usr.reset_data_process(0)   
 
 
@@ -410,26 +418,26 @@ class Process_Manager:
         
         if(opcion==cls.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_GESTION_CALIFICATION):
             #gestion de calific 1
-            vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA)
+            vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA,usr)
             usr.reset_data_process(0)            
         elif(opcion==cls.RENDIMIENTO_OPTION_ACCESS_SABANA_AND_CALIFICATIONS_YEAR_PANEL):
             #sabana de notas
             if(is_secretaria==False):
-                vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_SABANA_NOTAS)
+                vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_SABANA_NOTAS,usr)
                 usr.reset_data_process(0)
             else:
                General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")
         elif(opcion==cls.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_MATERIA_PENDIENTE):
             #materia pendiente 1
             if(is_secretaria==False):
-               vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND)
+               vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND,usr)
                usr.reset_data_process(0)
             else:
                General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")
         elif(opcion==cls.RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT):
             #notas finales.
              if(is_secretaria==False):
-                 vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF_FINALES)
+                 vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF_FINALES,usr)
                  usr.reset_data_process(0)
              else:
                  General.show_message("no se puede acceder a esta opcion siendo un usuario secretaria","acceso invalido")  
@@ -438,12 +446,14 @@ class Process_Manager:
             data_proces=[]
             ced=pnl.get_comp_byName("cedula_p3").get_text()
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            if(conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[ced],["and"])==[]):
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[ced],"conditions_Verify":["="]}      
+            if(conexion_bd.get_allData([],cond_data)==[]):
                 General.show_message("cedula del estudiante invalida","cedula invalida")
                 return
                 
             conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-            if(conexion_bd.get_allData(constantes.CAMPOS_MATERIA_PENDIENTE,len(constantes.CAMPOS_MATERIA_PENDIENTE),[constantes.CLAVE_ESTUDIANTE],[ced],["and"])==[]):
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[ced],"conditions_Verify":["="]}      
+            if(conexion_bd.get_allData([],cond_data)==[]):
                 General.show_message("estudiante sin materia pendientes","sin materias pendientes")
                 return
             
@@ -456,11 +466,12 @@ class Process_Manager:
             valido=estud.verificar_data_rendimiento(data_proces,1)
             if(valido==True):
               usr.recibe_data_process(data_proces)
-              vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_MAT_PEND)
+              vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_MAT_PEND,usr)
               pnl=vent.panelActual
               pnl.get_comp_byName("area_p4").set_text(data_proces[1])
               conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-              data_pend=conexion_bd.get_allData(["max_calif"],1,[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],[data_proces[0],data_proces[1],str(int(data_proces[3])-1)],["and","and","and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[data_proces[0],data_proces[1],str(int(data_proces[3])-1)],"conditions_Verify":["=","=","="]}    
+              data_pend=conexion_bd.get_allData(["max_calif"],cond_data)
               nota=data_pend[0][0]
               if(len(nota)<2):
                  nota="0"+nota
@@ -477,7 +488,8 @@ class Process_Manager:
                 return
             ced=pnl.get_comp_byName("cedula_p1").get_text()
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            if(conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[ced],["and"])==[]):
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[ced],"conditions_Verify":["="]}      
+            if(conexion_bd.get_allData([],cond_data)==[]):
                 General.show_message("cedula del estudiante invalida","cedula invalida")
                 return
             data_proces=[]
@@ -491,7 +503,7 @@ class Process_Manager:
             valido=estud.verificar_data_rendimiento(data_proces,0)
             if(valido==True):
               usr.recibe_data_process(data_proces)
-              vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF)
+              vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF,usr)
             else:
                if(valido==-1):
                    General.show_message("estudiante no inscrito","estudiante invalido")
@@ -515,15 +527,15 @@ class Process_Manager:
              if(valido[0]==True):
                  if(General.show_confirmDialog("esta seguro que desea registrar el intento?","registar intento")!=True):
                      return
-                 if(valido[1]==True):
-                    General.show_message("materia pendiente del estudiante aprobada existosamente","estudiante aprobado")
-                 else:
-                    General.show_message("calificacion de materia pendiente o revision registrada satisfactoriamente","registro exitoso de materia pendiente o revision")
                  conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                  id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                  data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","mat. pendiente",motivo,time_object.get_fecha()]
-                 conexion_bd.add_data(data_hist)  
-                 vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND)
+                 conexion_bd.add_data(data_hist,True)     
+                 if(valido[1]==True):
+                    General.show_message("materia pendiente del estudiante aprobada existosamente","estudiante aprobado")
+                 else:
+                    General.show_message("calificacion de materia pendiente o revision registrada satisfactoriamente","registro exitoso de materia pendiente o revision")                 
+                 vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND,usr)
                  usr.reset_data_process(0)
              else:
                 if(valido[0]==-1):
@@ -585,6 +597,12 @@ class Process_Manager:
             return  
         valido=estud.delete_calif(data_estud,time_object.get_fecha())
         if(valido[0]==True):
+           usr.add_action_historial(["borrar calificacion",time_object.get_tiempo()])
+           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+           data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar calificacion",motivo,time_object.get_fecha()]
+           conexion_bd.add_data(data_his,True)
+           
            tabl_califics.reset()
            calificaciones=valido[1]
            for i in range(0,len(calificaciones)):
@@ -602,11 +620,6 @@ class Process_Manager:
            pnl.get_comp_byName("calific_m_p1_4").set_text("definitiva:"+defi+"pts")
            pnl.get_comp_byName("calific_val").set_text("")
            pnl.get_comp_byName("motivo").set_text("")
-           usr.add_action_historial(["borrar calificacion",time_object.get_tiempo()])
-           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-           data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar calificacion",motivo,time_object.get_fecha()]
-           conexion_bd.add_data(data_hist)  
            General.show_message("calificacion borrada satisfactoriamente","calificacion borrada")
         else:
           if(valido[0]==-1):
@@ -642,6 +655,11 @@ class Process_Manager:
         data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],evaluation,next_calific]
         valido=estud.modific_calif(data_estud,time_object.get_fecha())
         if(valido[0]==True):
+           usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
+           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+           data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar calificacion",motivo,time_object.get_fecha()]
+           conexion_bd.add_data(data_hist,True) 
            tabl_califics.reset()
            calificaciones=valido[1]
            for i in range(0,len(calificaciones)):
@@ -659,11 +677,6 @@ class Process_Manager:
            pnl.get_comp_byName("calific_m_p1_4").set_text("definitiva:"+defi+"pts")
            calific_comp.set_text("")
            pnl.get_comp_byName("motivo").set_text("")
-           usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
-           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-           data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar calificacion",motivo,time_object.get_fecha()]
-           conexion_bd.add_data(data_hist)  
            General.show_message("calificacion modificada exitosamente","calificacion modificada")
         else:
            if(valido[0]==-1):
@@ -690,6 +703,11 @@ class Process_Manager:
          data_estud=[temp_dat[0],temp_dat[1],temp_dat[2],temp_dat[4],estimuñ_prom_field.get_text(),estimul_areas_field.get_text()]
          valido=estud.estimular_area(data_estud,time_object.get_fecha())
          if(valido[0]==True):
+            usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
+            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","calificacion estimulada",motivo,time_object.get_fecha()]
+            conexion_bd.add_data(data_hist,True)
             estimuñ_prom_field.set_text("")
             estimul_areas_field.set_text("")  
             prom_data=valido[1]
@@ -698,11 +716,6 @@ class Process_Manager:
             pnl.get_comp_byName("calific_m_p1_3").set_text("estimulacion:"+str(prom_data[2])+"pts")
             pnl.get_comp_byName("calific_m_p1_4").set_text("definitiva:"+str(prom_data[3])+"pts")
             pnl.get_comp_byName("motivo").set_text("")
-            usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
-            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","calificacion estimulada",motivo,time_object.get_fecha()]
-            conexion_bd.add_data(data_hist)  
             General.show_message("area de formacion estimulada satisfactoriamente","area de formacion estimulada")
          else:
             if(valido[0]==-1):
@@ -746,7 +759,8 @@ class Process_Manager:
           else:
              cedula_estud=f"E-{field_ced.get_text()}"
        conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-       data_estud=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_ESTUDIANTE],[cedula_estud],["and"])
+       cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula_estud],"conditions_Verify":["="]}        
+       data_estud=conexion_bd.get_allData([],cond_data)
        area=pnl.get_comp_byName("area").get_text()
        year=pnl.get_comp_byName("year").get_text()
        tabla=pnl.get_comp_byName("table_califics")
@@ -766,7 +780,8 @@ class Process_Manager:
                   fl.set_text("")
            tabla.reset()
            conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-           data_calif=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION_FINAL,len(constantes.CAMPOS_CALIFICACION_FINAL),[constantes.CLAVE_ESTUDIANTE],[cedula_estud],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula_estud],"conditions_Verify":["="]}      
+           data_calif=conexion_bd.get_allData([],cond_data)
            for i in range(0,len(data_calif)):
               tabla.add_row([data_calif[i][3],data_calif[i][2],data_calif[i][4]])
            if(valido==1):
@@ -777,7 +792,7 @@ class Process_Manager:
               conexion_bd.set_tabla(constantes.TABLA_REPORTE)
               id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
               data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar calificacion final","actualizar notas faltantes del estudiante provenientes de otra institucion",time_object.get_fecha()]
-              conexion_bd.add_data(data_hist)
+              conexion_bd.add_data(data_hist,True)
               General.show_message("calificacion final modificada exitosamente","calificacion final modificada")
        else:
          if(valido==-1):
@@ -820,21 +835,25 @@ class Process_Manager:
                 id_secc=id_secc+"M)"
             else:
                id_secc=id_secc+"T)"
-            data_secc=conexion_bd.get_allData(constantes.CAMPOS_SECCION,len(constantes.CAMPOS_SECCION),[constantes.CLAVE_SECCION],[id_secc],["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[id_secc],"conditions_Verify":["="]}      
+            data_secc=conexion_bd.get_allData([],cond_data)
             if(data_secc!=[]):
                 conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
                 data_areas=[]
-                data_areas_temp=conexion_bd.get_allData(constantes.CAMPOS_AREA_FORMACION,len(constantes.CAMPOS_AREA_FORMACION),["incorporada"],["Si"],["and"])
+                cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}    
+                data_areas_temp=conexion_bd.get_allData([],cond_data)
                 conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
                 for ar in data_areas_temp:
                    id_years=ar[2]
                    field_in=year[0]+"_año"
-                   data_years=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],1,[constantes.CLAVE_AÑOS_INCORPORADOS,field_in],[id_years,"True"],["and","and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS,field_in],"condition_Types":["and","and"],"conditions_Values":[id_years,"True"],"conditions_Verify":["=","="]}    
+                   data_years=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)
                    if(data_years!=[]):
                        data_areas.append(ar[0])
                 if(data_areas!=[]):
                     conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                    data_estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE),[constantes.CLAVE_SECCION],[data_secc[0][0]],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[data_secc[0][0]],"conditions_Verify":["="]}    
+                    data_estuds=conexion_bd.get_allData([],cond_data)
                     orden=["lengua y literatura","castellano","idiomas","ingles","matematica","matematicas","ed fisica","educacion fisica","arte y patrimonio","biologia","biologia ambiente y tecnologia","fisica","quimica","cs tierra","ciencias de la tierra","ghc","historia","fsn","ov","gcrp"]     
                     areas_list=[]                
                     for j in range(0,len(orden)):
@@ -846,9 +865,11 @@ class Process_Manager:
                         nombres=[]
                         for i in range(0,len(data_estuds)):
                             conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                            data_estatus=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_ESTUD],[data_estuds[i][2]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estuds[i][2]],"conditions_Verify":["="]}                    
+                            data_estatus=conexion_bd.get_allData(["estatus"],cond_data)
                             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                            data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_estuds[i][1]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_estuds[i][1]],"conditions_Verify":["="]}    
+                            data_nombre=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
                             if(data_estatus[0][0]!="inactivo" and data_estatus[0][0]!="graduado" ):
                                 fullname=""
                                 for name_index in range(0,len(data_nombre[0])):
@@ -861,7 +882,8 @@ class Process_Manager:
                                 temp_data=[data_estuds[i][0],fullname]
                                 conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
                                 for temp_area in areas_list:
-                                    calif=conexion_bd.get_allData(["valor"],1,[constantes.CLAVE_ESTUDIANTE,"año",constantes.CLAVE_AREA_FORMACION],[data_estuds[i][0],year[0],temp_area],["and","and","and"]) 
+                                    cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[data_estuds[i][0],temp_area,year[0]],"conditions_Verify":["=","=","="]}    
+                                    calif=conexion_bd.get_allData(["valor"],cond_data) 
                                     if(calif!=[]):
                                         if(con_notas):
                                              temp_data.append(calif[0][0])
@@ -870,7 +892,7 @@ class Process_Manager:
                                              temp_data.append("05")
                                         id_next_calif=data_estuds[i][0]+"-"+temp_area+year[0]
                                         data_next_calif=[id_next_calif,data_estuds[i][0],year[0],temp_area,"05",time_object.get_fecha()]
-                                        conexion_bd.add_data(data_next_calif)
+                                        conexion_bd.add_data(data_next_calif,True)
                                         
                                 nombres.append(temp_data)  
                         dat=[nombres,areas_list,year[0]+"-"+letra+" ("+turno+")",year[0]]                        
@@ -975,7 +997,7 @@ class Process_Manager:
              if(General.show_confirmDialog("modificar el cronograma?","modificar crongrama")!=True):
                 return
              conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-             dat_cronog=conexion_bd.get_allData(constantes.CAMPOS_CRONOGRAMA,len(constantes.CAMPOS_CRONOGRAMA))
+             dat_cronog=conexion_bd.get_allData([])
              if(parte=="mat pendiente"):
                  conexion_bd.set_tabla(constantes.TABLA_FECHA)
                  for i in range(0,len(data_send)):                     
@@ -984,7 +1006,8 @@ class Process_Manager:
                      if(conexion_bd.id_exist(constantes.CLAVE_FECHA,data_fecha[0])==False):
                          conexion_bd.add_data(data_fecha)
                      else:
-                        conexion_bd.update_data(["fecha","fecha_cierre","modificado"],[data_fecha[4],data_fecha[5],time_object.get_fecha()],3,[ constantes.CLAVE_FECHA],[data_fecha[0]],["and"]) 
+                        cond_data={"conditions_Names":[constantes.CLAVE_FECHA],"condition_Types":["and"],"conditions_Values":[data_fecha[0]],"conditions_Verify":["="]}    
+                        conexion_bd.update_data({"fecha":data_fecha[4],"fecha_cierre":data_fecha[5],"modificado":time_object.get_fecha()},cond_data) 
              elif(parte=="general"):
                    conexion_bd.set_tabla(constantes.TABLA_FECHA)
                    for i in range(0,len(data_send)):
@@ -992,7 +1015,8 @@ class Process_Manager:
                       if(conexion_bd.id_exist(constantes.CLAVE_FECHA,data_fecha[0])==False):
                          conexion_bd.add_data(data_fecha)
                       else:
-                        conexion_bd.update_data(["fecha","fecha_cierre","modificado"],[data_fecha[4],data_fecha[5],time_object.get_fecha()],3,[ constantes.CLAVE_FECHA],[data_fecha[0]],["and"])    
+                        cond_data={"conditions_Names":[constantes.CLAVE_FECHA],"condition_Types":["and"],"conditions_Values":[data_fecha[0]],"conditions_Verify":["="]}    
+                        conexion_bd.update_data({"fecha":data_fecha[4],"fecha_cierre":data_fecha[5],"modificado":time_object.get_fecha()},cond_data)    
              elif(parte.startswith("momento")):
                    mom="momento 1"
                    momento_new_data=[]
@@ -1004,11 +1028,13 @@ class Process_Manager:
                           abierto="false"
                           cerrado="false"
                           if(mom=="momento 2"):
-                              data_mom1=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO],["momento 1"],["and"])
+                              cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento 1"],"conditions_Verify":["="]}    
+                              data_mom1=conexion_bd.get_allData([],cond_data)
                               if(data_mom1[0][2]=="true"):
                                  abierto="true"
                           elif(mom=="momento 3"):
-                              data_mom2=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO],["momento 2"],["and"])
+                              cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento 2"],"conditions_Verify":["="]}    
+                              data_mom2=conexion_bd.get_allData([],cond_data)
                               if(data_mom2[0][2]=="true"):
                                  abierto="true"   
                           momento_new_data=[mom,abierto,cerrado,time_object.get_fecha(),"","",""]
@@ -1022,22 +1048,24 @@ class Process_Manager:
                              momento_new_data[6]=data_send[i][0]
                              conexion_bd.add_data(momento_new_data)
                          else:
-                             conexion_bd.update_data(["fecha_limite","hora_limite","fecha_inicio","modificado"],[data_send[i][1],"00:00:00",data_send[i][0],time_object.get_fecha()],4,[constantes.CLAVE_MOMENTO],[mom],["and"])
+                             cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[mom],"conditions_Verify":["="]}    
+                             conexion_bd.update_data({"fecha_limite":data_send[i][1],"hora_limite":"00:00:00","fecha_inicio":data_send[i][0],"modificado":time_object.get_fecha()},cond_data)
                       else:
                           conexion_bd.set_tabla(constantes.TABLA_FECHA)   
                           data_fecha=[dat_cronog[0][0]+"-"+mom+"-"+razones_send[i][0],mom,dat_cronog[0][0],razones_send[i][0],data_send[i][0],data_send[i][1],time_object.get_fecha()]           
                           if(conexion_bd.id_exist(constantes.CLAVE_FECHA,data_fecha[0])==False):
                              conexion_bd.add_data(data_fecha)
                           else:
-                            conexion_bd.update_data(["fecha","fecha_cierre","modificado"],[data_fecha[4],data_fecha[5],data_fecha[6]],3,[constantes.CLAVE_FECHA],[data_fecha[0]],["and"])             
+                            cond_data={"conditions_Names":[constantes.CLAVE_FECHA],"condition_Types":["and"],"conditions_Values":[data_fecha[0]],"conditions_Verify":["="]}    
+                            conexion_bd.update_data({"fecha":data_fecha[4],"fecha_cierre":data_fecha[5],"modificado":data_fecha[6]},cond_data)             
              usr.add_action_historial(["editar cronograma",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
              id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","editar cronograma","",time_object.get_fecha()]
-             conexion_bd.add_data(data_hist) 
+             conexion_bd.add_data(data_hist,True) 
              General.show_message("cronograma actualizado exitosamente","cronograma actualizado") 
              usr.reset_data_process(0)
-             vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1)
+             vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1,usr)
              cls.show_planificar_cronogOption(usr,vent,True)
             
         else:
@@ -1056,7 +1084,7 @@ class Process_Manager:
         pnl=vent.panelActual
         if((usr.get_credentials()[2]!="coordinador" and usr.get_credentials()[2]!="admin")==True):
             General.show_error("acceso invalido para el usuario","usuario sin permiso")
-            vent.update_pantallas(constantes.PANTALLA_WELCOME)
+            vent.update_pantallas(constantes.PANTALLA_WELCOME,usr)
             usr.reset_data_process(0)
             return
         time_object=tiempo()
@@ -1083,18 +1111,20 @@ class Process_Manager:
                  conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                  id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                  data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","crear cronograma","",time_object.get_fecha()]
-                 conexion_bd.add_data(data_hist) 
+                 conexion_bd.add_data(data_hist,True) 
                  General.show_message("cronograma registrado satisfactoriamente","cronograma registrado")
              else:
                  #Crongram Update
                  if(General.show_confirmDialog("actualizar el cronograma indicado?","registrar cronograma")!=True):
                       return
-                 conexion_bd.update_data(["inicio","cierre","modificado"],[inicio,cierre,time_object.get_fecha()],3,[constantes.CLAVE_CRONOGRAMA],[periodo],["and"])
+                 cond_data={"conditions_Names":[constantes.CLAVE_CRONOGRAMA],"condition_Types":["and"],"conditions_Values":[periodo],"conditions_Verify":["="]}    
+                     
+                 conexion_bd.update_data({"inicio":inicio,"cierre":cierre,"modificado":time_object.get_fecha()},cond_data)
                  usr.add_action_historial(["modificar cronograma",time_object.get_fecha()])
                  conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                  id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                  data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar cronograma","",time_object.get_fecha()]
-                 conexion_bd.add_data(data_hist) 
+                 conexion_bd.add_data(data_hist,True) 
                  General.show_message("cronograma actualizado satisfactoriamente","cronograma registrado")
              cls.show_planificar_cronogOption(usr,vent,True)
            else:
@@ -1113,7 +1143,7 @@ class Process_Manager:
         elif(accion=="eliminar cronograma"):
              last_moment_close=False
              conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-             mom_dat=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO))
+             mom_dat=conexion_bd.get_allData([])
              if(mom_dat!=[]):
                for i in range(0,len(mom_dat)):
                   if(mom_dat[i][0]=="momento 3"):
@@ -1121,12 +1151,13 @@ class Process_Manager:
                              last_moment_close=True      
                if(last_moment_close==False):
                  conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-                 if(conexion_bd.get_allData(-1,-1)!=[]):
+                 if(conexion_bd.get_allData([])!=[]):
                     General.show_error("no se puede eliminar el cronograma","cronograma no borrable")
                     return   
              conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
              id_cronog=pnl.get_comp_byName("año_escolar").get_text()
-             data_cronog=conexion_bd.get_allData(constantes.CAMPOS_CRONOGRAMA,len(constantes.CAMPOS_CRONOGRAMA),[constantes.CLAVE_CRONOGRAMA],[id_cronog],["and"])
+             cond_data={"conditions_Names":[constantes.CLAVE_CRONOGRAMA],"condition_Types":["and"],"conditions_Values":[id_cronog],"conditions_Verify":["="]}    
+             data_cronog=conexion_bd.get_allData([],cond_data)
              max_date=time_object.get_next_date2(data_cronog[0][1],4)
              if(time_object.is_previous(time_object.get_fecha(),max_date)==False and last_moment_close==False):
                 if(time_object.is_previous(time_object.get_fecha(),data_cronog[0][2])):
@@ -1139,7 +1170,7 @@ class Process_Manager:
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
              id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar cronograma","",time_object.get_fecha()]
-             conexion_bd.add_data(data_hist) 
+             conexion_bd.add_data(data_hist,True) 
              General.show_message("cronograma borrado exitosamente","cronograma borrado")
              cls.show_planificar_cronogOption(usr,vent,True)         
              pnl.get_comp_byName("acciones").set_selected_index(0)
@@ -1147,18 +1178,18 @@ class Process_Manager:
         else:
            if(accion.startswith("editar fechas: momento")):
               mom=""
-             
               conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-              dat_mom=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO],["momento 1"],["and"])
+              cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento 1"],"conditions_Verify":["="]}    
+              dat_mom=conexion_bd.get_allData([],cond_data)
               if(dat_mom!=[]):
                   if(accion=="editar fechas: momento1"):
                      mom="momento 1"
                      if(dat_mom[0][2]=="false"):
-                       vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG4)
+                       vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG4,usr)
                        if(dat_mom[0][6]=="" or dat_mom[0][6]==" "):
                            pnl=vent.panelActual
                            conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-                           d_crong=conexion_bd.get_allData(None,None)
+                           d_crong=conexion_bd.get_allData([])
                            if(d_crong!=[]):
                               inicio_c=d_crong[0][1].split("/")
                               conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
@@ -1168,28 +1199,31 @@ class Process_Manager:
                         return  
                   elif(accion=="editar fechas: momento 2"):
                       mom="momento 2"
-                      dat_mom=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO],["momento 2"],["and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento 2"],"conditions_Verify":["="]}    
+                      dat_mom=conexion_bd.get_allData([],cond_data)
                       if(dat_mom!=[]):
                          if(dat_mom[0][2]=="false"):
-                            vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG5)
+                            vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG5,usr)
                          else:
                            General.show_message("el segundo momento academico ya ha culminado","cronograma de momento no modificable")
                            return
                       else:
-                         vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG5)    
+                         vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG5,usr)    
                   elif(accion=="editar fechas: momento 3"):
                       mom="momento 3"
-                      dat_mom=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO],["momento 2"],["and"])
+                      cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento 2"],"conditions_Verify":["="]}    
+                      dat_mom=conexion_bd.get_allData([],cond_data)
                       if(dat_mom!=[]):
-                            dat_mom=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO],["momento 3"],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento 3"],"conditions_Verify":["="]}    
+                            dat_mom=conexion_bd.get_allData([],cond_data)
                             if(dat_mom!=[]):
                                 if(dat_mom[0][2]=="false"):
-                                     vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG6)
+                                     vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG6,usr)
                                 else:
                                     General.show_message("el tercer momento  academico ya ha culminado ","cronograma de momento no modificable")
                                     return
                             else:
-                               vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG6)
+                               vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG6,usr)
                       else:
                           General.show_message("el cronograma del momento 2 aun no se ha iniciado","cronograma de momento no modificable")
                           return
@@ -1205,7 +1239,8 @@ class Process_Manager:
               conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
               if(conexion_bd.id_exist(constantes.CLAVE_MOMENTO,mom)):
                   conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                  data_mom=conexion_bd.get_allData(["fecha_inicio","fecha_limite","abierto","culminado"],4,[constantes.CLAVE_MOMENTO],[mom],["and"])
+                  cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[mom],"conditions_Verify":["="]}    
+                  data_mom=conexion_bd.get_allData(["fecha_inicio","fecha_limite","abierto","culminado"],cond_data)
                   conexion_bd.set_tabla(constantes.TABLA_FECHA)
                   razones=["evaluacion continua","entrega de planificaciones a subdireccion academica","entrega de calificacion a departamento de evaluacion","asueto de navidad","consejo de curso","consejo de docentes","reunion de representantes","cierre pedagogico","entrega de boletas a representantes","semana aniversario","misa graduandos","acto de grado","asueto de carnaval"]
                   double_fields=[True,False,False,True,False,False,False,False,False,True,False,False,True]
@@ -1223,7 +1258,8 @@ class Process_Manager:
                         inicio.set_text(data_mom[0][0])
                         cierre.set_text(data_mom[0][1])
                   for i in range(0,len(razones)):
-                    data_t=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_MOMENTO],[razones[i],mom],["and","and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO,"razon"],"condition_Types":["and","and"],"conditions_Values":[mom,razones[i]],"conditions_Verify":["=","="]}    
+                    data_t=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                     if(data_t!=[]):
                        comp=pnl.get_comp_byName(razones[i])
                        comp.set_text(data_t[0][0])
@@ -1233,21 +1269,22 @@ class Process_Manager:
            else:
            
              if(accion=="editar fechas: materia pend."):
-                vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG3)
+                vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG3,usr)
                 conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-                dat_cronog=conexion_bd.get_allData(constantes.CAMPOS_CRONOGRAMA,len(constantes.CAMPOS_CRONOGRAMA))
+                dat_cronog=conexion_bd.get_allData([])
                 pnl=vent.panelActual 
                 conexion_bd.set_tabla(constantes.TABLA_FECHA)
                 razones=["materia pendiente 1","materia pendiente 2","materia pendiente 3","materia pendiente 4","revision"]
                 for i in range(0,len(razones)):
-                  data_t=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_CRONOGRAMA],[razones[i],dat_cronog[0][0]],["and","and"])
+                  cond_data={"conditions_Names":["razon"],"condition_Types":["and"],"conditions_Values":[razones[i]],"conditions_Verify":["="]}    
+                  data_t=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                   if(data_t!=[]):
                       comp= pnl.get_comp_byName(razones[i])
                       comp.set_text(data_t[0][0])
              elif(accion=="editar fechas: inscripcion"):
-                vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG2)
+                vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG2,usr)
                 conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-                dat_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA,"inicio","cierre"],3)
+                dat_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA,"inicio","cierre"])
                 pnl=vent.panelActual   
                 pnl.get_comp_byName("inicio").set_text(dat_cronog[0][1])
                 pnl.get_comp_byName("cierre").set_text(dat_cronog[0][2])
@@ -1255,7 +1292,8 @@ class Process_Manager:
                 razones=["inscripcion nuevo ingreso","inscripcion estudiantes regulares"]
                 doble_field=[True,True]
                 for i in range(0,len(razones)):
-                  data_t=conexion_bd.get_allData(["fecha","fecha_cierre"],2,["razon",constantes.CLAVE_CRONOGRAMA],[razones[i],dat_cronog[0][0]],["and","and"])
+                  cond_data={"conditions_Names":["razon"],"condition_Types":["and"],"conditions_Values":[razones[i]],"conditions_Verify":["="]}    
+                  data_t=conexion_bd.get_allData(["fecha","fecha_cierre"],cond_data)
                   if(data_t!=[]):
                       comp= pnl.get_comp_byName(razones[i])
                       comp.set_text(data_t[0][0])
@@ -1274,12 +1312,12 @@ class Process_Manager:
         if(autollamado==True):
             accion_actual=pnl.get_comp_byName("acciones").get_selected_value()
             if( pnl_index==constantes.PANTALLA_PLANIFIC_CRONOG1 and( accion_actual=="elejir" or  accion_actual=="elegir")):
-                   vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION)
+                   vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,usr)
                    return
-            vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1)
+            vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1,usr)
             pnl=vent.panelActual
         conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        data_cronog=conexion_bd.get_allData(constantes.CAMPOS_CRONOGRAMA,len(constantes.CAMPOS_CRONOGRAMA))
+        data_cronog=conexion_bd.get_allData([])
         field=pnl.get_comp_byName("año_escolar")
         accion_list=pnl.get_comp_byName("acciones")
         from event_manager import Event_manager
@@ -1319,29 +1357,34 @@ class Process_Manager:
         pnl=vent.panelActual
         time_object=tiempo()
         conexion_bd.set_tabla(constantes.TABLA_FECHA)
-        conexion_bd.delete_data([constantes.CLAVE_CRONOGRAMA],[id_cronog],["and"])
+        cond_data={"conditions_Names":[constantes.CLAVE_CRONOGRAMA],"condition_Types":["and"],"conditions_Values":[id_cronog],"conditions_Verify":["="]}           
+        conexion_bd.delete_data(cond_data)
         conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        conexion_bd.delete_data([constantes.CLAVE_CRONOGRAMA],[id_cronog],["and"])
+        conexion_bd.delete_data(cond_data)
         #Reset Sections
         for i in range(0,5):
             conexion_bd.set_tabla(constantes.TABLA_SECCION)
             if(conexion_bd.id_exist("año",str(i+1))==True):
                 seccs_year=conexion_bd.get_allData([constantes.CLAVE_HORARIO,constantes.CLAVE_SECCION],2,["año"],[str(i+1)],["and"])
-                conexion_bd.update_data(["total_estud","modificado"],["0",time_object.get_fecha()],2,["año"],[str(i+1)],["and"])
+                cond_data={"conditions_Names":["año"],"condition_Types":["and"],"conditions_Values":[str(i+1)],"conditions_Verify":["="]}    
+                conexion_bd.update_data({"total_estud":"0","modificado":time_object.get_fecha()},cond_data)
                 for secc in seccs_year:
                     clave_secc=secc[1]
                     clave_hor=secc[0]
                     conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-                    conexion_bd.update_data(["src_hor"],[""],1,[constantes.CLAVE_HORARIO],[clave_hor],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[clave_hor],"conditions_Verify":["="]} 
+                    conexion_bd.update_data({"src_hor":""},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)   
-                    d_estud=conexion_bd.get_allData([constantes.CLAVE_ESTATUS_ESTUD],1,[constantes.CLAVE_SECCION],[clave_secc],["and"])
-                    conexion_bd.update_data([constantes.CLAVE_SECCION],["default"],1,[constantes.CLAVE_SECCION],[clave_secc],["and"])
+                    cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[clave_secc],"conditions_Verify":["="]} 
+                    d_estud=conexion_bd.get_allData([constantes.CLAVE_ESTATUS_ESTUD],cond_data)
+                    conexion_bd.update_data({constantes.CLAVE_SECCION:"default"},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
                     for estud in d_estud:
-                        estatus_estud=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_ESTUD],[estud[0]],["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[estud[0]],"conditions_Verify":["="]} 
+                        estatus_estud=conexion_bd.get_allData(["estatus"],cond_data)
                         if(estatus_estud!=[]):
                             if(estatus_estud[0][0]!="graduado"):
-                                conexion_bd.update_data(["estatus"],["inactivo"],1,[constantes.CLAVE_ESTATUS_ESTUD],[estud[0]],["and"])
+                                conexion_bd.update_data({"estatus":"inactivo"},cond_data)
                
                               
         #Reset Temporal Califications               
@@ -1356,7 +1399,12 @@ class Process_Manager:
         conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
         for i in range(0,3):
             if(conexion_bd.id_exist(constantes.CLAVE_MOMENTO,"momento "+str(i+1))==True):
-                conexion_bd.delete_data([constantes.CLAVE_MOMENTO],["momento "+str(i+1)],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento "+str(i+1)],"conditions_Verify":["="]} 
+                conexion_bd.delete_data(cond_data)
+        conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"Modificacion del Cronograma","Cronograma Reseteado","",time_object.get_fecha()]
+        conexion_bd.add_data(data_hist,True)        
                
     #Determine and Execute the Required Actions for The Planification of Formats Process
     @classmethod
@@ -1375,7 +1423,7 @@ class Process_Manager:
                 if(refe=="" or refe==" "):
                    General.show_message("por favor escriba una columna de referncia del formato","referncia invalida")
                    return
-                vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO2)  
+                vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO2,usr)  
                 pnl=vent.panelActual
                 src=dat[0][3]
                 url=constantes.SERVER+src
@@ -1394,19 +1442,20 @@ class Process_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_FORMATO)
                 if(General.show_confirmDialog("esta seguro que desea eliminar este formato?","borrar formato")!=True):
                      return
-               
-                data_form=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO),["src_form"],[dat[0][3]],["and"])
+                cond_data={"conditions_Names":["src_form"],"condition_Types":["and"],"conditions_Values":[dat[0][3]],"conditions_Verify":["="]} 
+                data_form=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,cond_data)
                 if(len(data_form)<=1):
                   url_delete=constantes.SERVER+"delete_file.php"
                   path={"directorio":"./","nombre":usr.get_data_process()[0][3]}
                   response_del=requests.post(url_delete,params=path)
                   res_delete=response_del.text.strip()
                 conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
+                cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]} 
                 conexion_bd.delete_data([constantes.CLAVE_FORMATO],[id_f],["and"]) 
                 conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-                conexion_bd.delete_data([constantes.CLAVE_FORMATO],[id_f],["and"]) 
+                conexion_bd.delete_data(cond_data) 
                 lista=pnl.get_comp_byName("formatos_list")
-                data_form=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,len(constantes.CAMPOS_FORMATO))
+                data_form=conexion_bd.get_allData([])
                 nombres=[]
                 if(data_form!=[]):
                    for i in range(0,len(data_form)):
@@ -1417,7 +1466,7 @@ class Process_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar formato","",time_object.get_fecha()]
-                conexion_bd.add_data(data_hist)
+                conexion_bd.add_data(data_hist,True)
                 General.show_message("formato borrado satisfactoriamente","formato borrado")
               else:
                 General.show_message("por favor seleccione un formato","formato no valido")
@@ -1442,7 +1491,7 @@ class Process_Manager:
     @classmethod
     def verificar_caudicidad(cls,usr,vent):
         conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        cronogs=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA,"cierre"],2)
+        cronogs=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA,"cierre"])
         time_object=tiempo()
         user_t=usr.get_credentials()[2]
         
@@ -1453,29 +1502,35 @@ class Process_Manager:
                #Academic Year is Finished
                if(General.show_confirmDialog("cronograma finalizado,desea borrarlo?","borrar cronograma")==True):
                    conexion_bd.set_tabla(constantes.TABLA_FECHA)
-                   conexion_bd.delete_data([constantes.CLAVE_CRONOGRAMA],[cronogs[0][0]],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_CRONOGRAMA],"condition_Types":["and"],"conditions_Values":[cronogs[0][0]],"conditions_Verify":["="]} 
+                    
+                   conexion_bd.delete_data(cond_data)
                    conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-                   conexion_bd.delete_data([constantes.CLAVE_CRONOGRAMA],[cronogs[0][0]],["and"])
+                   conexion_bd.delete_data(cond_data)
                    #Reset Section
                    for i in range(0,5):
                       conexion_bd.set_tabla(constantes.TABLA_SECCION)
                       if(conexion_bd.id_exist("año",str(i+1))==True):
-                          seccs_year=conexion_bd.get_allData([constantes.CLAVE_HORARIO,constantes.CLAVE_SECCION],2,["año"],[str(i+1)],["and"])
-                          conexion_bd.update_data(["total_estud","modificado"],["0",time_object.get_fecha()],2,["año"],[str(i+1)],["and"])
+                          cond_data={"conditions_Names":["año"],"condition_Types":["and"],"conditions_Values":[str(i+1)],"conditions_Verify":["="]} 
+                          seccs_year=conexion_bd.get_allData([constantes.CLAVE_HORARIO,constantes.CLAVE_SECCION],cond_data)
+                          conexion_bd.update_data({"total_estud":"0","modificado":time_object.get_fecha()},cond_data)
                           for secc in seccs_year:
                              clave_secc=secc[1]
                              clave_hor=secc[0]
                              conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-                             conexion_bd.update_data(["src_hor"],[""],1,[constantes.CLAVE_HORARIO],[clave_hor],["and"])
+                             cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[clave_hor],"conditions_Verify":["="]} 
+                             conexion_bd.update_data(["src_hor"],[""],cond_data)
                              conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)   
-                             d_estud=conexion_bd.get_allData([constantes.CLAVE_ESTATUS_ESTUD],1,[constantes.CLAVE_SECCION],[clave_secc],["and"])
-                             conexion_bd.update_data([constantes.CLAVE_SECCION],["default"],1,[constantes.CLAVE_SECCION],[clave_secc],["and"])
+                             cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[clave_secc],"conditions_Verify":["="]} 
+                             d_estud=conexion_bd.get_allData([constantes.CLAVE_ESTATUS_ESTUD],cond_data)
+                             conexion_bd.update_data([constantes.CLAVE_SECCION],["default"],cond_data)
                              conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
                              for estud in d_estud:
-                                estatus_estud=conexion_bd.get_allData(["estatus"],1,[constantes.CLAVE_ESTATUS_ESTUD],[estud[0]],["and"])
+                                cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[estud[0]],"conditions_Verify":["="]} 
+                                estatus_estud=conexion_bd.get_allData(["estatus"],cond_data)
                                 if(estatus_estud!=[]):
                                      if(estatus_estud[0][0]!="graduado"):
-                                         conexion_bd.update_data(["estatus"],["inactivo"],1,[constantes.CLAVE_ESTATUS_ESTUD],[estud[0]],["and"])
+                                         conexion_bd.update_data({"estatus":"inactivo"},cond_data)
                                   
                    #Reset Temporals Califications
                    conexion_bd.set_foregein_check(False)      
@@ -1488,13 +1543,18 @@ class Process_Manager:
                    conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
                    for i in range(0,3):
                       if(conexion_bd.id_exist(constantes.CLAVE_MOMENTO,"momento "+str(i+1))==True):
-                         conexion_bd.delete_data([constantes.CLAVE_MOMENTO],["momento "+str(i+1)],["and"])
+                         cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento "+str(i+1)],"conditions_Verify":["="]} 
+                         conexion_bd.delete_data(cond_data)
+                   conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+                   id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+                   data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"Modificacion del Cronograma","Cronograma Borrado","Cronograma Obsoleto",time_object.get_fecha()]
+                   conexion_bd.add_data(data_hist,True)       
                    General.show_message("cronograma borrado exitosamente","cronograma borrado")
             
          
         #Verifications Over Academic Moments
         conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-        moms=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO))
+        moms=conexion_bd.get_allData([])
         if(moms!=[]):
             momentos_activos=0
             for i in range(0,len(moms)):
@@ -1504,27 +1564,32 @@ class Process_Manager:
                        if(time_object.is_previous(time_object.get_fecha(),limite)==False):
                             #Academic Moment is Finished and Activate the Next Moment
                             conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                            conexion_bd.update_data(["abierto","culminado"],["false","true"],2,[constantes.CLAVE_MOMENTO],[moms[i][0]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[moms[i][0]],"conditions_Verify":["="]} 
+                            conexion_bd.update_data({"abierto":"false","culminado":"true"},cond_data)
                             if(moms[i][0]=="momento 1"):
-                               next_mom=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO,"culminado","abierto"],["momento 2","false","false"],["and","and","and"])
+                               cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO,"abierto","culminado"],"condition_Types":["and","and","and"],"conditions_Values":["momento2","false","false"],"conditions_Verify":["=","=","="]} 
+                               next_mom=conexion_bd.get_allData([],cond_data)
                                if(next_mom!=[]):
                                   if(next_mom[0][6]!=""):
                                      next_inicio=next_mom[0][6]
                                      if(time_object.is_previous(next_inicio,time_object.get_fecha(),False)==True):
-                                        conexion_bd.update_data(["abierto"],["true"],1,[constantes.CLAVE_MOMENTO],[next_mom[0][0]],["and"])
+                                        cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[next_mom[0][0]],"conditions_Verify":["="]} 
+                                        conexion_bd.update_data({"abierto":"true"},cond_data,None,True)
                             elif(moms[i][0]=="momento 2"):
-                         
-                                  next_mom=conexion_bd.get_allData(constantes.CAMPOS_MOMENTO,len(constantes.CAMPOS_MOMENTO),[constantes.CLAVE_MOMENTO,"culminado","abierto"],["momento 3","false","false"],["and","and","and"])
+                                  cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO,"abierto","culminado"],"condition_Types":["and","and","and"],"conditions_Values":["momento 3","false","false"],"conditions_Verify":["=","=","="]} 
+                                  next_mom=conexion_bd.get_allData([],cond_data)
                                   if(next_mom!=[]):
                                      if(next_mom[0][6]!=""):
                                         next_inicio=next_mom[0][6]
                                         if(time_object.is_previous(next_inicio,time_object.get_fecha(),False)==True):
-                                            conexion_bd.update_data(["abierto"],["true"],1,[constantes.CLAVE_MOMENTO],[next_mom[0][0]],["and"])
+                                            cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[next_mom[0][0]],"conditions_Verify":["="]} 
+                                            conexion_bd.update_data({"abierto":"true"},cond_data,None,True)
                elif(moms[i][2]=="true" and moms[i][1]=="true"):
                   if(moms[i][4]!="" and moms[i][5]!=""):
                       if(time_object.is_previous(moms[i][4],time_object.get_fecha(),False)):
                          if(time_object.is_previous_time(moms[i][5],time_object.get_tiempo())):
-                             conexion_bd.update_data(["abierto"],["false"],1,[constantes.CLAVE_MOMENTO],[moms[i][0]],["and"])
+                             cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[moms[i][0]],"conditions_Verify":["="]} 
+                             conexion_bd.update_data({"abierto":"false"},cond_data,None,True)
             if(momentos_activos==0):
                activado=False
                for i in range(0,len(moms)):
@@ -1533,7 +1598,8 @@ class Process_Manager:
                          inicio=moms[i][6]
                          if(time_object.is_previous(inicio,time_object.get_fecha(),False)==True):
                             conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                            conexion_bd.update_data(["abierto"],["true"],1,[constantes.CLAVE_MOMENTO],[moms[i][0]],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[moms[i][0]],"conditions_Verify":["="]} 
+                            conexion_bd.update_data({"abierto":"true"},cond_data,None,True)
                             activado=True
                             break
              

@@ -15,7 +15,7 @@ import time
 
 class Stadistic_Windows:
 
-    def __init__(self, parent, dim, colors):
+    def __init__(self, parent, dim, colors,usr):
         self.raiz = ctk.CTkToplevel()
         self.raiz.configure(fg_color=colors)
         self.parent = parent
@@ -27,28 +27,48 @@ class Stadistic_Windows:
         pheight = round(htotal / 2 - dim["Height"] / 2)
         self.raiz.geometry(str(dim["Width"]) + "x" + str(dim["Height"]) + "+" + str(pwidth) + "+" + str(pheight))
         self.raiz.withdraw()
-        self.configure_components()
-        self.raiz.deiconify()
-        self.raiz.attributes("-topmost", True)
-        self.raiz.grab_set()
-        self.raiz.focus_force()
-        self.raiz.after(10, lambda: self.raiz.attributes("-topmost", False))
+        if(self.configure_components(usr)==False):
+            self.parent.secundaria = None
+            self.raiz.destroy()
+        else:
+           self.raiz.deiconify()
+           self.raiz.attributes("-topmost", True)
+           self.raiz.grab_set()
+           self.raiz.focus_force()
+           self.raiz.after(10, lambda: self.raiz.attributes("-topmost", False))
 
-    def configure_components(self):
-        url = f"{constantes.SERVER}UI_Json/Stadistics_Windows.json"
-        response = requests.get(url)
-        if response.status_code > 400:
-            return
-        raw_data = response.content
-        from io import BytesIO
-        temp_file = BytesIO(raw_data)
-        data_json = json.load(temp_file)
+    def configure_components(self,usr):
+        if(usr==None):
+           General.show_error("usuario invalido","Error")
+           return False
+        import time
+        timestamp=str(int(time.time()))
+        data_user={
+          "token":usr.get_credentials()[4],
+          "timestamp":timestamp,
+          "target_panel":"Stadistics_Windows"
+        }
+        from General import General
+        url_send=f"{constantes.SERVER}panel_manager.php"
+        response=requests.post(url_send,data=data_user)
+        json_content=json.loads(response.content)
+        if(json_content["status"]=="Error"):
+            General.show_error(json_content["message"],"Error")
+            return False
+        elif(json_content["status"]=="Invalid Access" or json_content["status"]=="Invalid Token"):
+           General.show_message(json_content["message"],"Alerta")
+           return False
+        redirect=json_content["Redirect_Panel"] 
+        if(redirect!="No Redirect"):
+            return False
+        data_json=json_content["data"] 
         widgets = data_json["Widgets"]
         for element in widgets:
             posicion = element["Posicion"]
             props = element["Propiedades"]
             widget_type = element["Type"]
             self.read_component(posicion, props, widget_type)
+        return True
 
     def read_component(self, pos, props, widget_type):
         if widget_type == "CanvasStadistics":
@@ -135,7 +155,7 @@ class Stadistic_Windows:
 
 class Expedent_Windows:
 
-    def __init__(self, parent, dim, colors, data=None):
+    def __init__(self, parent, dim, colors,usr, data=None):
         self.dim = dim
         self.background = colors[0]
         self.raiz = tk.Toplevel()
@@ -154,8 +174,12 @@ class Expedent_Windows:
         self.raiz.grid_rowconfigure(2, weight=0)
         self.raiz.grid_columnconfigure(0, weight=1)
         self.raiz.bind("<Configure>", self.on_configure)
-        self.assign_components(colors, data)
-        self.panel.set_active(True)
+        if( self.assign_components(colors,usr,data)==False):
+           General.show_error("Error Cargando datos de la Pantalla de Expediente","Error de Datos")
+           self.parent.secundaria = None
+           self.raiz.destroy()
+        else:
+            self.panel.set_active(True)
 
     def add_expedent_component(self, pos, props, widget_type):
         id = props["Id"]
@@ -187,9 +211,9 @@ class Expedent_Windows:
             if border_color == "None":
                 border_color = None
             colors = {'Fg':props["Color"], 'Border':border_color,  'Scrollbar':props["ScrollBar_Color"],  'Scrollbar_Hover':props["ScrollBar_Hover_Color"]}
-            scrollable = False
-            if props["Scroll"] == "True":
-                scrollable = True
+            scrollable = props["Scroll"]
+            if(scrollable=="True"):
+               scrollable="Full"
             corner_radius = int(props["Corner_Radious"])
             frame = Internal_Frame(pos, parent_comp, colors, id, "frame", initial_state, scrollable, ev, corner_radius)
             self.panel.add_comp(frame, id, "frame", have_master, pos_master, pos_comp, inter_pos)
@@ -225,89 +249,93 @@ class Expedent_Windows:
             self.comps.append(btn)
             self.panel.add_comp(btn, id, "button", have_master, pos_master, pos_comp, inter_pos)
 
-    def assign_components(self, colors, data):
-        if data != None:
-            self.add_data = data
-            if data["Is_Student"] == True:
-                self.panel = panel(self.raiz, colors, "")
-                url = f"{constantes.SERVER}UI_Json/expediente_students.json"
-                response = requests.get(url)
-                if response.status_code > 400:
-                    return
-                raw_data = response.content
-                from io import BytesIO
-                temp_file = BytesIO(raw_data)
-                data_json = json.load(temp_file)
-                widgets = data_json["Widgets"]
-                for element in widgets:
-                    posicion = element["Posicion"]
-                    props = element["Propiedades"]
-                    widget_type = element["Type"]
-                    self.add_expedent_component(posicion, props, widget_type)
+    def assign_components(self, colors,usr, data):
+        if(data==None or usr==None):
+           return False
+        import time
+        target_panel=""
+        if(data["Is_Student"] ==True):
+            target_panel="expediente_students"
+        else:
+            target_panel="expediente_workers"
+        timestamp=str(int(time.time()))
+        data_user={
+          "token":usr.get_credentials()[4],
+          "timestamp":timestamp,
+          "target_panel":target_panel
+        }
+        from General import General
+        url_send=f"{constantes.SERVER}panel_manager.php"
+        response=requests.post(url_send,data=data_user)
+        json_content=json.loads(response.content)
+        if(json_content["status"]=="Error"):
+            General.show_error(json_content["message"],"Error")
+            return False
+        elif(json_content["status"]=="Invalid Access" or json_content["status"]=="Invalid Token"):
+           General.show_message(json_content["message"],"Alerta")
+           return False
+        redirect=json_content["Redirect_Panel"] 
+        if(redirect!="No Redirect"):
+            return False
+        data_json=json_content["data"] 
+        self.panel = panel(self.raiz, colors, "")
+        widgets = data_json["Widgets"]
+        for element in widgets:
+            posicion = element["Posicion"]
+            props = element["Propiedades"]
+            widget_type = element["Type"]
+            self.add_expedent_component(posicion, props, widget_type)
 
-                self.requireds["exp_1"] = True
-                self.requireds["exp_2"] = True
-                self.requireds["exp_3"] = False
-                self.requireds["exp_4"] = False
-                self.requireds["exp_5"] = True
-                self.requireds["exp_6"] = False
-                self.requireds["exp_7"] = False
-                self.requireds["exp_8"] = False
-                self.requireds["exp_f"] = False
-                if data["Nuevo_Ingreso"] == constantes.NUEVO_INGRESO_FIRST_YEAR:
-                    comp_label = self.panel.get_comp_byName("docs_aprob_label")
-                    if comp_label != None:
-                        old_text = comp_label.get_text()
-                        comp_label.set_text(f"{old_text} * ")
-                    self.requireds["exp_3"] = True
-                elif data["Nuevo_Ingreso"] == constantes.NUEVO_INGRESO_NO_FIRST_YEAR:
-                    self.requireds["exp_4"] = True
-                    comp_label = self.panel.get_comp_byName("califics_label")
-                    if comp_label != None:
-                        old_text = comp_label.get_text()
-                        comp_label.set_text(f"{old_text} * ")
-            else:
-                self.panel = panel(self.raiz, colors, "")
-                url = f"{constantes.SERVER}UI_Json/expediente_workers.json"
-                response = requests.get(url)
-                if response.status_code > 400:
-                    return
-                raw_data = response.content
-                from io import BytesIO
-                temp_file = BytesIO(raw_data)
-                data_json = json.load(temp_file)
-                widgets = data_json["Widgets"]
-                for element in widgets:
-                    posicion = element["Posicion"]
-                    props = element["Propiedades"]
-                    widget_type = element["Type"]
-                    self.add_expedent_component(posicion, props, widget_type)
-
-                self.requireds["exp_1"] = True
-                self.requireds["exp_2"] = True
-                self.requireds["exp_3"] = True
+        self.add_data = data
+        if data["Is_Student"] == True:
+            self.requireds["exp_1"] = True
+            self.requireds["exp_2"] = True
+            self.requireds["exp_3"] = False
+            self.requireds["exp_4"] = False
+            self.requireds["exp_5"] = True
+            self.requireds["exp_6"] = False
+            self.requireds["exp_7"] = False
+            self.requireds["exp_8"] = False
+            self.requireds["exp_f"] = False
+            if data["Nuevo_Ingreso"] == constantes.NUEVO_INGRESO_FIRST_YEAR:
+               comp_label = self.panel.get_comp_byName("docs_aprob_label")
+               if comp_label != None:
+                   old_text = comp_label.get_text()
+                   comp_label.set_text(f"{old_text} * ")
+               self.requireds["exp_3"] = True
+            elif data["Nuevo_Ingreso"] == constantes.NUEVO_INGRESO_NO_FIRST_YEAR:
                 self.requireds["exp_4"] = True
-                self.requireds["exp_5"] = True
-                self.requireds["exp_6"] = False
-                self.requireds["exp_7"] = True
-                self.requireds["exp_f"] = False
-            self.raiz.update_idletasks()
-            self.raiz.event_generate("<Configure>")
-            from event_manager import Event_manager
-            for j in range(0, len(self.comps)):
-                self.comps[j].set_active(True)
-                tag = self.comps[j].get_tag()
-                if tag == "button":
-                    self.add_event(self.comps[j])
-                if tag == "text":
-                    self.comps[j].On_load()
-
-            try:
-                self.asignar_old_files_expediente()
-            except:
-                General.show_error("fallo al leer el expediente de la bd , por favor intentelo de nuevo", "error de lectura")
-                self.destroy_sec(True)
-
+                comp_label = self.panel.get_comp_byName("califics_label")
+                if comp_label != None:
+                    old_text = comp_label.get_text()
+                    comp_label.set_text(f"{old_text} * ")
+        else:
+            self.requireds["exp_1"] = True
+            self.requireds["exp_2"] = True
+            self.requireds["exp_3"] = True
+            self.requireds["exp_4"] = True
+            self.requireds["exp_5"] = True
+            self.requireds["exp_6"] = False
+            self.requireds["exp_7"] = True
+            self.requireds["exp_f"] = False
+        self.raiz.update_idletasks()
+        self.raiz.event_generate("<Configure>")
+        from event_manager import Event_manager
+        for j in range(0, len(self.comps)):
+            self.comps[j].set_active(True)
+            tag = self.comps[j].get_tag()
+            if tag == "button":
+               self.add_event(self.comps[j])
+            if tag == "text":
+               self.comps[j].On_load()
+        try:
+            self.asignar_old_files_expediente()
+        except:
+            General.show_error("fallo al leer el expediente de la bd , por favor intentelo de nuevo", "error de lectura")
+            self.destroy_sec(True)
+        return True
+        
+        
     def on_configure(self, ev):
         if ev.widget == self.raiz:
             w_limit = self.raiz.winfo_width()
@@ -334,103 +362,109 @@ class Expedent_Windows:
         url_zip = ""
         if self.add_data["Is_Student"] == True:
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            data_estud = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], 1, [constantes.CLAVE_ESTUDIANTE], [self.add_data["cedula"]], ["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[self.add_data["cedula"]],"conditions_Verify":["="]}              
+            data_estud = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], cond_data)
             if data_estud != []:
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                data_exp = conexion_bd.get_allData(["src_exp"], 1, [constantes.CLAVE_EXPEDIENTE], [data_estud[0][0]], ["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_estud[0][0]],"conditions_Verify":["="]}              
+                data_exp = conexion_bd.get_allData(["src_exp"], cond_data)
                 if data_exp != []:
                     url_zip = constantes.SERVER + data_exp[0][0]
-        conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-        data_trabaj = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], 1, [constantes.CLAVE_TRABAJADOR], [self.add_data["cedula"]], ["and"])
-        if data_trabaj != []:
-            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-            data_exp = conexion_bd.get_allData(["src_exp"], 1, [constantes.CLAVE_EXPEDIENTE], [data_trabaj[0][0]], ["and"])
-            if data_exp != []:
-                url_zip = constantes.SERVER + data_exp[0][0]
-            if url_zip == "" or url_zip.endswith(".zip") == False:
-                return
-            response = requests.get(url_zip)
-            if response.status_code > 400:
-                return
-            raw_data = response.content
-            direccion = constantes.FOLDER_DOCUMENTS + self.add_data["cedula"] + ".zip"
-            file_val = open(direccion, "wb")
-            file_val.write(raw_data)
-            file_val.close()
-            dir_extraccion = constantes.FOLDER_ZIP
-            Zip = zipfile.ZipFile(direccion, "r")
-            Zip.extractall(dir_extraccion)
-            Zip.close()
-            file_info = open(dir_extraccion + "info.txt", "r")
-            files_list = ["","","","","","","","",""]
-            files_ids = ["","","","","","","","",""]
-            for linea in file_info:
-                linea_split = linea.split(":")
-                if self.add_data["Panel_Id"] == constantes.PANTALLA_REGISTRO_PERSONAL:
-                    if linea.startswith("Fondo Negro"):
-                        files_list[0] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[0] = "exp_1"
-                    elif linea.startswith("Fondo Blanco"):
-                        files_list[1] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[1] = "exp_2"
-                    elif linea.startswith("Cuenta Bancaria"):
-                        files_list[2] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[2] = "exp_3"
-                    elif linea.startswith("fotocopia de la cedula"):
-                        files_list[3] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[3] = "exp_4"
-                    elif linea.startswith("Hoja de Vida"):
-                        files_list[4] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[4] = "exp_5"
-                    elif linea.startswith("Ultimo Baucher"):
-                        files_list[5] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[5] = "exp_6"
-                    elif linea.startswith("Credenciales"):
-                        files_list[6] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[6] = "exp_7"
-                    elif linea.startswith("foto"):
-                        files_list[7] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[7] = "exp_f"
+        else:
+           conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
+           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[self.add_data["cedula"]],"conditions_Verify":["="]}              
+           data_trabaj = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], cond_data)
+           if data_trabaj != []:
+               conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
+               cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][0]],"conditions_Verify":["="]}              
+               data_exp = conexion_bd.get_allData(["src_exp"], cond_data)
+               if data_exp != []:
+                   url_zip = constantes.SERVER + data_exp[0][0]
+        if url_zip == "" or url_zip.endswith(".zip") == False:
+           return
+        response = requests.get(url_zip)
+        if response.status_code > 400:
+           return
+        raw_data = response.content
+        direccion = constantes.FOLDER_DOCUMENTS + self.add_data["cedula"] + ".zip"
+        file_val = open(direccion, "wb")
+        file_val.write(raw_data)
+        file_val.close()
+        dir_extraccion = constantes.FOLDER_ZIP
+        Zip = zipfile.ZipFile(direccion, "r")
+        Zip.extractall(dir_extraccion)
+        Zip.close()
+        file_info = open(dir_extraccion + "info.txt", "r")
+        files_list = ["","","","","","","","",""]
+        files_ids = ["","","","","","","","",""]
+        for linea in file_info:
+            linea_split = linea.split(":")
+            if self.add_data["Panel_Id"] == constantes.PANTALLA_REGISTRO_PERSONAL:
+                if linea.startswith("Fondo Negro"):
+                      files_list[0] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[0] = "exp_1"
+                elif linea.startswith("Fondo Blanco"):
+                      files_list[1] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[1] = "exp_2"
+                elif linea.startswith("Cuenta Bancaria"):
+                      files_list[2] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[2] = "exp_3"
                 elif linea.startswith("fotocopia de la cedula"):
-                    files_list[0] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[0] = "exp_1"
+                      files_list[3] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[3] = "exp_4"
+                elif linea.startswith("Hoja de Vida"):
+                      files_list[4] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[4] = "exp_5"
+                elif linea.startswith("Ultimo Baucher"):
+                      files_list[5] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[5] = "exp_6"
+                elif linea.startswith("Credenciales"):
+                      files_list[6] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[6] = "exp_7"
+                elif linea.startswith("foto"):
+                      files_list[7] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[7] = "exp_f"
+            else:
+                if linea.startswith("fotocopia de la cedula"):
+                      files_list[0] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[0] = "exp_1"
                 elif linea.startswith("copia de la partida de nacimiento"):
-                    files_list[1] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[1] = "exp_2"
+                      files_list[1] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[1] = "exp_2"
                 elif linea.startswith("Documento de Aprobacion de sexto grado"):
-                    files_list[2] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[2] = "exp_3"
+                      files_list[2] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[2] = "exp_3"
                 elif linea.startswith("calificaciones certificadas de A??cursados"):
-                    files_list[3] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[3] = "exp_4"
+                      files_list[3] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[3] = "exp_4"
                 elif linea.startswith("Carta de Residencia"):
-                    files_list[4] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[4] = "exp_5"
+                      files_list[4] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[4] = "exp_5"
                 elif linea.startswith("Tarjeta de Vacunacion"):
-                    files_list[5] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[5] = "exp_6"
+                      files_list[5] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[5] = "exp_6"
                 elif linea.startswith("fotocopia de la cedula del representante"):
-                    files_list[6] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[6] = "exp_7"
+                      files_list[6] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[6] = "exp_7"
                 elif linea.startswith("foto del representante"):
-                    files_list[7] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                    files_ids[7] = "exp_8"
+                      files_list[7] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                      files_ids[7] = "exp_8"
                 else:
-                    if linea.startswith("foto"):
-                        files_list[8] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
-                        files_ids[8] = "exp_f"
+                      if linea.startswith("foto"):
+                          files_list[8] = constantes.FOLDER_ZIP + linea_split[1].split("\n")[0]
+                          files_ids[8] = "exp_f"
 
-            file_info.close()
-            from event_manager import Event_manager
-            data_old = []
-            for i in range(0, len(files_list)):
-                if files_list[i] != "":
-                    data_old.append([files_ids[i], files_list[i]])
+        file_info.close()
+        from event_manager import Event_manager
+        data_old = []
+        for i in range(0, len(files_list)):
+             if files_list[i] != "":
+                data_old.append([files_ids[i], files_list[i]])
 
-            for dat in data_old:
-                for j in range(0, len(self.comps)):
-                    if self.comps[j].get_id() == dat[0]:
-                        self.comps[j].set_text(dat[1])
+        for dat in data_old:
+            for j in range(0, len(self.comps)):
+                if self.comps[j].get_id() == dat[0]:
+                    self.comps[j].set_text(dat[1])
 
     def asignar_expediente(self):
         from General import General
@@ -453,13 +487,16 @@ class Expedent_Windows:
                     dat_temp = []
                     if self.add_data["Panel_Id"] != constantes.PANTALLA_REGISTRO_PERSONAL:
                         conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], 1, [constantes.CLAVE_ESTUDIANTE], [self.add_data["cedula"]], ["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[self.add_data["cedula"]],"conditions_Verify":["="]}              
+                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], cond_data)
                     else:
                         conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], 1, [constantes.CLAVE_TRABAJADOR], [self.add_data["cedula"]], ["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[self.add_data["cedula"]],"conditions_Verify":["="]}              
+                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], cond_data)
                     if dat_temp != []:
                         conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                        dat_expedent = conexion_bd.get_allData(["src_foto"], 1, [constantes.CLAVE_EXPEDIENTE], [dat_temp[0][0]], ["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[dat_temp[0][0]],"conditions_Verify":["="]}              
+                        dat_expedent = conexion_bd.get_allData(["src_foto"], cond_data)
                         if dat_expedent != []:
                             val_fot = dat_expedent[0][0]
                             if val_fot.startswith("fotos/"):
@@ -479,13 +516,15 @@ class Expedent_Windows:
                     dat_temp = []
                     if self.add_data["Panel_Id"] != constantes.PANTALLA_REGISTRO_PERSONAL:
                         conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], 1, [constantes.CLAVE_ESTUDIANTE], [self.add_data["cedula"]], ["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[self.add_data["cedula"]],"conditions_Verify":["="]}              
+                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], cond_data)
                     else:
                         conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], 1, [constantes.CLAVE_TRABAJADOR], [self.add_data["cedula"]], ["and"])
+                        cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[self.add_data["cedula"]],"conditions_Verify":["="]}              
+                        dat_temp = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE], cond_data)
                     if dat_temp != [] and foto.startswith("C:/"):
                         conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                        data_exps = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE, "src_foto"], 2)
+                        data_exps = conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE, "src_foto"])
                         for dat_expedent in data_exps:
                             if dat_expedent[0] != dat_temp[0][0]:
                                 if (dat_expedent[1] != "" and dat_expedent[1] != "...") == True:
@@ -499,7 +538,7 @@ class Expedent_Windows:
 
                     elif foto.startswith("C:/"):
                         conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                        data_expe = conexion_bd.get_allData(["src_foto"], 1)
+                        data_expe = conexion_bd.get_allData(["src_foto"])
                         if data_expe != []:
                             source1 = foto.split("/")
                             source1 = source1[len(source1) - 1]
@@ -513,72 +552,77 @@ class Expedent_Windows:
 
             else:
                 valor = target_comps[i].get_text()
-            if valor.endswith(".pdf") == False:
-                if valor.endswith(".doc") == False:
-                    if valor.endswith(".docx") == False:
-                        if valor.endswith(".xlsx") == False:
-                            if valor.endswith(".png") == False:
-                                if valor.endswith(".jpg") == False:
-                                    if valor.endswith(".jpeg") == False:
-                                        General.show_message("por favor seleccione una documento o imagen escaneada del documento valida", "documento invalido")
-                                        self.raiz.focus_force()
-                                        return
-                                    valor = target_comps[i].get_id()
-                                    if self.add_data["Panel_Id"] == constantes.PANTALLA_REGISTRO_PERSONAL:
-                                        if valor == "exp_1":
-                                            files_paths[1] = target_comps[i].get_text()
-                                        elif valor == "exp_2":
-                                            files_paths[2] = target_comps[i].get_text()
-                                        elif valor == "exp_3":
-                                            files_paths[3] = target_comps[i].get_text()
-                                        elif valor == "exp_4":
-                                            files_paths[0] = target_comps[i].get_text()
-                                        elif valor == "exp_5":
-                                            files_paths[4] = target_comps[i].get_text()
-                                        elif valor == "exp_6":
-                                            files_paths[5] = target_comps[i].get_text()
-                                        elif valor == "exp_7":
-                                            files_paths[6] = target_comps[i].get_text()
-                                        elif valor == "exp_f":
-                                            files_paths[7] = target_comps[i].get_text()
-                                    elif valor == "exp_1":
-                                        files_expe[3] = "copia de Cedula de Identidad"
-                                        files_paths[0] = target_comps[i].get_text()
-                                    elif valor == "exp_2":
-                                        files_expe[0] = "Copia de Partida de Nacimiento Original"
-                                        files_expe[2] = "partida de nacimiento Original"
-                                        files_paths[1] = target_comps[i].get_text()
-                                    elif valor == "exp_3":
-                                        files_expe[5] = "Boleta del periodos escolar anterior de ser neceario"
-                                        files_paths[2] = target_comps[i].get_text()
-                                    elif valor == "exp_4":
-                                        files_expe[4] = "Notas Cerificadas"
-                                        files_paths[3] = target_comps[i].get_text()
-                                    elif valor == "exp_5":
-                                        files_expe[8] = "Carta de Residencia"
-                                        files_paths[4] = target_comps[i].get_text()
-                                    elif valor == "exp_6":
-                                        files_paths[5] = target_comps[i].get_text()
-                                    elif valor == "exp_7":
-                                        files_expe[7] = "Copia de Cedula"
-                                        files_paths[6] = target_comps[i].get_text()
-                                    elif valor == "exp_8":
-                                        files_expe[6] = "2 Fotos"
-                                        files_paths[7] = target_comps[i].get_text()
-                                    else:
-                                        if valor == "exp_f":
-                                            files_expe[1] = "2 fotos del estudiante"
-                                            files_paths[8] = target_comps[i].get_text()
+            valid_file=False
+            available_formats=[".pdf",".doc",".docx",".xlsx",".png",".jpg",".jpeg"]
+            for available in available_formats:
+               if(valor.endswith(available)):
+                   valid_file=True
+                   break
+                  
+            if valid_file == False:
+               General.show_message("por favor seleccione una documento o imagen escaneada del documento valida", "documento invalido")
+               self.raiz.focus_force()
+               return
+            valor = target_comps[i].get_id()
+            if self.add_data["Panel_Id"] == constantes.PANTALLA_REGISTRO_PERSONAL:
+                if valor == "exp_1":
+                    files_paths[1] = target_comps[i].get_text()
+                elif valor == "exp_2":
+                    files_paths[2] = target_comps[i].get_text()
+                elif valor == "exp_3":
+                    files_paths[3] = target_comps[i].get_text()
+                elif valor == "exp_4":
+                    files_paths[0] = target_comps[i].get_text()
+                elif valor == "exp_5":
+                    files_paths[4] = target_comps[i].get_text()
+                elif valor == "exp_6":
+                    files_paths[5] = target_comps[i].get_text()
+                elif valor == "exp_7":
+                    files_paths[6] = target_comps[i].get_text()
+                elif valor == "exp_f":
+                    files_paths[7] = target_comps[i].get_text()
+            else:                   
+                if valor == "exp_1":
+                    files_expe[3] = "copia de Cedula de Identidad"
+                    files_paths[0] = target_comps[i].get_text()
+                elif valor == "exp_2":
+                    files_expe[0] = "Copia de Partida de Nacimiento Original"
+                    files_expe[2] = "partida de nacimiento Original"
+                    files_paths[1] = target_comps[i].get_text()
+                elif valor == "exp_3":
+                    files_expe[5] = "Boleta del periodos escolar anterior de ser neceario"
+                    files_paths[2] = target_comps[i].get_text()
+                elif valor == "exp_4":
+                    files_expe[4] = "Notas Cerificadas"
+                    files_paths[3] = target_comps[i].get_text()
+                elif valor == "exp_5":
+                    files_expe[8] = "Carta de Residencia"
+                    files_paths[4] = target_comps[i].get_text()
+                elif valor == "exp_6":
+                    files_paths[5] = target_comps[i].get_text()
+                elif valor == "exp_7":
+                    files_expe[7] = "Copia de Cedula"
+                    files_paths[6] = target_comps[i].get_text()
+                elif valor == "exp_8":
+                    files_expe[6] = "2 Fotos"
+                    files_paths[7] = target_comps[i].get_text()
+                else:
+                    if valor == "exp_f":
+                        files_expe[1] = "2 fotos del estudiante"
+                        files_paths[8] = target_comps[i].get_text()
 
         for j in range(0, len(files_paths)):
-            if files_paths[j] != None:
-                for k in range(0, len(files_paths)):
-                    if j != k:
-                        if files_paths[k] != None:
-                            if files_paths[j] == files_paths[k]:
-                                General.show_message("existen archivos repetidos en el expediente", "archivos repetidos")
-                                self.raiz.focus_force()
-                                return
+            if files_paths[j] == None:
+               continue
+            for k in range(0, len(files_paths)):
+                if(j==k):
+                   break
+                if files_paths[k] == None:
+                    continue
+                if files_paths[j] == files_paths[k]:
+                    General.show_message("existen archivos repetidos en el expediente", "archivos repetidos")
+                    self.raiz.focus_force()
+                    return
 
         if General.show_confirmDialog("construir expediente con estos archivos?", "asignar expediente") != True:
             self.raiz.focus_force()

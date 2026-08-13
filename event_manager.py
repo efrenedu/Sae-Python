@@ -279,7 +279,7 @@ class Event_manager:
     @classmethod 
     def planificar_forms(cls):
         pnl=cls.vent.panelActual
-        cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1)
+        cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1,cls.user)
     
     #Update a Format File in the Server
     @classmethod 
@@ -301,7 +301,7 @@ class Event_manager:
         data_hist=[ id_hist,cls.user.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar formato","",time_object.get_fecha()]
         conexion_bd.add_data(data_hist)
         General.show_message("actualizacion del contenido del formato realizada exitsamente","actualizacion exitosa")
-        cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1)
+        cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1,cls.user)
         cls.user.reset_data_process(0)
         
     #Request Update a format file of Server    
@@ -354,7 +354,7 @@ class Event_manager:
     def planificar_cronog(cls,autollamado=False): 
         from Process_Manager import Process_Manager
         if(autollamado==False):
-           cls.vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1)
+           cls.vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1,cls.user)
            cls.vent.raiz.after(200,Process_Manager.show_planificar_cronogOption,cls.user,cls.vent,autollamado)
            return
         Process_Manager.show_planificar_cronogOption(cls.user,cls.vent,autollamado)
@@ -414,13 +414,15 @@ class Event_manager:
                 else:
                    data_exp=dat[1][0]
                    conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
-                   data_repres_temp=conexion_bd.get_allData(constantes.CAMPOS_REPRESENTANTE,len(constantes.CAMPOS_REPRESENTANTE),[constantes.CLAVE_REPRESENTANTE],[data_estud[8]],["and"])
+                   cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[data_estud[8]],"conditions_Verify":["="]}
+                   data_repres_temp=conexion_bd.get_allData([],cond_data)
                    if(data_repres_temp!=[]):
                      for representant_field in range(0,len(data_repres_temp[0])):
                         if(representant_field==1):
                             id_nomb=data_repres_temp[0][representant_field]
                             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                            data_n_representant=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],4,[constantes.CLAVE_NOMBRE],[id_nomb],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[id_nomb],"conditions_Verify":["="]}
+                            data_n_representant=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],cond_data)
                             nombre=data_n_representant[0][0]
                             apellido=data_n_representant[0][1]
                             if(data_n_representant[0][2]!="" and data_n_representant[0][2]!="..."):
@@ -432,10 +434,12 @@ class Event_manager:
                         else:
                             data_repres.append(data_repres_temp[0][representant_field])     
                 conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                data_dire=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[data_estud[11]],["and"])[0]
+                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[data_estud[11]],"conditions_Verify":["="]}
+                data_dire=conexion_bd.get_allData([],cond_data)[0]
                 dire=data_dire[1]+","+data_dire[2]+","+data_dire[3]
                 conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_ESTUD,len(constantes.CAMPOS_ESTATUS_ESTUD),[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[5]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[5]],"conditions_Verify":["="]}          
+                data_estatus=conexion_bd.get_allData([],cond_data)
                 fields=pnl.get_comps_byTag("field")
                 fecha=pnl.get_comp_byName("fecha")
                 for i in range(0,len(fields)):                
@@ -485,7 +489,8 @@ class Event_manager:
                     elif(fields[i].get_id()=="dir_representante"):
                         dir_code=data_repres[6]
                         conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                        data_dir_r=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[dir_code],["and"])[0]
+                        cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[dir_code],"conditions_Verify":["="]}
+                        data_dir_r=conexion_bd.get_allData([],cond_data)[0]
                         direccion_r=data_dir_r[1]+","+data_dir_r[2]+","+data_dir_r[3]
                         fields[i].set_text(direccion_r)
                     elif(fields[i].get_id()=="correo"):
@@ -512,13 +517,15 @@ class Event_manager:
             if(cedula_repres!=""):
                  conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
                  d_repres=[]
-                 d_repres_temp=conexion_bd.get_allData(constantes.CAMPOS_REPRESENTANTE,len(constantes.CAMPOS_REPRESENTANTE),[constantes.CLAVE_REPRESENTANTE],[cedula_repres],["and"])
+                 cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[cedula_repres],"conditions_Verify":["="]}      
+                 d_repres_temp=conexion_bd.get_allData([],cond_data)
                  if(d_repres_temp!=[]):
                      for representant_field in range(0,len(d_repres_temp[0])):
                         if(representant_field==1):
                             id_nomb=d_repres_temp[0][representant_field]
                             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                            data_n_representant=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],4,[constantes.CLAVE_NOMBRE],[id_nomb],["and"])
+                            cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[id_nomb],"conditions_Verify":["="]}
+                            data_n_representant=conexion_bd.get_allData(["nombre","apellido","s_nombre","s_apellido"],cond_data)
                             nombre=data_n_representant[0][0]
                             apellido=data_n_representant[0][1]
                             if(data_n_representant[0][2]!="" and data_n_representant[0][2]!="..."):
@@ -556,7 +563,8 @@ class Event_manager:
                       elif(fields[i].get_id()=="dir_representante"):
                            dir_code=d_repres[6]
                            conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                           data_dir_r=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[dir_code],["and"])[0]
+                           cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[dir_code],"conditions_Verify":["="]}
+                           data_dir_r=conexion_bd.get_allData([],cond_data)[0]
                            direccion_r=data_dir_r[1]+","+data_dir_r[2]+","+data_dir_r[3]
                            fields[i].set_text(direccion_r)
                       elif(fields[i].get_id()=="oficio"):
@@ -644,7 +652,8 @@ class Event_manager:
             General.show_message("por favor seleccione una seccion","seccion no valida")
           return             
        conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-       data_form=conexion_bd.get_allData(["src_form"],1,[constantes.CLAVE_FORMATO],[form],["and"])
+       cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[form],"conditions_Verify":["="]}                 
+       data_form=conexion_bd.get_allData(["src_form"],cond_data)
        time_object=tiempo()
        if(data_form!=[]):
           src_form=data_form[0][0]
@@ -661,7 +670,7 @@ class Event_manager:
           temp_file.close()         
           conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
           data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), id_trabaj,form,time_object.get_fecha(),time_object.get_tiempo(),"formato",time_object.get_fecha()]
-          conexion_bd.add_data(data_descarga)
+          conexion_bd.add_data(data_descarga,True)
           os.startfile(ruta)  
        else:
          General.show_message("error encontrando data del formato","formato no encontrado")
@@ -676,7 +685,7 @@ class Event_manager:
     @classmethod
     def verificar_momentos(cls):
        conexion_bd.set_tabla(constantes.TABLA_FECHA_MOM)
-       data=conexion_bd.get_allData(None,None)      
+       data=conexion_bd.get_allData([])      
        for i in range(0,len(data)):
           terminado=False
           if(data[i][2]=="cierre momento"):
@@ -706,7 +715,8 @@ class Event_manager:
                     terminado=True                                                   
               if(terminado and is_date):
                  conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-                 conexion_bd.update_data(["abierto"],["False"],1,[constantes.CLAVE_MOMENTO],[data[i][1]],["and"])
+                 cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[data[i][1]],"conditions_Verify":["="]}                 
+                 conexion_bd.update_data({"abierto":"False"},cond_data)
                  
     #Search and Verify if the Student with the Indicated Student Id Exist  
     @classmethod   
@@ -718,15 +728,16 @@ class Event_manager:
              pnl.get_comp_byName("cedula_p1").set_text(cedula)
              pnl.get_comp_byName("nombre_p1").set_text(nombre)
              conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-             data_areas=conexion_bd.get_allData(constantes.CAMPOS_AREA_FORMACION,len(constantes.CAMPOS_AREA_FORMACION),["incorporada"],["Si"],["and"])             
+             cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}                 
+             data_areas=conexion_bd.get_allData([],cond_data)             
              lista_areas=["elegir"]
              curso=pnl.get_comp_byName("year").get_text()
              if(curso!=""):
                  if(data_areas!=[]):
                     conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
                     for area in data_areas:
-                        
-                       data_year=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],1,[constantes.CLAVE_AÑOS_INCORPORADOS,curso+"_año"],[area[2],"True"],["and","and"]) 
+                       cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS,curso+"_año"],"condition_Types":["and","and"],"conditions_Values":[area[2],"True"],"conditions_Verify":["=","="]}                 
+                       data_year=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data) 
                        if(data_year!=[]):
                            lista_areas.append(area[0])         
              pnl.get_comp_byName("area_form").set_values(lista_areas)
@@ -742,7 +753,8 @@ class Event_manager:
                pnl.get_comp_byName("cedula_p3").set_text(cedula)
                pnl.get_comp_byName("nombre_p3").set_text(nombre)
                conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-               data_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],1,[constantes.CLAVE_ESTUDIANTE],[cedula],["and"])             
+               cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}                       
+               data_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data)             
                lista_areas=["elegir"]
                if(data_areas!=[]):
                     for area in data_areas:
@@ -767,14 +779,17 @@ class Event_manager:
                    cedula_estud=f"E-{field_ced.get_text()}"
                    
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            data_estud=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_ESTATUS_ESTUD],2,[constantes.CLAVE_ESTUDIANTE],[cedula_estud],["and"])          
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula_estud],"conditions_Verify":["="]}
+            data_estud=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_ESTATUS_ESTUD],cond_data)          
             tabl=pnl.get_comp_byName("table_califics")
             tabl.reset()
             if(data_estud!=[]):
                conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-               data_estatus=conexion_bd.get_allData(["last_year","estatus"],2,[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[0][1]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[0][1]],"conditions_Verify":["="]}
+               data_estatus=conexion_bd.get_allData(["last_year","estatus"],cond_data)
                conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-               data_califs=conexion_bd.get_allData(constantes.CAMPOS_CALIFICACION_FINAL,len(constantes.CAMPOS_CALIFICACION_FINAL),[constantes.CLAVE_ESTUDIANTE],[data_estud[0][0]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_estud[0][0]],"conditions_Verify":["="]}
+               data_califs=conexion_bd.get_allData([],cond_data)
                if(data_califs!=[]):
                     for i in range(0,len(data_califs)):
                       dat=[data_califs[i][3],data_califs[i][2],data_califs[i][4]]
@@ -797,11 +812,12 @@ class Event_manager:
             pnl=cls.vent.panelActual
             estud_lista=pnl.get_comp_byName("estudiantes")
             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-            estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,len(constantes.CAMPOS_ESTUDIANTE))
+            estuds=conexion_bd.get_allData([])
             new_data=["elegir"]
             conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
             for i in range(0,len(estuds)):
-               data_nomb=conexion_bd.get_allData(["apellido","nombre"],2,[constantes.CLAVE_NOMBRE],[estuds[i][1]],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[estuds[i][1]],"conditions_Verify":["="]}
+               data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
                dat=estuds[i][0]+"-"+data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize()
                new_data.append(dat)
             estud_lista.set_values(new_data)
@@ -1136,6 +1152,7 @@ class Event_manager:
         pnl=cls.vent.panelActual
         pantalla=cls.vent.panelActual_str
         datos=["",""]
+        time_object=tiempo()
         field1=pnl.get_comp_byName("usuario_login")
         field2=pnl.get_comp_byName("pass_login")
         datos[0]=field1.get_text()
@@ -1143,8 +1160,13 @@ class Event_manager:
         temp_user=usuario()
         valido=temp_user.login(datos[0],datos[1])
         if(valido[0]==0):
+           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+           data_report=[conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),datos[0],time_object.get_fecha(),time_object.get_tiempo(),"Loggin","inicio de sesion","",time_object.get_fecha()]
+           conexion_bd.add_data(data_report,True)
            #login Succes
-           cls.vent.update_pantallas(constantes.PANTALLA_WELCOME)
+           if(cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,temp_user)<0):
+              cls.logout(True)
+              return
            cred=temp_user.get_credentials()
            if(valido[1]=="admin"):
                 cls.user=admin()
@@ -1179,22 +1201,12 @@ class Event_manager:
                  else:
                     st_m=tk.DISABLED  
                  menus[i+1].entryconfig((j-1),state=st_m)
-           time_object=tiempo()
-           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           conexion_bd.add_data([conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),datos[0],time_object.get_fecha(),time_object.get_tiempo(),"gestion usuario","inicio de sesion","",time_object.get_fecha()])
         else:
            #login fallido
-           if(valido[0]==-1):
-              General.show_message("por favor introdusca un usuario ","usuario vacio")
-           elif(valido[0]==-2):
-              General.show_message("por favor introdusca un password ","password vacio")
-           elif(valido[0]==-3):
-                General.show_message("por favor introdusca un usuario y password ","usuario y password  vacios")
-           elif(valido[0]==-4):
-                General.show_message("usuario o contraseña invalida","error de datos")
-           elif(valido[0]==-5):
-                General.show_message("usuario bloqueado","usuario bloqueado")
-                    
+           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+           data_report=[conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),datos[0],time_object.get_fecha(),time_object.get_tiempo(),"Loggin","inicio de sesion Fallido","",time_object.get_fecha()]
+           conexion_bd.add_data(data_report,True)
+           
     #Verify if The Cronogram is Finished
     @classmethod
     def verificar_caudicidad(cls):
@@ -1222,38 +1234,38 @@ class Event_manager:
         pantalla=cls.vent.panelActual_str
         if(pantalla==constantes.PANTALLA_UPDATE_ESTUDIANTE):
               cls.user.reset_data_process(0)
-              cls.vent.update_pantallas(constantes.PANTALLA_WELCOME)
+              cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
         
         elif(pantalla==constantes.PANTALLA_RECUPERAR_PASSWORD):
            cls.vent.update_pantallas(constantes.PANTALLA_INICIO)
         elif(pantalla==constantes.PANTALLA_DESCARGAR_FORMATOS or pantalla==constantes.PANTALLA_DESCARGAR_CARNETS or pantalla==constantes.PANTALLA_DESCARGAR_CONSTANCIAS):
            cls.vent.update_pantallas(constantes.PANTALLA_INICIO)
         elif(pantalla==constantes.PANTALLA_REGISTRO_USUARIO):
-             cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_GESTION_USUARIO)
+             cls.vent.update_pantallas(constantes.PANTALLA_SERVICIO_GESTION_USUARIO,cls.user)
         elif(pantalla==constantes.PANTALLA_AYUDA_INFORMACION):
-              cls.vent.update_pantallas(constantes.PANTALLA_WELCOME)
+              cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
         else:
           if(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION):
                cls.user.reset_data_process(0)
-               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME)
+               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
           elif(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_2 or pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_3):
                cls.user.reset_data_process(0)
-               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION)
+               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,cls.user)
           elif(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_4):
                temp_dat=cls.user.get_data_process()
                cls.user.reset_data_process(1)
                ci=temp_dat[0][0]
                if(temp_dat[0][2]=="True"):
-                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_2)
+                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_2,cls.user)
                  if(temp_dat[0][1]!="True"):
                    cls.set_data_estud(ci,False,"",temp_dat)   
                  else:
                   cls.set_data_estud(ci,False,"",temp_dat)   
                else:
-                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3)      
+                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3,cls.user)      
                  cls.set_data_estud(ci,True)   
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF):
-                cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA)
+                cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA,cls.user)
                 temp_data=cls.user.get_data_process()
                 cls.user.reset_data_process(0)
                 pnl=cls.vent.panelActual
@@ -1261,7 +1273,7 @@ class Event_manager:
                 secciones.set_value(temp_data[0][3])
                 secciones.On_select(None)
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_MAT_PEND):
-                cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND)
+                cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND,cls.user)
                 temp_data=cls.user.get_data_process()
                 cls.user.reset_data_process(0)
                 pnl=cls.vent.panelActual
@@ -1269,40 +1281,40 @@ class Event_manager:
                 secciones.set_value(temp_data[0][2])
                 secciones.On_select(None)
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND or pantalla==constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA):
-               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO)
+               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO,cls.user)
                cls.user.reset_data_process(0)    
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_SABANA_NOTAS or pantalla==constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF_FINALES):
-               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO)
+               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO,cls.user)
                cls.user.reset_data_process(0)               
           elif(pantalla==constantes.PANTALLA_PLANIF_FORMATO1):
-                cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION)
+                cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,cls.user)
                 cls.user.reset_data_process(0) 
           elif(pantalla==constantes.PANTALLA_PLANIF_FORMATO2 ):
-                cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1)
+                cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1,cls.user)
                 cls.user.reset_data_process(0)                  
           elif(pantalla>=constantes.PANTALLA_PLANIFIC_CRONOG2 and pantalla<=constantes.PANTALLA_PLANIFIC_CRONOG6):
-              cls.vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1)                         
+              cls.vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1,cls.user)                         
               cls.planificar_cronog(pantalla)
           elif(pantalla==constantes.PANTALLA_PLANIFIC_CRONOG1):
               cls.user.reset_data_process(0)
-              cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION)                         
+              cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,cls.user)                         
           elif(pantalla!=constantes.PANTALLA_PROCESO_INSCRIPCION and pantalla!=constantes.PANTALLA_PROCESO_PLANIFICACION and pantalla!=constantes.PANTALLA_PROCESO_RENDIMIENTO):
              next_p=-1
              cls.user.reset_data_process(0)
              next_p=constantes.PANTALLA_WELCOME
-             cls.vent.update_pantallas(next_p)
+             cls.vent.update_pantallas(next_p,cls.user)
           else:
               cls.user.reset_data_process(0)
-              cls.vent.update_pantallas(constantes.PANTALLA_WELCOME)
+              cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
               cls.show_data_user()
     
     #The User Loggout           
     @classmethod		
-    def logout(cls):       
-         if(General.show_confirmDialog("cerrar session?","cerrar session")!=True):
-            return       
-         userActive_id=""
-         cls.vent.update_pantallas(constantes.PANTALLA_INICIO)
+    def logout(cls,force_logout=False):
+         if(force_logout==False):    
+             if(General.show_confirmDialog("cerrar session?","cerrar session")!=True):
+                 return       
+             cls.vent.update_pantallas(constantes.PANTALLA_INICIO)
          cls.user=usuario()
          mat_permiso=cls.user.get_permiso_matrix()
          menus=cls.vent.get_menu()
@@ -1331,7 +1343,7 @@ class Event_manager:
            pnl=cls.vent.panelActual
            comp=pnl.get_comp_byName("formatos")
            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-           lista_temp=conexion_bd.get_allData(None,None)
+           lista_temp=conexion_bd.get_allData([])
            exclusiones=["disp horario","info estudiante","info trabajador","materia pendiente","sabana de notas","notas finales","notas finales del año","notas del momento","constancia de estudio","constancia de trabajo","constancia de prestacion de servicios","carnet","inscripcion","cronograma","reporte de usuarios","reporte de descargas","lista de trabajadores"]
            forms=["elegir"]
            for i in range(0,len(lista_temp)):
@@ -1401,14 +1413,18 @@ class Event_manager:
                 else:
                    data_exp=dat[1][0]                   
                    conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
-                   data_repres=conexion_bd.get_allData(constantes.CAMPOS_REPRESENTANTE,len(constantes.CAMPOS_REPRESENTANTE),[constantes.CLAVE_REPRESENTANTE],[data_estud[8]],["and"])[0]
+                   cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[data_estud[8]],"conditions_Verify":["="]}
+                   data_repres=conexion_bd.get_allData([],cond_data)[0]
                 conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                data_dire=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[data_estud[11]],["and"])[0]
+                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[data_estud[11]],"conditions_Verify":["="]}  
+                data_dire=conexion_bd.get_allData([],cond_data)[0]
                 dire=data_dire[1]+","+data_dire[2]+","+data_dire[3]
                 conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_ESTUD,len(constantes.CAMPOS_ESTATUS_ESTUD),[constantes.CLAVE_ESTATUS_ESTUD],[data_estud[5]],["AND"])[0]
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[5]],"conditions_Verify":["="]} 
+                data_estatus=conexion_bd.get_allData([],cond_data)[0]
                 conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                nombr_r=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],4,[constantes.CLAVE_NOMBRE],[data_repres[1]],["and"])
+                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_repres[1]],"conditions_Verify":["="]}  
+                nombr_r=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
                 fields=pnl.get_comps_byTag("field")
                 for i in range(0,len(fields)):                    
                     if(fields[i].get_id()=="cedula_estud"):
@@ -1460,7 +1476,8 @@ class Event_manager:
                     elif(fields[i].get_id()=="dir_representante"):                        
                          dire_r=data_repres[5]
                          conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                         temp_dire_r=conexion_bd.get_allData(constantes.CAMPOS_DIRECCION,len(constantes.CAMPOS_DIRECCION),[constantes.CLAVE_DIRECCION],[ dire_r],["and"])[0]
+                         cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[dire_r],"conditions_Verify":["="]}
+                         temp_dire_r=conexion_bd.get_allData([],cond_data)[0]
                          direccion_r=temp_dire_r[1]+","+temp_dire_r[2]+","+temp_dire_r[3]
                          fields[i].set_text(direccion_r)
                     elif(fields[i].get_id()=="parentesco"):
@@ -1522,16 +1539,21 @@ class Event_manager:
               return
            number_id=id_list[1]
            conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-           data_trabaj=conexion_bd.get_allData(constantes.CAMPOS_TRABAJADOR,len(constantes.CAMPOS_TRABAJADOR),[constantes.CLAVE_TRABAJADOR],[full_id],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[full_id],"conditions_Verify":["="]}         
+           data_trabaj=conexion_bd.get_allData([],cond_data)
            conexion_bd.set_tabla(constantes.TABLA_CARGO)
-           data_cargo=conexion_bd.get_allData(constantes.CAMPOS_CARGO,len(constantes.CAMPOS_CARGO),[constantes.CLAVE_CARGO],[data_trabaj[0][6]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][6]],"conditions_Verify":["="]}         
+           data_cargo=conexion_bd.get_allData([],cond_data)
            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-           data_exp=conexion_bd.get_allData(constantes.CAMPOS_EXPEDIENTE,len(constantes.CAMPOS_EXPEDIENTE),[constantes.CLAVE_EXPEDIENTE],[data_trabaj[0][4]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][4]],"conditions_Verify":["="]} 
+           data_exp=conexion_bd.get_allData([],cond_data)
            docente=False
            conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           data_nombre=conexion_bd.get_allData(constantes.CAMPOS_NOMBRE,len(constantes.CAMPOS_NOMBRE),[constantes.CLAVE_NOMBRE],[data_trabaj[0][1]],["and"])
+           cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}
+           data_nombre=conexion_bd.get_allData([],cond_data)
            conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-           data_estatus=conexion_bd.get_allData(constantes.CAMPOS_ESTATUS_TRABAJ,len(constantes.CAMPOS_ESTATUS_TRABAJ),[constantes.CLAVE_ESTATUS_TRABAJ],[data_trabaj[0][7]],["and"])           
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][7]],"conditions_Verify":["="]}
+           data_estatus=conexion_bd.get_allData([],cond_data)           
            conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
            if(conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,full_id)):
              docente=True
@@ -1595,9 +1617,11 @@ class Event_manager:
                box_docente.set_active(True)
                box_titulo.set_active(True)
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-               id_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],1,[constantes.CLAVE_TRABAJADOR],[id_t],["and"])[0][0]
+               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_t],"conditions_Verify":["="]}
+               id_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],cond_data)[0][0]
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-               data_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],1,[constantes.CLAVE_PROFESOR],[id_prof],["and"])
+               cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[id_prof],"conditions_Verify":["="]}
+               data_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data)
                areas=[]
                if(data_areas!=[]):
                   for j in range(0,len(data_areas)):
@@ -1606,13 +1630,14 @@ class Event_manager:
                
                values=["elegir","Docente","Docente de Aula",]
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO,constantes.CLAVE_TRABAJADOR],2)
+               lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO,constantes.CLAVE_TRABAJADOR])
                posibles=["Coordinador de Evaluacion","Coordinador de Orientacion","Sub Director Academico","Sub Director Administrativo"]
                conexion_bd.set_tabla(constantes.TABLA_CARGO)         
                for posibl in posibles:
                   valid_carg=True                
-                  for worker in lista_trabaj:                                       
-                       data_carg=conexion_bd.get_allData([constantes.CLAVE_CARGO,"cargo","cargo_ministerio"],3,[constantes.CLAVE_CARGO],[worker[0]],["and"])                     
+                  for worker in lista_trabaj: 
+                       cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[worker[0]],"conditions_Verify":["="]}        
+                       data_carg=conexion_bd.get_allData([constantes.CLAVE_CARGO,"cargo","cargo_ministerio"],cond_data)                     
                        if(data_carg==[]):
                            continue
                        if(id_t!=worker[1]):
@@ -1682,13 +1707,14 @@ class Event_manager:
                     if(id_comb!="cargo_minist"):
                        values=["elegir","Docente","Docente de Aula",]
                        conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                       lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO],1)
+                       lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO])
                        posibles=["Coordinador de Evaluacion","Coordinador de Orientacion","Sub Director Academico","Sub Director Administrativo"]
                        conexion_bd.set_tabla(constantes.TABLA_CARGO)
                        for temp_cargo in posibles:
                           valid_carg=True                
-                          for temp_trabaj in lista_trabaj:                     
-                             data_cargo=conexion_bd.get_allData(["cargo"],1,[constantes.CLAVE_CARGO],[temp_trabaj[0]],["and"])
+                          for temp_trabaj in lista_trabaj:
+                             cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[temp_trabaj[0]],"conditions_Verify":["="]}                         
+                             data_cargo=conexion_bd.get_allData(["cargo"],cond_data)
                              if(data_cargo!=[]):          
                                  if(data_cargo[0][0].lower()==temp_cargo.lower()):
                                       valid_carg=False
@@ -1714,7 +1740,8 @@ class Event_manager:
           disponibilidad=[]          
           if(id_t!=""):             
             conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
-            data_disp=conexion_bd.get_allData(constantes.CAMPOS_DISP_HORARIO,len(constantes.CAMPOS_DISP_HORARIO),[constantes.CLAVE_TRABAJADOR],[id_t],["and"])
+            cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_t],"conditions_Verify":["="]}               
+            data_disp=conexion_bd.get_allData([],cond_data)
             if(data_disp!=[]):
                turno.set_value(data_disp[0][2])               
                temp_turno=data_disp[0][2]
@@ -2002,7 +2029,7 @@ class Event_manager:
                if(cedula=="" or cedula==" "):
                  General.show_message("por favor indique el estudiante","cedula de estudiante no indicada")
                  return
-            expedent_win= Expedent_Windows(cls.vent.raiz,[600,600],pnl.get_background(),{"cedula":cedula,"Panel_Id":pantalla,"Is_Student":estudiante,"Nuevo_Ingreso":nuevo_ing})
+            expedent_win= Expedent_Windows(cls.vent.raiz,[600,600],pnl.get_background(),cls.user,{"cedula":cedula,"Panel_Id":pantalla,"Is_Student":estudiante,"Nuevo_Ingreso":nuevo_ing})
     
     #Remove the Files of Zip Folder    
     @classmethod

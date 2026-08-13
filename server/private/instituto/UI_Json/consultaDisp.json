@@ -1,5 +1,5 @@
 {
-  "Pantalla_Name": "consultaSecciones",
+  "Pantalla_Name": "consultaDisp",
   "Widgets": [
     {
       "Type": "CTkFrame",
@@ -50,7 +50,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "CONSULTAR SECCION",
+        "Text": "CONSULTAR DISPONIBILIDAD DE HORARIO",
         "Text_Color": [
           "#000000",
           "#FFFFFF"
@@ -58,7 +58,7 @@
         "Fg_Color": "transparent",
         "Id": "label_title",
         "Ev": "None",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -137,7 +137,7 @@
         "Fg_Color": "transparent",
         "Id": "label_filter",
         "Ev": "None",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -165,7 +165,7 @@
     {
       "Type": "CTkLabel",
       "Propiedades": {
-        "Text": "Filtro",
+        "Text": "filtro",
         "Text_Color": [
           "#5E53AD",
           "#F5EFF5"
@@ -173,7 +173,7 @@
         "Fg_Color": "transparent",
         "Id": "label_filterVal",
         "Ev": "None",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -201,7 +201,7 @@
     {
       "Type": "CTkCombobox",
       "Propiedades": {
-        "Data": "elegir,seccion,año,letra,numero de estudiantes",
+        "Data": "elegir,CI trabajador,turno",
         "Fg_Color": [
           "#FFFFFF",
           "#48516F"
@@ -217,7 +217,7 @@
         "Corner_Radious": "8",
         "Id": "filtros_cp",
         "Ev": "None",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -290,7 +290,7 @@
         ],
         "Id": "identificador_cp",
         "Ev": "None",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Placeholder_Text": "Valor del Filtro",
@@ -381,9 +381,9 @@
     {
       "Type": "CTkTable",
       "Propiedades": {
-        "data": "numero,seccion,año,letra,num. estudiant.",
-        "data_Ids": "#0,#1,#2,#3,#4",
-        "Width_Column": "125",
+        "data": "numero,CI trabajador,turno,lunes,martes,miercoles,jueves,viernes",
+        "data_Ids": "#0,#1,#2,#3,#4,#5,#6,#7",
+        "Width_Column": "95",
         "Heigth_Table": "10",
         "Colors": {
           "Bg": "#8CA8DA",
@@ -401,7 +401,7 @@
         },
         "Id": "table1_cp",
         "Ev": "None",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Master": "Main_Box",
         "Initial_state": "True",
         "Intern_Position": {
@@ -499,7 +499,7 @@
     {
       "Type": "CTkCombobox",
       "Propiedades": {
-        "Data": "Buscar,Descargar Horario,Descargar Lista de Asistencia,Descargar Lista de Evaluacion Continua,Descargar Lista de la Seccion",
+        "Data": "Buscar,Generar Reporte de Disponibilidad de Horarios",
         "Fg_Color": [
           "#FFFFFF",
           "#48516F"
@@ -598,8 +598,8 @@
           ]
         },
         "Id": "buscar",
-        "Ev": "constantes.EV_CONSULTAR_SECCIONES",
-        "Panel_Id": "consultaSecciones",
+        "Ev": "constantes.EV_CONSULTAR_DISP_HORARIO",
+        "Panel_Id": "consultaDisp",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
@@ -652,7 +652,7 @@
         },
         "Id": "volver",
         "Ev": "constantes.EV_VOLVER",
-        "Panel_Id": "consultaSecciones",
+        "Panel_Id": "consultaDisp",
         "Corner_Radious": "8",
         "Master": "Main_Box",
         "Initial_state": "True",
