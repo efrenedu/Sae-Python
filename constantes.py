@@ -426,4 +426,6 @@ class constantes:
   PASS_USER_DEFAULT="Axah5512$"
   DEFAULT_USER_ICON="fotos/user_login.jpg"
   SERVER="http://localhost/Instituto/"
+  SERVER_BD_URL="http://localhost/Instituto/requests_manager.php"
+  
 

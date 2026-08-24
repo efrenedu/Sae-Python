@@ -66,9 +66,6 @@ class UI_Event:
                    for i in range(0,len(califications)):
                        dat_row=[califications[i][3], dat_rend[1],dat_rend[2],califications[i][2]]
                        comp.add_row(dat_row) 
-               conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-               cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_MOMENTO],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_rend[1],dat_rend[2]],"conditions_Verify":["=","=","="]}    
-               data_area_actual=conexion_bd.get_allData([],cond_data)
                value_momento=["","","",""]
                value_momento[0]="promedio:\n"+dat_calif_mom[0][3]+"pts"
                value_momento[1]="calificacion:\n"+dat_calif_mom[0][4]+"pts"

@@ -601,7 +601,7 @@ class Process_Manager:
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar calificacion",motivo,time_object.get_fecha()]
-           conexion_bd.add_data(data_his,True)
+           conexion_bd.add_data(data_hist,True)
            
            tabl_califics.reset()
            calificaciones=valido[1]
@@ -1388,13 +1388,15 @@ class Process_Manager:
                
                               
         #Reset Temporal Califications               
-        conexion_bd.set_foregein_check(False)      
         conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-        conexion_bd.reset_table()
+        data_calif_moms=conexion_bd.get_allData([])
         conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
-        conexion_bd.reset_table()
-        conexion_bd.set_foregein_check(True) 
-               
+        for calif_mom in data_calif_moms:
+            cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[calif_mom[0]],"conditions_Verify":["="]} 
+            conexion_bd.delete_data(cond_data)
+            conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
+            conexion_bd.delete_data(cond_data)                      
+
         #Reset Academic Moments
         conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
         for i in range(0,3):
@@ -1533,16 +1535,20 @@ class Process_Manager:
                                          conexion_bd.update_data({"estatus":"inactivo"},cond_data)
                                   
                    #Reset Temporals Califications
-                   conexion_bd.set_foregein_check(False)      
                    conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-                   conexion_bd.reset_table()
+                   data_calif_moms=conexion_bd.get_allData([])
                    conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
-                   conexion_bd.reset_table()
-                   conexion_bd.set_foregein_check(True) 
+                   for calif_mom in data_calif_moms:
+                      cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[calif_mom[0]],"conditions_Verify":["="]} 
+                      conexion_bd.delete_data(cond_data)
+                      conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
+                      conexion_bd.delete_data(cond_data)                      
+           
+                   conexion_bd.set_tabla(constantes.TABLA_MOMENTO) 
                    #Reset Academic Moments
-                   conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
                    for i in range(0,3):
-                      if(conexion_bd.id_exist(constantes.CLAVE_MOMENTO,"momento "+str(i+1))==True):
+                      id_mom="momento "+str(i+1)
+                      if(conexion_bd.id_exist(constantes.CLAVE_MOMENTO,id_mom)==True):
                          cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento "+str(i+1)],"conditions_Verify":["="]} 
                          conexion_bd.delete_data(cond_data)
                    conexion_bd.set_tabla(constantes.TABLA_REPORTE)

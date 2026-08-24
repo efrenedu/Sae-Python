@@ -1170,7 +1170,6 @@ class Service_Manager:
         pnl.get_comp_byName("cargando").set_active(False)
         radios=pnl.get_comp_byTag("radio")
         ubicacion=pnl.get_comp_byName("ubicacion").get_text()
-        formato=".csv"
         pass_entry=General.show_password_message("por favor escriba su password","password de administrado")    
         if(pass_entry=="" or pass_entry==None or pass_entry==" "):
            return  
@@ -1196,12 +1195,20 @@ class Service_Manager:
             if(General.show_confirmDialog("estas seguro que desea crear respaldo la BD?","registrar")!=True):
                return
             pnl.get_comp_byName("cargando").set_active(True)
-            conexion_bd.respaldar_bd(ubicacion,"",formato,vent.raiz)
+            conexion_bd.respaldar_bd("default_copy.zip",vent.raiz)
         else:   
             if(General.show_confirmDialog("estas seguro que desea restaurar la BD?","registrar")!=True):
                return
             pnl.get_comp_byName("cargando").set_active(True)
-            conexion_bd.restore_bd(ubicacion,formato,vent.raiz)   
+            list_files=os.listdir(constantes.FOLDER_RESPALDOS)
+            file_target=""
+            for name_file in list_files:
+               if(name_file.endswith(".zip")):
+                  file_target=name_file
+                  break
+            if(file_target==""):
+               General.show_error("No se Encontraron Copias de Seguridad Disponibles","Copias de Seguridad Inexistentes")            
+            conexion_bd.request_restoreBd(file_target,vent.raiz)   
     
     #Organizate the Sections 
     @classmethod
