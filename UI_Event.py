@@ -23,19 +23,29 @@ class UI_Event:
        if(ev_value==constantes.TABLE_LOAD_DATA_GESTION_USUARIOS):
            if(panel_id!=constantes.PANTALLA_SERVICIO_GESTION_USUARIO):
               return
-           conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-           flds=[constantes.CLAVE_USUARIO,constantes.CLAVE_TRABAJADOR,"nivel_acceso",constantes.CLAVE_INTENTOS_USUARIO,"bloqueado"]
-           data=conexion_bd.get_allData(flds)
            comp.reset()
-           conexion_bd.set_tabla(constantes.TABLA_INTENTOS_USUARIO)        
-           for i in range(0,len(data)):
-              temp_data=[data[i][0],"********",data[i][1],data[i][2],"",data[i][4]]
-              cond_data={"conditions_Names":[constantes.CLAVE_INTENTOS_USUARIO],"condition_Types":["and"],"conditions_Values":[data[i][3]],"conditions_Verify":["="]} 
-              data_intentos=conexion_bd.get_allData(["num_intentos"],cond_data)
-              if(len(data_intentos)>0):
-                  temp_data[4]=data_intentos[0][0]   
-              if(temp_data[3]!="admin"):
+           
+           import requests
+           import time
+           import json
+           from General import General
+           usr=Event_manager.user
+           token=usr.get_credentials()[4]
+           url_target=f"{constantes.SERVER}get_users_GestionUser.php"
+           timestamp=str(int(time.time()))
+           data_send={"timestamp":timestamp,"token_user":token}    
+           try:
+              response=requests.post(url_target,data=data_send)
+              resp_json=json.loads(response.content)
+              if(resp_json["status"]=="Error"):
+                 General.show_error(resp_json["message"],"Error")
+                 return
+              data=resp_json["message"]
+              for i in range(0,len(data)):
+                  temp_data=[data[i]["usuario"],"********",data[i]["CI_trabaj"],data[i]["nivel_acceso"],data[i]["num_intentos"],data[i]["bloqueado"]]
                   comp.add_row(temp_data)
+           except:
+              General.show_error("Error Conectando con el Servidor","Error de Conexion")
        elif(ev_value==constantes.TABLE_LOAD_DATA_CALIFICATIONS_STUDENTS):  
              dat_rend=Event_manager.user.get_data_process()[0]
              conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)

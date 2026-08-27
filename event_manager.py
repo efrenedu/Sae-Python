@@ -1235,8 +1235,9 @@ class Event_manager:
         if(pantalla==constantes.PANTALLA_UPDATE_ESTUDIANTE):
               cls.user.reset_data_process(0)
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
-        
         elif(pantalla==constantes.PANTALLA_RECUPERAR_PASSWORD):
+           from Service_Manager import Service_Manager
+           Service_Manager.Token_Recover_pass=""
            cls.vent.update_pantallas(constantes.PANTALLA_INICIO)
         elif(pantalla==constantes.PANTALLA_DESCARGAR_FORMATOS or pantalla==constantes.PANTALLA_DESCARGAR_CARNETS or pantalla==constantes.PANTALLA_DESCARGAR_CONSTANCIAS):
            cls.vent.update_pantallas(constantes.PANTALLA_INICIO)

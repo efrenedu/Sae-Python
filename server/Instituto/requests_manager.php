@@ -2,6 +2,8 @@
 //verify Integrity of Data Received
 require_once __DIR__."/../../private/instituto/db_config.php";
 require_once __DIR__."/../../private/instituto/jwt.php";
+
+
 if(count($_POST)<4){
    http_response_code(400);
    header("Content-Type:application/json;charset=utf-8");
@@ -93,16 +95,28 @@ if($request_type=="Security Copies"){
 	$id_request=$request_dat["Action"];
 	$res=array();
 	if($id_request=="Restore"){
+		
+		ini_set('output_buffering','off');
+	    ini_set('zlib.output_compression',false);
+	    ob_implicit_flush(true);
+    	while(ob_get_level()) ob_end_flush();
+		header("Content-Type:application/x-ndjson;charset=utf-8");
 		$dat_tables=$request_dat["data_tables"]; 
 		$res=restore_bd($conexion,$db,$dat_tables);
+		foreach(restore_bd($conexion,$db,$dat_tables) as $estado){
+			echo json_encode($estado,JSON_UNESCAPED_UNICODE)."\n";
+			flush();
+		}
+		exit;
 	}
 	else{
 		$res=respald_bd($conexion,$db);
+		http_response_code(400);
+        header("Content-Type:application/json;charset=utf-8");
+	    echo json_encode($res);
+        exit;
 	}
-	http_response_code(400);
-    header("Content-Type:application/json;charset=utf-8");
-	echo json_encode($res);
-    exit; 
+	 
 }
 else if($request_type=="Id Manager"){
 	$field_verify=$request_dat["field_required"];
@@ -114,6 +128,13 @@ else if($request_type=="Id Manager"){
 	}
 	else{
 		//Id Exist Request
+		$valid_token=validar_token($token_user,$data_secretKey["Token"]);
+        if($valid_token["Valido"]=="False"){
+	        http_response_code(400);
+            header("Content-Type:application/json;charset=utf-8");
+            echo json_encode(["status"=>"Error","message"=>$valid_token["Message"]]);
+            exit;
+        }
 		$field_value=$request_dat["field_Value"];
 		$res=id_exist($conexion,$db,$tabl_target,$field_verify,$field_value);
 	}
@@ -123,13 +144,54 @@ else if($request_type=="Id Manager"){
     exit;   
 }
 else{
+	
+	//Verify Token of User if Is Neccesary
+	$tabl=$request_dat["target_table"];
+	$verify_token_requerid=false;
+	if($request_type=="Update Data" || $request_type=="Delete Data"){
+		$verify_token_requerid=true;
+	}
+	else if($request_type=="Add Data"){
+		if($tabl!="descarga_documentos" and $tabl!="reporte"){
+			$verify_token_requerid=true;
+		}
+	}
+	if($verify_token_requerid==true){
+		$valid_token=validar_token($token_user,$data_secretKey["Token"]);
+            if($valid_token["Valido"]=="False"){
+	            http_response_code(400);
+                header("Content-Type:application/json;charset=utf-8");
+                echo json_encode(["status"=>"Error","message"=>"Acceso Denegado, el token del Usuario es Invalido"]);
+                exit;
+        }
+	}
+	$prohibited_tables=array("usuario","intentos_usuario","preguntas_secretas");
+	if(array_key_exists($tabl,$prohibited_tables)==True){
+		 http_response_code(400);
+         header("Content-Type:application/json;charset=utf-8");
+         echo json_encode(["status"=>"Error","message"=>"Acceso Denegado, No se Puede Hacer Consultas hacia las Tablas Solicitadas"]);
+         exit;
+	}
+	$join_dat=null;
+	if(array_key_exists("join_dat",$request_dat)){
+		$join_dat=$request_dat["join_dat"];
+		if($join_dat!=null){
+			foreach($prohibited_tables as $target_prohibited){
+			   if(array_key_exists($target_prohibited,$join_dat)==True){
+		           http_response_code(400);
+                   header("Content-Type:application/json;charset=utf-8");
+                   echo json_encode(["status"=>"Error","message"=>"Acceso Denegado, No se Puede Hacer Consultas Join hacia las Tablas Solicitadas"]);
+                   exit;
+	           }
+		    }			
+		}
+	}
 	if($request_type=="Get Data"){
+		
 		$fields=$request_dat["fields"];
 		$cond_dat=$request_dat["cond_dat"];
-		$join_dat=$request_dat["join_dat"];
-		$tabl=$request_dat["target_table"];
 		$as_dict=$request_dat["as_dict"];
-		$res=get_data($conexion,$db,$tabl,$fields,$cond_dat,$join_dat,$as_dict);
+	    $res=get_data($conexion,$db,$tabl,$fields,$cond_dat,$join_dat,$as_dict);
 		http_response_code(400);
 	    header("Content-Type:application/json;charset=utf-8");
 	    echo json_encode($res);
@@ -137,11 +199,10 @@ else{
 		
 	}
 	else if($request_type=="Update Data"){
+       
 		$fields_dat=$request_dat["fields_update"];
 		$cond_dat=$request_dat["cond_dat"];
-		$join_dat=$request_dat["join_dat"];
-		$tabl=$request_dat["target_table"];
-		$do_commit=$request_dat["commit"];
+        $do_commit=$request_dat["commit"];
 		$res=update_data($conexion,$db,$tabl,$fields_dat,$cond_dat,$join_dat,$do_commit);
 		http_response_code(400);
 	    header("Content-Type:application/json;charset=utf-8");
@@ -150,9 +211,7 @@ else{
 	}
 	else if($request_type=="Delete Data"){
 		$cond_dat=$request_dat["cond_dat"];
-		$join_dat=$request_dat["join_dat"];
-		$tabl=$request_dat["target_table"];
-		$do_commit=$request_dat["commit"];
+        $do_commit=$request_dat["commit"];
 		$res=delete_data($conexion,$db,$tabl,$cond_dat,$join_dat,$do_commit);
 		http_response_code(400);
 	    header("Content-Type:application/json;charset=utf-8");
@@ -160,7 +219,8 @@ else{
         exit;   
 	}
 	else if($request_type=="Add Data"){
-		$tabl=$request_dat["target_table"];
+		
+		
 		$values_dat=$request_dat["values_add"];
 		$from_dict=$request_dat["from_dict"];
 		$do_commit=$request_dat["commit"];
@@ -172,8 +232,7 @@ else{
 		
 	}
 	else if($request_type=="Is_Empty"){
-	    $tabl=$request_dat["target_table"];
-		$res=is_empty($conexion,$db,$tabl);
+	    $res=is_empty($conexion,$db,$tabl);
 		http_response_code(400);
 	    header("Content-Type:application/json;charset=utf-8");
 	    echo json_encode($res);

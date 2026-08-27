@@ -843,8 +843,8 @@ class estudiante:
            return -6
        if(General.show_confirmDialog("esta seguro que de desea modificar la calificacion final?","modificar calificacion")!=True):
            return -7               
-       if(val<5):
-          val=5
+       if(val<1):
+          val=1
        str_val=str(val)
        if(len(str_val)<2):
           str_val="0"+str_val                      
@@ -896,8 +896,8 @@ class estudiante:
         id_calific=data_calific_mom[0][0]
         conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
         val_cal=dat_rend[5]
-        if(int(val_cal)<5):
-           val_cal="05"
+        if(int(val_cal)<1):
+           val_cal="01"
         else:
           if(len(val_cal)<2):
              val_cal="0"+val_cal 
@@ -922,11 +922,11 @@ class estudiante:
             estimul=int(data_calific_mom[0][5])
             str_prom=""
             str_calif=""
-            if(calif<5):
-               str_calif="05"
-               str_prom="5.0"
-               prom=5.0
-               calif=5
+            if(calif<1):
+               str_calif="01"
+               str_prom="1.0"
+               prom=1.0
+               calif=1
             else:
                str_calif=str(calif)
                str_prom=str(prom)
@@ -950,7 +950,7 @@ class estudiante:
         else:
             conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"prom":"0.0","definitiva":"0","modificado":fecha},cond_data)            
+            conexion_bd.update_data({"prom":"1.0","definitiva":"1","modificado":fecha},cond_data)            
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}              
             all_moments=conexion_bd.get_allData([],cond_data)
             suma=0.0
@@ -959,8 +959,8 @@ class estudiante:
             if(suma>0.0):
                suma/=len(all_moments)
                suma=int(round(suma))
-            if(suma<5):
-                suma=5 
+            if(suma<1):
+                suma=1 
             str_suma=str(suma)
             if(len(str_suma)<2):
                  str_suma="0"+str_suma            
@@ -1009,11 +1009,11 @@ class estudiante:
             calif=int(round(prom))
             str_calif=""
             str_prom=""
-            if(calif<5):
-                str_calif="05"
-                str_prom="5.0"
-                calif=5
-                prom=5.0
+            if(calif<1):
+                str_calif="01"
+                str_prom="1.0"
+                calif=1
+                prom=1.0
             else:
               str_calif=str(calif)
               str_prom=str(prom)
@@ -1032,18 +1032,18 @@ class estudiante:
             if(suma>0.0):
                 suma/=len(all_moments)
                 suma=int(round(suma))
-            if(suma<5):
-                suma=5
+            if(suma<1):
+                suma=1
             str_suma=str(suma)
             if(len(str_suma)<2):
                str_suma="0"+str_suma              
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
             conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data)            
        else:
-            prom_data=[5.0,5,0,5]
+            prom_data=[1.0,1,0,1]
             conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"prom":"5.0","definitiva":"05","modificado":fecha},cond_data)            
+            conexion_bd.update_data({"prom":"1.0","definitiva":"01","modificado":fecha},cond_data)            
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}              
             all_moments=conexion_bd.get_allData([],cond_data)
             suma=0.0
@@ -1052,8 +1052,8 @@ class estudiante:
             if(suma>0.0):
                suma/=len(all_moments)
                suma=int(round(suma))
-            if(suma<5):
-                  suma=5.0
+            if(suma<1):
+                  suma=1.0
             str_suma=str(suma)
             if(len(str_suma)<2):
                  str_suma="0"+str_suma              
@@ -1148,18 +1148,18 @@ class estudiante:
              encontrado=False
              for i in range(0,len(data_calific_moms)):
                 valor=int(data_calific_moms[i][4])+int(data_calific_moms[i][5])
-                if(valor<5):
-                   valor=5
+                if(valor<1):
+                   valor=1
                 suma+=valor
                 if(data_calific_moms[i][1]==mom):
                    encontrado=True
                    calif_mom=int(data_calific_moms[i][4])
-                   if(calif_mom<5):
-                      calif_mom=5                     
+                   if(calif_mom<1):
+                      calif_mom=1                     
              if(suma!=0):
                 suma=int(suma/3)
-             if(suma<5):
-                 suma=5              
+             if(suma<1):
+                 suma=1              
              if(calif_mom==0 and encontrado==False):
                  return -3       
              str_suma=str(suma)
@@ -1231,7 +1231,7 @@ class estudiante:
         else:
            #Register Definitive Calification if Not Exist
            id_calif_f= dat_rend[0]+"-"+ dat_rend[1]+ dat_rend[4]
-           data_f=[id_calif_f,dat_rend[0],dat_rend[4],dat_rend[1],"05",fecha]
+           data_f=[id_calif_f,dat_rend[0],dat_rend[4],dat_rend[1],"01",fecha]
            conexion_bd.add_data(data_f)
         conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
         cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_calif_f,dat_rend[2]],"conditions_Verify":["=","="]}               
@@ -1240,7 +1240,7 @@ class estudiante:
         if(data_calific_mom==[]):
             #Register Calification of Academic Moment if Not Exist
             id_calif_mom=conexion_bd.generate_id(True,constantes.CLAVE_CALIF_MOM)
-            data_mom=[ id_calif_mom,dat_rend[2],id_calif_f,"5.0","05","0",dat_rend[4],fecha]
+            data_mom=[ id_calif_mom,dat_rend[2],id_calif_f,"1.0","01","0",dat_rend[4],fecha]
             conexion_bd.add_data(data_mom)
         else: 
             id_calif_mom=data_calific_mom[0][0]
@@ -1254,8 +1254,8 @@ class estudiante:
             General.show_message("el maximo de evaluaciones posibles es diez evaluacion","demasiadas evaluaciones")
             return [-3]
         data[3]="evaluacion "+str(num_eval)
-        if(int(data[2])<5):
-            data[2]="05"
+        if(int(data[2])<1):
+            data[2]="01"
         else:
             if(len(data[2])<2):
                data[2]="0"+data[2]
@@ -1279,9 +1279,9 @@ class estudiante:
                 str_prom=""
                 str_nota=""
                 str_def=""
-                if(nota_mom<5):
-                    str_nota="05"
-                    str_prom="5.0"
+                if(nota_mom<1):
+                    str_nota="01"
+                    str_prom="1.0"
                 else:
                     str_nota=str(nota_mom)
                     str_prom=str(prom_mom)
@@ -1298,8 +1298,8 @@ class estudiante:
                 if(suma>0.0):
                     suma/=len(all_moments)
                     suma=int(round(suma))
-                if(suma<5):
-                    suma=5
+                if(suma<1):
+                    suma=1
                 str_suma=str(suma)
                 if(len(str_suma)<2):
                     str_suma="0"+str_suma

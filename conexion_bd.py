@@ -28,13 +28,18 @@ class conexion_bd:
         url_target=constantes.SERVER_BD_URL
         timestamp=str(int(time.time()))
         data_send={"request_type":"Verify_db","timestamp":timestamp,"data_request":"","token":""}
-        response=requests.post(url_target,data=data_send)
-        resp_json=json.loads(response.content)
-        if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error al Conectar")
-            return False
-        cls.set_tabla_byName("usuario")
-        return True
+        try:
+           response=requests.post(url_target,data=data_send)
+           resp_json=json.loads(response.content)
+           if(resp_json["status"]=="Error"):
+               General.show_error(resp_json["message"],"Error al Conectar")
+               return False
+           cls.set_tabla_byName("usuario")
+           return True
+        except:
+           General.show_error("Imposible Conectar con el Servidor","Erro de Conexion")
+           return False 
+      
 
     #set the Table Target for Operations    
     @classmethod
@@ -158,10 +163,13 @@ class conexion_bd:
     #Return True if the Id  withe Indicated Value exist in the Table     
     @classmethod
     def id_exist(cls,id_name,id_value):
+        from event_manager import Event_manager
+        usr=Event_manager.user
+        token_user=usr.get_credentials()[4]
         url_target=constantes.SERVER_BD_URL
         timestamp=str(int(time.time()))
         data_request={"target_table":cls.tabla_selected,"field_required":id_name,"Id_Request":"Exists Id","field_Value":id_value}
-        data_send={"request_type":"Id Manager","timestamp":timestamp,"data_request":json.dumps(data_request),"token":""}
+        data_send={"request_type":"Id Manager","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
         response=requests.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
         if(resp_json["status"]=="Error"):
@@ -184,13 +192,19 @@ class conexion_bd:
     #Recive Response From Data Base to Request of Restore Securriy Copy
     @classmethod
     def verify_response_restoreBd(cls,url_target,data_send,usr):
-        response=requests.post(url_target,data=data_send)
-        resp_json=json.loads(response.content)
-        if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Obteniendo Datos")
-            return -1 
-        from tiempo import tiempo
         from event_manager import Event_manager
+        with requests.post(url_target,data=data_send,stream=True) as response:
+           for line in response.iter_lines():
+              if(line):
+                data=json.loads(line.decode("utf-8"))
+                if(data.get("status")=="Procesing"):
+                   Event_manager.set_comp_values("cargando",f"Procesando Restauracion de BD {data['message']}%")
+                elif(data.get("status")=="Error"):
+                    General.show_error(data["message"],"Error en Restauracion de Bd")
+                elif(data.get("status")=="Success"):
+                   General.show_message("restauracion del respaldo realizada exitosamente","Restauracion Exitosa")
+      
+        from tiempo import tiempo
         time_object=tiempo()    
         Event_manager.user.add_action_historial(["restaurar BD",time_object.get_tiempo()])            
         cls.set_tabla(constantes.TABLA_REPORTE)
@@ -198,8 +212,8 @@ class conexion_bd:
         data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"base de datos","restaurar","",time_object.get_fecha()]
         cls.add_data(data_hist)
         Event_manager.set_comp_values("cargando","")
-        General.show_message("restauracion del respaldo realizada exitosamente","Restauracion Exitosa")
-      
+        return 0
+        
     #Restore Data Base from a Security Copy (ZipFile)
     @classmethod
     def restore_bd(cls,data):

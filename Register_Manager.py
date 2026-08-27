@@ -90,14 +90,14 @@ class Register_Manager:
             cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[1]],"conditions_Verify":["="]}              
             data_hors=conexion_bd.get_allData([],cond_data)
             if(data_hors==[]):
-              data[0]=conexion_bd.generate_id()
+              data[0]=conexion_bd.generate_id(True,constantes.CLAVE_DISP_HORARIO)
             else:
               valido=-3
         else:
            if(valido==0 and data[1]!=""):
               conexion_bd.set_tabla(constantes.TABLA_DISP_HORARIO)
               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[1]],"conditions_Verify":["="]}              
-              data[0]=conexion_bd.get_allData([constantes.CLAVE_DISP_HORARIO],cond_data,["and"])[0][0]
+              data[0]=conexion_bd.get_allData([constantes.CLAVE_DISP_HORARIO],cond_data)[0][0]
         data[2]=radios.get_selected_value()
         
         #Verifications over days
@@ -412,7 +412,7 @@ class Register_Manager:
        conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
        for i in range(0,len(fields)):
           if(fields[i].get_id()=="area_ra"):
-              val=fields[i].get_text().lower()
+              val=fields[i].get_text()
               data[0]=val
               if(General.is_valid(val,constantes.CADENA_SOLOTEXTO,True,1)==False):
                    valido=-1
@@ -773,7 +773,7 @@ class Register_Manager:
                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
                data_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],cond_data)       
                cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[data_prof[0][0]],"conditions_Verify":["="]}              
-               conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:"default"},cond_data)
+               conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:"000"},cond_data)
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
                conexion_bd.delete_data(cond_data)
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)   

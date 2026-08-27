@@ -889,7 +889,7 @@ class Process_Manager:
                                              temp_data.append(calif[0][0])
                                     else:
                                         if(con_notas):
-                                             temp_data.append("05")
+                                             temp_data.append("01")
                                         id_next_calif=data_estuds[i][0]+"-"+temp_area+year[0]
                                         data_next_calif=[id_next_calif,data_estuds[i][0],year[0],temp_area,"05",time_object.get_fecha()]
                                         conexion_bd.add_data(data_next_calif,True)
