@@ -133,19 +133,28 @@ foreach($list_updates as $update_target){
            echo json_encode($id_dat);
 	       exit;
 	   }
-	   $have_user_dat=id_exist($conexion,$db,"usuario","CI_trabaj",$ci_requerid);
-	   if($have_user_dat["status"]=="Error"){
+	   $cond_data=array("conditions_Names"=>array("CI_trabaj"),"conditions_Values"=>array($ci_requerid),"condition_Types"=>array("and"),"conditions_Verify"=>array("="));		 
+	   $users_worker=get_data($conexion,$db,"usuario",array("nivel_acceso"),$cond_data,null,true);
+	   if($users_worker["status"]=="Error"){
 		   http_response_code(400);
            header("Content-Type:application/json;charset=utf-8");
-           echo json_encode($have_user_dat);
+           echo json_encode($users_worker);
 	       exit;
 	   }
-	   if($have_user_dat["message"]=="True"){
-		   http_response_code(400);
-           header("Content-Type:application/json;charset=utf-8");
-           echo json_encode(["status"=>"Error","message"=>"No se puede Asignar Usuario Administrador a un Trabajador con Usuario Asignado,Por Favor Elimine Primero el Usuario Asignado en la Gestion de Usuarios antes de Designarlo como Administrador"] );
-	       exit; 
+	   $users_worker=$users_worker["message"];
+	   if(count($users_worker)>0){
+		   $temp_user=$users_worker[0];
+		   if($temp_user["nivel_acceso"]!="admin"){
+			  http_response_code(400);
+              header("Content-Type:application/json;charset=utf-8");
+              echo json_encode(["status"=>"Error","message"=>"No se puede Asignar Usuario Administrador a un Trabajador con Usuario Asignado,Por Favor Elimine Primero el Usuario Asignado en la Gestion de Usuarios antes de Designarlo como Administrador"] );
+	          exit;   
+		   }
+		   else{
+			   $ci_requerid="";
+		   }
 	   }
+	   
 	   if($id_dat["message"]=="True" && $ci_requerid!=""){
 		  $cond_old_worker=array("conditions_Names"=>array("usuario","nivel_acceso"),"conditions_Values"=>array($user_client,"admin"),"condition_Types"=>array("and","and"),"conditions_Verify"=>array("=","="));
 		  $old_worker_dat=get_data($conexion,$db,"usuario",array("CI_trabaj"),$cond_old_worker,null,true);	

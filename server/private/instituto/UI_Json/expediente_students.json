@@ -256,7 +256,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_1",
+        "Id": "fotocopia",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -407,7 +407,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_2",
+        "Id": "partid_nac",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -558,7 +558,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_3",
+        "Id": "docs_aprob",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -709,7 +709,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_4",
+        "Id": "califics",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -860,7 +860,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_5",
+        "Id": "carta_resid",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -1011,7 +1011,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_6",
+        "Id": "vacunacion",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -1162,7 +1162,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_7",
+        "Id": "fotocopia_repres",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -1313,7 +1313,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_8",
+        "Id": "foto_repres",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -1464,7 +1464,7 @@
           "#AAAAAA",
           "#AAAAAA"
         ],
-        "Id": "exp_f",
+        "Id": "foto",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",
@@ -1537,7 +1537,7 @@
             "#FFFFFF"
           ]
         },
-        "Id": "boton_f",
+        "Id": "boton_foto",
         "Ev": "None",
         "Panel_Id": "Expediente_Students",
         "Corner_Radious": "8",

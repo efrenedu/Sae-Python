@@ -176,7 +176,7 @@ class Event_manager:
            elif(type_e==constantes.EV_FINISH_INSCRIP):
                cls.inscribir(Process_Manager.INSCRIPTION_CONFIRM_INSCRIPTION)
            elif(type_e==constantes.EV_INIT_EXPEDIENTE):
-               cls.asign_expediente()  
+               cls.assign_expediente()  
         elif(type_e>=constantes.EV_PLANIFIC_CRONOGRAMA and type_e<=constantes.EV_MODIFIC_CONTENT_FORMATO):
            #Planification Event
            if(type_e==constantes.EV_PLANIFIC_FORMATOS):
@@ -395,7 +395,7 @@ class Event_manager:
             
     #Set the Data of Student in the required Components
     @classmethod
-    def set_data_estud(cls,cedula_estud,regular,cedula_repres="",alternative_data=[]):
+    def set_data_estud(cls,cedula_estud,regular,cedula_repres="",alternative_data={}):
         pnl=cls.vent.panelActual
         if(regular): 
             cedulado=True
@@ -544,8 +544,6 @@ class Event_manager:
                      fields[i].set_state("readonly") 
                 elif(fields[i].get_id()=="fecha"):
                     fields[i].set_state("normal") 
-                    if(alternative_data!=[]):
-                        fields[i].set_text(alternative_data[1][8])                        
                 elif(fields[i].get_id()!="cedula_estud"):
                    fields[i].set_state("normal")
                    if(d_repres!=[]):
@@ -571,49 +569,7 @@ class Event_manager:
                            fields[i].set_text(d_repres[5])                    
                       elif(fields[i].get_id()=="correo"):
                            fields[i].set_text(d_repres[4])
-                   elif(alternative_data!=[]):
-                      if(fields[i].get_id()=="CIrepres"): 
-                           fields[i].set_text(alternative_data[2][0])
-                           if(alternative_data[0][2].lower()=="true"):
-                                fields[i].set_state("readonly")
-                      elif(fields[i].get_id()=="nombre_repres"):
-                           temp_name=alternative_data[2][1]
-                           if(alternative_data[2][11]!=""):
-                              temp_name=temp_name+" "+alternative_data[2][11]
-                           fields[i].set_text(temp_name)
-                           if(alternative_data[0][2].lower()=="true"):
-                                fields[i].set_state("readonly")
-                      elif(fields[i].get_id()=="apellido_repres"):
-                           temp_dat=alternative_data[2][2]
-                           if(alternative_data[2][12]!=""):
-                               temp_dat=temp_dat+" "+alternative_data[2][12]
-                           fields[i].set_text(temp_dat)
-                           if(alternative_data[0][2].lower()=="true"):
-                               fields[i].set_state("readonly")
-                      elif(fields[i].get_id()=="telef"):
-                           fields[i].set_text(alternative_data[2][3])
-                      elif(fields[i].get_id()=="dir_representante"):
-                           direccion_r=alternative_data[2][7]+","+alternative_data[2][8]+","+alternative_data[2][9]
-                           fields[i].set_text(direccion_r)
-                      elif(fields[i].get_id()=="oficio"):
-                           fields[i].set_text(alternative_data[2][13])                  
-                      elif(fields[i].get_id()=="correo"):
-                           fields[i].set_text(alternative_data[2][4]) 
-                      elif(fields[i].get_id()=="parentesco"):
-                           fields[i].set_text(alternative_data[2][10])  
-                      elif(fields[i].get_id()=="direccion"):
-                           dire=alternative_data[3][2]+","+alternative_data[3][3]+","+alternative_data[3][4]
-                           fields[i].set_text(dire)   
-                      elif(fields[i].get_id()=="nombre"):
-                             temp_name=alternative_data[1][0]
-                             if(alternative_data[1][2]!=""):
-                                 temp_name=temp_name+" "+alternative_data[1][2] 
-                             fields[i].set_text(temp_name) 
-                      elif(fields[i].get_id()=="apellido"):                             
-                             temp_data=alternative_data[1][1]
-                             if(alternative_data[1][3]!=""):
-                                 temp_data=temp_data+" "+alternative_data[1][3] 
-                             fields[i].set_text(temp_data)    
+                      
                 else:
                    fields[i].set_text(cedula_estud)                
 
@@ -1232,6 +1188,7 @@ class Event_manager:
     def volver(cls):
         pnl=cls.vent.panelActual
         pantalla=cls.vent.panelActual_str
+        from Process_Manager import Process_Manager
         if(pantalla==constantes.PANTALLA_UPDATE_ESTUDIANTE):
               cls.user.reset_data_process(0)
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
@@ -1247,24 +1204,18 @@ class Event_manager:
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
         else:
           if(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION):
-               cls.user.reset_data_process(0)
+               Process_Manager.clear_data_process()
                cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
           elif(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_2 or pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_3):
-               cls.user.reset_data_process(0)
+               Process_Manager.clear_data_process()
                cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,cls.user)
+               conexion_bd.cancel_requests()
           elif(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_4):
-               temp_dat=cls.user.get_data_process()
-               cls.user.reset_data_process(1)
-               ci=temp_dat[0][0]
-               if(temp_dat[0][2]=="True"):
-                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_2,cls.user)
-                 if(temp_dat[0][1]!="True"):
-                   cls.set_data_estud(ci,False,"",temp_dat)   
-                 else:
-                  cls.set_data_estud(ci,False,"",temp_dat)   
-               else:
-                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3,cls.user)      
-                 cls.set_data_estud(ci,True)   
+               temp_dat=Process_Manager.data_process
+               ci=temp_dat["estudiante"]["CI_estudiante"]
+               conexion_bd.cancel_requests()
+               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3,cls.user)      
+               cls.set_data_estud(ci,True)   
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF):
                 cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA,cls.user)
                 temp_data=cls.user.get_data_process()
@@ -1301,10 +1252,12 @@ class Event_manager:
               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,cls.user)                         
           elif(pantalla!=constantes.PANTALLA_PROCESO_INSCRIPCION and pantalla!=constantes.PANTALLA_PROCESO_PLANIFICACION and pantalla!=constantes.PANTALLA_PROCESO_RENDIMIENTO):
              next_p=-1
+             Process_Manager.clear_data_process()
              cls.user.reset_data_process(0)
              next_p=constantes.PANTALLA_WELCOME
              cls.vent.update_pantallas(next_p,cls.user)
           else:
+              Process_Manager.clear_data_process()
               cls.user.reset_data_process(0)
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
               cls.show_data_user()
@@ -1913,7 +1866,7 @@ class Event_manager:
      
     #Read the Expedent File and Assign the data Value to the Required TextFields     
     @classmethod
-    def asign_expediente(cls,data=None):
+    def assign_expediente(cls,data=None):
        pnl=cls.vent.panelActual
        pantalla=cls.vent.panelActual_str
        cedula=""
@@ -1926,12 +1879,9 @@ class Event_manager:
           file_sources=data[2]
           foto=data[3]         
           zip_path=constantes.FOLDER_DOCUMENTS+"expediente-"+cedula+".zip"
-          try:
-              if(os.path.exists(zip_path)):
-                   os.remove(zip_path)
-          except:
-              print("zip ocupado")
-                
+          if(os.path.exists(zip_path)):
+               os.remove(zip_path)
+    
           if sys.version_info >= (3, 7):
                import zipfile
           else:
@@ -1957,7 +1907,7 @@ class Event_manager:
                      elif(j==3):
                         zip_info[3]="Cuenta Bancaria:"+source
                      elif(j==4):
-                        zip_info[4]="Hoja de Vida:"+source
+                        zip_info[4]="sintesis:"+source
                      elif(j==5):
                         zip_info[5]="Ultimo Baucher:"+source
                      elif(j==6):
@@ -2013,13 +1963,25 @@ class Event_manager:
                 cls.user.data_expediente=data[4]                                     
        else:      
             if(pantalla==constantes.PANTALLA_REGISTRO_PERSONAL):
-              cedula=pnl.get_comp_byName("cedula").get_text()
-              if(cedula=="" or cedula==" "):
-                 General.show_message("por favor indique la cedula del trabajador","cedula no indicada")
-                 return              
+                cedula_val=pnl.get_comp_byName("cedula").get_text()
+                cedula=""
+                nacionalidad_comp=pnl.get_comp_byName("nacionalidad")
+                nacionalidad_text=""
+                if(nacionalidad_comp!=None):
+                    nacionalidad_val=nacionalidad_comp.get_selected_value()
+                    if(nacionalidad_val=="venezolano"):
+                       nacionalidad_text="V-"
+                    else:
+                       nacionalidad_text="E-"
+                  
+                if(cedula_val=="" or cedula_val==" "):
+                   General.show_message("por favor indique la cedula del trabajador","cedula no indicada")
+                   return
+                cedula=f"{nacionalidad_text}{cedula_val}"                 
             else:               
                estudiante=True
                cedula=pnl.get_comp_byName("cedula_estud").get_text()               
+               
                if(pantalla==constantes.PANTALLA_PROCESO_INSCRIPCION_2):
                    y_i=pnl.get_comp_byName("curso").get_selected_value()
                    if(y_i.startswith("1")==False):
@@ -2028,8 +1990,8 @@ class Event_manager:
                      nuevo_ing=constantes.NUEVO_INGRESO_UPDATE
                       
                if(cedula=="" or cedula==" "):
-                 General.show_message("por favor indique el estudiante","cedula de estudiante no indicada")
-                 return
+                   General.show_message("por favor indique el estudiante","cedula de estudiante no indicada")
+                   return
             expedent_win= Expedent_Windows(cls.vent.raiz,[600,600],pnl.get_background(),cls.user,{"cedula":cedula,"Panel_Id":pantalla,"Is_Student":estudiante,"Nuevo_Ingreso":nuevo_ing})
     
     #Remove the Files of Zip Folder    

@@ -3,7 +3,6 @@ from tkinter import messagebox
 from tkinter import filedialog as fd 
 from constantes import constantes
 from tkinter import simpledialog
-import bcrypt
 
 #class with support Methods
 class General: 
@@ -37,38 +36,6 @@ class General:
      messagebox.showinfo(message=msg, title=title)
      root.destroy()     
 
-  #Encript a String Value
-  @classmethod	 
-  def get_hash(cls,value):
-      if(value==""):
-         return ""
-      bytes_value=value.encode("utf-8")
-      salt=bcrypt.gensalt()
-      hash=bcrypt.hashpw(bytes_value,salt)
-      hash=hash.decode("utf-8")
-      return hash
-      
-  #verify if two passwords are the same comparing the hash
-  @classmethod
-  def compare_hash(cls,passwd,hashed_passwd):
-      return bcrypt.checkpw( passwd,hashed_passwd)
-  
-  #Desencript a String
-  @classmethod	 
-  def desencriptar(cls,valor):
-      desencript=""
-      abc="abcdefghijklmnñopqrstuvwxyz1234567890ABCDEFGHIJKLMNÑOPQRSTUVWXYZ%$_@&"
-      desplaz=3
-      for chr in valor:
-         if(chr in abc):
-             index=abc.index(chr)-desplaz 
-             if(index<0):
-                index=(len(abc)-1)+index
-             desencript=desencript+abc[index]
-         else:
-            desencript=desencript+chr
-      return desencript
-   
   #Show a Error Message 
   @classmethod	 
   def show_error(cls,msg,title):

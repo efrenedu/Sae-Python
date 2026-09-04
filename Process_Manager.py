@@ -22,125 +22,339 @@ class Process_Manager:
     RENDIMIENTO_OPTION_IDENTIFIC_GESTION_CALIFICATIONS=5
     RENDIMIENTO_OPTION_PROCESS_MATERIA_PENDIENTE=6
     RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT=7
+    pendent_registers=[]
+    pendent_updates=[]
+    pendent_deletes=[]
+    data_process={}
     
-    #Return the Section to Assign the Student On the Inscription 
+    #Clear the data Saved On the Active Process of User
+    @classmethod
+    def clear_data_process(cls):
+         cls.data_process={}
+       
+    #Verify data of Student in Inscription process Is Correct 
+    @classmethod    
+    def validar_inscripcion(cls,data):
+          fields=data[0]
+          birthdate_stud=data[1]
+          for i in range(0,len(fields)):
+              id_f=fields[i].get_id()
+              valor=fields[i].get_text()
+              if(id_f=="cedula_estud"):
+                 continue
+              if(id_f=="nombre"):
+                  if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True,3)==False):
+                       General.show_message("Por Favor Indique el Nombre del Estudiante Correctamente","Nombre Invalido")
+                       return False
+                  fullname=valor.split(" ")
+                  if(len(fullname)==1):
+                       cls.data_process["estudiante"]["nombre"]=fullname[0].lower()
+                       cls.data_process["estudiante"]["s_nombre"]=""
+                  elif(len(fullname)==2):
+                       cls.data_process["estudiante"]["nombre"]=fullname[0].lower()
+                       cls.data_process["estudiante"]["s_nombre"]=fullname[1].lower()
+                  else:
+                       General.show_message("Por Favor Indique Correctamente los Nombres del Estudiante","Nombres Invalido")
+                       return False
+                             
+              elif(id_f=="apellido"):
+                  if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True,3)==False):
+                       General.show_message("Por Favor Indique el Apellido del Estudiante Correctamente","Apellido Invalido")
+                       return False
+                  fullapell=valor.split(" ")
+                  if(len(fullapell)==1):
+                       cls.data_process["estudiante"]["apellido"]=fullapell[0].lower()
+                       cls.data_process["estudiante"]["s_apellido"]=""
+                  elif(len(fullapell)==2):
+                      cls.data_process["estudiante"]["apellido"]=fullapell[0].lower()
+                      cls.data_process["estudiante"]["s_apellido"]=fullapell[1].lower()
+                  else:
+                      General.show_message("Por Favor Indique Correctamente los Apellidos del Estudiante","Apellidos Invalidos")                 
+                      return False
+              elif(id_f=="destino_file"):
+                    valor_exp=valor
+                    if(valor!=""):
+                       if(valor.endswith(".rar")==False and valor.endswith(".zip")==False):
+                           General.show_message("Por Favor suba el Expediente como un Archivo comprimido ZIP o RAR","formato de expediente Invalido")
+                           return False
+                       valor_exp=valor
+                    else:
+                       valor_exp="..."
+                    cls.data_process["estudiante"]["expediente_src"]=valor_exp
+              elif(id_f=="destino_foto"):
+                    valor_foto=valor
+                    if(valor!=""):
+                       if(valor.endswith(".png")==False and valor.endswith(".jpg")==False and valor.endswith(".jpeg")):
+                           General.show_message("Por Favor suba la Foto como un Archivo de Imagen PNG o JPG","formato de foto Invalido")
+                           return False
+                       valor_foto=valor
+                    else:
+                       valor_foto="..."
+                    cls.data_process["estudiante"]["foto_expediente"]=valor_foto
+                     
+              elif(id_f=="CIrepres"):
+                      temp_v=valor
+                      if(temp_v.startswith("v-") or temp_v.startswith("V-") or temp_v.startswith("e-") or temp_v.startswith("E-")):
+                         temp_v=valor.split("-")[1]
+                      if(General.is_valid(temp_v,constantes.CADENA_SOLONUMERO,False,6)==False):
+                          General.show_message("Por Favor Indique una Cedula del Representante Valida","Cedula de Representante Invalida")
+                          return False
+                      cls.data_process["representante"]["CI_representante"]=valor
+              elif(id_f=="telef"):
+                      if(General.is_valid(valor,constantes.CADENA_TELEFONO,False)==False):
+                         General.show_message("Por Favor Indique un telefono Valido","telefono invalido")
+                         return False
+                      cls.data_process["representante"]["telefono"]=valor 
+              elif(id_f=="nombre_repres"):
+                      if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True,3)==False):
+                          General.show_message("Por Favor Indique el Nombre del Representante Correctamente","Nombre de Representante Invalido")
+                          return False
+                      temp_nomb=valor.split(" ")
+                      if(len(temp_nomb)==1):
+                          cls.data_process["representante"]["nombre"]=temp_nomb[0].lower()
+                          cls.data_process["representante"]["s_nombre"]=""
+                      elif(len(temp_nomb)==2):
+                           cls.data_process["representante"]["nombre"]=temp_nomb[0].lower()
+                           cls.data_process["representante"]["s_nombre"]=temp_nomb[1].lower() 
+                      else:
+                          General.show_message("Por Favor Indique Los Nombres del Representante Correctamente","Nombre de Representante Invalido")
+                          return False
+              elif(id_f=="apellido_repres"):
+                      if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True,3)==False):
+                          General.show_message("Por Favor Indique el Apellido del Representante Correctamente","Apellido de Representante Invalido")
+                          return False
+                      temp_apell=valor.split(" ")
+                      if(len(temp_apell)==1):
+                           cls.data_process["representante"]["apellido"]=temp_apell[0].lower()
+                           cls.data_process["representante"]["s_apellido"]=""
+                      elif(len(temp_apell)==2):
+                          cls.data_process["representante"]["apellido"]=temp_apell[0].lower()
+                          cls.data_process["representante"]["s_apellido"]=temp_apell[1].lower()
+                      else:
+                         General.show_message("Por Favor Indique Los Apellidos del Representante Correctamente","Apellido de Representante Invalido")
+                         return False  
+              elif(id_f=="direccion"):
+                       if(General.is_valid(valor,constantes.CADENA_DIRECCION,True)==False):
+                           General.show_message("Por Favor Indique la Direccion del Estudiante separada por ',' en formato xxx,xxxx,xxx","Direccion Invalida")
+                           return False
+                       data_d=valor.split(",")
+                       cls.data_process["estudiante"]["direccion"]={"sector":data_d[0],"parroquia":data_d[1],"casa":data_d[2]}
+
+              elif(id_f=="correo"):
+                       if(General.is_valid(valor,constantes.CADENA_CORREO,False)==False):
+                           General.show_message("Por Favor Indique un Correo del Representante Valido","correo Invalido")
+                           return False
+                       cls.data_process["representante"]["correo"]=valor
+              elif(id_f=="dir_representante"):
+                       if(General.is_valid(valor,constantes.CADENA_DIRECCION,True)==False):
+                           General.show_message("Por Favor Indique la Direccion del Representante separada por ',' en formato xxx,xxxx,xxx","Direccion Invalida")
+                           return False
+                       data_d=valor.split(",")
+                       cls.data_process["representante"]["direccion"]={"sector":data_d[0],"parroquia":data_d[1],"casa":data_d[2]}
+
+              elif(id_f=="parentesco"):
+                      if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,False)==False):
+                          General.show_message("Por Favor Indique un Parentesco del Representante Valido","Parentesco Invalido")
+                          return False
+                      cls.data_process["estudiante"]["parentesco"]=valor.lower()
+              elif(id_f=="plantel"):
+                      if(General.is_valid(valor,constantes.CADENA_ALFANUMERICA,True,4)==False):
+                         General.show_message("Por Favor Indique el Plantel de Procedencia del Estudiante","Plantel Invalido")
+                         return False
+                      cls.data_process["estudiante"]["plantel"]=valor    
+              elif(id_f=="oficio"):
+                      if(General.is_valid(valor,constantes.CADENA_SOLOTEXTO,True)==False):
+                            General.show_message("Por Favor Indique un Oficio del Representante Valido","Oficio Invalido")
+                            return False
+                      cls.data_process["representante"]["oficio"]=valor.lower()
+          if(General.is_valid(birthdate_stud,constantes.CADENA_FECHA,False)==False):
+             General.show_message("Por Favor Indique el Año de Nacimiento del Estudiante","Año de Nacimiento Invalido")
+             return False
+          cls.data_process["estudiante"]["año_nacimiento"]=birthdate_stud                            
+          cls.data_process["estudiante"]["genero"]=data[3]
+          cls.data_process["estudiante"]["year_estud"]=data[4]
+          cls.data_process["estudiante"]["estatus"]=data[5]
+          if(data[2]=="elejir" or data[2]=="elegir"):
+             General.show_message("Por Favor Indique el Estado de Salud del Estudiante","Estado de Salud Invalido")
+             return False
+          cls.data_process["estudiante"]["salud"]=data[2]
+          return True
+   
+    #Verify if the Data for Request Inscription is Valid     
+    @classmethod
+    def validar_solicit_inscrip(cls,data):
+        time_object=tiempo()
+        now_date=time_object.get_fecha()
+        res={"CI_Estudiante":"","CI_Repres":"","Cedulado":"","Nuevo_Ingreso":""}
+        cedula_estud=""
+        #Verification Over Student Id
+        nacionalidad=""
+        if(data["Nacionalidad"].lower()=="venezolano"):
+            nacionalidad="V-"
+        elif(data["Nacionalidad"].lower()=="extranjero"):
+            nacionalidad="E-"
+        if(data["Cedulado"]=="Si"):
+            #Student with Id
+            valor_CI=str(data["CI_Estud"])
+            if(General.is_valid(valor_CI,constantes.CADENA_SOLONUMERO,False,6)==False):
+               General.show_message("Por Favor Escriba una Cedula Valida","Cedula Invalida")
+               return [False,res]
+            valor_CI=nacionalidad+valor_CI
+            cedula_estud=valor_CI
+            res["CI_Estudiante"]=valor_CI
+            res["Cedulado"]="True"
+
+        else:
+           #estud Without Id
+            valor_CI=str(data["CI_Repres"])
+            if(valor_CI.startswith("v-") or valor_CI.startswith("V-") or valor_CI.startswith("e-") or valor_CI.startswith("E-")):
+               valor_CI=valor_CI.split("-")[1]
+            year=data["Año"]
+            cedulado=False
+            if(General.is_valid(valor_CI,constantes.CADENA_SOLONUMERO,False,6)==False):
+               General.show_message("Por Favor Escriba una Cedula del Representante Valida","Cedula Invalida")
+               return [False,res]
+            elif(General.is_valid(year,constantes.CADENA_YEAR,False)==False):
+               General.show_message("Por Favor Escriba un Año de Nacimiento Valido","Año de Nacimiento Invalido")
+               return [False,res]
+            cedula_estud=nacionalidad+"1"+year[2]+year[3]+valor_CI
+            cedula_repres=data["CI_Repres"]
+            res["CI_Estudiante"]=cedula_estud
+            res["CI_Repres"]=cedula_repres
+            res["Cedulado"]="False"
+ 
+        if(data["Inscripcion_Type"]==0):
+           #inscription Nuevo Ingreso
+           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+           if(conexion_bd.id_exist(constantes.CLAVE_ESTUDIANTE,cedula_estud)==True ):
+              General.show_message("El Estudiante ya esta Inscrito","Estudiante Inscrito")
+              return [False,res]
+           if((time_object.is_previous(now_date,data["Fecha_end_Nuevo"],False))==True and (time_object.is_previous(data["Fecha_Init_Nuevo"],now_date,False)==True)==False):
+              General.show_message("Inscripciones de Nuevo Ingresos Cerrado","Inscripciones Cerradas")
+              return [False,res]
+           res["Nuevo_Ingreso"]="True"
+        else:
+           res["Nuevo_Ingreso"]="False"
+           #inscription Regular Student
+           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+           if(conexion_bd.id_exist(constantes.CLAVE_ESTUDIANTE,cedula_estud)==False):
+              General.show_message("El Estudiante No Esta Registrado","Estudiante No Registrado")
+              return [False,res]
+           conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,"valor"],"condition_Types":["and","and"],"conditions_Values":[cedula_estud,"0"],"conditions_Verify":["=",">"]}              
+           data_califs=conexion_bd.get_allData(["valor","año"],cond_data,None,True)
+           if(len(data_califs)<=0):
+              General.show_error("El Estudiante No se le han Actualizado/Registrado Calificaciones","Estudiante sin Calificaciones")
+              return [False,res]
+              
+           all_aprobadas=True
+           have_5_califs=False
+           for calific in data_califs:
+               if(int(calific["valor"])<10):
+                   all_aprobadas=False
+               if(calific["año"].startswith("5")):
+                   have_5_califs=True
+           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+           cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula_estud],"conditions_Verify":["="]}              
+           join_data={}
+           join_data["estatus_estud"]={"query_field":["estatus","fecha_inscrip","last_year"],"share_fields":{"field":constantes.CLAVE_ESTATUS_ESTUD,"table_reference":"estudiante"},"Conditions_join":None}
+           data_estatus=conexion_bd.get_allData([],cond_data,join_data,True)
+           if(len(data_estatus)<=0):
+              General.show_error("Error Obteniendo Datos del Estatus del Estudiante","Error")
+              return [False,res]
+              
+           if(data_estatus[0]["estatus"]=="graduado"):
+                General.show_message("El Estudiante ya se ha graduado","Estudiante graduado")
+                return [False,res]
+           if(all_aprobadas==True):
+                 if(have_5_califs==True):
+                     join_data["estatus_estud"]={"query_field":{"estatus":"graduado"},"share_fields":{"field":constantes.CLAVE_ESTATUS_ESTUD,"table_reference":"estudiante"},"Conditions_join":None}
+                     conexion_bd.update_data([],cond_data,join_data)
+                     General.show_message("El Estudiante ya se ha graduado","Estudiante graduado")
+                     return [False,res]        
+           last_inscrip=data_estatus[0]["fecha_inscrip"]
+           if(time_object.is_previous(last_inscrip,data["Fecha_Init_Regular"])==False):
+                 General.show_message("el Estudiante ya se ha Inscrito este Año","Estudiante Inscrito")
+                 return [False,res]      
+           elif((time_object.is_previous(now_date,data["Fecha_End_Regular"],False))==True and (time_object.is_previous(data["Fecha_Init_Regular"],now_date,False)==True)==False):
+                 General.show_message("Inscripcion de Estudiantes Regulares Cerradas","inscripciones Cerradas")                 
+                 return [False,res]
+                
+        return [True,res]
+    
+         
+    #Register a New Section
+    @classmethod
+    def register_seccion(cls,year,turno,max_studs,min_studs):
+          time_object=tiempo()
+                   
+          conexion_bd.set_tabla(constantes.TABLA_SECCION)
+          cond_data={"conditions_Names":["año",constantes.CLAVE_SECCION],"condition_Types":["and","and"],"conditions_Values":[year,"default"],"conditions_Verify":["=","!="]}      
+          data_year_seccs=conexion_bd.get_allData(["letra"],cond_data,None,True)
+          best_letra_code=-1
+          best_letra=""
+          for secc in data_year_seccs:
+              letra_secc=secc["letra"]
+              code_letra=ord(letra_secc)
+              if(code_letra>best_letra_code):
+                  best_letra_code=code_letra
+                  best_letra=letra_secc
+                  
+          if(best_letra==""):
+             best_letra="A" 
+          else:
+             best_letra=chr(best_letra_code+1)
+          id_horario=f"HorarioSeccion_{year}-{best_letra}"
+          dat_hor={"id_hor":id_horario,"turno":turno,"src_hor":"...","modificado":time_object.get_fecha()}
+          id_new_secc=f"{year}-{best_letra}"               
+          new_secc_dat={"id_secc":id_new_secc,"año":year,"letra":best_letra,"id_hor":id_horario,"total_estud":"1","maximo_estud":max_studs,"minimo_estud":min_studs,"modificado":time_object.get_fecha()}
+          secc_dat={"Action":"Register","data":new_secc_dat,"horario":dat_hor}
+          return secc_dat
+    
+    #Assign Section , Verify Disponibilty of Sections and Build a New Section if is Neccesary
     @classmethod
     def get_seccion(cls,year,turno):
-        last_secc=""
-        conexion_bd.set_tabla(constantes.TABLA_SECCION)   
-        nueva_secc=False
-        total_secc="0"
-        max_secc="30"
-        min_secc="15"
-        data_seccion_estud=[]
-        if(conexion_bd.is_empty()==False):
-            cond_data={"conditions_Names":["año"],"condition_Types":["and"],"conditions_Values":[year],"conditions_Verify":["="]}      
-            data_seccs=conexion_bd.get_allData([],cond_data)
-            num_seccs=len(data_seccs)
-            if(data_seccs!=[]):
-                asignada=-1
-                letra=""
-                code_letra=-1
-                for i in range(0,len(data_seccs)):
-                    conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-                    cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data_seccs[i][3]],"conditions_Verify":["="]}    
-                
-                    data_hor=conexion_bd.get_allData([],cond_data)
-                    if(data_hor[0][2]==turno and data_seccs[i][0]!="default" and asignada==-1):
-                        total1=data_seccs[i][4]
-                        limite1=data_seccs[i][5]
-                        minimo1=data_seccs[i][6]
-                        another_seccion=False
-                        total2=-1
-                        limite2=-1
-                        minimo2=-1
-                        id_secc2=""
-                        letra2=""
-                        for j in range(0,len(data_seccs)):
-                            if(data_seccs[i][0]!=data_seccs[j][0] and another_seccion==False and data_seccs[j][0]!="default"):
-                                cond_data={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":[data_seccs[j][3]],"conditions_Verify":["="]}    
-                                data_hor2=conexion_bd.get_allData([],cond_data)
-                                if(data_hor2[0][2]==turno):
-                                    total2=data_seccs[j][4]
-                                    limite2=data_seccs[j][5]
-                                    minimo2=data_seccs[j][6]
-                                    id_secc2=data_seccs[j][0]
-                                    letra2=data_seccs[j][2]
-                                    another_seccion=True
-                            else:
-                                if(another_seccion==True):
-                                    break            
-                        if(another_seccion==True):
-                                  if(int(total1)+1<=int(minimo1)):
-                                  
-                                     asignada=data_seccs[i][0]
-                                     letra=data_seccs[i][2]
-                                     total_secc=str(int(total1)+1)
-                                  elif(int(total2)+1<=int(minimo2)):
-                                    
-                                     asignada=id_secc2
-                                     letra=letra2
-                                     total_secc=str(int(total2)+1)
-                                  else:
-                                     if(int(total1)+1<=int(limite1)):
-                                      
-                                       asignada=data_seccs[i][0]
-                                       letra=data_seccs[i][2]
-                                       total_secc=str(int(total1)+1)
-                                     elif(int(total2)+1<=int(limite2)):
-                                     
-                                       asignada=id_secc2
-                                       letra=letra2
-                                       total_secc=str(int(total2)+1)
-                                     else:
-                                        
-                                        code_letraA=ord(data_seccs[i][2])
-                                        code_letraB=ord(letra2)
-                                        if(code_letraA<code_letraB):
-                                            last_secc=letra2
-                                        else:
-                                            last_secc=data_seccs[i][2]
-                              
-                        else:
-                                 
-                                 if(int(total1)+1<=int(minimo1)):
-                                   asignada=data_seccs[i][0]
-                                   letra=data_seccs[i][2]
-                                   total_secc=str(int(total1)+1)
-                                 else:
-                                    code_letra=ord(data_seccs[i][2][0])
-                                    last_secc=data_seccs[i][2]
-                if(asignada==-1):
-                    nueva_secc=True
-                    if(last_secc==""):
-                         last_secc="None"
-                else:
-                    data_seccion_estud=["False",str(asignada),year,letra,total_secc,max_secc,min_secc,turno]
-                         
-            else:
-                nueva_secc=True
-                last_secc="None"
-        else:
-            nueva_secc=True
-            last_secc="None"       
-        if(nueva_secc):                   
-            letra_secc=""
-            if(last_secc=="None"):
-                letra_secc="A"
-            else:    
-               letra_secc=str(chr(ord(last_secc[0])+1))
-            codigo=year+"-"+letra_secc
-            if(turno=="mañana"):
-               codigo=codigo+"(M)"
-            else:
-               codigo=codigo+"(T)"
-            data_seccion_estud=["True",codigo,year,letra_secc,"1",max_secc,min_secc,turno]
-        return data_seccion_estud
-
+       max_studs="30"
+       Maxlimit_int=30
+       min_studs="15"
+       Minlimit_int=15
+       time_object=tiempo()
+       join_data={}
+       conexion_bd.set_tabla(constantes.TABLA_SECCION)
+       fields_require=[constantes.CLAVE_SECCION,"letra","total_estud","maximo_estud","minimo_estud"]
+       cond_join={"conditions_Names":[constantes.CLAVE_HORARIO],"condition_Types":["and"],"conditions_Values":["default"],"conditions_Verify":["!="]}        
+       join_data["horario"]={"query_field":["turno"],"share_fields":{"field":"id_hor","table_reference":"seccion"},"Conditions_join":cond_join}
+       cond_data={"conditions_Names":["año",constantes.CLAVE_SECCION],"condition_Types":["and","and"],"conditions_Values":[year,"default"],"conditions_Verify":["=","!="]}      
+       data_seccs=conexion_bd.get_allData(fields_require,cond_data,join_data,True)
+       num_seccs=len(data_seccs)
+       if(num_seccs<=0):
+           return cls.register_seccion(year,turno,max_studs,min_studs)
+          
+       sections_lowStudents=[]
+       sections_availables=[]       
+       for secc in data_seccs:
+         cant=int(secc["total_estud"])
+         if(secc["turno"]==turno and cant<Maxlimit_int):
+             sections_availables.append({"Id":secc[constantes.CLAVE_SECCION],"Cant":secc["total_estud"]})
+             if(cant<Minlimit_int):
+                sections_lowStudents.append({"Id":secc[constantes.CLAVE_SECCION],"Cant":secc["total_estud"]})
+       
+       if(len(sections_lowStudents)>0): 
+           new_cant=int(sections_lowStudents[0]["Cant"])+1 
+           id_secc=sections_lowStudents[0]["Id"]
+           return {"Action":"Update","data":{"id_secc":id_secc,"new_cant":str(new_cant)},"horario":{}}
+       if(len(sections_availables)>0):
+           new_cant=int(sections_availables[0]["Cant"])+1 
+           id_secc=sections_availables[0]["Id"]
+           return {"Action":"Update","data":{"id_secc":id_secc,"new_cant":str(new_cant)},"horario":{}}
+       return cls.register_seccion(year,turno,max_studs,min_studs)
+       
+       
     #Execute the Action Required for Inscription Process
     @classmethod
     def inscribir(cls,usr,vent,type_i,fase):
-      pnl=vent.panelActual    
+      pnl=vent.panelActual
+      time_object=tiempo()      
       from event_manager import Event_manager
       if(fase==cls.INSCRIPTION_VERIFY_ID):  
         radios=pnl.get_comp_byName("cedulado")
@@ -154,101 +368,63 @@ class Process_Manager:
         if(conexion_bd.id_exist(constantes.CLAVE_FORMATO,"inscripcion")==False): 
              General.show_error("no hay formato de inscripcion registrado","formato de isncripcion sin registrar")
              return   
-        time_object=tiempo()
-        año_escolar=""
+        
         hoy=time_object.get_fecha()
         fecha_inscrip=time_object.get_fecha()
         fecha_cierre=time_object.get_fecha()
         fecha_inscrip_nuevo=time_object.get_fecha()
         fecha_cierre_nuevo=time_object.get_fecha()
-        
-        #verificamos cronograma si existe
-        conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        data_cronog=conexion_bd.get_allData([])
-        if(data_cronog!=[]):
-           data_fechas=[]
-           conexion_bd.set_tabla(constantes.TABLA_FECHA)
-           data_fechas=conexion_bd.get_allData(["razon","fecha","fecha_cierre"])                
-           if(data_fechas!=[]):
-              for i in range(0,len(data_fechas)):
-                 if(data_fechas[i][0]=="inscripcion nuevo ingreso"):
-                     fecha_inscrip_nuevo=data_fechas[i][1]
-                     fecha_cierre_nuevo=data_fechas[i][2]
-                 elif(data_fechas[i][0]=="inscripcion estudiantes regulares"):
-                     fecha_inscrip=data_fechas[i][1]
-                     fecha_cierre=data_fechas[i][2]
-           else:
-              fecha_actual=hoy.split("/")
-              if(len(fecha_actual)==3):
-                 year=fecha_actual[2]
-                 fecha_inscrip="16/09/"+year
-                 fecha_cierre="15/03/"+str(int(year)+1)
-                 fecha_inscrip_nuevo="16/09/"+year
-                 fecha_cierre_nuevo="15/12/"+year
-               
-        else:
-          #set default date inscripcion
-          fecha_actual=hoy.split("/")
-          if(len(fecha_actual)==3):
-            year=fecha_actual[2]
-            fecha_inscrip="16/09/"+year
-            fecha_cierre="15/03/"+str(int(year)+1)
-            fecha_inscrip_nuevo="16/09/"+year
-            fecha_cierre_nuevo="15/12/"+year
+        #Get Inscriptions Date
+        conexion_bd.set_tabla(constantes.TABLA_FECHA)
+        fields_fecha=["razon","fecha","fecha_cierre"]
+        data_fechas=conexion_bd.get_allData(fields_fecha,None,None,True)
+        if(data_fechas==[]):
+           General.show_error("cronograma o fechas de Inscripcion no Registradas","Fechas Inscripcion Invalidas")
+           return         
+        for i in range(0,len(data_fechas)):
+           if(data_fechas[i]["razon"]=="inscripcion nuevo ingreso"):
+               fecha_inscrip_nuevo=data_fechas[i]["fecha"]
+               fecha_cierre_nuevo=data_fechas[i]["fecha_cierre"]
+           elif(data_fechas[i]["razon"]=="inscripcion estudiantes regulares"):
+               fecha_inscrip=data_fechas[i]["fecha"]
+               fecha_cierre=data_fechas[i]["fecha_cierre"]
+   
         estud=estudiante()
-        data_estud=[
-            type_i,
-            radios.get_selected_value(),
-            pnl.get_comp_byName("cedula").get_text(),
-            pnl.get_comp_byName("cedula_repres").get_text(),
-            pnl.get_comp_byName("año").get_text(),
-            time_object,
-            fecha_inscrip,
-            fecha_cierre,
-            fecha_inscrip_nuevo,
-            fecha_cierre_nuevo,
-            hoy,
-            radios2.get_selected_value()
-        ]
-        valido=estud.validar_solicit_inscrip(data_estud)
-        if(valido==0):
+        data_estud={
+            "Inscripcion_Type":type_i,
+            "Cedulado":radios.get_selected_value(),
+            "CI_Estud":pnl.get_comp_byName("cedula").get_text(),
+            "CI_Repres":pnl.get_comp_byName("cedula_repres").get_text(),
+            "Año":pnl.get_comp_byName("año").get_text(),
+            "Fecha_Init_Regular":fecha_inscrip,
+            "Fecha_End_Regular":fecha_cierre,
+            "Fecha_Init_Nuevo":fecha_inscrip_nuevo,
+            "Fecha_end_Nuevo":fecha_cierre_nuevo,
+            "Nacionalidad":radios2.get_selected_value()
+        }
+        valido=cls.validar_solicit_inscrip(data_estud)
+        
+        if(valido[0]==True):
           usr.data_expediente=[]
-          data_valid=estud.get_data_inscrip()
-          usr.recibe_data_process(data_valid)
+          data_valid=valido[1]
+          cls.data_process["estudiante"]={"CI_estudiante":data_valid["CI_Estudiante"],"cedulado":data_valid["Cedulado"]}
+          cls.data_process["representante"]={"CI_representante":data_valid["CI_Repres"]}
+          cls.data_process["tipo_inscripcion"]=""
           if(type_i==cls.INSCRIPTION_NUEVO_INGRESO):
+                cls.data_process["tipo_inscripcion"]="Nuevo Ingreso"
                 vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_2,usr)
-                Event_manager.set_data_estud(data_valid[0],False,data_estud[3])   
+                Event_manager.set_data_estud(data_valid["CI_Estudiante"],False,data_valid["CI_Repres"])   
           else:
+                cls.data_process["tipo_inscripcion"]="Regular"
                 vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_3,usr)
-                Event_manager.set_data_estud(data_valid[0],True,data_estud[3])                           
-        else:
-          if(valido==-1):
-            General.show_message("por favor escriba una CI valida","cedula invalida")
-          elif(valido==-2):
-            General.show_message("estudiante no registrado","cedula inexistente")
-          elif(valido==-3):
-             General.show_message("por favor escriba una CI del representante valida","cedula representante invalida")
-          elif(valido==-4):
-             General.show_message("por favor escriba un año de nacimiento valido","año de nacimiento invalido")
-          elif(valido==-5):
-             General.show_message("el estudiante ya se ha registrado","estudiante inscrito")
-          elif(valido==-6):
-             General.show_message("el estudiante ya se ha inscrito este año","estudiante inscrito")
-          elif(valido==-7):
-             General.show_message("las inscripciones de estudiantes regulares estan cerradas","inscripciones cerradas")
-          elif(valido==-8):
-             General.show_message("las inscripciones de estudiantes nuevo ingreso estan cerradas","inscripciones cerradas")
-          elif(valido==-9):
-             General.show_message("el estudiante tiene calificaciones pendientes de otra institucion por actualizar","calificaciones no actualizadas")
-          elif(valido==-10):
-             General.show_message("el estudiante ya se ha graduado","estudiante graduado")      
+                Event_manager.set_data_estud(data_valid["CI_Estudiante"],True,data_valid["CI_Repres"])                           
+              
       else:
           if(fase==cls.INSCRIPTION_VERIFY_DATA_STUDENT):
              data_estud=[]
-             data_pendiente=["False"]
-             data_repitiendo=["False"]
+             data_pendiente={"Required":"False","List":[]}
+             data_repitiendo={"Required":"False","List":[]}
              data_seccion=[]
-             last_dat=usr.get_data_process()
              year_curso=""
              turno=pnl.get_comp_byName("turno").get_selected_value()
              if(turno=="elejir" or turno=="elegir"):
@@ -256,37 +432,31 @@ class Process_Manager:
                 return
                 
              estatus="activo"
-             if(last_dat[0][2]=="True"):
+             if(cls.data_process["tipo_inscripcion"]!="Regular"):
                 year_curso=pnl.get_comp_byName("curso").get_selected_value().split(" ")[0] 
                 if(int(year_curso)>1):
                     estatus="irregular"    
              else:
                  estud=estudiante()
-                 data_curso=estud.get_data_curso(last_dat[0][0])
+                 data_curso=estud.get_data_curso(cls.data_process["estudiante"]["CI_estudiante"])
                  year_curso=data_curso[0]
                  data_pendiente=data_curso[1]
                  data_repitiendo=data_curso[2]
-                 
-             #Verify Formation Areas  
-             conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-             cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}    
-             areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION,constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)
-             if(areas==[]):
-                    General.show_error("error no existen areas de formacion incorporadas","sin areas de formacion disponibles")
+             
+             conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION) 
+             #Verify Formation Areas 
+             for i in range(0,int(year_curso)):
+                join_data={}
+                join_conds={"conditions_Names":[str(i+1)+"_año"],"condition_Types":["and"],"conditions_Values":["True"],"conditions_Verify":["="]}    
+                join_data["años_incorporados"]={"query_field":[],"share_fields":{"field":constantes.CLAVE_AÑOS_INCORPORADOS,"table_reference":"area_formacion"},"Conditions_join":join_conds}
+                cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}    
+                areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data,join_data,True)
+                if(areas==[]):
+                    General.show_error("error no existen areas de formacion Disponibles para el Año de Curso Solicitado","sin areas de formacion disponibles")
                     return
-             conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
-             cants=[0,0,0,0,0]                                
-             for ar in areas:
-                for i in range(0,int(year_curso)):
-                    cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS,str(i+1)+"_año"],"condition_Types":["and","and"],"conditions_Values":[ar[1],"True"],"conditions_Verify":["=","="]}    
-                    ar_in=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data) 
-                    if(ar_in!=[]):
-                         cants[i]=cants[i]+1
-             for j in range(0,int(year_curso)):
-                 if(cants[j]==0):
-                     General.show_error("faltan areas de formacion disponibles para "+str(j+1)+" año ","año sin areas de formacion")
-                     return    
-             data_seccion=cls.get_seccion(year_curso,turno)                      
+                    
+              
+             data_seccion=cls.get_seccion(year_curso,turno)              
              fields=pnl.get_comps_byTag("field")
              data_estud.append(fields)
              data_estud.append(pnl.get_comp_byName("fecha").get_text())
@@ -294,114 +464,96 @@ class Process_Manager:
              data_estud.append(pnl.get_comp_byName("genero").get_selected_value())
              data_estud.append(year_curso)
              data_estud.append(estatus)
-             data_verificada=usr.validar_inscripcion(data_estud)
-             valido=data_verificada[0]
-             if(valido==0):
-                if(last_dat[0][2]=="True" or (data_pendiente[0]=="False" and data_repitiendo[0]=="False")):
-                    if(General.show_confirmDialog("esta seguro que desea inscribir el estudiante","inscribir estudiante")!=True):
-                       return
-               
-                usr.recibe_data_process(data_verificada[1])
-                usr.recibe_data_process(data_verificada[2])
-                usr.recibe_data_process(data_verificada[3])
-                usr.recibe_data_process(data_seccion)
-                usr.recibe_data_process(data_pendiente)
-                data_areas=[]
-                year_area=year_curso+"_año"
-                conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
-                cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}    
-                areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data)           
-                usr.recibe_data_process(data_areas)
-                usr.recibe_data_process(data_repitiendo)
-                
-                if(last_dat[0][2]!="True" and (data_pendiente[0]!="False" or data_repitiendo[0]!="False")):
+             data_verificada=cls.validar_inscripcion(data_estud)
+            
+             if(data_verificada==False):
+                 conexion_bd.cancel_requests()
+                 return
+             direct_inscription=False
+             if(cls.data_process["tipo_inscripcion"]=="Regular"):
+                conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cls.data_process["estudiante"]["CI_estudiante"]],"conditions_Verify":["="]}              
+                join_data={} 
+                join_data["expediente"]={"query_field":["src_foto"],"share_fields":{"field":"id_exp","table_reference":"estudiante"},"Conditions_join":None}
+                join_data["estatus_estud"]={"query_field":["plantel_procedencia"],"share_fields":{"field":"id_est","table_reference":"estudiante"},"Conditions_join":None}
+                data_estudReg=conexion_bd.get_allData([],cond_data,join_data,True)
+                if(len(data_estudReg)>0):
+                   cls.data_process["estudiante"]["foto_expediente"]=data_estudReg[0]["src_foto"]
+                   cls.data_process["estudiante"]["plantel"]=data_estudReg[0]["plantel_procedencia"]
+                else:
+                  cls.data_process["estudiante"]["foto_expediente"]="..."
+                  cls.data_process["estudiante"]["plantel"]="..."
+                cls.data_process["estudiante"]["expediente_src"]="..."
+             if(cls.data_process["tipo_inscripcion"]!="Regular" or (data_pendiente["Required"]=="False" and data_repitiendo["Required"]=="False")):
+                  direct_inscription=True
+                  if(General.show_confirmDialog("esta seguro que desea inscribir el estudiante","inscribir estudiante")!=True):
+                      conexion_bd.cancel_requests()
+                      return
+             cls.data_process["seccion"]=data_seccion
+             id_secc=data_seccion["data"]["id_secc"]
+             cls.data_process["materia_pendiente"]=data_pendiente  
+             cls.data_process["areas_repitiendo"]=data_repitiendo
+             data_areas=[]
+             year_area=year_curso+"_año"
+             if(direct_inscription==False):
                     vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION_4,usr)
                     pnl=vent.panelActual
-                    pnl.get_comp_byName("seccion").set_text(f"Seccion Asignada: {year_curso}-{data_seccion[3]}")
-                    if(data_pendiente[0]!="False"):
+                    pnl.get_comp_byName("seccion").set_text(f"Seccion Asignada:{id_secc}")
+                    if(data_pendiente["Required"]!="False"):
                         temp_pendiente=[]
-                        for i in range(1,len(data_pendiente)):
-                            temp_pendiente.append(data_pendiente[i][0] +" - "+data_pendiente[i][1]+" año")
+                        for i in range(0,len(data_pendiente["List"])):
+                            temp_pendiente.append(data_pendiente["List"][i][0] +" - "+data_pendiente["List"][i][1]+" año")
                         pnl.get_comp_byName("pendientes").set_values(temp_pendiente)         
-                    if(data_repitiendo[0]!="False"):
+                    if(data_repitiendo["Required"]!="False"):
                         temp_repitiendo=[]
-                        for rep in range(1,len(data_repitiendo)):
-                           temp_repitiendo.append(data_repitiendo[rep])
+                        for rep in range(0,len(data_repitiendo["List"])):
+                           temp_repitiendo.append(data_repitiendo["List"][rep])
                         pnl.get_comp_byName("areas").set_values(temp_repitiendo)
-                else:  
-                    estud=estudiante()
-                    estud.inscribir(usr.get_data_process())
-                    conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-                    Event_manager.generar_reporte("inscripcion",usr.get_data_process())
-                    time_object=tiempo()
-                    usr.add_action_historial(["inscripcion de estudiante",time_object.get_tiempo()])
-                    conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                    id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-                    data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
-                    conexion_bd.add_data(data_hist)
-                    General.show_message("inscripcion realizada satisfactoriamente","inscripcion finalizada")
-                    vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,usr)
-                    usr.reset_data_process(0)
-             else:
-                 if(valido==-1):
-                   General.show_message("por favor escriba un nombre valido","nombre invalido")                   
-                 elif(valido==-2):
-                   General.show_message("por favor escriba un apellido valido","apellido invalido")
-                 elif(valido==-3):
-                   General.show_message("por favor abra una carpeta con un expediente valido","expediente invalido")
-                 elif(valido==-4):
-                   General.show_message("por favor escriba un cedula de representante valida","cedula de representante invalido")
-                 elif(valido==-5):
-                   General.show_message("por favor escriba un telefono de representante valido","telefono de representante invalido")
-                 elif(valido==-6):
-                   General.show_message("por favor escriba un nombre de representante valido","nombre de representante invalido")
-                 elif(valido==-7):
-                   General.show_message("por favor escriba un apellido de representante valido","apellido de representante invalido")
-                 elif(valido==-8):
-                   General.show_message("por favor elija un estatus valido","estatus invalido")
-                 elif(valido==-9):
-                   General.show_message("por favor elija un estado de salud valido","estado de salud invalido")
-                 elif(valido==-10):
-                   General.show_message("por favor indique la direccion separada por comas","direccion invalida")
-                 elif(valido==-11):
-                   General.show_message("por favor escriba una fecha de nacimiento valida","fecha invalida")
-                 elif(valido==-12):
-                   General.show_message("la foto debe ser un archivo en formato .JPG o .PNG","formato de foto invalido")
-                 elif(valido==-13):
-                    General.show_message("el expediente debe ser un archivo .RAR o .ZIP ","formato de expediente invaldo")
-                 elif(valido==-14):
-                   General.show_message("el archivo de la foto ya existe en servidor, por favor cambie el nombre al archivo y vuelve a intentarlo","foto ya existente")
-                 elif(valido==-15):
-                    General.show_message("el archivo del expediente ya existe en servidor, por favor cambie el nombre al archivo y vuelve a intentarlo","expediente ya existente")
-                 elif(valido==-16):
-                    General.show_message("por favor escriba un correo del representante valido","correo invalido")
-                 elif(valido==-17):
-                    General.show_message("por favor escriba una direccion del representate de la siguiente maner: xxxxx,xxxx,xxxx","direccion del representante no valida")
-                 elif(valido==-18):
-                    General.show_message("por favor escriba un parentesco valido del representante","parentesco invalido")
-                 elif(valido==-19):
-                     General.show_message("por favor escriba un oficio valido del representante","oficio invalido")
-                 elif(valido==-20):                 
-                     General.show_message("por indique el plantel de procedencia del estudiante","plantel invalido")
-               
+             else:  
+                 usr_creds=usr.get_credentials()
+                 usr_token=usr_creds[4]
+                 cls.data_process["usuario"]=usr_token
+                 estud=estudiante()
+                 if(estud.inscribir(cls.data_process)==False):
+                       return
+                       
+                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+                 if(id_hist=="-1"):
+                       General.show_error("Error Generando Reporte","Error de Conexion")
+                       return
+                 data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
+                 if(conexion_bd.add_data(data_hist,True)<0):
+                     return                   
+                 conexion_bd.set_tabla(constantes.TABLA_FORMATO)
+                 Event_manager.generar_reporte("inscripcion",cls.data_process)
+                 usr.add_action_historial(["inscripcion de estudiante",time_object.get_tiempo()])              
+                 General.show_message("inscripcion realizada satisfactoriamente","inscripcion finalizada")
+                 vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,usr)
+                 cls.clear_data_process()
+             
           elif(fase==cls.INSCRIPTION_CONFIRM_INSCRIPTION):
+            
             if(General.show_confirmDialog("esta seguro que desea inscribir el estudiante","inscribir estudiante")!=True):
                return
-               
+            usr_creds=usr.get_credentials()
+            usr_token=usr_creds[4]
+            cls.data_process["usuario"]=usr_token   
             estud=estudiante()
-            estud.inscribir(usr.get_data_process())
-            time_object=tiempo()           
-            usr.add_action_historial(["inscripcion de estudiante",time_object.get_tiempo()])
+            if(estud.inscribir(cls.data_process)==False):
+               return
+           
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
             data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
-            conexion_bd.add_data(data_hist,True)
-            
+            if(conexion_bd.add_data(data_hist,True)<0):
+                return                     
+            usr.add_action_historial(["inscripcion de estudiante",time_object.get_tiempo()])
             conexion_bd.set_tabla(constantes.TABLA_FORMATO)
-            Event_manager.generar_reporte("inscripcion",usr.get_data_process())                    
+            Event_manager.generar_reporte("inscripcion",cls.data_process)                    
             General.show_message("inscripcion realizada satisfactoriamente","inscripcion finalizada")
             vent.update_pantallas(constantes.PANTALLA_PROCESO_INSCRIPCION,usr)
-            usr.reset_data_process(0)   
+            cls.clear_data_process()   
 
 
     #Determine and execute the Action Required for 'Rendimiento' Process
@@ -830,11 +982,7 @@ class Process_Manager:
              valido=-2
        if(valido==0):
             conexion_bd.set_tabla(constantes.TABLA_SECCION)
-            id_secc=year[0]+"-"+letra+"("
-            if(turno=="mañana"):
-                id_secc=id_secc+"M)"
-            else:
-               id_secc=id_secc+"T)"
+            id_secc=year[0]+"-"+letra
             cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[id_secc],"conditions_Verify":["="]}      
             data_secc=conexion_bd.get_allData([],cond_data)
             if(data_secc!=[]):
@@ -895,7 +1043,7 @@ class Process_Manager:
                                         conexion_bd.add_data(data_next_calif,True)
                                         
                                 nombres.append(temp_data)  
-                        dat=[nombres,areas_list,year[0]+"-"+letra+" ("+turno+")",year[0]]                        
+                        dat=[nombres,areas_list,year[0]+"-"+letra,year[0]]                        
                         if(dat[0]!=[]):
                           from event_manager import Event_manager
                           if(con_notas==False):
@@ -1414,6 +1562,7 @@ class Process_Manager:
         pnl=vent.panelActual
         accion=pnl.get_comp_byName("accion_box").get_selected_value()
         time_object=tiempo()
+        import time
         if(accion!="elejir" and accion!="elegir"):
           dat=usr.get_data_process()
           if(accion=="modificar contenido"):
@@ -1447,8 +1596,9 @@ class Process_Manager:
                 cond_data={"conditions_Names":["src_form"],"condition_Types":["and"],"conditions_Values":[dat[0][3]],"conditions_Verify":["="]} 
                 data_form=conexion_bd.get_allData(constantes.CAMPOS_FORMATO,cond_data)
                 if(len(data_form)<=1):
+                  user_token=usr.get_credentials()[4]
                   url_delete=constantes.SERVER+"delete_file.php"
-                  path={"directorio":"./","nombre":usr.get_data_process()[0][3]}
+                  path={"directorio":"./","nombre":usr.get_data_process()[0][3],"token":user_token,"timestamp":str(int(time.time()))}
                   response_del=requests.post(url_delete,params=path)
                   res_delete=response_del.text.strip()
                 conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)

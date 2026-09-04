@@ -170,9 +170,9 @@ class Consult_Manager:
               return
           data_raw=response.content
           replace=[]
-          if(receive_data[1][10]!="" and receive_data[1][10]!="..."):
+          if(receive_data["estudiante"]["foto_expediente"]!="" and receive_data["estudiante"]["foto_expediente"]!="..."):
               conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[receive_data[0][0]],"conditions_Verify":["="]}              
+              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[receive_data["estudiante"]["CI_estudiante"]],"conditions_Verify":["="]}              
               data_e=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
               if(data_e!=[]):
                   conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
@@ -187,38 +187,38 @@ class Consult_Manager:
                replace.append(["FOTO:","not found"])        
           nombres=""
           apellidos=""
-          if(receive_data[1][0]!="" and receive_data[1][0]!="..."):
-               nombres=receive_data[1][0]
-          if(receive_data[1][1]!="" and receive_data[1][1]!="..."):
-               apellidos=receive_data[1][1]
-          if(receive_data[1][2]!="" and receive_data[1][2]!="..."):
-               nombres=nombres+" "+receive_data[1][2]
-          if(receive_data[1][3]!="" and receive_data[1][3]!="..."):
-               apellidos=apellidos+" "+receive_data[1][3]
-          dir_estud=receive_data[3][2]+","+receive_data[3][3]+","+receive_data[3][4] 
-          nombre_repres=receive_data[2][2]
-          if(receive_data[2][12]!="" and receive_data[2][12]!="..."):
-             nombre_repres=nombre_repres+" "+receive_data[2][12]
-          nombre_repres=nombre_repres+" "+receive_data[2][1]
-          if(receive_data[2][11]!="" and receive_data[2][11]!="..."):
-             nombre_repres=nombre_repres+" "+receive_data[2][11]
+          if(receive_data["estudiante"]["nombre"]!="" and receive_data["estudiante"]["nombre"]!="..."):
+               nombres=receive_data["estudiante"]["nombre"]
+          if(receive_data["estudiante"]["apellido"]!="" and receive_data["estudiante"]["apellido"]!="..."):
+               apellidos=receive_data["estudiante"]["apellido"]
+          if(receive_data["estudiante"]["s_nombre"]!="" and receive_data["estudiante"]["s_nombre"]!="..."):
+               nombres=nombres+" "+receive_data["estudiante"]["s_nombre"]
+          if(receive_data["estudiante"]["s_apellido"]!="" and receive_data["estudiante"]["s_apellido"]!="..."):
+               apellidos=apellidos+" "+receive_data["estudiante"]["s_apellido"]
+          dir_estud=receive_data["estudiante"]["direccion"]["sector"]+","+receive_data["estudiante"]["direccion"]["parroquia"]+","+receive_data["estudiante"]["direccion"]["casa"] 
+          nombre_repres=receive_data["representante"]["nombre"]
+          if(receive_data["representante"]["s_nombre"]!="" and receive_data["representante"]["s_nombre"]!="..."):
+             nombre_repres=nombre_repres+" "+receive_data["representante"]["s_nombre"]
+          nombre_repres=nombre_repres+" "+receive_data["representante"]["apellido"]
+          if(receive_data["representante"]["s_apellido"]!="" and receive_data["representante"]["s_apellido"]!="..."):
+             nombre_repres=nombre_repres+" "+receive_data["representante"]["s_apellido"]
           replace.append(["Apellidos y Nombres:",apellidos+" "+nombres])
-          replace.append(["Fecha de Nacimiento:",receive_data[1][8]])
+          replace.append(["Fecha de Nacimiento:",receive_data["estudiante"]["año_nacimiento"]])
           replace.append(["Domicilio:",dir_estud]) 
           replace.append(["Representante:",nombre_repres])
-          id_representant=receive_data[2][0]
+          id_representant=receive_data["representante"]["CI_representante"]
           if(id_representant.startswith("v-")==False and id_representant.startswith("V-")==False and id_representant.startswith("e-")==False and id_representant.startswith("E-")==False):
                 id_representant="V-"+id_representant
           replace.append(["CI:",id_representant])
-          replace.append(["Telefono:",receive_data[2][3]])
-          dir_repres=receive_data[2][7]+","+receive_data[2][8]+","+receive_data[2][9]
+          replace.append(["Telefono:",receive_data["representante"]["telefono"]])
+          dir_repres=receive_data["representante"]["direccion"]["sector"]+","+receive_data["representante"]["direccion"]["parroquia"]+","+receive_data["representante"]["direccion"]["casa"]
           replace.append(["Domicilio del Representante:",dir_repres])
-          replace.append(["Correo del Representante:",receive_data[2][4]])
-          edad=str(time_object.get_edad(receive_data[1][8]))
-          replace.append(["Parentesco:",receive_data[2][10]])
-          replace.append(["Oficio:",receive_data[2][13]])
-          replace.append(["Cedula:",receive_data[0][0]])
-          replace.append(["Plantel de Procedencia:",receive_data[1][11]])
+          replace.append(["Correo del Representante:",receive_data["representante"]["correo"]])
+          edad=str(time_object.get_edad(receive_data["estudiante"]["año_nacimiento"]))
+          replace.append(["Parentesco:",receive_data["estudiante"]["parentesco"]])
+          replace.append(["Oficio:",receive_data["representante"]["oficio"]])
+          replace.append(["Cedula:",receive_data["estudiante"]["CI_estudiante"]])
+          replace.append(["Plantel de Procedencia:",receive_data["estudiante"]["plantel"]])
           replace.append(["NN",""])
           replace.append(["Edad:",edad])
           replace.append(["Yo:",nombre_repres])
@@ -227,20 +227,14 @@ class Consult_Manager:
           fech=list(fech.split("/"))
           fech[1]=time_object.get_mes(int(fech[1]))
           replace.append(["Inscripcion Realizada a los:","Inscripcion Realizada a los "+fech[0]+" dias "+"del mes de "+fech[1]+" del Año "+fech[2]])
-          secc=""
-          secc_temp=receive_data[4][1]
-          if(secc_temp.endswith("(M)")):
-              secc_temp=secc_temp.split("(M)")[0]
-              secc=secc_temp
-          else:
-              secc_temp=secc_temp.split("(T)")[0]
-              secc=secc_temp
+          secc=receive_data["seccion"]["data"]["id_secc"]
+         
           num_replace=len(replace)
           filename=data_form[0][0].split("/")
-          filename=receive_data[0][0]+"-"+filename[len(filename)-1]
+          filename=receive_data["estudiante"]["CI_estudiante"]+"-"+filename[len(filename)-1]
           ruta=constantes.FOLDER_DOCUMENTS+filename
           data_cells=[]
-          year_inscription=int(receive_data[1][9])
+          year_inscription=int(receive_data["estudiante"]["year_estud"])
           conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
           data_cronog=conexion_bd.get_allData([])
           periodo=""
@@ -254,13 +248,15 @@ class Consult_Manager:
                 areas=""
                 pends=""
                 con_pendientes=False
-                if(receive_data[5][0]!="False"):
-                    con_pendientes=True                   
-                    for pd in range(1,len(receive_data[5])):
-                        pends=pends+receive_data[5][pd][0].lower()+","
-                if(receive_data[7][0]!="False"):
-                    for rept in range(1,len(receive_data[7])):
-                        areas=areas+receive_data[7][rept].lower()+","
+                if(receive_data["materia_pendiente"]["Required"]!="False"):
+                    con_pendientes=True 
+                    list_areas=receive_data["materia_pendiente"]["List"]                    
+                    for pd in range(0,len(list_areas)):
+                        pends=pends+list_areas[pd][0].lower()+","
+                if(receive_data["areas_repitiendo"]["Required"]!="False"):
+                    list_areas=receive_data["areas_repitiendo"]["List"]
+                    for rept in range(0,len(list_areas)):
+                        areas=areas+list_areas[rept].lower()+","
                 temp_data[4]=pends
                 temp_data[3]=areas                        
              data_cells.append(temp_data)
@@ -271,7 +267,7 @@ class Consult_Manager:
                       replace.append([ex,"X"])
           else:
               conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[receive_data[0][0]],"conditions_Verify":["="]}              
+              cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[receive_data["estudiante"]["CI_estudiante"]],"conditions_Verify":["="]}              
               dat_expedent=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
               if(dat_expedent!=[]):
                 conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)

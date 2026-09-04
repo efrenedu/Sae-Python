@@ -369,7 +369,9 @@ class ventana:
         if(user_data==None and from_menu==True):
             user_data=Event_manager.user
         if(next_p!=""): 
-           
+           if(next_p==constantes.PANTALLA_WELCOME and self.panelActual_str!=constantes.PANTALLA_INICIO):
+               from conexion_bd import conexion_bd
+               conexion_bd.cancel_requests()
            self.loading_panel=True
            if(self.panelActual!=None):
               self.panelActual.free_Memory() 
@@ -389,6 +391,8 @@ class ventana:
        
     #Close the Windows    
     def close(self):
+        from conexion_bd import conexion_bd
+        conexion_bd.cancel_requests()
         if(self.panelActual!=None):
            self.panelActual.free_Memory()
         if(self.date_win!=None):

@@ -19,7 +19,7 @@ class conexion_bd:
     "area_dictada_docentes","reporte","formato","cronograma","momento","fecha",
     "pregunta_secreta","descarga_documentos","calificacion_final","calif_momento",
     "calificacion","disponibilidad_horario","materia_pendiente","calific_pendiente"]
-
+    pendent_querys=[]
 
     #Init the Connection
     @classmethod	
@@ -70,61 +70,80 @@ class conexion_bd:
             return []
         return resp_json["message"]
         
-        
+    #Force Cancel Request in DB
+    @classmethod
+    def cancel_requests(cls):
+        cls.pendent_querys=[]
+
     #add Data from a List or Dictionary to a Table    
     @classmethod
     def add_data(cls,values,do_commit=False):
+        from_dict=False
+        if(type(values).__name__=="dict"):
+           from_dict=True
+        cls.pendent_querys.append({"Type":"Add","Values":values,"Conditions":None,"Join":None,"Table":cls.tabla_selected,"from_dict":from_dict})
+        if(do_commit==False):  
+           return 0
+        
         from event_manager import Event_manager
         usr=Event_manager.user
         token_user=usr.get_credentials()[4]
         url_target=constantes.SERVER_BD_URL
         timestamp=str(int(time.time()))
-        from_dict=False
-        if(type(values).__name__=="dict"):
-           from_dict=True
-        data_request={"values_add":values,"target_table":cls.tabla_selected,"from_dict":from_dict,"commit":do_commit}
-        data_send={"request_type":"Add Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
+        
+        data_request={"query_list":cls.pendent_querys}
+        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
         response=requests.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
+        cls.pendent_querys=[]
         if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Obteniendo Datos")
+            General.show_error(resp_json["message"],"Error Actualizando Datos")
             return -1
         return 0
         
     #update a Field of table Target
     @classmethod
     def update_data(cls,values,cond_data,join_data=None,do_commit=False):
+        cls.pendent_querys.append({"Type":"Update","Values":values,"Conditions":cond_data,"Join":join_data,"Table":cls.tabla_selected})
+        if(do_commit==False):   
+            return 0
+            
         from event_manager import Event_manager
         usr=Event_manager.user
         token_user=usr.get_credentials()[4]
         url_target=constantes.SERVER_BD_URL
         timestamp=str(int(time.time()))
-        from_dict=False
-        if(type(values).__name__=="dict"):
-           from_dict=True
-        data_request={"fields_update":values,"target_table":cls.tabla_selected,"cond_dat":cond_data,"join_dat":join_data,"commit":do_commit}
-        data_send={"request_type":"Update Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
+    
+        data_request={"query_list":cls.pendent_querys}
+        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
         response=requests.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
+        cls.pendent_querys=[]
         if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Obteniendo Datos")
+            General.show_error(resp_json["message"],"Error Actualizando Datos")
             return -1
         return 0
 
     #delete a Register of the Table target
     @classmethod
     def delete_data(cls,cond_data,join_data=None,do_commit=False):
+        
+        cls.pendent_querys.append({"Type":"Delete","Values":None,"Conditions":cond_data,"Join":join_data,"Table":cls.tabla_selected})
+        if(do_commit==False):  
+           return 0
+           
         from event_manager import Event_manager
         usr=Event_manager.user
         token_user=usr.get_credentials()[4]
         url_target=constantes.SERVER_BD_URL
         timestamp=str(int(time.time()))
-        data_request={"target_table":cls.tabla_selected,"cond_dat":cond_data,"join_dat":join_data,"commit":do_commit}
-        data_send={"request_type":"Delete Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
+        data_request={"query_list":cls.pendent_querys}
+        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
         response=requests.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
+        cls.pendent_querys=[]
         if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Obteniendo Datos")
+            General.show_error(resp_json["message"],"Error Actualizando Datos")
             return -1
         return 0
      

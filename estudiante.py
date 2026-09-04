@@ -65,111 +65,14 @@ class estudiante:
             dat.append(data_exp)        
         return dat
     
-    #Verify if is a Valid Student for the Inscription
-    def validar_solicit_inscrip(self,data):
- 
-        from General import General
-        from conexion_bd import conexion_bd   
-        valido=0
-        cedulado=True
-        cedula_estud=""
-
-        #Verification Over Student Id
-        nacionalidad=""
-        if(data[11].lower()=="venezolano"):
-            nacionalidad="V-"
-        elif(data[11].lower()=="extranjero"):
-            nacionalidad="E-"
-        if(data[1]=="Si"):
-            #Student with Id
-            valor_CI=str(data[2])
-            if(General.is_valid(valor_CI,constantes.CADENA_SOLONUMERO,False,6)==False):
-               valido=-1
-            else:
-              valor_CI=nacionalidad+valor_CI
-              cedula_estud=valor_CI
-              self.data_inscrip.append(valor_CI)
-              self.data_inscrip.append("True")
-        else:
-           #estud Without Id
-            valor_CI=str(data[3])
-            if(valor_CI.startswith("v-") or valor_CI.startswith("V-") or valor_CI.startswith("e-") or valor_CI.startswith("E-")):
-               valor_CI=valor_CI.split("-")[1]
-            year=data[4]
-            cedulado=False
-            if(General.is_valid(valor_CI,constantes.CADENA_SOLONUMERO,False,6)==False):
-               valido=-3
-            elif(General.is_valid(year,constantes.CADENA_YEAR,False)==False):
-               valido=-4
-            else:   
-              cedula_estud=nacionalidad+"1"+year[2]+year[3]+valor_CI
-              cedula_repres=data[3]
-              self.data_inscrip.append(cedula_estud)
-              self.data_inscrip.append("False") 
-        if(cedula_estud==""):
-           return valido
-        
-        if(data[0]==0):
-           #inscription Nuevo Ingreso
-           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-           if(conexion_bd.id_exist(constantes.CLAVE_ESTUDIANTE,cedula_estud)==True ):
-              valido=-5
-           else:
-               if((data[5].is_previous(data[10],data[9],False)==True and data[5].is_previous(data[8],data[10],False)==True)==False):
-                  valido=-8
-               else:   
-                 self.data_inscrip.append("True")
-        else:
-           #inscription Regular Student
-           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-           if(conexion_bd.id_exist(constantes.CLAVE_ESTUDIANTE,cedula_estud)==True):               
-             self.data_inscrip.append("False")
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula_estud],"conditions_Verify":["="]}              
-             data_estud=conexion_bd.get_allData([],cond_data)
-             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-             data_califs=conexion_bd.get_allData(["valor","año"],cond_data)
-             aprobadas=True
-             have_5_califs=False
-             if(data_califs!=[]):
-                for cal in data_califs:
-                   if(int(cal[0])<1):
-                       return -9
-                   elif(int(cal[0])<10):
-                       aprobadas=False
-                   if(cal[1].startswith("5")):
-                       have_5_califs=True
-             else:
-                 aprobadas=False
-             if(have_5_califs==False):
-                 aprobadas=False
-             clave_estatus=data_estud[0][2]
-             conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[clave_estatus],"conditions_Verify":["="]}                          
-             data_estatus=conexion_bd.get_allData(["estatus","fecha_inscrip","last_year"],cond_data)[0]
-             if(data_estatus[0]=="graduado"):
-                return -10
-             else:
-                if(aprobadas==True):
-                    if(data_estatus[2].startswith("5")):
-                        cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[clave_estatus],"conditions_Verify":["="]}                          
-                        conexion_bd.update_data({"estatus":"graduado"},cond_data,None,True)
-                        return -10           
-             last_inscrip=data_estatus[1]
-             if(data[5].is_previous(last_inscrip,data[6])==False):
-                valido=-6
-             elif((data[5].is_previous(data[10],data[7],False)==True and data[5].is_previous(data[6],data[10],False)==True)==False):
-                valido=-7
-           else:
-              valido=-2
-        return valido
     
     
     #Get the Academic Data of Student    
     def get_data_curso(self,cedula):
         from conexion_bd import conexion_bd
         conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-        mat_pends=["False"]
-        data_repitiendo=["False"]
+        mat_pends={"Required":"False","List":[]}
+        data_repitiendo={"Required":"False","List":[]}
         repitiendo=False
         cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}                    
         id_estatus=conexion_bd.get_allData([constantes.CLAVE_ESTATUS_ESTUD],cond_data)[0][0]  
@@ -182,11 +85,11 @@ class estudiante:
         data_pendiente=conexion_bd.get_allData([],cond_data)
         if(data_pendiente!=[]):
             repitiendo=True
-            data_repitiendo=["True"]
-            mat_pends=["True"]
+            data_repitiendo["Required"]="True"
+            mat_pends["Required"]="True"
             num_pends=len(data_pendiente)
             for old_pend in data_pendiente:
-                mat_pends.append([old_pend[3],old_pend[4]]) 
+                mat_pends["List"].append([old_pend[3],old_pend[4]]) 
         
         conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
         cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,"año"],"condition_Types":["and","and"],"conditions_Values":[cedula,year_curso],"conditions_Verify":["=","="]}              
@@ -198,7 +101,7 @@ class estudiante:
           data_califs_old=conexion_bd.get_allData([],cond_data) 
         if(repitiendo==False):
             num_pends=0
-            mat_pends=["False"]
+            mat_pends["Required"]="False"
         if(data_califs!=[] or data_califs_old!=[]):
             #Student with Definitive Califications
             if(repitiendo==False):
@@ -208,40 +111,40 @@ class estudiante:
                        if(int(valor)<10):
                           if(num_pends<2):
                               num_pends+=1
-                              mat_pends.append([data_califs[i][3],data_califs[i][2]])
-                              data_repitiendo.append(data_califs[i][3]+"-"+data_califs[i][2])
+                              mat_pends["List"].append([data_califs[i][3],data_califs[i][2]])
+                              data_repitiendo["List"].append(data_califs[i][3]+"-"+data_califs[i][2])
                           else:
                             if(repitiendo==False):
                                repitiendo=True
-                               data_repitiendo[0]="True"
+                               data_repitiendo["Required"]="True"
                             num_pends+=1
-                            data_repitiendo.append(data_califs[i][3]+"-"+data_califs[i][2])
-                            mat_pends=["False","estudiante repitiendo año"]
+                            data_repitiendo["List"].append(data_califs[i][3]+"-"+data_califs[i][2])
+                            mat_pends={"Required":"False","List":[]}
                 if(data_califs_old!=[]):
                     for j in range(0,len(data_califs_old)):
                        valor=data_califs_old[j][4]
                        if(int(valor)<10):
                           if(num_pends<2):
                               num_pends+=1
-                              mat_pends.append([data_califs_old[j][3],data_califs_old[j][2]])
-                              data_repitiendo.append(data_califs_old[j][3]+"-"+data_califs_old[j][2])
+                              mat_pends["List"].append([data_califs_old[j][3],data_califs_old[j][2]])
+                              data_repitiendo["List"].append(data_califs_old[j][3]+"-"+data_califs_old[j][2])
                           else:
                             if(repitiendo==False):
                                repitiendo=True
-                               data_repitiendo[0]="True"
+                               data_repitiendo["Required"]="True"
                             num_pends+=1
-                            data_repitiendo.append(data_califs_old[j][3]+"-"+data_califs_old[j][2])
-                            mat_pends=["False","estudiante repitiendo año"]
+                            data_repitiendo["List"].append(data_califs_old[j][3]+"-"+data_califs_old[j][2])
+                            mat_pends={"Required":"False","List":[]}
             else:
                 if(data_califs!=[]):
                     for i in range(0,len(data_califs)):
-                        data_repitiendo.append(data_califs[i][3]+"-"+data_califs[i][2])                                
+                        data_repitiendo["List"].append(data_califs[i][3]+"-"+data_califs[i][2])                                
         else:
             return ["1",mat_pends,data_repitiendo]
      
         if(num_pends<=2 ):
             if(num_pends>0):
-                mat_pends[0]="True"     
+                mat_pends["Required"]="True"     
             if(repitiendo==False):
                year_curso=str(int(year_curso)+1)  
         return[year_curso,mat_pends,data_repitiendo]                             
@@ -253,201 +156,291 @@ class estudiante:
         from tiempo import tiempo
         from conexion_bd import conexion_bd
         import requests
+        import time
         time_object=tiempo()
-        
-        if(data_inscrip[4][0]=="True"):
-            conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-            data_hor=[conexion_bd.generate_id(True,constantes.CLAVE_HORARIO),"...",data_inscrip[4][7],time_object.get_fecha()]
-            conexion_bd.add_data(data_hor)
-            conexion_bd.set_tabla(constantes.TABLA_SECCION)
-            secc=[data_inscrip[4][1],data_inscrip[4][2],data_inscrip[4][3],data_hor[0],data_inscrip[4][4],data_inscrip[4][5],data_inscrip[4][6],time_object.get_fecha()]
-            conexion_bd.add_data(secc)     
+        conexion_bd.set_tabla(constantes.TABLA_SECCION)
+        data_secc=data_inscrip["seccion"]
+        register_secc={}
+        register_hor={}
+        update_secc={}
+        id_secc=""
+        if(data_secc["Action"]=="Register"):
+            register_secc=data_secc["data"]
+            register_hor=data_secc["horario"]
+            secc_exist=conexion_bd.id_exist(constantes.CLAVE_SECCION,register_secc["id_secc"])
+            if(secc_exist==True):
+               general.show_error("La seccion ya se ha Registrado","Error")
+               return False
+            id_secc=register_secc["id_secc"]
         else:
-            conexion_bd.set_tabla(constantes.TABLA_SECCION)
-            cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[data_inscrip[4][1]],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"total_estud":data_inscrip[4][4],"modificado":time_object.get_fecha()},cond_data)
-        if(data_inscrip[0][2]=="True"):
+            update_secc=data_secc["data"]
+            secc_exist=conexion_bd.id_exist(constantes.CLAVE_SECCION,update_secc["id_secc"])
+            if(secc_exist==False):
+               general.show_error("La seccion ya indicada no existe","Error")
+               return 
+            id_secc=update_secc["id_secc"]
+               
+        if(data_inscrip["tipo_inscripcion"]!="Regular"):
            #Student 'Nuevo Ingreso'
            conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-           estudent_dir=[conexion_bd.generate_id(True,constantes.CLAVE_DIRECCION),data_inscrip[3][2],data_inscrip[3][3],data_inscrip[3][4],time_object.get_fecha()]
-           conexion_bd.add_data(estudent_dir)
+           id_dire=f"DirStudent-{data_inscrip['estudiante']['CI_estudiante']}"      
+           estudent_dir=data_inscrip["estudiante"]["direccion"]
+           estudent_dir[constantes.CLAVE_DIRECCION]=id_dire
+           estudent_dir["modificado"]=time_object.get_fecha()           
            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-           id_exp=conexion_bd.generate_id(True,constantes.CLAVE_EXPEDIENTE)
-           exp=[]
-           try:
-                exp=[id_exp,data_inscrip[1][7],data_inscrip[1][10],time_object.get_fecha(),time_object.get_fecha()]
-           except:
-                exp=[id_exp,"...","...",time_object.get_fecha(),time_object.get_fecha()]
+           id_exp=f"ExpedentStudent-{data_inscrip['estudiante']['CI_estudiante']}"               
+           exp={"id_exp":id_exp,"src_exp":data_inscrip["estudiante"]["expediente_src"],"src_foto":data_inscrip["estudiante"]["foto_expediente"],"fecha_registro":time_object.get_fecha(),"modificado":time_object.get_fecha()}
            
-           #Add Expedent Data
-           if(exp[1]!="" and exp[1]!="..."):
-               try:
-                  if(exp[1].startswith("expedientes/")==False):
-                    url=constantes.SERVER+"upload_expediente.php"
-                    with open(exp[1],"rb") as temp_file:
-                      dict_exp={"file":temp_file}
-                      response=requests.post(url,files=dict_exp)
-                      res=response.text.strip()
-                      exp[1]=res
-                      if(res.startswith("expedientes/")==False):
-                         exp[1]="..."
-                         General.show_error("error subiendo expediente, por favor vuelva a subirlo desde la opcion actualizar extudiante","error de expediente")      
-               except:
-                    print("excepcion de lectura expediente")
-                    exp[1]="..."
-            
-           if(exp[2]!="" and exp[2]!="..."):
-               try:   
-                  if(exp[2].startswith("fotos/")==False):
-                    url=constantes.SERVER+"upload_foto.php"
-                    with open(exp[2],"rb") as temp_foto:
-                      dict_foto={"file":temp_foto}
-                      response=requests.post(url,files=dict_foto)
-                      res=response.text.strip()
-                      exp[2]=res
-                      if(res.startswith("fotos/")==False):
-                         exp[2]="..."
-                         General.show_error("error subiendo foto del expediente, por favor vuelva a subirlo desde la opcion actualizar extudiante","error de expediente")              
-               except:
-                    print("excepcion de letura foto")
-                    exp[2]="..."               
-           conexion_bd.add_data(exp)
+           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
+           id_nombre=f"NameStudent-{data_inscrip['estudiante']['CI_estudiante']}"
+           data_nombre={constantes.CLAVE_NOMBRE:id_nombre,"nombre":data_inscrip["estudiante"]["nombre"],"s_nombre":data_inscrip["estudiante"]["s_nombre"],"apellido":data_inscrip["estudiante"]["apellido"],"s_apellido":data_inscrip["estudiante"]["s_apellido"],"modificado":time_object.get_fecha()}
+          
+          
+           update_represent={}
+           representant_name_data={}
+           update_name_representant={}
+           representant_direccion_data={}
+           update_direccion_representant={}
+           add_represent={}
+               
            conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)     
-           if(conexion_bd.id_exist(constantes.CLAVE_REPRESENTANTE,data_inscrip[2][0])==False):
+           if(conexion_bd.id_exist(constantes.CLAVE_REPRESENTANTE,data_inscrip["representante"]["CI_representante"])==False):
                 #Add data of Representant
                 conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                data_nombre_representant=[conexion_bd.generate_id(True,constantes.CLAVE_NOMBRE),data_inscrip[2][1],data_inscrip[2][11],data_inscrip[2][2],data_inscrip[2][12],time_object.get_fecha()]
-                conexion_bd.add_data(data_nombre_representant)
+                id_nombre_representant=f"NameRepresentant-{data_inscrip['representante']['CI_representante']}"
+                representant_name_data={constantes.CLAVE_NOMBRE:id_nombre_representant,"nombre":data_inscrip["representante"]["nombre"],"s_nombre":data_inscrip["representante"]["s_nombre"],"apellido":data_inscrip["representante"]["apellido"],"s_apellido":data_inscrip["representante"]["s_apellido"],"modificado":time_object.get_fecha()}
                 conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                dir_representant_code=conexion_bd.generate_id(True,constantes.CLAVE_DIRECCION)
-                conexion_bd.add_data([dir_representant_code,data_inscrip[2][7],data_inscrip[2][8],data_inscrip[2][9],time_object.get_fecha()])
+                id_dir_representant=f"DirRepresentant-{data_inscrip['representante']['CI_representante']}"
+                representant_direccion_data=data_inscrip["representante"]["direccion"]
+                representant_direccion_data[constantes.CLAVE_DIRECCION]=id_dir_representant
+                representant_direccion_data["modificado"]=time_object.get_fecha()
                 conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
-                repres=[data_inscrip[2][0],data_nombre_representant[0],data_inscrip[2][3],data_inscrip[2][4],data_inscrip[2][13],dir_representant_code,time_object.get_fecha()]               
-                conexion_bd.add_data(repres)
+                add_represent={constantes.CLAVE_REPRESENTANTE:data_inscrip["representante"]["CI_representante"],constantes.CLAVE_NOMBRE:id_nombre_representant,"telef":data_inscrip["representante"]["telefono"],"correo":data_inscrip["representante"]["correo"],"ocupacion":data_inscrip["representante"]["oficio"],constantes.CLAVE_DIRECCION:id_dir_representant,"modificado":time_object.get_fecha()}              
            else:
-                conexion_bd.update_data(["telef","correo","ocupacion","modificado"],[data_inscrip[2][3],data_inscrip[2][4],data_inscrip[2][13] ,time_object.get_fecha()],4,[constantes.CLAVE_REPRESENTANTE],[data_inscrip[2][0]],["and"])
-                cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip[2][0]],"conditions_Verify":["="]}              
-                old_representant=conexion_bd.get_allData([constantes.CLAVE_NOMBRE,constantes.CLAVE_DIRECCION],cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[old_representant[0][0]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"nombre":data_inscrip[2][1],"apellido":data_inscrip[2][2],"s_nombre":data_inscrip[2][11],"s_apellido":data_inscrip[2][12],"modificado":time_object.get_fecha()},cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[old_representant[0][1]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"sector":data_inscrip[2][7],"parroquia":data_inscrip[2][8],"casa":data_inscrip[2][9],"modificado":time_object.get_fecha()},cond_data)
-           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           data_nombre=[conexion_bd.generate_id(True,constantes.CLAVE_NOMBRE),data_inscrip[1][0],data_inscrip[1][2],data_inscrip[1][1],data_inscrip[1][3],time_object.get_fecha()]
-           conexion_bd.add_data(data_nombre)
+                update_represent={"telef":data_inscrip["representante"]["telefono"],"correo":data_inscrip["representante"]["correo"],"ocupacion":data_inscrip["representante"]["oficio"] ,"modificado":time_object.get_fecha()}
+                update_name_representant={"nombre":data_inscrip["representante"]["nombre"],"apellido":data_inscrip["representante"]["apellido"],"s_nombre":data_inscrip["representante"]["s_nombre"],"s_apellido":data_inscrip["representante"]["s_apellido"],"modificado":time_object.get_fecha()}
+                update_direccion_representant=data_inscrip["representante"]["direccion"]
+                update_direccion_representant["modificado"]=time_object.get_fecha()
+                
            conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-           temp_estado=data_inscrip[1][4]
-           estado=data_inscrip[1][4]
+           temp_estado=data_inscrip["estudiante"]["estatus"]
+           estado=data_inscrip["estudiante"]["estatus"]
            if(estado=="irregular"):
               estado="activo"
-           data_estatus=[conexion_bd.generate_id(True,constantes.CLAVE_ESTATUS_ESTUD),estado,data_inscrip[1][5],data_inscrip[0][1],data_inscrip[1][9],time_object.get_fecha(),time_object.get_fecha(),data_inscrip[1][11],time_object.get_fecha()]
-           conexion_bd.add_data(data_estatus)
+           id_estatus= conexion_bd.generate_id(True,constantes.CLAVE_ESTATUS_ESTUD)
+           if(id_estatus=="-1"):
+              General.show_error("Error generando Id para el Estatus del Estudiante","Error")
+              return False
+           data_estatus={constantes.CLAVE_ESTATUS_ESTUD:id_estatus,"estatus":estado,"salud":data_inscrip["estudiante"]["salud"],"cedulado":data_inscrip["estudiante"]["cedulado"],"last_year":data_inscrip["estudiante"]["year_estud"],"fecha_inscrip":time_object.get_fecha(),"fecha_ingreso":time_object.get_fecha(),"plantel_procedencia":data_inscrip["estudiante"]["plantel"],"modificado":time_object.get_fecha()}
            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-           estud=[data_inscrip[0][0],data_nombre[0],data_estatus[0],data_inscrip[4][1],exp[0],data_inscrip[2][0],data_inscrip[1][6],data_inscrip[1][8],estudent_dir[0],data_inscrip[2][10],time_object.get_fecha()]
-           conexion_bd.add_data(estud)
+           estud={constantes.CLAVE_ESTUDIANTE:data_inscrip["estudiante"]["CI_estudiante"],constantes.CLAVE_NOMBRE:id_nombre,constantes.CLAVE_ESTATUS_ESTUD:id_estatus,constantes.CLAVE_SECCION:id_secc,constantes.CLAVE_EXPEDIENTE:id_exp,constantes.CLAVE_REPRESENTANTE:data_inscrip["representante"]["CI_representante"],"genero":data_inscrip["estudiante"]["genero"],"nacimiento":data_inscrip["estudiante"]["año_nacimiento"],constantes.CLAVE_DIRECCION:id_dire,"parentesco":data_inscrip["estudiante"]["parentesco"],"modificado":time_object.get_fecha()}
+          
+           add_califics=[]
            if(temp_estado=="irregular"):
              #inscription Irregular (Nuevo Ingreso But not First Year)
-             num_years=int(data_inscrip[1][9])-1
+             num_years=int(data_inscrip["estudiante"]["year_estud"])-1
              for i in range(0,num_years):
                conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
+               join_data={}
+               field_year=str(i+1)+"_año"
+               join_cond={"conditions_Names":[field_year],"condition_Types":["and"],"conditions_Values":["True"],"conditions_Verify":["="]}              
+               join_data["años_incorporados"]={"query_field":[],"share_fields":{"field":constantes.CLAVE_AÑOS_INCORPORADOS,"table_reference":"area_formacion"},"Conditions_join":join_cond}
                cond_data={"conditions_Names":["incorporada"],"condition_Types":["and"],"conditions_Values":["Si"],"conditions_Verify":["="]}              
-               areas_incorp=conexion_bd.get_allData([],cond_data)
-               for j in range(0,len(areas_incorp)):
-                  field_year=str(i+1)+"_año"
-                  conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
-                  cond_data={"conditions_Names":[constantes.CLAVE_AÑOS_INCORPORADOS,field_year],"condition_Types":["and"],"conditions_Values":[areas_incorp[j][2],"True"],"conditions_Verify":["="]}              
-                  data_yrs=conexion_bd.get_allData([constantes.CLAVE_AÑOS_INCORPORADOS],cond_data)
-                  if(data_yrs!=[]):
-                     conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-                     conexion_bd.add_data([data_inscrip[0][0]+"-"+areas_incorp[j][0]+str(i+1),data_inscrip[0][0],str(i+1),areas_incorp[j][0],"0",time_object.get_fecha()]) 
+               areas_data=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data,join_data,True)
+               for area in areas_data:
+                  next_register_calific={constantes.CLAVE_CALIFICACION_FINAL:data_inscrip["estudiante"]["CI_estudiante"]+"-"+area[constantes.CLAVE_AREA_FORMACION]+str(i+1),constantes.CLAVE_ESTUDIANTE:data_inscrip["estudiante"]["CI_estudiante"],"año":str(i+1),"nomb_area":area[constantes.CLAVE_AREA_FORMACION],"valor":"0","modificado":time_object.get_fecha()}
+                  add_califics.append(next_register_calific)
+               num_areas_year=len(areas_data)
+               if(num_areas_year<=0):
+                  General.show_error(f"Areas para el Año {(i+1)} no Registradas","Error")
+                  return False     
+           #Add Expedent Data
+           if(exp["src_exp"]!="" and exp["src_exp"]!="..."):
+               try:
+                  if(exp["src_exp"].startswith("expedientes/")==False):
+                    url=constantes.SERVER+"upload_expediente.php"
+                    with open(exp["src_exp"],"rb") as temp_file:
+                      dict_exp={"file":temp_file}
+                      data_exp={"token":data_inscrip["usuario"],"timestamp":str(int(time.time()))}
+                      response=requests.post(url,files=dict_exp,data=data_exp)
+                      res=response.text.strip()
+                      exp["src_exp"]=res
+                      if(res.startswith("expedientes/")==False):
+                         exp["src_exp"]="..."
+                         General.show_error(f"Error subiendo Expediente , Valor Recibido:{res}","Error Subiendo Foto")              
+                         return False
+               except:
+                    General.show_error("Error Subiendo Datos del Expediente al Servidor","Error")
+                    return False
+           if(exp["src_foto"]!="" and exp["src_foto"]!="..."):
+               try:  
+                                 
+                  if(exp["src_foto"].startswith("fotos/")==False):
+                    format_foto=""
+                    if(exp["src_foto"].endswith(".png")):
+                      format_foto="png"
+                    elif(exp["src_foto"].endswith(".jpg")):
+                      format_foto="jpg"
+                    else:
+                      General.show_error("La foto puede ser solo PNG o JPG ","Foto Invalida")
+                      return False
+                    url=constantes.SERVER+"upload_foto.php"
+                    with open(exp["src_foto"],"rb") as temp_foto:
+                      dict_foto={"file":temp_foto}
+                      
+                      data_send={"token":data_inscrip["usuario"],"timestamp":str(int(time.time())),"identificador":"Estudiante_"+data_inscrip["estudiante"]["CI_estudiante"],"format":format_foto,"target":"Student"}
+                      response=requests.post(url,files=dict_foto,data=data_send)
+                      res=response.text.strip()
+                      exp["src_foto"]=res
+                      if(res.startswith("fotos/")==False):
+                         exp["src_foto"]="..."
+                         General.show_error(f"Error subiendo foto , Valor Recibido:{res}","Error Subiendo Foto")              
+                         return False
+               except:
+                   General.show_error("Error Subiendo Datos de la Foto al Servidor","Error")
+                   return False  
+                         
+           #Request Updates to Data Base      
+           if(register_secc!={}):
+              conexion_bd.set_tabla(constantes.TABLA_HORARIO)
+              conexion_bd.add_data(register_hor)
+              conexion_bd.set_tabla(constantes.TABLA_SECCION)
+              conexion_bd.add_data(register_secc)
+           else:
+              conexion_bd.set_tabla(constantes.TABLA_SECCION)
+              cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[update_secc["id_secc"]],"conditions_Verify":["="]}              
+              conexion_bd.update_data({"total_estud":update_secc["new_cant"]},cond_data,None)               
+           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
+           conexion_bd.add_data(data_nombre)
+           conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
+           conexion_bd.add_data(estudent_dir)
+           conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
+           conexion_bd.add_data(exp)
+           conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
+           conexion_bd.add_data(data_estatus)  
+           conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
+           if(len(add_represent)>0):
+                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
+                conexion_bd.add_data(representant_name_data)
+                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
+                conexion_bd.add_data(representant_direccion_data)
+                conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
+                conexion_bd.add_data(add_represent)
+           else:
+               join_data={}
+               join_data["nombre"]={"query_field":update_name_representant,"share_fields":{"field":"id_nombre","table_reference":"representante"},"Conditions_join":None}
+               join_data["direccion"]={"query_field":update_direccion_representant,"share_fields":{"field":"id_dir","table_reference":"representante"},"Conditions_join":None}
+               cond_data_representant={"conditions_Names":["CI_repres"],"condition_Types":["and"],"conditions_Values":[data_inscrip["representante"]["CI_representante"]],"conditions_Verify":["="]}              
+               conexion_bd.update_data(update_represent,cond_data_representant,join_data)
+           conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+           conexion_bd.add_data(estud)
+           conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
+           for register in add_califics:
+               conexion_bd.add_data(register)
+           return True
+           
         else:
              #Regular Student
-               
-             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip[0][0]],"conditions_Verify":["="]}              
-             old_estatus=conexion_bd.get_allData([constantes.CLAVE_ESTATUS_ESTUD],cond_data)
-             if(old_estatus==[]):
-                General.show_error("error obtenido data de estatus, vuelva a intentarlo","error de datos")
-                return               
-             conexion_bd.update_data({constantes.CLAVE_SECCION:data_inscrip[4][1],"parentesco":data_inscrip[2][10]},cond_data)
-             conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[old_estatus[0][0]],"conditions_Verify":["="]}              
-             conexion_bd.update_data({"salud":data_inscrip[1][5],"fecha_inscrip":time_object.get_fecha(),"modificado":time_object.get_fecha(),"last_year":data_inscrip[1][9],"estatus":"activo"},cond_data)  
-             conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)     
-             if(conexion_bd.id_exist(constantes.CLAVE_REPRESENTANTE,data_inscrip[2][0])==False):
-                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                data_nombre_representant=[conexion_bd.generate_id(True,constantes.CLAVE_NOMBRE),data_inscrip[2][1],data_inscrip[2][11],data_inscrip[2][2],data_inscrip[2][12],time_object.get_fecha()]
-                conexion_bd.add_data(data_nombre_representant)
-                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                dir_representant_code=conexion_bd.generate_id(True,constantes.CLAVE_DIRECCION)
-                conexion_bd.add_data([dir_representant_code,data_inscrip[2][7],data_inscrip[2][8],data_inscrip[2][9],time_object.get_fecha()])
-                conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)   
-                repres=[data_inscrip[2][0],data_nombre_representant[0],data_inscrip[2][3],data_inscrip[2][4],data_inscrip[2][13],dir_representant_code,time_object.get_fecha()]
-                conexion_bd.add_data(repres)
-             else:
-                cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip[2][0]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"telef":data_inscrip[2][3],"correo":data_inscrip[2][4],"ocupacion":data_inscrip[2][13],"modificado":time_object.get_fecha()})
-                old_representant=conexion_bd.get_allData([constantes.CLAVE_NOMBRE,constantes.CLAVE_DIRECCION],cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[old_representant[0][0]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"nombre":data_inscrip[2][1],"apellido":data_inscrip[2][2],"s_nombre":data_inscrip[2][11],"s_apellido":data_inscrip[2][12],"modificado":time_object.get_fecha()},cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[old_representant[0][1]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"sector":data_inscrip[2][7],"parroquia":data_inscrip[2][8],"casa":data_inscrip[2][9],"modificado":time_object.get_fecha()},cond_data)
-             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip[0][0]],"conditions_Verify":["="]}              
-             old_data_estud=conexion_bd.get_allData([constantes.CLAVE_REPRESENTANTE,constantes.CLAVE_DIRECCION,constantes.CLAVE_NOMBRE],cond_data)
-             if(old_data_estud!=[]):
-                if(data_inscrip[2][0]!=old_data_estud[0][0]):
-                        old_repres=old_data_estud[0][0]          
-                        conexion_bd.update_data({constantes.CLAVE_REPRESENTANTE:data_inscrip[2][0]},cond_data)                      
-                        cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[old_repres],"conditions_Verify":["="]}              
-                        resto=conexion_bd.get_allData([],cond_data)
-                        if(len(resto)<=0):
-                            conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
-                            old_dat_representant=conexion_bd.get_allData([constantes.CLAVE_NOMBRE,constantes.CLAVE_DIRECCION],cond_data)
-                            conexion_bd.delete_data(cond_data)
-                            if(old_dat_representant!=[]):
-                                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[old_dat_representant[0][0]],"conditions_Verify":["="]}              
-                                conexion_bd.delete_data(cond_data)
-                                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[old_dat_representant[0][1]],"conditions_Verify":["="]}              
-                                conexion_bd.delete_data(cond_data)       
-                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[old_data_estud[0][1]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"sector":data_inscrip[3][2],"parroquia":data_inscrip[3][3],"casa":data_inscrip[3][4],"modificado":time_object.get_fecha()},cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[old_data_estud[0][2]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"nombre":data_inscrip[1][0],"s_nombre":data_inscrip[1][2],"apellido":data_inscrip[1][1],"s_apellido":data_inscrip[1][3],"modificado":time_object.get_fecha()},cond_data)
-             if(data_inscrip[7][0]!="False"):
+            
+             estudent_update_dat={}
+             estudent_update_dir=data_inscrip["estudiante"]["direccion"]
+             estudent_update_dir["modificado"]=time_object.get_fecha()
+             estudent_update_name={"nombre":data_inscrip["estudiante"]["nombre"],"s_nombre":data_inscrip["estudiante"]["s_nombre"],"apellido":data_inscrip["estudiante"]["apellido"],"s_apellido":data_inscrip["estudiante"]["s_apellido"],"modificado":time_object.get_fecha()}
+             estudent_update_status={"salud":data_inscrip["estudiante"]["salud"],"fecha_inscrip":time_object.get_fecha(),"modificado":time_object.get_fecha(),"last_year":data_inscrip["estudiante"]["year_estud"],"estatus":"activo"}
+             representant_update_name={}
+             representant_update_dir={}
+             representant_update_data={}
+             update_califics=[]
+             materias_pendientes=[]
+             remove_materias_pendientes={}
+                           
+            
+             representant_update_data={"telef":data_inscrip["representante"]["telefono"],"correo":data_inscrip["representante"]["correo"],"ocupacion":data_inscrip["representante"]["oficio"] ,"modificado":time_object.get_fecha()}
+             representant_update_name={"nombre":data_inscrip["representante"]["nombre"],"apellido":data_inscrip["representante"]["apellido"],"s_nombre":data_inscrip["representante"]["s_nombre"],"s_apellido":data_inscrip["representante"]["s_apellido"],"modificado":time_object.get_fecha()}
+             representant_update_dir=data_inscrip["representante"]["direccion"]
+             representant_update_dir["modificado"]=time_object.get_fecha()
+            
+             estudent_update_dat={constantes.CLAVE_SECCION:id_secc,"parentesco":data_inscrip["estudiante"]["parentesco"],constantes.CLAVE_REPRESENTANTE:data_inscrip["representante"]["CI_representante"],"modificado":time_object.get_fecha()}
+                                   
+             #reset califications of last year of student if is neccesary
+            
+             if(data_inscrip["areas_repitiendo"]["Required"]!="False"):
+                clear_year=data_inscrip["estudiante"]["year_estud"]
                 conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-                for reprobad_index in range(1,len(data_inscrip[7])):
-                   temp_reprobad=data_inscrip[7][reprobad_index].split("-")
-                   area=temp_reprobad[0]
-                   year=temp_reprobad[1]
-                   cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[data_inscrip[0][0],area,year],"conditions_Verify":["=","=","="]}              
-                   conexion_bd.delete_data(cond_data)
+                cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,"año"],"condition_Types":["and","and"],"conditions_Values":[data_inscrip["estudiante"]["CI_estudiante"],clear_year],"conditions_Verify":["=","="]}              
+                list_areas_year=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data,None,True)
+                for area in list_areas_year:
+                   update_califics.append({"Area":area[constantes.CLAVE_AREA_FORMACION],"Year":clear_year,constantes.CLAVE_ESTUDIANTE:data_inscrip["estudiante"]["CI_estudiante"]})
+
+             #Remove Old Materials Pendientes
              conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip[0][0]],"conditions_Verify":["="]}              
-             temp_pendent=conexion_bd.get_allData([],cond_data)
-             if(temp_pendent!=[]):
+             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip["estudiante"]["CI_estudiante"]],"conditions_Verify":["="]}              
+             temp_pendent=conexion_bd.get_allData([constantes.CLAVE_MATERIA_PENDIENTE],cond_data,None,True)             
+             for register in temp_pendent:
                 conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
-                for i in range(0,len(temp_pendent)):
-                     cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE],"condition_Types":["and"],"conditions_Values":[temp_pendent[i][0]],"conditions_Verify":["="]}              
-                     conexion_bd.delete_data(cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)  
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip[0][0]],"conditions_Verify":["="]}              
-             conexion_bd.delete_data(cond_data)
-          
-        if(data_inscrip[5][0]!="False"): 
-            pendiente=data_inscrip[5]
-            for i in range(1,len(pendiente)):
-                 conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-                 pend=[conexion_bd.generate_id(),data_inscrip[0][0],"0",pendiente[i][0],pendiente[i][1],time_object.get_fecha()]
-                 conexion_bd.add_data(pend)
+                cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE],"condition_Types":["and"],"conditions_Values":[register[constantes.CLAVE_MATERIA_PENDIENTE]],"conditions_Verify":["="]}              
+                id_mat_pend=register[constantes.CLAVE_MATERIA_PENDIENTE]
+                dat_califs_pends=conexion_bd.get_allData([constantes.CLAVE_CALIF_PENDIENTE],cond_data,None)
+                remove_materias_pendientes[id_mat_pend]=[]
+                for dat in dat_califs_pends:
+                   remove_materias_pendientes[id_mat_pend].append(dat[constantes.CLAVE_CALIF_PENDIENTE])
+                  
+             #Add New Materias Pendientes
+             if(data_inscrip["materia_pendiente"]["Required"]!="False"): 
+                 areas_pendiente=data_inscrip["materia_pendiente"]["List"]
+                 conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE) 
+                 for i in range(0,len(areas_pendiente)):
+                    id_mat_pend=f"MateriaPendiente_{areas_pendiente[i][0]}-{areas_pendiente[i][1]}Year-{data_inscrip['estudiante']['CI_estudiante']}"
+                    next_mat_pendiente={constantes.CLAVE_MATERIA_PENDIENTE:id_mat_pend,constantes.CLAVE_ESTUDIANTE:data_inscrip["estudiante"]["CI_estudiante"],"max_calif":"0","nomb_area":areas_pendiente[i][0],"año":areas_pendiente[i][1],"modificado":time_object.get_fecha()}
+                    materias_pendientes.append(next_mat_pendiente)
+        
+             
+             #Update Data Base
+             if(register_secc!={}):
+                conexion_bd.set_tabla(constantes.TABLA_HORARIO)
+                conexion_bd.add_data(register_hor)
+                conexion_bd.set_tabla(constantes.TABLA_SECCION)
+                conexion_bd.add_data(register_secc)
+             else:
+                conexion_bd.set_tabla(constantes.TABLA_SECCION)
+                cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[update_secc["id_secc"]],"conditions_Verify":["="]}              
+                conexion_bd.update_data({"total_estud":update_secc["new_cant"]},cond_data,None)               
+             conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
+             join_data={}
+             join_data["nombre"]={"query_field":representant_update_name,"share_fields":{"field":"id_nombre","table_reference":"representante"},"Conditions_join":None}
+             join_data["direccion"]={"query_field":representant_update_dir,"share_fields":{"field":"id_dir","table_reference":"representante"},"Conditions_join":None}
+             cond_data_representant={"conditions_Names":["CI_repres"],"condition_Types":["and"],"conditions_Values":[data_inscrip["representante"]["CI_representante"]],"conditions_Verify":["="]}              
+             conexion_bd.update_data(representant_update_data,cond_data_representant,join_data)
+             
+             conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[data_inscrip["estudiante"]["CI_estudiante"]],"conditions_Verify":["="]}              
+             join_data={}
+             join_data["nombre"]={"query_field":estudent_update_name,"share_fields":{"field":"id_nombre","table_reference":"estudiante"},"Conditions_join":None}
+             join_data["direccion"]={"query_field":estudent_update_dir,"share_fields":{"field":"id_dir","table_reference":"estudiante"},"Conditions_join":None}  
+             join_data["estatus_estud"]={"query_field":estudent_update_status,"share_fields":{"field":"id_est","table_reference":"estudiante"},"Conditions_join":None}  
+             
+             conexion_bd.update_data(estudent_update_dat,cond_data,join_data)
+             
+              
+             
+             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
+             for register in update_califics:
+                 cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[register[constantes.CLAVE_ESTUDIANTE],register["Area"],register["Year"]],"conditions_Verify":["=","=","="]}              
+                 conexion_bd.update_data({"valor":"01","modificado":time_object.get_fecha()},cond_data)             
+             conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
+             for id_mat_pend in remove_materias_pendientes:
+                list_califics=remove_materias_pendientes[id_mat_pend]
+                conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
+                for calific_id in list_califics:
+                   cond_data={"conditions_Names":[constantes.CLAVE_CALIF_PENDIENTE],"condition_Types":["and"],"conditions_Values":[calific_id],"conditions_Verify":["="]}              
+                   conexion_bd.delete_data(cond_data)
+                conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
+                cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE],"condition_Types":["and"],"conditions_Values":[id_mat_pend],"conditions_Verify":["="]}              
+                conexion_bd.delete_data(cond_data)
+             conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE) 
+             for register in materias_pendientes:
+                conexion_bd.add_data(register)
+             return True
             
     #Verification for data Assocated to Rendimiento Process of a Student
     def verificar_data_rendimiento(self,data,tipo):
@@ -657,31 +650,13 @@ class estudiante:
         if(data_exp[0]!=""):
            
            if(data_exp[0].endswith(".rar") or data_exp[0].endswith(".zip")):
-               filename=data_exp[0].split("/")
-               f="expedientes/"+filename[len(filename)-1]
-               if(conexion_bd.id_exist("src_exp",f)==True):
-                  
-                  if((d_e[0]==f)==False):
-                     return [-14]
-                  else:
-                    data_exp_valid[0]=data_exp[0]
-               else:
-                 data_exp_valid[0]=data_exp[0]
+               data_exp_valid[0]=data_exp[0]
            else:
               return [-12]  
               
         if(data_exp[1]!=""):
            if(data_exp[1].endswith(".png") or data_exp[1].endswith(".jpg")):
-              filename=data_exp[1].split("/")
-              f="fotos/"+filename[len(filename)-1]
-              if(conexion_bd.id_exist("src_foto",f)==True):
-                
-                 if((d_e[1]==f)==False):
-                     return [-15]
-                 else:
-                    data_exp_valid[1]=data_exp[1]
-              else:
-                data_exp_valid[1]=data_exp[1]
+              data_exp_valid[1]=data_exp[1]
            else:
               return [-13]    
         return [True,data_estud_valid,update_ced,data_repres_valid,data_exp_valid,data_dir_valid,data_dir_repres_valid]
@@ -707,7 +682,7 @@ class estudiante:
                 if(suma>0):
                    suma=int(suma/len(all_califs))
                 conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-                conexion_bd.update_data(["valor","modificado"],[str(suma),fecha],2,[constantes.CLAVE_CALIFICACION_FINAL],[id_calif_final],["and"])
+                conexion_bd.update_data(["valor","modificado"],[str(suma),fecha],2,[constantes.CLAVE_CALIFICACION_FINAL],[id_calif_final],["and"],None,True)
                 valor_momento=["","","",""]
                 valor_momento[0]=float(data_area_actual[0][3])
                 valor_momento[1]=int(data_area_actual[0][4])
@@ -746,8 +721,9 @@ class estudiante:
             val_estimul_actual=0
             if(val_estimul>1 or val_estimul2>1):
                  return[-7,"",""]
+            print(dat_rend)
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_r[1],dat_rend[3]],"conditions_Verify":["=","=","="]}              
+            cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_rend[1],dat_rend[3]],"conditions_Verify":["=","=","="]}              
             data_f=conexion_bd.get_allData([],cond_data)    
             if(data_f==[]):
                return[-3,"",""]
@@ -757,7 +733,7 @@ class estudiante:
             conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
             if(data_areas==[]):
                return[-2,"",""]
-            cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_f,dat_rend[1]],"conditions_Verify":["=","="]}              
+            cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_f,dat_rend[2]],"conditions_Verify":["=","="]}              
             data_area_actual=conexion_bd.get_allData([],cond_data)
             if(data_area_actual==[]):
                 return[-3,"",""]
@@ -783,8 +759,8 @@ class estudiante:
                 return["","",""]
             conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[data_area_actual[0][0]],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"estimulacion":str(val_estimul+val_estimul2),"modificado":fecha},cond_data)
-            data_nueva=conexion_bd.get_allData([],cond_data)
+            conexion_bd.update_data({"estimulacion":str(val_estimul+val_estimul2),"modificado":fecha},cond_data,None,True)
+            data_nueva=conexion_bd.get_allData([],cond_data,None,False)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}              
             all_califs=conexion_bd.get_allData([],cond_data)
             suma=0
@@ -793,7 +769,7 @@ class estudiante:
             if(suma>0):
                 suma=int(suma/len(all_califs))
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)             
-            conexion_bd.update_data({"valor":str(suma),"modificado":fecha},cond_data)
+            conexion_bd.update_data({"valor":str(suma),"modificado":fecha},cond_data,None,True)
             data_califs=[0.0,0.0,0,0.0]
             if(data_nueva!=[]):
                 data_califs[0]=float(data_nueva[0][3])
@@ -850,7 +826,7 @@ class estudiante:
           str_val="0"+str_val                      
        conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
        cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat[0],area,year],"conditions_Verify":["=","=","="]}                
-       conexion_bd.update_data({"valor":str_val,"modificado":fecha},cond_data)
+       conexion_bd.update_data({"valor":str_val,"modificado":fecha},cond_data,None,True)
        cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,"valor"],"condition_Types":["and","and"],"conditions_Values":[dat[0],"0"],"conditions_Verify":["=","="]}                
        pendientes_calif=conexion_bd.get_allData([],cond_data)
        conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
@@ -861,11 +837,11 @@ class estudiante:
            cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE],"condition_Types":["and"],"conditions_Values":[data_pend[0][0]],"conditions_Verify":["="]}              
            conexion_bd.delete_data(cond_data)
            conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-           conexion_bd.delete_data(cond_data)                    
+           conexion_bd.delete_data(cond_data,True)                    
        if(val<10):
           conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
           data_pend=[conexion_bd.generate_id(True,constantes.CLAVE_MATERIA_PENDIENTE),dat[0],"0.0",area,year,fecha]
-          conexion_bd.add_data(data_pend)    
+          conexion_bd.add_data(data_pend,True)    
        if(len(pendientes_calif)<=0):
           return 1
        else :
@@ -902,7 +878,7 @@ class estudiante:
           if(len(val_cal)<2):
              val_cal="0"+val_cal 
         cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM,"numero"],"condition_Types":["and","and"],"conditions_Values":[id_calific,dat_rend[4]],"conditions_Verify":["=","="]}                             
-        conexion_bd.update_data({"valor":val_cal,"modificado":fecha},cond_data)  
+        conexion_bd.update_data({"valor":val_cal,"modificado":fecha},cond_data,None,True)  
         conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
         cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
         calificaciones=conexion_bd.get_allData([],cond_data)
@@ -933,7 +909,7 @@ class estudiante:
                if(len(str_calif)<2):
                   str_calif="0"+str_calif                   
             prom_data=[prom,calif,estimul,calif+estimul]             
-            conexion_bd.update_data({"prom":str_prom,"definitiva":str_calif,"modificado":fecha},cond_data)   
+            conexion_bd.update_data({"prom":str_prom,"definitiva":str_calif,"modificado":fecha},cond_data,None,True)   
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}                       
             all_moments=conexion_bd.get_allData([],cond_data)
             suma=0.0
@@ -946,11 +922,11 @@ class estudiante:
             if(len(str_suma)<2):
                str_suma="0"+str_suma              
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data)
+            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data,None,True)
         else:
             conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"prom":"1.0","definitiva":"1","modificado":fecha},cond_data)            
+            conexion_bd.update_data({"prom":"1.0","definitiva":"1","modificado":fecha},cond_data,None,True)            
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}              
             all_moments=conexion_bd.get_allData([],cond_data)
             suma=0.0
@@ -965,7 +941,7 @@ class estudiante:
             if(len(str_suma)<2):
                  str_suma="0"+str_suma            
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data)
+            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data,None,True)
         return [True,list_calif,prom_data]            
     
     #Remove a Calification
@@ -987,7 +963,7 @@ class estudiante:
        id_calific=data_calific_mom[0][0]
        conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
        cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM,"numero"],"condition_Types":["and","and"],"conditions_Values":[id_calific,dat_rend[4]],"conditions_Verify":["=","="]}              
-       conexion_bd.delete_data(cond_data)
+       conexion_bd.delete_data(cond_data,None,True)
        cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
        calificaciones=conexion_bd.get_allData([],cond_data)
        calif_list=[]
@@ -1002,7 +978,7 @@ class estudiante:
                 dat_row=[evaluacion_n, dat_rend[1],dat_rend[2],calificaciones[i][2]]
                 calif_list.append(dat_row)
                 cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION],"condition_Types":["and"],"conditions_Values":[calificaciones[i][0]],"conditions_Verify":["="]}              
-                conexion_bd.update_data({"numero":evaluacion_n},cond_data)
+                conexion_bd.update_data({"numero":evaluacion_n},cond_data,None,True)
                 count+=1
             prom/=len(calificaciones)
             prom=round(prom,2)
@@ -1023,7 +999,7 @@ class estudiante:
             estimul=int(data_calific_mom[0][5])
             prom_data=[prom,calif,estimul,calif+estimul]
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"prom":str_prom,"definitiva":str_calif,"modificado":fecha},cond_data)             
+            conexion_bd.update_data({"prom":str_prom,"definitiva":str_calif,"modificado":fecha},cond_data,None,True)             
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}              
             all_moments=conexion_bd.get_allData([],cond_data)
             suma=0.0
@@ -1038,12 +1014,12 @@ class estudiante:
             if(len(str_suma)<2):
                str_suma="0"+str_suma              
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data)            
+            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data,None,True)            
        else:
             prom_data=[1.0,1,0,1]
             conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[id_calific],"conditions_Verify":["="]}              
-            conexion_bd.update_data({"prom":"1.0","definitiva":"01","modificado":fecha},cond_data)            
+            conexion_bd.update_data({"prom":"1.0","definitiva":"01","modificado":fecha},cond_data,None,True)            
             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]}              
             all_moments=conexion_bd.get_allData([],cond_data)
             suma=0.0
@@ -1058,7 +1034,7 @@ class estudiante:
             if(len(str_suma)<2):
                  str_suma="0"+str_suma              
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data)     
+            conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data,None,True)     
        return [True,calif_list,prom_data]          
         
     #Add a Try for Materia Pendiente   
@@ -1112,7 +1088,7 @@ class estudiante:
             conexion_bd.delete_data(cond_data)
             conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_rend[1],year_pend],"conditions_Verify":["=","=","="]}              
-            conexion_bd.update_data({"valor":calif,"modificado":fecha},cond_data)
+            conexion_bd.update_data({"valor":calif,"modificado":fecha},cond_data,None,True)
             return [True,True]
                        
         else:
@@ -1120,7 +1096,7 @@ class estudiante:
             codigo_c=conexion_bd.generate_id(True,constantes.CLAVE_CALIF_PENDIENTE)
             valores=[codigo_c,data_m_pen[0][0],intento_val,calif,fecha,fecha]
             conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
-            conexion_bd.add_data(valores)
+            conexion_bd.add_data(valores,True)
             temp_v=data_m_pen[0][2]
             if(temp_v=="" or temp_v==" " or temp_v=="0.0"):
                 temp_v="0"
@@ -1128,7 +1104,7 @@ class estudiante:
             if(temp_v<int(calif)):
                 conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
                 cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION],"condition_Types":["and","and"],"conditions_Values":[dat_rend[0],dat_rend[1]],"conditions_Verify":["=","="]}                         
-                conexion_bd.update_data({"max_calif":calif,"modificado":fecha},cond_data)           
+                conexion_bd.update_data({"max_calif":calif,"modificado":fecha},cond_data,None,True)           
             return [True,False]
                  
     #Get the Califiactions of a Student for an Area, momento and year of Study
@@ -1169,7 +1145,7 @@ class estudiante:
              if(len(str_calif)<2):
                 str_calif="0"+str_calif 
              conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-             conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data)             
+             conexion_bd.update_data({"valor":str_suma,"modificado":fecha},cond_data,None,True)             
              return str_calif 
           else:
             return -2
@@ -1232,7 +1208,7 @@ class estudiante:
            #Register Definitive Calification if Not Exist
            id_calif_f= dat_rend[0]+"-"+ dat_rend[1]+ dat_rend[4]
            data_f=[id_calif_f,dat_rend[0],dat_rend[4],dat_rend[1],"01",fecha]
-           conexion_bd.add_data(data_f)
+           conexion_bd.add_data(data_f,True)
         conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
         cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_calif_f,dat_rend[2]],"conditions_Verify":["=","="]}               
         data_calific_mom=conexion_bd.get_allData([],cond_data)
@@ -1241,7 +1217,7 @@ class estudiante:
             #Register Calification of Academic Moment if Not Exist
             id_calif_mom=conexion_bd.generate_id(True,constantes.CLAVE_CALIF_MOM)
             data_mom=[ id_calif_mom,dat_rend[2],id_calif_f,"1.0","01","0",dat_rend[4],fecha]
-            conexion_bd.add_data(data_mom)
+            conexion_bd.add_data(data_mom,True)
         else: 
             id_calif_mom=data_calific_mom[0][0]
                     
@@ -1264,9 +1240,10 @@ class estudiante:
         data_cal=conexion_bd.get_allData([],cond_data)
         if(data_cal==[]):
             data[0]=conexion_bd.generate_id(True,constantes.CLAVE_CALIFICACION)
-            conexion_bd.add_data(data)
+            conexion_bd.add_data(data,True)
             cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[data[1]],"conditions_Verify":["="]}              
             data_calific=conexion_bd.get_allData([],cond_data)                
+            
             if(data_calific!=[]):
                 nota_mom=0
                 prom_mom=0.0

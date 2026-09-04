@@ -209,6 +209,8 @@ class Register_Manager:
     @classmethod
     def registrar_formato(cls,user,vent,update=False):
        from event_manager import Event_manager
+       user_token=user.get_credentials()[4]
+       import time
        pnl=vent.panelActual
        fields=pnl.get_comps_byTag("field")
        valido=0
@@ -269,9 +271,13 @@ class Register_Manager:
             url=constantes.SERVER+"upload.php"
             with open(data[1],"rb") as temp_file:
                files={'file':temp_file}
-               response=requests.post(url,files=files)
+               data_sendFormat={"token":user_token,"timestamp":str(int(time.time())),"format_type":data[0]}
+               response=requests.post(url,files=files,data=data_sendFormat)
                res=response.text.strip()
                data[1]=res 
+               if(data[1].startswith("formato")==False):
+                   General.show_error(res,"Error")
+                   return 
             conexion_bd.set_tabla(constantes.TABLA_FORMATO)
             conexion_bd.add_data(data)
             user.add_action_historial(["registrar formato",time_object.get_tiempo()])
@@ -290,17 +296,16 @@ class Register_Manager:
              cond_data={"conditions_Names":["src_form"],"condition_Types":["and"],"conditions_Values":[old_src],"conditions_Verify":["="]}              
              data_form=conexion_bd.get_allData([],cond_data)
              if(data[1].startswith("formatos")==False):
-                if(len(data_form)<=1):
-                  url_delete=constantes.SERVER+"delete_file.php"
-                  path={"directorio":"./","nombre":old_src}
-                  response_del=requests.post(url_delete,params=path)
-                  res_delete=response_del.text.strip()
                 url=constantes.SERVER+"upload.php"
                 with open(data[1],"rb") as temp_file:
                     files={'file':temp_file}
-                    response=requests.post(url,files=files)
+                    data_sendFormat={"token":user_token,"timestamp":str(int(time.time())),"format_type":data[0]}
+                    response=requests.post(url,files=files,data=data_sendFormat)
                     res=response.text.strip()
-                    data[1]=res  
+                    data[1]=res 
+                    if(data[1].startswith("formato")==False):
+                         General.show_error(res,"Error")
+                         return                         
              id_form=data[0]             
              conexion_bd.set_tabla(constantes.TABLA_FORMATO)
              values={"src_form":data[1],"modificado":data[2]}
@@ -514,6 +519,8 @@ class Register_Manager:
     def registrar_horario(cls,user,vent,update=False):
         time_object=tiempo()
         pnl=vent.panelActual
+        user_token=user.get_credentials()[4]
+        import time
         data=["","","",time_object.get_fecha()]
         destinatario=""
         fields=pnl.get_comps_byTag("field")
@@ -557,11 +564,9 @@ class Register_Manager:
                else:
                   valido=-6
     
-        conexion_bd.set_tabla(constantes.TABLA_HORARIO)
-        if(update==False):
-          data[0]=conexion_bd.generate_id(True,constantes.CLAVE_HORARIO)
         id_dest=""
         id_name=""
+        id_target=""
         tabla_dest=""       
 
         if(is_worker):
@@ -579,11 +584,14 @@ class Register_Manager:
               data_t=conexion_bd.get_allData([],cond_data)
               if(update==False):
                   id_dest=id_t
+                  id_target=id_t
                   id_name=constantes.CLAVE_TRABAJADOR
+                  data[0]=f"HorarioWorker_{data_t[0][0]}"
                   if(data_t[0][5]!="default"):
                        valido=-13
               else:
-                  data[0]=data_t[0][5]                  
+                  data[0]=data_t[0][5] 
+                  id_target=data_t[0][0]                 
         else:
             if(valido==0):
               data[2]=pnl.get_comp_byName("turno_seccion").get_text()
@@ -594,27 +602,32 @@ class Register_Manager:
               if(data_secc!=[]):
                   if(update==False):
                     id_dest=data_secc[0][0]
+                    id_target=id_dest
                     id_name=constantes.CLAVE_SECCION
+                    data[0]=f"HorarioSeccion_{data_secc[0][0]}"
                     if(data_secc[0][3]!="default" and update==False):
                           valido=-12
                   else:
                      data[0]=data_secc[0][3]
+                     id_target=data_secc[0][0]
               else:
                 valido=-11
         if((valido==0 and id_dest!="" and update==False) or (valido==0 and update==True)):    
             conexion_bd.set_tabla(constantes.TABLA_HORARIO)
+            
             if(update==False):
                #Register
                filename=data[1].split("/")
-               if(conexion_bd.id_exist("src_hor","horarios/"+filename[len(filename)-1])):
-                   General.show_message("el documento del horario esta ya registrado en el servidor, cambie el nombre e intentelo de nuevo","documento ya existente")
-                   return 
                if(General.show_confirmDialog("registrar horario?","registrar")!=True):
                    return    
                url=constantes.SERVER+"upload_horarios.php"
+               if(data[1].endswith(".pdf")==False):
+                   General.show_error("el documento del horario debe ser un Archivo PDF","documento Invalido")
+                   return 
+               data_file={"token":user_token,"timestamp":str(int(time.time())),"Identificador":"Horario-"+id_target,"formato":"pdf"}
                with open(data[1],"rb") as temp_file:                
                   files={'file':temp_file}
-                  response=requests.post(url,files=files)
+                  response=requests.post(url,files=files,data=data_file)
                   res=response.text.strip()
                   data[1]=res
                conexion_bd.add_data(data)
@@ -635,17 +648,14 @@ class Register_Manager:
                    return
                conexion_bd.set_tabla(constantes.TABLA_HORARIO)
                if(data[1].startswith("horarios")==False):
-                  filename=data[1].split("/")
-                  if(conexion_bd.id_exist("src_hor","horarios/"+filename[len(filename)-1])):
-                    cond_data={"conditions_Names":[constantes.CLAVE_HORARIO,"src_hor"],"condition_Types":["and","and"],"conditions_Values":[data[0],"horarios/"+filename[len(filename)-1]],"conditions_Verify":["=","="]}              
-                    dat_hrs=conexion_bd.get_allData([constantes.CLAVE_HORARIO],cond_data)
-                    if(dat_hrs==[]):
-                         General.show_message("el documento del horario esta ya registrado en el servidor, cambie el nombre e intentelo de nuevo","documento ya existente")
-                         return 
+                  if(data[1].endswith(".pdf")==False):
+                       General.show_error("el documento del horario debe ser un Archivo PDF","documento Invalido")
+                       return 
+                  data_file={"token":user_token,"timestamp":str(int(time.time())),"Identificador":"Horario-"+id_target,"formato":"pdf"} 
                   url=constantes.SERVER+"upload_horarios.php"
                   with open(data[1],"rb") as temp_file:                
                      files={'file':temp_file}
-                     response=requests.post(url,files=files)
+                     response=requests.post(url,files=files,data=data_file)
                      res=response.text.strip()
                      data[1]=res
                   
@@ -687,7 +697,8 @@ class Register_Manager:
         
     #Upload Expedent data
     @classmethod
-    def upload_expedent(cls,data,index_expedent,index_photo,update,zip_name=""):
+    def upload_expedent(cls,user_token,data,index_expedent,index_photo,update,zip_name,id_worker):
+        import time
         if(data[index_expedent]=="..." or data[index_expedent]==""):
             if(os.path.exists(constantes.FOLDER_DOCUMENTS+zip_name) and zip_name!=""):
                 os.remove(constantes.FOLDER_DOCUMENTS+zip_name)        
@@ -699,7 +710,8 @@ class Register_Manager:
            fail_upload=False
            with open(data[index_expedent],"rb") as temp_file:                
                   files={'file':temp_file}
-                  response=requests.post(url,files=files)
+                  data_exp={"token":user_token,"timestamp":str(int(time.time()))}
+                  response=requests.post(url,files=files,data=data_exp)
                   res=response.text.strip()
                   data[index_expedent]=res
                   if(res.startswith("expedientes/")==False):
@@ -726,10 +738,20 @@ class Register_Manager:
         #upload photo
         if(data[index_photo].startswith("fotos/")==False):
            url=constantes.SERVER+"upload_foto.php"
+           format_foto=""
+           if(data[index_photo].endswith(".png")):
+                format_foto="png"
+           elif(data[index_photo].endswith(".jpg")):
+                format_foto="jpg"
+           else:
+               General.show_error("La foto puede ser solo PNG o JPG ","Foto Invalida")    
+               return False 
            with open(data[index_photo],"rb") as temp_photo:          
            
                 dict_foto={"file":temp_photo}
-                respond=requests.post(url,files=dict_foto)          
+                data_foto={"token":user_token,"timestamp":str(int(time.time())),"identificador":"Worker_"+id_worker,"format":format_foto,"target":"Worker"}
+                     
+                respond=requests.post(url,files=dict_foto,data=data_foto)          
                 res=respond.text.strip()
                 data[index_photo]=res
                 if(res.startswith("fotos/")==False):
@@ -746,11 +768,11 @@ class Register_Manager:
             if(cargo_val.lower()!="obrero" and cargo_val.lower()!="secretaria"):
                 conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
                 data_prof=[conexion_bd.generate_id(True,constantes.CLAVE_PROFESOR),data[0],"default",time_object.get_fecha()]
-                conexion_bd.add_data(data_prof) 
+                conexion_bd.add_data(data_prof,True) 
                 conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
                 for i in range(0,len(areas_selected)):
                     data_areas=[data_prof[0]+"-"+areas_selected[i],data_prof[0],areas_selected[i],time_object.get_fecha()]
-                    temp_res=conexion_bd.add_data(data_areas)
+                    temp_res=conexion_bd.add_data(data_areas,True)
                     if(temp_res==-1):
                         res=-1
                         break 
@@ -763,11 +785,11 @@ class Register_Manager:
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
                data_profesor=["",data[0],"default",time_object.get_fecha()]
                data_profesor[0]=conexion_bd.generate_id(True,constantes.CLAVE_PROFESOR)
-               conexion_bd.add_data(data_profesor)
+               conexion_bd.add_data(data_profesor,True)
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
                for i in range(0,len(areas_selected)):
                    data_areas=[data_profesor[0]+"-"+areas_selected[i],data_profesor[0],areas_selected[i],time_object.get_fecha()]
-                   conexion_bd.add_data(data_areas)  
+                   conexion_bd.add_data(data_areas,True)  
            elif(is_docente==True and (data_cargo[1].lower()=="obrero" or data_cargo[1].lower()=="secretaria")==True):
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)     
                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
@@ -777,17 +799,17 @@ class Register_Manager:
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
                conexion_bd.delete_data(cond_data)
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)   
-               conexion_bd.delete_data(cond_data)
+               conexion_bd.delete_data(cond_data,None,True)
            elif(is_docente==True and(data_cargo[1].lower()!="obrero" and data_cargo[1].lower()!="secretaria")==True):
                conexion_bd.set_tabla(constantes.TABLA_PROFESOR)     
                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data[0]],"conditions_Verify":["="]}              
                data_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],cond_data)       
                conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
                cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[data_prof[0][0]],"conditions_Verify":["="]}              
-               conexion_bd.delete_data(cond_data)
+               conexion_bd.delete_data(cond_data,None,True)
                for i in range(0,len(areas_selected)):
                    data_areas=[data_prof[0][0]+"-"+areas_selected[i],data_prof[0][0],areas_selected[i],time_object.get_fecha()]
-                   conexion_bd.add_data(data_areas)                           
+                   conexion_bd.add_data(data_areas,True)                           
         return res
     
     #Validate 'Cargo' Code of a Worker
@@ -840,31 +862,14 @@ class Register_Manager:
                 value_verify_expedent=value_verify_expedent+filename
            else:
               return -17   
-        conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-        if(conexion_bd.id_exist(field_verify_expedent,value_verify_expedent)==True):
-            if(update==False):
-                if(is_photo==False):
-                   return -19
-                else:
-                   return  -18
-            else:
-                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_value],"conditions_Verify":["="]}              
-                dat_worker=conexion_bd.get_allData([constantes.CLAVE_EXPEDIENTE],cond_data)
-                conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-                cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[dat_worker[0][0]],"conditions_Verify":["="]}              
-                expedent=conexion_bd.get_allData([field_verify_expedent],cond_data)
-                if(( expedent[0][0]==value_verify_expedent)==False):
-                    if(is_photo==False):
-                        return -19 
-                    else:
-                        return -18
+        
         return 0                        
        
     #Register or Update a worker
     @classmethod
     def registrar_trabajador(cls,user,vent,update=False):
        from event_manager import Event_manager
+       user_token=user.get_credentials()[4]
        pnl=vent.panelActual
        destino=pnl.get_comp_byName("destino_file")
        time_object=tiempo()
@@ -1053,20 +1058,19 @@ class Register_Manager:
                     conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
                     conexion_bd.update_data({constantes.CLAVE_TRABAJADOR:valor_id},cond_data)
                     conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                    conexion_bd.delete_data(cond_data)
+                    conexion_bd.delete_data(cond_data,None,True)
             if(update==False):
-               if(cls.upload_expedent(data_exp,1,2,update)==False):
+               if(cls.upload_expedent(user_token,data_exp,1,2,update,"",data[0])==False):
                  General.show_message("Error al Subir El Expedient al servidor","Error del Expedient")
                  return
                conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-               data_exp[0]=conexion_bd.generate_id(True,constantes.CLAVE_EXPEDIENTE)
-               
+               data_exp[0]=f"ExpedentWorker-{data[0]}"
                conexion_bd.add_data(data_exp)
                data[4]=data_exp[0]
                conexion_bd.set_tabla(constantes.TABLA_CARGO)
                conexion_bd.add_data(data_cargo)
                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-               data_nombre[0]=conexion_bd.generate_id(True,constantes.CLAVE_NOMBRE)
+               data_nombre[0]=f"NameWorker-{data[0]}"
                conexion_bd.add_data(data_nombre)
                data[1]=data_nombre[0]
                conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
@@ -1088,7 +1092,7 @@ class Register_Manager:
                   General.show_message("registro exitoso del personal","registro exitoso")
                   vent.update_pantallas(constantes.PANTALLA_WELCOME,user)
             else:
-                if(cls.upload_expedent(data_exp,1,2,update,data[0]+".zip")==False):
+                if(cls.upload_expedent(user_token,data_exp,1,2,update,data[0]+".zip",data[0])==False):
                     General.show_message("Error al Subir El Expedient al servidor","Error del Expedient")
                     return   
                 conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)

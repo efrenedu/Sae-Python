@@ -6,6 +6,7 @@ from tkinter.font import Font
 from PIL import Image,ImageDraw, ImageFont, ImageTk
 from constantes import constantes
 from CTkCalendar import CTkCalendar as CTkDatePicker
+import platform
 
 #Component Base Class
 class componente:
@@ -410,17 +411,19 @@ class Internal_Frame(componente):
             self.id_vent=self.canvas.create_window((0,0),window=self.container,anchor="nw")
             self.frame.bind("<Configure>",self.update_scrolls) 
             self.canvas.bind("<Configure>",self.center_panel)            
-            self.canvas.bind_all("<MouseWheel>", self.on_MouseWheel)
-            self.canvas.bind_all("<Shift-Button-4>",self.on_MouseWheel)
-            self.canvas.bind_all("<Shift-Button-5>",self.on_MouseWheel) 
+            self.canvas.bind_all("<Enter>", self.activate_scrolls)
+            self.canvas.bind_all("<Leave>",self.desactivate_scrolls)
             self.container.bind("<Configure>",self.On_Container_Change)
-            
+         
          elif(self.scroll=="Y Axis"):
              self.container=ctk.CTkScrollableFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
              self.container._scrollbar.configure(button_color=self.colors["Scrollbar"],button_hover_color=self.colors["Scrollbar_Hover"])
              if(border_w>0):
                  self.container.configure(border_width=border_w,border_color=border_color)
-             self.container.bind_all("<MouseWheel>",self.on_MouseWheel,add="+")
+             self.container.bind("<Enter>",self.activate_scrolls)
+             self.container.bind("<Leave>",self.desactivate_scrolls)
+             
+                
          else:
              self.container=ctk.CTkFrame(master.container,fg_color=self.colors["Fg"],corner_radius=corner_radius) 
              if(border_w>0):
@@ -450,9 +453,46 @@ class Internal_Frame(componente):
               self.container.grid_propagate(self.propagate)
          self.first_Activation=True
 
+    #Activate ScrollEvents
+    def activate_scrolls(self,event):
+       actual_system=platform.system()
+       if(self.scroll=="Y Axis"):
+          canvas=self.container._parent_canvas
+          if(actual_system=="Windows" or actual_system=="Darwin"):
+             canvas.bind_all("<MouseWheel>",self.container._mouse_wheel_all)
+          else:
+             canvas.bind_all("<Button-4>",self.container._mouse_wheel_all)
+             canvas.bind_all("<Button-5>",self.container._mouse_wheel_all)
+       elif(self.scroll=="Full"):
+            if(actual_system=="Windows" or actual_system=="Darwin"):
+               self.canvas.bind_all("<MouseWheel>",self.on_MouseWheel)
+            else:
+                self.canvas.bind_all("<Button-4>",self.container.on_MouseWheel)
+                self.canvas.bind_all("<Button-5>",self.container.on_MouseWheel)
+      
+         
+    #Desactivate ScrollEvents
+    def desactivate_scrolls(self,event):
+        actual_system=platform.system()
+        if(self.scroll=="Y Axis"):
+          canvas=self.container._parent_canvas
+          if(actual_system=="Windows" or actual_system=="Darwin"):
+             canvas.unbind_all("<MouseWheel>")
+          else:
+             canvas.unbind_all("<Button-4>")
+             canvas.unbind_all("<Button-5>")
+        elif(self.scroll=="Full"):
+            if(actual_system=="Windows" or actual_system=="Darwin"):
+               self.canvas.unbind_all("<MouseWheel>")
+            else:
+                self.canvas.unbind_all("<Button-4>")
+                self.canvas.unbind_all("<Button-5>")
+      
+    
     #MouseWheel Event for Canvas with Two Directions of Scrolls
     def on_MouseWheel(self,event):
-       desplz=0
+       
+       desplz=0         
        if(event.delta):
          desplz=int(-1*(event.delta/120))
        else:
@@ -460,6 +500,7 @@ class Internal_Frame(componente):
               desplz=-1
            elif(event.num==5):
               desplz=1
+             
        if(self.canvas!=None):
             self.canvas.yview_scroll(desplz,"units")
        from event_manager import Event_manager
@@ -618,26 +659,51 @@ class Internal_Frame(componente):
         
     #Destroy Component and Free Memory
     def free_Memory(self):
+        
         for i in range(0,self.last_comp):
            self.comps[i].free_Memory()
-            
+        
+          
+        try:
+           actual_system=platform.system()
+           if(self.scroll=="Y Axis"):
+              
+              canvas=self.container._parent_canvas
+              if(actual_system=="Windows" or actual_system=="Darwin"):
+                  canvas.unbind_all("<MouseWheel>")
+              else:
+                 canvas.unbind_all("<Button-4>")
+                 canvas.unbind_all("<Button-5>")
+              self.container.unbind_all("<Enter>")
+              self.container.unbind_all("<Leave>")              
+           elif(self.scroll=="Full"):
+             self.canvas.unbind_all("<Enter>")
+             self.canvas.unbind_all("<Leave>")
+             if(actual_system=="Windows" or actual_system=="Darwin"):
+                 self.canvas.unbind_all("<MouseWheel>")
+             else:
+                self.canvas.unbind_all("<Button-4>")
+                self.canvas.unbind_all("<Button-5>")
+      
+        except:
+           print("Exception freeMemory of {self.get_id()}")
+           
         if(self.scroll=="Full"):  
             self.container.grid_forget()
             self.container.destroy()
-            self.canvas.unbind_all("<MouseWheel>")
-            self.canvas.unbind_all("<Shift-Button-4>")
-            self.canvas.unbind_all("<Shift-Button-5>")
             self.canvas.grid_forget()
             self.canvas.destroy()
+            self.canvas=None
             self.scroll_y.grid_forget()
             self.scroll_y.destroy()
             self.scroll_x.grid_forget()
             self.scroll_x.destroy()
             self.frame.grid_forget()
             self.frame.destroy()
-        else:
+        else:   
             self.container.grid_forget()
             self.container.destroy()
+           
         
     #Set Active or Inactive the Inner Panel    
     def set_active(self,active):

@@ -598,26 +598,13 @@ class UI_Event:
                   if(data_secc!=[]):
                      year=data_secc[0][1]
                      letra=data_secc[0][2]
-                     turno=""
-                     if(data_secc[0][0].endswith("(M)")):
-                         turno="mañana"
-                     else:
-                        turno="tarde"
                      cond_data={"conditions_Names":["año"],"condition_Types":["and"],"conditions_Values":[year],"conditions_Verify":["="]}
                      next_data=conexion_bd.get_allData([],cond_data)
                      if(next_data!=[]):
                        for i in range(0,len(next_data)):
-                          turno_next=""
-                          if(next_data[i][0].endswith("(M)")):
-                              turno_next="mañana"
-                          else:
-                              turno_next="tarde"
                           if(next_data[i][2]!=letra):
                             if(next_data[i][0]!="default"):
                                 other_values.append(next_data[i][0])
-                          elif( next_data[i][2]==letra and turno_next!=turno):
-                             if(next_data[i][0]!="default"):
-                                 other_values.append(next_data[i][0])            
                      conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
                      cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[comp_value],"conditions_Verify":["="]}
                      data_estuds=conexion_bd.get_allData(constantes.CAMPOS_ESTUDIANTE,cond_data)
@@ -1170,10 +1157,8 @@ class UI_Event:
               cred=user.get_credentials()
               permiso=cred[2]
               usr=cred[0]
-              conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-              cond_data={"conditions_Names":[constantes.CLAVE_USUARIO],"condition_Types":["and"],"conditions_Values":[usr],"conditions_Verify":["="]}
-              dat_usr=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],cond_data)
-              ced=dat_usr[0][0]
+              ced=cred[1]
+             
               if(permiso=="admin"):
                   Event_manager.activar_element("director_label",True,True)
                   conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)

@@ -33,7 +33,7 @@ function verify_integrity_tables($conexion,$base_name,$list_tables){
          }
      }
      if($all_ok==False){
-		 return ["status"=>"Error","message"=>"Las Tablas {$corrupteds_tables} Estan Corruptas"];
+		 return ["status"=>"Error","message"=>"Las Tablas {$corrupted_tables} Estan Corruptas"];
     }
 	return["status"=>"Succes","message"=>""];
 }
@@ -193,7 +193,7 @@ function id_exist($conexion,$nomb_base,$tabl,$id_field,$id_name){
 		}
 	}
 	if($exist==false){
-		return ["status"=>"Error","message"=>"El campo Solicitado es Inexistente en la Tabla Indicada"];
+		return ["status"=>"Error","message"=>"El campo Solicitado {$id_field} es Inexistente en la Tabla Indicada{$tabl}"];
 	}
 	$query="SELECT {$id_field} FROM {$nomb_base}.{$tabl} WHERE {$id_field}=?;";
     try{
@@ -236,7 +236,7 @@ function generate_id ($conexion,$nomb_base,$tabl,$nomb_field){
 	}
 	if($exist==false){
 		mysqli_rollback($conexion);
-		return ["status"=>"Error","message"=>"El campo Solicitado es Inexistente en la Tabla Indicada"];
+		return ["status"=>"Error","message"=>"El campo Solicitado {$nomb_field} es Inexistente en la Tabla Indicada{$tabl}"];
 	}
 	try{
 		$query="SELECT COUNT(*) FROM {$nomb_base}.{$tabl};";
@@ -278,7 +278,7 @@ function verify_db(){
 	//get scheme data
 	$temp_scheme=get_scheme_dat();
 	if($temp_scheme["status"]=="Error"){
-		return temp_scheme;
+		return $temp_scheme;
 	}
 	$dat_scheme=$temp_scheme["message"];
 	$tables=$dat_scheme["tables_names"];
@@ -307,7 +307,7 @@ function verify_db(){
 	   return set_seed_data($conexion,$nomb_base,$seed_data,$primary_fields);
 	}
 	//Build Data Base
-	$res_db= build_db($conexion,$nomb_base,$tables,$fields_tables);
+	$res_db= build_db($conexion,$nomb_base,$tables,$fields_tables,$primary_fields);
 	if($res_db["status"]=="Error"){
 		return $res_db;
 	}
@@ -716,6 +716,7 @@ function add_conditions($query,$list_fields,$total_conds,$alias_list){
 		if($target_alias!=""){
 			$alias_text="{$target_alias}.";
 		}
+		$posibles_verificactions=array("=","!=","<",">");
 		for($i=0;$i<count($cond_list);$i++){
 			$next_cond=$cond_list[$i];
 		    $next_val=$cond_values[$i];
@@ -734,7 +735,14 @@ function add_conditions($query,$list_fields,$total_conds,$alias_list){
 		    if($next_conector!="AND" && $next_conector!="OR"){
                 return ["status"=>"Error","message"=>"Conectores de Condiciones Invalidos"];
 		    }	
-            if($next_verification!="=" && $next_verification!="!="){
+			$valid_verification_type=false;
+			for($j=0;$j<count($posibles_verificactions);$j++){
+				if($next_verification==$posibles_verificactions[$j]){
+					$valid_verification_type=true;
+					$j=count($posibles_verificactions);
+				}
+			}
+            if($valid_verification_type==false){
                return ["status"=>"Error","message"=>"Tipos de Verificaciones Invalidos"];
 		    }
 	        if($first_field==true){
@@ -813,19 +821,27 @@ function get_scheme_dat(){
     }
 	$scheme_raw=file_get_contents($path_scheme);
     $dat_scheme=json_decode($scheme_raw,true);
-	if(json_last_error()!==JSON_ERROR_NONE){
-		$json_raw=mb_convert_encoding($scheme_raw,"UTF-8","UTF-8, ISO-8859-1");
-		$dat_scheme=json_decode($scheme_raw,true);
+	if(json_last_error()!=JSON_ERROR_NONE){
+		 return["status"=>"Error","message"=>"Scheme File Bad Format"];
 	}
+	$json_raw=mb_convert_encoding($scheme_raw,"UTF-8","UTF-8, ISO-8859-1");
+	$dat_scheme=json_decode($scheme_raw,true);
+	
 	return ["status"=>"Succes","message"=>$dat_scheme];
 }
 
-
+//Finsh Commit from a Big set of Updates
+function finish_commit($conexion){
+	if($conexion==null || $conexion==false){
+		  return ["status"=>"Error","message"=>"Conexion Invalida"];
+    }
+	mysqli_commit($conexion);
+}
 //Verify if the Table Name is Valid 
 function verify_table($tabl){
 	 $temp_scheme=get_scheme_dat();
 	 if($temp_scheme["status"]=="Error"){
-	     	return temp_scheme;
+	     	return $temp_scheme;
 	 }
 	 $dat_scheme=$temp_scheme["message"];
 	 if(array_key_exists($tabl,$dat_scheme["fields_tables"])==false){
@@ -840,7 +856,7 @@ function get_fields($list_tabl){
 	   
 	  $temp_scheme=get_scheme_dat();
 	  if($temp_scheme["status"]=="Error"){
-	     	return temp_scheme;
+	     	return $temp_scheme;
 	  }
 	  $dat_scheme=$temp_scheme["message"];
 	  $alias_scheme=$dat_scheme["Alias_Tables"];
@@ -984,7 +1000,7 @@ function restore_bd($conexion,$bd,$data_tables){
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 	$temp_scheme=get_scheme_dat();
 	if($temp_scheme["status"]=="Error"){
-		yield temp_scheme;
+		yield $temp_scheme;
 		return;
 	}
 	$dat_scheme=$temp_scheme["message"];
@@ -1057,7 +1073,7 @@ function respald_bd($conexion,$bd){
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 	$temp_scheme=get_scheme_dat();
 	if($temp_scheme["status"]=="Error"){
-		return temp_scheme;
+		return $temp_scheme;
 	}
 	$dat_scheme=$temp_scheme["message"];
 	$tables=$dat_scheme["tables_names"];

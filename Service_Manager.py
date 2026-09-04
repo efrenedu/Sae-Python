@@ -240,16 +240,7 @@ class Service_Manager:
         conexion_bd.set_tabla(constantes.TABLA_USUARIO)
         new_icon=""
         split_icon=icono.split("/")
-        file_name=split_icon[len(split_icon)-1]
-        if("fotos/"+file_name==constantes.DEFAULT_USER_ICON):
-             General.show_message("ya existe una imagen con ese nombre en el servidor,cambie el nombre e intentelo de nuevo","imagen ya existe en server")
-             return   
-        if(conexion_bd.id_exist("foto","fotos/"+file_name)):
-            cond_data={"conditions_Names":[constantes.CLAVE_USUARIO],"condition_Types":["and"],"conditions_Values":[user_r],"conditions_Verify":["="]}     
-            old_icon=conexion_bd.get_allData(["foto"],cond_data)[0][0]
-            if(old_icon!="fotos/"+file_name):
-                General.show_message("ya existe una imagen con ese nombre en el servidor,cambie el nombre e intentelo de nuevo","imagen ya existe en server")
-                return 
+        
         pass_entry=General.show_password_message("por favor escriba su password","password de Usuario")    
         if(pass_entry=="" or pass_entry==None or pass_entry==" "):
            return 
@@ -286,10 +277,20 @@ class Service_Manager:
         timestamp=str(int(time.time())) 
         fragments=[]
         if(modific_icon):     
+            format_foto=""
+            if(icono.endswith(".png")):
+               format_foto="png"
+            elif(icono.endswith(".jpg")):
+               format_foto="jpg"
+            else:
+               General.show_error("La foto puede ser solo PNG o JPG ","Foto Invalida")
+               return 
             url=constantes.SERVER+"upload_foto.php"            
             with open(icono,"rb") as temp_file:                      
                dict_foto={"file":temp_file}
-               respond=requests.post(url,files=dict_foto)
+               data_foto={"token":usr_token,"timestamp":str(int(time.time())),"identificador":"User_"+user_r,"format":format_foto,"target":"User"}
+                      
+               respond=requests.post(url,files=dict_foto,data=data_foto)
                new_icon=respond.text.strip()
             if(new_icon!=""):
                fragments.append("Image Icon")   
@@ -1046,19 +1047,9 @@ class Service_Manager:
             data_secc1=secc1.get_all_values()
             data_secc2=secc2.get_all_values()
             cls.reasignar_secion(data_secc1,data_secc2,seccion_main_id,seccion_sec_id)           
-            General.show_message("secciones actualizadas exitosamente","secciones actualizadas")
-            secc1_name=seccion_main_id.split("(")
-            if(secc1_name[1].startswith("M")):
-                secc1_name=secc1_name[0]+"(Mañana)"
-            else:
-                secc1_name=secc1_name[0]+"(Tarde)"              
-            motivo="modificaciones sobre seccion:"+secc1_name
-            secc2_name=seccion_sec_id.split("(")
-            if(secc2_name[1].startswith("M")):
-                secc2_name=secc2_name[0]+"(Mañana)"
-            else:
-                secc2_name=secc2_name[0]+"(Tarde)"
-            motivo=motivo+" y "+secc2_name
+            General.show_message("secciones actualizadas exitosamente","secciones actualizadas")          
+            motivo="modificaciones sobre seccion:"+seccion_main_id   
+            motivo=motivo+" y "+seccion_sec_id
         time_object=tiempo()
         usr.add_action_historial(["organizar secciones",time_object.get_tiempo()])
         conexion_bd.set_tabla(constantes.TABLA_REPORTE)
@@ -1242,20 +1233,21 @@ class Service_Manager:
               res[6][dr_r]=temp_dire_r.lower()
            conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
            if(conexion_bd.id_exist(constantes.CLAVE_REPRESENTANTE,res[3][0])==False):
+               id_nomb_r=f"NameRepresentant-{res[3][0]}"
+               code_dir_r=f"DirRepresentant-{res[3][0]}"
                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-               id_nomb_r=conexion_bd.generate_id(True,constantes.CLAVE_NOMBRE)
                conexion_bd.add_data([id_nomb_r,res[3][1],res[3][2],res[3][3],res[3][4],time_object.get_fecha()])
                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-               code_dir_r=conexion_bd.generate_id(True,constantes.CLAVE_DIRECCION)
                conexion_bd.add_data([code_dir_r,res[6][0],res[6][1],res[6][2],time_object.get_fecha()])
                conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
                conexion_bd.add_data([res[3][0],id_nomb_r,res[3][5],res[3][6],res[3][8],code_dir_r,time_object.get_fecha()])
                conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
                cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
                conexion_bd.update_data({constantes.CLAVE_REPRESENTANTE:res[3][0]},cond_data)
-               cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[old_d[5]],"conditions_Verify":["="]}              
+               cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE,constantes.CLAVE_ESTUDIANTE],"condition_Types":["and","and"],"conditions_Values":[old_d[5],cedula],"conditions_Verify":["=","!="]}              
                resto=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE],cond_data)
                if(len(resto)<=0):
+                 cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[old_d[5]],"conditions_Verify":["="]}                 
                  conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
                  conexion_bd.delete_data(cond_data)
            else:
@@ -1276,9 +1268,10 @@ class Service_Manager:
                    conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
                    cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula],"conditions_Verify":["="]}              
                    conexion_bd.update_data({constantes.CLAVE_REPRESENTANTE:res[3][0]},cond_data)
-                   cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[old_d[5]],"conditions_Verify":["="]}              
+                   cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE,constantes.CLAVE_ESTUDIANTE],"condition_Types":["and","and"],"conditions_Values":[old_d[5],cedula],"conditions_Verify":["=","!="]}              
                    resto=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE],cond_data)
                    if(len(resto)<=0):
+                       cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[old_d[5]],"conditions_Verify":["="]}              
                        conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
                        conexion_bd.delete_data(cond_data)
                        conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
@@ -1306,13 +1299,15 @@ class Service_Manager:
            conexion_bd.update_data({"sector":next_dir[0],"parroquia":next_dir[1],"casa":next_dir[2],"modificado":time_object.get_fecha()},cond_data)
            conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
            err_upload=False
+           user_token=usr.get_credentials()[4]
            if(res[4][0]!=""):
               if(res[4][0].startswith("expedientes/")==False):
                  url=constantes.SERVER+"upload_expediente.php"
                  old_path=res[4][0]
                  with open(res[4][0],"rb") as temp_file:                
                     dict_exp={"file":temp_file}
-                    response=requests.post(url,files=dict_exp)                                    
+                    data_exp={"token":user_token,"timestamp":str(int(time.time()))}
+                    response=requests.post(url,files=dict_exp,data=data_exp)                                    
                     resp=response.text.strip()
                     res[4][0]=resp
                     if(resp.startswith("expedientes/")==False):
@@ -1324,17 +1319,27 @@ class Service_Manager:
                  if(os.path.exists(old_path)):
                         os.remove(old_path)
            if(res[4][1]!=""):
-               if(res[4][1].startswith("fotos/")==False):
-                 url=constantes.SERVER+"upload_foto.php"
-                 with open(res[4][1],"rb") as temp_file:
                
-                    dict_exp={"file":temp_file}
-                    response=requests.post(url,files=dict_exp)
-                    resp=response.text.strip()
-                    res[4][1]=resp
-                    if(resp.startswith("fotos/")==False):
-                        res[4][1]="..."
-                        err_upload=True
+               if(res[4][1].startswith("fotos/")==False):
+                 format_foto=""
+                 if(res[4][1].endswith(".png")):
+                      format_foto="png"
+                 elif(res[4][1].endswith(".jpg")):
+                      format_foto="jpg"
+                 else:
+                      General.show_error("La foto puede ser solo PNG o JPG ","Foto Invalida")
+                      err_upload=True
+                 if(err_upload==False):
+                     url=constantes.SERVER+"upload_foto.php"
+                     with open(res[4][1],"rb") as temp_file:
+                        dict_exp={"file":temp_file}
+                        data_foto={"token":user_token,"timestamp":str(int(time.time())),"identificador":"Estudiante_"+cedula,"format":format_foto,"target":"Student"}
+                        response=requests.post(url,files=dict_exp,data=data_foto)
+                        resp=response.text.strip()
+                        res[4][1]=resp
+                        if(resp.startswith("fotos/")==False):
+                            res[4][1]="..."
+                            err_upload=True
            cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[old_d[4]],"conditions_Verify":["="]}                                   
            conexion_bd.update_data({"src_exp":res[4][0],"src_foto":res[4][1],"modificado":time_object.get_fecha()},cond_data)
            conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
