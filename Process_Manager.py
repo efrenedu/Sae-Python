@@ -1603,9 +1603,9 @@ class Process_Manager:
                   res_delete=response_del.text.strip()
                 conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
                 cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[id_f],"conditions_Verify":["="]} 
-                conexion_bd.delete_data([constantes.CLAVE_FORMATO],[id_f],["and"]) 
-                conexion_bd.set_tabla(constantes.TABLA_FORMATO)
                 conexion_bd.delete_data(cond_data) 
+                conexion_bd.set_tabla(constantes.TABLA_FORMATO)
+                conexion_bd.delete_data(cond_data,None,True) 
                 lista=pnl.get_comp_byName("formatos_list")
                 data_form=conexion_bd.get_allData([])
                 nombres=[]
@@ -1618,6 +1618,7 @@ class Process_Manager:
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
                 data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar formato","",time_object.get_fecha()]
+                print(conexion_bd.pendent_querys)
                 conexion_bd.add_data(data_hist,True)
                 General.show_message("formato borrado satisfactoriamente","formato borrado")
               else:
