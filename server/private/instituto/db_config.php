@@ -992,11 +992,12 @@ function set_foreign_check($conexion,$bd,$value){
    }
 }
 //Restore the Data Base
-function restore_bd($conexion,$bd,$data_tables){
+function restore_bd($conexion,$bd,$abs_paths,$tables_send){
 	if($conexion==null || $conexion==false){
 	    yield ["statuts"=>"Error","message"=>"Conexion Invalida"];
 	    return;	
 	}
+	
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 	$temp_scheme=get_scheme_dat();
 	if($temp_scheme["status"]=="Error"){
@@ -1004,52 +1005,66 @@ function restore_bd($conexion,$bd,$data_tables){
 		return;
 	}
 	$dat_scheme=$temp_scheme["message"];
+	
+	
 	$tables=$dat_scheme["tables_names"];
-	if(count($data_tables)!=count($tables)){
+	if(count($abs_paths)!=count($tables) || count($tables_send)!=count($tables)){
 		yield ["statuts"=>"Error","message"=>"El Numero de Tablas Recibido No Coincide con los de la Base de Datos"];
 	    return;
 	}
+	
     if(set_foreign_check($conexion,$bd,false)==false){
 		yield ["status"=>"Error","message"=>"Imposible desactivar Foreign Check"];
 	    return;
 	}
+	mysqli_query($conexion,"SET UNIQUE_CHECKS=0;");
+	
 	$porcent=0;
-	for($i=0;$i<count($tables);$i++){
-		$porcent=round((($i+1)/count($tables))*100);
+	for($i=0;$i<count($abs_paths);$i++){
+		$porcent=round((($i+1)/count($abs_paths))*100);
 		yield[
 		   "status"=>"Procesing",
 		   "message"=>$porcent
 	    ];
-		$tabl_target=$tables[$i];
+		$tabl_target=$tables_send[$i];
 		if(reset_table($conexion,$bd,$tabl_target)==false){
 			mysqli_rollback($conexion);
 			$msg="Imposible Truncar Tabla {$tabl_target}";
+			mysqli_query($conexion,"SET UNIQUE_CHECKS=1;");
 			if(set_foreign_check($conexion,$bd,true)==false){
 				$msg=$msg.", Error Reactivando Foreign Check";
 			}
 		    yield ["status"=>"Error","message"=>$msg];
 			return;
 		}
-		$dat_tabl_target=$data_tables[$tabl_target];
-		$list_rows=array();
-		for($j=0;$j<count($dat_tabl_target);$j++){
-			$next_row=$dat_tabl_target[$j];
-			foreach ($next_row as $key=>$value){
-			    $list_rows[$j][$key]=$value;
-		    }
+		$file_target=$abs_paths[$i];
+		$temp_content=file_get_contents($file_target);
+		if($temp_content==""){
+			continue;
 		}
-		for($j=0;$j<count($list_rows);$j++){
-			$res_add=add_data($conexion,$bd,$tabl_target,$list_rows[$j],true,false,true);
-            if($res_add["status"]=="Error"){
-			    $msg="Error En los Datos Recibidos para la Tabla{$tabl_target}";
-			    if(set_foreign_check($conexion,$bd,true)==false){
+		if(explode(";",$temp_content)<=1){
+			continue;
+		}
+		$escape_path=str_replace("\\","/",$file_target);
+		$request="LOAD DATA INFILE '{$conexion->real_escape_string($escape_path)}' REPLACE INTO TABLE {$tabl_target}";
+		$request=$request." FIELDS TERMINATED BY ';' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY'\\\\' LINES TERMINATED BY '\\r\\n' IGNORE 0 LINES;";   
+		try{
+             mysqli_query($conexion,$request);
+
+		}
+		catch(Exception $e){
+			 $msg=$e->getMessage();
+			 if(set_foreign_check(true)==false){
 				     $msg=$msg.", Error Reactivando Foreign Check";
-			    }
-				yield ["status"=>"Error","message"=>$msg];
-				return;
-			}
+			  }
+			  $conexion->query("SET UNIQUE_CHECKS=1;");
+			  yield ["status"=>"Error","message"=>$msg];
+			  return;
+		      
 		}
+		
 	}
+	mysqli_query($conexion,"SET UNIQUE_CHECKS=1;");
 	if(set_foreign_check($conexion,$bd,true)==false){
 	    yield ["status"=>"Error","message"=>"Restauracion Realizada pero no se pudo Reactivar Foreign Check"];
 	    mysqli_rollback($conexion);
@@ -1069,7 +1084,7 @@ function restore_bd($conexion,$bd,$data_tables){
 }
 
 //Respaldthe Data Base
-function respald_bd($conexion,$bd){
+function respald_bd($conexion,$bd,$base_path){
 	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 	$temp_scheme=get_scheme_dat();
 	if($temp_scheme["status"]=="Error"){
@@ -1079,14 +1094,66 @@ function respald_bd($conexion,$bd){
 	$tables=$dat_scheme["tables_names"];
 	$fields_tables=$dat_scheme["fields_tables"];
 	$dat_tables=array();
-	for($i=0;$i<count($tables);$i++){
+	$ruta_respaldo=$base_path."respaldos".DIRECTORY_SEPARATOR;
+
+    for($i=0;$i<count($tables);$i++){
+		$tabl=$tables[$i];
+		if(file_exists($ruta_respaldo.$tabl.".csv")){
+			unlink($ruta_respaldo.$tabl.".csv");
+		}
 		$dat_target=get_data($conexion,$bd,$tables[$i],array(),null,null,true);
 		if($dat_target["status"]=="Error"){
 			return $dat_target;
 		}
-		$dat_tables[$tables[$i]]=$dat_target["message"];
+		$dat_target=$dat_target["message"];
+		$path_file=$ruta_respaldo.$tabl.".csv";
+		$path_file=str_replace("ñ","n",$path_file);
+	            
+	    $f_tabla=fopen($path_file,"w+");
+		foreach($dat_target as $row){
+            $linea=implode(";",$row);
+			fwrite($f_tabla,$linea."\r\n");
+		}
+		 fflush($f_tabla);
+		 fclose($f_tabla);	
 	}
-	return ["status"=>"Suceess","message"=>"Respaldo Realizado Exitosamente","data"=>$dat_tables];
+	
+	$fecha=strval(date("d-m-Y"));
+	$zip=new ZipArchive();
+	$zip_server_name="respaldo-".$fecha.".zip";
+	$nombre_zip=$ruta_respaldo.$zip_server_name;
+	$files_contains=array();
+	if($zip->open($nombre_zip,ZipArchive::CREATE |ZipArchive::OVERWRITE)){
+		    $archivos=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($ruta_respaldo),RecursiveIteratorIterator::LEAVES_ONLY);
+			foreach ($archivos as $f){
+				if($f->isDir()){
+					 continue;
+				}
+				$ruta_abs=$f->getRealPath();
+				$nombre_file=basename($ruta_abs);
+				$size_csv=strlen(".csv");
+				if(substr($nombre_file,-$size_csv,$size_csv)==".csv"){
+		            $files_contains[]=$ruta_abs;
+                    $zip->addFile($ruta_abs,$nombre_file);					
+			    }
+			}
+			if(count($files_contains)<=0){
+				 return ["status"=>"Error","Message"=>"Can Not Build Backups CSV Files"];
+			}
+			
+			
+			$res=$zip->close();
+			if(!$res){
+				return ["status"=>"Error","message"=>"Can not Build Zip file of BackUp"];
+			}
+			foreach ($files_contains as $target_file){
+				if(file_exists($target_file)){
+					unlink($target_file);
+				}
+			}
+			
+	}
+	return ["status"=>"Suceess","message"=>"Respaldo Realizado Exitosamente","data"=>"respaldos/".$zip_server_name,"filename"=>$zip_server_name];
 }
 
 //get the Connection to DB

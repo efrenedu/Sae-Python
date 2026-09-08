@@ -975,7 +975,7 @@ class Service_Manager:
                   break
             if(file_target==""):
                General.show_error("No se Encontraron Copias de Seguridad Disponibles","Copias de Seguridad Inexistentes")            
-            conexion_bd.request_restoreBd(file_target,vent.raiz)   
+            conexion_bd.request_restoreBd(file_target)   
     
     #Organizate the Sections 
     @classmethod

@@ -107,22 +107,114 @@ if($request_type=="Security Copies"){
 	$id_request=$request_dat["Action"];
 	$res=array();
 	if($id_request=="Restore"){
-		
-		ini_set('output_buffering','off');
-	    ini_set('zlib.output_compression',false);
-	    ob_implicit_flush(true);
-    	while(ob_get_level()) ob_end_flush();
-		header("Content-Type:application/x-ndjson;charset=utf-8");
-		$dat_tables=$request_dat["data_tables"]; 
-		$res=restore_bd($conexion,$db,$dat_tables);
-		foreach(restore_bd($conexion,$db,$dat_tables) as $estado){
-			echo json_encode($estado,JSON_UNESCAPED_UNICODE)."\n";
-			flush();
+		if(count($_FILES)<=0){
+			 http_response_code(400);
+             header("Content-Type:application/json;charset=utf-8");
+             echo json_encode(["status"=>"Error","message"=>"Faltan Datos"]);
+             exit;
+	
 		}
-		exit;
+		
+		if(!isset($_FILES["source"])){
+			 http_response_code(400);
+             header("Content-Type:application/json;charset=utf-8");
+             echo json_encode(["status"=>"Error","message"=>"Datos Invalidos"]);
+             exit;
+		}
+		copy($_FILES["source"]["tmp_name"],$_FILES["source"]["name"]);
+        $nombre=$_FILES["source"]["name"];
+	    $posibles=array(".zip",".rar");
+	    $valid_format=false;
+	    foreach($posibles as $posible_target){
+		    $size=strlen($posible_target);
+	        if(substr($nombre,-$size,$size)==$posible_target){
+		       $valid_format=true;
+		       break;
+	        }
+	    }
+	    if($valid_format==false){
+  	        if(file_exists(__DIR__.DIRECTORY_SEPARATOR.$nombre)){
+		        unlink(__DIR__.DIRECTORY_SEPARATOR.$nombre);
+	        }
+			http_response_code(400);
+            header("Content-Type:application/json;charset=utf-8");
+            echo json_encode(["status"=>"Error","message"=>"Invalid File Format, Upload ZIP "]);
+	        exit;
+	    }
+	    $dir="respaldos".DIRECTORY_SEPARATOR.$nombre;
+        move_uploaded_file($_FILES["source"]["tmp_name"],$dir);
+	    if(file_exists(__DIR__.DIRECTORY_SEPARATOR.$nombre)){
+		    unlink(__DIR__.DIRECTORY_SEPARATOR.$nombre);
+	    }
+		$zip=new ZipArchive();
+	    $zip_server_name=$dir;
+	    $nombre_zip=__DIR__.DIRECTORY_SEPARATOR.$dir;
+	    $ruta_files=__DIR__.DIRECTORY_SEPARATOR."respaldos";
+	    $files_contains=array();
+	    if($zip->open($nombre_zip)){
+		    $zip->extractTo($ruta_files);
+		    $zip->close();
+		    $error=false;
+		    $archivos=new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__.DIRECTORY_SEPARATOR."respaldos"),RecursiveIteratorIterator::LEAVES_ONLY);
+		    $abs_paths=array();
+		    $tables_names=array();
+		    foreach ($archivos as $f){
+			    if($f->isDir()){
+				    continue;
+			    }
+			    $ruta_abs=$f->getRealPath();
+			    $nombre_file=basename($ruta_abs);
+			    $size_csv=strlen(".csv");
+	            if(substr($nombre_file,-$size_csv,$size_csv)==".csv"){
+		           $abs_paths[]=$ruta_abs;
+				   $next_tabl=explode(".csv",$nombre_file)[0];
+				   if($next_tabl=="anos_incorporados"){
+					   $next_tabl="años_incorporados";
+				   }
+			       $tables_names[]=$next_tabl;
+	           }
+		    }
+			if(count($abs_paths)<=0){
+				if(file_exists($nombre_zip)){
+			        unlink($nombre_zip);
+			    }
+				http_response_code(400);
+                header("Content-Type:application/json;charset=utf-8");
+	            echo json_encode(["status"=>"Error","message"=>"No Existen Archivos dentro del Backup"]);
+                exit;
+			}
+			
+		    ini_set('output_buffering','off');
+	        ini_set('zlib.output_compression',false);
+	        ob_implicit_flush(true);
+    	    while(ob_get_level()) ob_end_flush();
+		    header("Content-Type:application/x-ndjson;charset=utf-8");
+		    foreach(restore_bd($conexion,$db,$abs_paths,$tables_names) as $estado){
+			    echo json_encode($estado,JSON_UNESCAPED_UNICODE)."\n";
+			    flush();
+		    }
+			$abs_paths[]=$nombre_zip;
+		    foreach ($abs_paths as $target_path){
+			    if(file_exists($target_path)){
+				    unlink($target_path);
+			    }
+	        } 
+		     
+		    exit;
+		}
+		else{
+		    if(file_exists($nombre_zip)){
+			    unlink($nombre_zip);
+			}
+			http_response_code(400);
+            header("Content-Type:application/json;charset=utf-8");
+	        echo json_encode(["status"=>"Error","message"=>"imposible leer el Archivo Zip"]);
+            exit;
+		}
 	}
 	else{
-		$res=respald_bd($conexion,$db);
+		$base_path=__DIR__.DIRECTORY_SEPARATOR;
+		$res=respald_bd($conexion,$db,$base_path);
 		http_response_code(400);
         header("Content-Type:application/json;charset=utf-8");
 	    echo json_encode($res);
@@ -172,10 +264,11 @@ else if($request_type=="Get Data"){
 				$tables_list[]=$tabl_join;
 			}
 		}
+		
 		if(verify_tablesAccess($tables_list)==false){
-			http_response_code(400);
+			http_response_code(400);			
             header("Content-Type:application/json;charset=utf-8");
-            echo json_encode(["status"=>"Error","message"=>"Acceso Denegado, No se Puede Hacer Consultas hacia las Tablas Solicitadas"]);
+			echo json_encode(["status"=>"Error","message"=>"Acceso Denegado, No se Puede Hacer Consultas hacia las Tablas Solicitadas"]);
             exit;
 		}
 		$fields=$request_dat["fields"];

@@ -50,27 +50,11 @@ class documento:
                             Event_manager.set_comp_values(cls.result[1],data)          
                      elif(cls.result[0]=="modificar excel"):
                            Event_manager.finish_update_formato(cls.result[1])               
-                     elif(cls.result[0]=="Security Copy Data"):
-                          conexion_bd.restore_bd(cls.result[1])   
-              elif(cls.result==constantes.REQUEST_RESULT_WRITE_CSV_SUCCESS):
-                    time_object=tiempo()
-                    Event_manager.user.add_action_historial(["respaldar BD",time_object.get_tiempo()])
-                    Event_manager.activar_element("cargando",False,True)
-                    conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                    id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-                    data_hist=[ id_hist,Event_manager.user.user,time_object.get_fecha(),time_object.get_tiempo(),"base de datos","respaldo","",time_object.get_fecha()]
-                    conexion_bd.add_data(data_hist)
-                    General.show_message("respaldo creado exitosamente","Respaldo Generado") 
+ 
               elif(cls.result==constantes.REQUEST_RESULT_GENERATE_DOCUMENT_WITH_MESSAGE):
                   General.show_message("documentos generados","reportes creados")
               elif(cls.result==constantes.REQUEST_RESULT_DOWNLOAD_SUCCESS):
                   General.show_message("documentos descargados exitosamente","Descarga Exitosa")
-              elif(cls.result==constantes.REQUEST_RESULT_ERROR_WRITE_CSV):
-                  General.show_error("error el crear respaldo","Error al Crear Respaldo")
-                  Event_manager.activar_element("cargando",False,True)
-              elif(cls.result==constantes.REQUEST_RESULT_ERROR_READ_CSV):
-                  Event_manager.activar_element("cargando",False,True)
-                  General.show_error("error en la lectura del respaldo","Error al Leer Respaldo")
               elif(cls.result==constantes.REQUEST_RESULT_ERROR_NO_REFERENCE_EXCEL):
                   General.show_error("error en no hay contenido de refernecia para escribir en el formato","Referencia Del formato Invalida")
               elif(cls.result==constantes.REQUEST_RESULT_ERROR_REFERENCE_EXCEL):
@@ -100,14 +84,6 @@ class documento:
         if(cls.estatus==0):
             if(request_type==constantes.REQUEST_READ_EXCEL):
                 cls.thread_object=threading.Thread(target=cls.read_excell,args=(file_name,content))
-                cls.thread_object.start() 
-                cls.check_ifDone(root,cls.thread_object)
-            elif(request_type==constantes.REQUEST_WRITE_CSV):
-                cls.thread_object=threading.Thread(target=cls.write_CSV,args=(file_name,content))
-                cls.thread_object.start() 
-                cls.check_ifDone(root,cls.thread_object)
-            elif(request_type==constantes.REQUEST_READ_CSV):
-                cls.thread_object=threading.Thread(target=cls.read_CSV,args=(file_name,content))
                 cls.thread_object.start() 
                 cls.check_ifDone(root,cls.thread_object)
             elif(request_type==constantes.REQUEST_MODIFIC_EXCEL):
@@ -687,126 +663,10 @@ class documento:
            cls.result=constantes.REQUEST_RESULT_ERROR_ACCESS
            return constantes.REQUEST_RESULT_ERROR_ACCESS 
      
-     #Write a Zip File With CSV Files Containing the Tables data from Data Base  
-     @classmethod 
-     def write_CSV(cls,file_name,content):      
-         from event_manager import Event_manager 
-         import sys
-         Event_manager.set_comp_values("cargando","Escribiendo Datos: 0 %")
-         num_files=len(content)
-         list_files=[]
-         for tabl in content:
-             porcent=int((float(float(len(list_files))/num_files))*100)
-             Event_manager.set_comp_values("cargando",f"Escribiendo Archivos: {str(porcent)} %")
-             dat_tabl=content[tabl]
-             lines=[]
-             for i in range(0,len(dat_tabl)):
-                row_dat=dat_tabl[i]
-                if(lines==[]):
-                   fragment=[]
-                   for key in row_dat:
-                      fragment.append(key)
-                   temp_line=";".join(fragment)
-                   lines.append(temp_line)
-                row_fragments=[]
-                for field in row_dat:
-                  row_fragments.append(row_dat[field])
-                next_line=";".join(row_fragments)
-                lines.append(next_line)
-             next_file=f"{constantes.FOLDER_ZIP}{tabl}.csv"
-             try:
-                with open(next_file,"w") as f:
-                   for i in range(0,len(lines)):
-                      f.write(lines[i]+"\n")
-                list_files.append(next_file)
-             except:
-                cls.clear_csv_zipFolder(list_files)
-                cls.estatus=0
-                cls.result=constantes.REQUEST_RESULT_ERROR_WRITE_CSV
-                return constantes.REQUEST_RESULT_ERROR_WRITE_CSV  
-         
-         if sys.version_info >= (3, 7):
-            import zipfile
-         else:
-            import zipfile37 as zipfile
-         zip_path=f"{constantes.FOLDER_RESPALDOS}{file_name}"
-         if(zip_path.endswith(".zip")==False):
-              cls.clear_csv_zipFolder(list_files)
-              cls.estatus=0
-              cls.result=constantes.REQUEST_RESULT_ERROR_WRITE_CSV
-              return constantes.REQUEST_RESULT_ERROR_WRITE_CSV  
-         Zip=zipfile.ZipFile(zip_path, "w",compression=zipfile.ZIP_DEFLATED ) 
-         for file in list_files:
-            Zip.write(file,arcname=os.path.basename(file))
-         Zip.close()
-         Event_manager.set_comp_values("cargando","")
-         cls.clear_csv_zipFolder(list_files)
-         cls.estatus=0
-         cls.result=constantes.REQUEST_RESULT_WRITE_CSV_SUCCESS
-         return constantes.REQUEST_RESULT_WRITE_CSV_SUCCESS
-     
+    
      #Remove CSV File On temp Zips Folder When Read or Write the Zip File with CSV Files
      @classmethod 
      def clear_csv_zipFolder(cls,list_files):
          for name in list_files:
              os.remove(name)
-             
-     #Read the ZipFile With the Csv Files Containing the data for Restore Data Base      
-     @classmethod       
-     def read_CSV(cls,file_name,content):
-         
-         from event_manager import Event_manager 
-         import sys
-         import csv
-         if sys.version_info >= (3, 7):
-            import zipfile
-         else:
-            import zipfile37 as zipfile
-         zip_path=f"{constantes.FOLDER_RESPALDOS}{file_name}"
-         if(os.path.exists(zip_path)==False or zip_path.endswith(".zip")==False):
-             cls.estatus=0
-             cls.result=constantes.REQUEST_RESULT_ERROR_READ_CSV
-             return constantes.REQUEST_RESULT_ERROR_READ_CSV
-         Zip = zipfile.ZipFile(zip_path, "r")
-         Zip.extractall(constantes.FOLDER_ZIP)
-         Zip.close()
-         list_files=[]
-         files_remove=[]
-         list_dir=os.listdir(constantes.FOLDER_ZIP)
-         for name_file in list_dir:
-            if(name_file.endswith(".csv")):
-                list_files.append(name_file)
-                
-         if(len(list_files)<=0):
-            cls.estatus=0
-            cls.result=constantes.REQUEST_RESULT_ERROR_READ_CSV
-            return constantes.REQUEST_RESULT_ERROR_READ_CSV
-         data_tables={}
-         num_files=0
-         for file in list_files:
-            porcent=int((float(float(num_files)/len(list_files)))*100)
-            num_files+=1
-            Event_manager.set_comp_values("cargando",f"Leyendo Copia de Seguridad: {str(porcent)} %")
-            files_remove.append(f"{constantes.FOLDER_ZIP}{file}")
-            data_file=[]
-            header_data=[]
-            nomb_table=file.split(".")[0]
-            path_file_csv=f"{constantes.FOLDER_ZIP}{file}"
-            with open(path_file_csv,newline='')as f:
-                spamreader=csv.reader(f,delimiter=';',quotechar='|')
-                first_row=True
-                for row in spamreader:
-                    if(first_row==True):
-                        first_row=False
-                        header_data=row
-                        continue
-                    next_row={}
-                    for i in range(0,len(header_data)):
-                        next_row[header_data[i]]=row[i]
-                    data_file.append(next_row)
-            data_tables[nomb_table]=data_file
-         cls.clear_csv_zipFolder(files_remove)
-         cls.estatus=0
-         cls.result=["Security Copy Data",data_tables]
-         return constantes.REQUEST_RESULT_READ_CSV_SUCCESS    
-            
+      

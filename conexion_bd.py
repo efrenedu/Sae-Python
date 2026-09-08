@@ -199,58 +199,57 @@ class conexion_bd:
         else:
            return False
      
-    #Request the Data of a Security Copy (ZiopFile) for Restore the Data Base
+     
+     
+    #Process the Restoring BD Process
     @classmethod
-    def request_restoreBd(cls,filename,root):
-       from documento import documento
+    def restore_bd(cls,filename,data_send,url_target,usr):
        from event_manager import Event_manager
        Event_manager.set_comp_values("cargando","Leyendo Copia de Seguridad : 0%")
-       documento.request(root,filename,constantes.REQUEST_READ_CSV,[])
-       
-       
-    #Recive Response From Data Base to Request of Restore Securriy Copy
-    @classmethod
-    def verify_response_restoreBd(cls,url_target,data_send,usr):
-        from event_manager import Event_manager
-        with requests.post(url_target,data=data_send,stream=True) as response:
-           for line in response.iter_lines():
-              if(line):
-                data=json.loads(line.decode("utf-8"))
-                if(data.get("status")=="Procesing"):
-                   Event_manager.set_comp_values("cargando",f"Procesando Restauracion de BD {data['message']}%")
-                elif(data.get("status")=="Error"):
-                    General.show_error(data["message"],"Error en Restauracion de Bd")
-                elif(data.get("status")=="Success"):
-                   General.show_message("restauracion del respaldo realizada exitosamente","Restauracion Exitosa")
+       with open(f"{constantes.FOLDER_RESPALDOS}{filename}","rb") as temp_file:
+          file_dict={'source':temp_file}
+          with requests.post(url_target,data=data_send,files=file_dict,stream=True) as response:
+             for line in response.iter_lines():
+                 cls.verify_lineStream_restorBd(line)
+               
+       from tiempo import tiempo
+       time_object=tiempo()  
+       Event_manager.set_comp_values("cargando","")
+              
+       Event_manager.user.add_action_historial(["restaurar BD",time_object.get_tiempo()])            
+       cls.set_tabla(constantes.TABLA_REPORTE)
+       id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+       data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"base de datos","restaurar","",time_object.get_fecha()]
+       cls.add_data(data_hist)
       
-        from tiempo import tiempo
-        time_object=tiempo()    
-        Event_manager.user.add_action_historial(["restaurar BD",time_object.get_tiempo()])            
-        cls.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-        data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"base de datos","restaurar","",time_object.get_fecha()]
-        cls.add_data(data_hist)
-        Event_manager.set_comp_values("cargando","")
-        return 0
-        
+    #Request the Data of a Security Copy (ZiopFile) for Restore the Data Base
+    @classmethod
+    def request_restoreBd(cls,filename):
+       from event_manager import Event_manager
+       Event_manager.set_comp_values("cargando","Procesando Restauracion de BD...")
+       url_target=constantes.SERVER_BD_URL
+       timestamp=str(int(time.time()))
+       usr=Event_manager.user
+       token_user=usr.get_credentials()[4]
+       data_request={"Action":"Restore"}
+       data_send={"request_type":"Security Copies","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
+       import threading
+       thread_object=threading.Thread(target=cls.restore_bd,args=(filename,data_send,url_target,usr))
+       thread_object.start() 
+       
     #Restore Data Base from a Security Copy (ZipFile)
     @classmethod
-    def restore_bd(cls,data):
-        if(len(data)<=0):
-            General.show_error("Data Invalida Recibida","Error de Datos")
-            return -1
+    def verify_lineStream_restorBd(cls,line):
         from event_manager import Event_manager
-        Event_manager.set_comp_values("cargando","Procesando Restauracion de BD...")
-        url_target=constantes.SERVER_BD_URL
-        timestamp=str(int(time.time()))
-        usr=Event_manager.user
-        token_user=usr.get_credentials()[4]
-        data_request={"Action":"Restore","data_tables":data}
-        data_send={"request_type":"Security Copies","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user,"file_send":""}
-        import threading  
-        cls.thread_object=threading.Thread(target=cls.verify_response_restoreBd,args=(url_target,data_send,usr))
-        cls.thread_object.start()         
-        return 0
+        if(line):
+            data=json.loads(line.decode("utf-8"))
+            if(data.get("status")=="Procesing"):
+                 Event_manager.set_comp_values("cargando",f"Procesando Restauracion de BD {data['message']}%")
+            elif(data.get("status")=="Error"):
+                 General.show_error(data["message"],"Error en Restauracion de Bd")
+            elif(data.get("status")=="Success"):
+                 General.show_message("restauracion del respaldo realizada exitosamente","Restauracion Exitosa")
+      
         
     #Build The Security Copy with the Information of Data Base
     @classmethod
@@ -269,7 +268,16 @@ class conexion_bd:
             Event_manager.set_comp_values("cargando","")
             General.show_error(resp_json["message"],"Error Obteniendo Datos")
             return -1
-        from documento import documento
-        documento.request(root,filename,constantes.REQUEST_WRITE_CSV,resp_json["data"])           
+        url_zip=f"{constantes.SERVER}{resp_json['data']}"
+        response=requests.get(url_zip)
+        if(response.status_code>400):
+            General.show_error("error obteniendo data del Respaldo del servidor","error del server")
+            return -1
+        raw_data=response.content
+        path_zip=f"{constantes.FOLDER_RESPALDOS}{resp_json['filename']}"
+        with open(path_zip,"wb") as zip_file:
+             zip_file.write(raw_data)
+             
+        General.show_message(resp_json["message"],"Respaldo Creado")
         return 0
     
