@@ -1,1 +1,1 @@
-folder for store temporally the files to extract or Pack Inside of a Zip File
+Folder for Store Temporally the Content of Zip Files Before Use it

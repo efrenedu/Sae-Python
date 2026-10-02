@@ -220,7 +220,7 @@ class conexion_bd:
        cls.set_tabla(constantes.TABLA_REPORTE)
        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
        data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"base de datos","restaurar","",time_object.get_fecha()]
-       cls.add_data(data_hist)
+       cls.add_data(data_hist,True)
       
     #Request the Data of a Security Copy (ZiopFile) for Restore the Data Base
     @classmethod

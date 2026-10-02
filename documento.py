@@ -40,16 +40,22 @@ class documento:
               from event_manager import Event_manager 
               if(type(cls.result).__name__=="list"):
                  if(cls.result!=[]):
+                     from Process_Manager import Process_Manager
                      if(cls.result[0]=="data formato"):
+                          
                           data=[]
                           temp_dat=cls.result
                           for i in range(0,len(temp_dat[2])):
                               data.append(temp_dat[2][i])
                           if(data!=[]):
-                            Event_manager.user.recibe_data_process(cls.result[3])
-                            Event_manager.set_comp_values(cls.result[1],data)          
+                            preview_dat=Process_Manager.get_data_process()
+                            preview_dat["Formatos"]["Row_Requerid"]=cls.result[3][1]
+                            Process_Manager.set_data_process(preview_dat)
+                            Event_manager.set_comp_values(cls.result[1],data)                             
                      elif(cls.result[0]=="modificar excel"):
-                           Event_manager.finish_update_formato(cls.result[1])               
+                           vent=Event_manager.vent
+                           usr=Event_manager.user
+                           Process_Manager.finish_update_formato(cls.result[1],usr,vent)               
  
               elif(cls.result==constantes.REQUEST_RESULT_GENERATE_DOCUMENT_WITH_MESSAGE):
                   General.show_message("documentos generados","reportes creados")

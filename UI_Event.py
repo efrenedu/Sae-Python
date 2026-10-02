@@ -47,11 +47,12 @@ class UI_Event:
            except:
               General.show_error("Error Conectando con el Servidor","Error de Conexion")
        elif(ev_value==constantes.TABLE_LOAD_DATA_CALIFICATIONS_STUDENTS):  
-             dat_rend=Event_manager.user.get_data_process()[0]
+             from Process_Manager import Process_Manager
+             dat_rend=Process_Manager.get_data_process()["Estudiante"]
              conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
-             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend[0],dat_rend[1],dat_rend[4]],"conditions_Verify":["=","=","="]} 
-             dat_calif=conexion_bd.get_allData([],cond_data)
-             if(dat_calif==[]):
+             cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION,"año"],"condition_Types":["and","and","and"],"conditions_Values":[dat_rend["Id_Estud"],dat_rend["Area"],dat_rend["Year"]],"conditions_Verify":["=","=","="]} 
+             dat_calif=conexion_bd.get_allData([constantes.CLAVE_CALIFICACION_FINAL],cond_data,None,True)
+             if(len(dat_calif)<=0):
                 comp.reset()
                 value_momento=["","","",""]
                 value_momento[0]="promedio: 5.0 pts"
@@ -62,25 +63,25 @@ class UI_Event:
                 for i in range(0,len(posibles)):
                     Event_manager.set_comp_values(posibles[i],value_momento[i])
                 return   
-             id_calif=dat_calif[0][0]
+             id_calif=dat_calif[0][constantes.CLAVE_CALIFICACION_FINAL]
              conexion_bd.set_tabla(constantes.TABLA_CALIF_MOM)
-             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_calif,dat_rend[2]],"conditions_Verify":["=","="]} 
-                    
-             dat_calif_mom=conexion_bd.get_allData([],cond_data)
+             cond_data={"conditions_Names":[constantes.CLAVE_CALIFICACION_FINAL,constantes.CLAVE_MOMENTO],"condition_Types":["and","and"],"conditions_Values":[id_calif,dat_rend["Momento"]],"conditions_Verify":["=","="]} 
+
+             dat_calif_mom=conexion_bd.get_allData([constantes.CLAVE_CALIF_MOM,"prom","definitiva","estimulacion"],cond_data,None,True)
              comp.reset()
-             if(dat_calif_mom!=[]):
+             if(len(dat_calif_mom)>0):
                conexion_bd.set_tabla(constantes.TABLA_CALIFICACION)
-               cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[dat_calif_mom[0][0]],"conditions_Verify":["="]}   
-               califications=conexion_bd.get_allData([],cond_data)
+               cond_data={"conditions_Names":[constantes.CLAVE_CALIF_MOM],"condition_Types":["and"],"conditions_Values":[dat_calif_mom[0][constantes.CLAVE_CALIF_MOM]],"conditions_Verify":["="]}   
+               califications=conexion_bd.get_allData(["numero","valor"],cond_data,None,True)
                if(califications!=[]):
                    for i in range(0,len(califications)):
-                       dat_row=[califications[i][3], dat_rend[1],dat_rend[2],califications[i][2]]
+                       dat_row=[califications[i]["numero"], dat_rend["Area"],dat_rend["Momento"],califications[i]["valor"]]
                        comp.add_row(dat_row) 
                value_momento=["","","",""]
-               value_momento[0]="promedio:\n"+dat_calif_mom[0][3]+"pts"
-               value_momento[1]="calificacion:\n"+dat_calif_mom[0][4]+"pts"
-               value_momento[2]="pts estimulacion:\n"+dat_calif_mom[0][5]+"pts"
-               str_definitive=str(int(dat_calif_mom[0][4] )+int(dat_calif_mom[0][5]))
+               value_momento[0]="promedio:\n"+dat_calif_mom[0]["prom"]+"pts"
+               value_momento[1]="calificacion:\n"+dat_calif_mom[0]["definitiva"]+"pts"
+               value_momento[2]="pts estimulacion:\n"+dat_calif_mom[0]["estimulacion"]+"pts"
+               str_definitive=str(int(dat_calif_mom[0]["definitiva"] )+int(dat_calif_mom[0]["estimulacion"]))
                if(len(str_definitive)<2):
                    str_definitive="0"+str_definitive
                value_momento[3]="definitiva:\n"+str_definitive+"pts"  
@@ -203,17 +204,15 @@ class UI_Event:
            conexion_bd.set_tabla(constantes.TABLA_FORMATO)
            id_format=comp_value
            cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[id_format],"conditions_Verify":["="]}
-           data_format=conexion_bd.get_allData([],cond_data)
-           if(data_format==[]):
+           data_format=conexion_bd.get_allData([constantes.CLAVE_FORMATO,"src_form"],cond_data,None,True)
+           if(len(data_format)<=0):
               return
            file_format=""
-           if(data_format[0][1].endswith(".pdf")==True):
+           if(data_format[0]["src_form"].endswith(".pdf")==True):
               file_format="PDF"
            else:
               file_format="XLSX"
-           Event_manager.user.reset_data_process(0)
-           Event_manager.user.recibe_data_process([id_format,data_format[0][0],file_format,data_format[0][1]])
-           Event_manager.set_comp_values("form_field",data_format[0][0])
+           Event_manager.set_comp_values("form_field",data_format[0][constantes.CLAVE_FORMATO])
            Event_manager.set_comp_values("type_field",file_format)
         elif(ev_value==constantes.LISTBOX_SET_VALUE_TO_REMOVE_COLUMN_FORMATO):
             if(comp_id.endswith("2")):
@@ -380,28 +379,29 @@ class UI_Event:
                valor=comp_value
                if(valor!="elejir" and valor!="elegir"):
                    conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-                   data=Event_manager.user.get_data_process()[0]
-                   area=data[1]
-                   id_student=data[0]
+                   from Process_Manager import Process_Manager
+                   data=Process_Manager.get_data_process()["Estudiante"]
+                   area=data["Area"]
+                   id_student=data["Id_Estud"]
                    cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE,constantes.CLAVE_AREA_FORMACION],"condition_Types":["and","and"],"conditions_Values":[id_student,area],"conditions_Verify":["=","="]}
-                   data_pen=conexion_bd.get_allData(constantes.CAMPOS_MATERIA_PENDIENTE,cond_data)
+                   data_pen=conexion_bd.get_allData([constantes.CLAVE_MATERIA_PENDIENTE],cond_data,None,True)
                    conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
                    if(valor!="revision"):
-                      cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE,"intento"],"condition_Types":["and","and"],"conditions_Values":[data_pen[0][0],valor],"conditions_Verify":["=","="]}
-                      mat_Pendent=conexion_bd.get_allData([],cond_data)
+                      cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE,"intento"],"condition_Types":["and","and"],"conditions_Values":[data_pen[0][constantes.CLAVE_MATERIA_PENDIENTE],valor],"conditions_Verify":["=","="]}
+                      mat_Pendent=conexion_bd.get_allData(["valor","fecha"],cond_data,None,True)
                       Event_manager.set_comp_values("fecha_p4","")
                       if(mat_Pendent!=[]):
-                        Event_manager.set_comp_values("calif_p4",mat_Pendent[0][3])
-                        Event_manager.set_comp_values("fecha_p4",mat_Pendent[0][4])
+                        Event_manager.set_comp_values("calif_p4",mat_Pendent[0]["valor"])
+                        Event_manager.set_comp_values("fecha_p4",mat_Pendent[0]["fecha"])
                       else:
                         Event_manager.set_comp_values("calif_p4","")
                    else:
-                      cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE,"revision"],"condition_Types":["and","and"],"conditions_Values":[data_pen[0][0],valor],"conditions_Verify":["=","="]}
-                      mat_Pendent=conexion_bd.get_allData([],cond_data)
+                      cond_data={"conditions_Names":[constantes.CLAVE_MATERIA_PENDIENTE,"revision"],"condition_Types":["and","and"],"conditions_Values":[data_pen[0][constantes.CLAVE_MATERIA_PENDIENTE],valor],"conditions_Verify":["=","="]}
+                      mat_Pendent=conexion_bd.get_allData(["valor","fecha"],cond_data,None,True)
                       Event_manager.set_comp_values("fecha_p4","")
                       if(mat_Pendent!=[]):
-                         Event_manager.set_comp_values("calif_p4",mat_Pendent[0][3])
-                         Event_manager.set_comp_values("fecha_p4",mat_Pendent[0][4])
+                         Event_manager.set_comp_values("calif_p4",mat_Pendent[0]["valor"])
+                         Event_manager.set_comp_values("fecha_p4",mat_Pendent[0]["fecha"])
                       else:
                          Event_manager.set_comp_values("calif_p4","")
                else:
@@ -908,7 +908,7 @@ class UI_Event:
                   Event_manager.activar_element(target,False,True)
                if(comp_value.lower()=="elegir"):
                    return
-               targets_activations=["motiv_label","motivo"]
+               targets_activations=[]
                if("Calificacion" in comp_value):
                   if(comp_value=="Nueva Calificacion"):
                      targets_activations.append("calific_label")
@@ -916,11 +916,18 @@ class UI_Event:
                   elif(comp_value=="Editar Calificacion"):
                      targets_activations.append("calific_label")
                      targets_activations.append("calific_val") 
+                     targets_activations.append("motivo") 
+                     targets_activations.append("motiv_label") 
+                  elif(comp_value=="Borrar Calificacion"):
+                     targets_activations.append("motivo") 
+                     targets_activations.append("motiv_label") 
                elif(comp_value=="Establecer Estimulacion del Area de Formacion"):
                      targets_activations.append("estimulacion_label_promedio")
                      targets_activations.append("estimulacion_label_areas")
                      targets_activations.append("estimul_prom")
                      targets_activations.append("estimul_areas")
+                     targets_activations.append("motivo") 
+                     targets_activations.append("motiv_label") 
                for target in targets_activations:
                   Event_manager.activar_element(target,True,True)
           elif(ev_value==constantes.COMBOBOX_UPDATE_SECTIONS_MANAGER_ACTION):

@@ -179,32 +179,31 @@ class Event_manager:
                cls.assign_expediente()  
         elif(type_e>=constantes.EV_PLANIFIC_CRONOGRAMA and type_e<=constantes.EV_MODIFIC_CONTENT_FORMATO):
            #Planification Event
+           from Process_Manager import Process_Manager
            if(type_e==constantes.EV_PLANIFIC_FORMATOS):
                cls.planificar_forms()  
            elif(type_e==constantes.EV_PLANIFIC_CRONOGRAMA):
               cls.planificar_cronog()
            elif(type_e==constantes.EV_GESTION_CRONOG1):
-              cls.validar_cronog("general")
+              cls.edit_cronog_dates("general")
            elif(type_e==constantes.EV_GESTION_CRONOG2):
-              cls.validar_cronog("mat pendiente")
+              cls.edit_cronog_dates("mat pendiente")
            elif(type_e==constantes.EV_GESTION_CRONOG3):
-              cls.validar_cronog("momento 1")
+              cls.edit_cronog_dates("momento 1")
            elif(type_e==constantes.EV_GESTION_CRONOG4): 
-              cls.validar_cronog("momento 2")
+              cls.edit_cronog_dates("momento 2")
            elif(type_e==constantes.EV_GESTION_CRONOG5):
-              cls.validar_cronog("momento 3")
+              cls.edit_cronog_dates("momento 3")
            elif(type_e==constantes.EV_ADD_COL_FORMAT):
-               cls.agregar_columna()
+               Process_Manager.modify_columns_format("Add",cls.vent)
            elif(type_e==constantes.EV_DELETE_COL_FORMAT):
-               cls.eliminar_columna()
+                Process_Manager.modify_columns_format("Remove",cls.vent)
            elif(type_e==constantes.EV_MODIF_COL_FORMAT):
-               cls.modif_col() 
+               Process_Manager.modify_columns_format("Modify",cls.vent)
            elif(type_e==constantes.EV_REPORTE_CRONOG):
                cls.generar_reporte("cronograma") 
            elif(type_e==constantes.EV_GESTION_FORMATOS):
-               cls.next_formatos()
-           elif(type_e==constantes.EV_MODIFIC_SOURCE_FORMATO):             
-               cls.registrar_formato(True)
+               cls.format_gestion()
            elif(type_e==constantes.EV_MODIFIC_CONTENT_FORMATO):             
                cls.update_formato()    
            elif(type_e==constantes.EV_INIT_GESTION_CRONOG):
@@ -213,19 +212,19 @@ class Event_manager:
            #Rendimiento Event
            from Process_Manager import Process_Manager
            if(type_e==constantes.EV_RENDIMIENTO_GESTION_CALIFIC):
-              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_GESTION_CALIFICATION)
+              cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_GESTION_CALIFICATION)
            elif(type_e==constantes.EV_RENDIMIENTO_SABANA):
-              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_ACCESS_SABANA_AND_CALIFICATIONS_YEAR_PANEL)
+              cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_ACCESS_SABANA_AND_CALIFICATIONS_YEAR_PANEL)
            elif(type_e==constantes.EV_RENDIMIENTO_MATERIA_PEND):
-              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_MATERIA_PENDIENTE)
+              cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_ACCESS_IDENTIFIC_MATERIA_PENDIENTE)
            elif(type_e==constantes.EV_RENDIMIENTO_NOTAS_CERTIFIC):
-              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT)
+              cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_PROCESS_CALIFICATIONS_TOTAL_REPORT)
            elif(type_e==constantes.EV_GESTIONAR_MAT_PEND):
-              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_IDENTIFIC_MATERIA_PENDIENTE)
+              cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_IDENTIFIC_MATERIA_PENDIENTE)
            elif(type_e==constantes.EV_GESTIONAR_CALIF):
-               cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_IDENTIFIC_GESTION_CALIFICATIONS)
+               cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_IDENTIFIC_GESTION_CALIFICATIONS)
            elif(type_e==constantes.EV_REGISTRAR_INTENTO_MAT_PEND):
-              cls.set_rendimiento(Process_Manager.RENDIMIENTO_OPTION_PROCESS_MATERIA_PENDIENTE)
+              cls.rendimiento_gestion(Process_Manager.RENDIMIENTO_OPTION_PROCESS_MATERIA_PENDIENTE)
            elif(type_e==constantes.EV_PROCESS_DEFINITVE_CALIFICATION_GESTION_ACTION):
               cls.definite_califics_gestion()
            elif(type_e==constantes.EV_PROCESS_CALIFICATION_GESTION_ACTION):
@@ -270,10 +269,9 @@ class Event_manager:
 
     #Determine and execute the Action Required for 'Rendimiento' Process
     @classmethod 
-    def set_rendimiento(cls,opcion):
-        #determina que evento de rendimiento academico se ejecutar
+    def rendimiento_gestion(cls,opcion):
         from Process_Manager import Process_Manager
-        Process_Manager.set_rendimiento(cls.user,cls.vent,opcion)
+        Process_Manager.rendimiento_gestion(cls.user,cls.vent,opcion)
 
     #Activate the panel for format Planification
     @classmethod 
@@ -281,67 +279,30 @@ class Event_manager:
         pnl=cls.vent.panelActual
         cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1,cls.user)
     
-    #Update a Format File in the Server
-    @classmethod 
-    def finish_update_formato(cls,archivo):
-        url=constantes.SERVER+"upload.php"
-        temp_file=open(archivo,"rb")
-        dict_file={"file":temp_file}
-        response=requests.post(url,files=dict_file)
-        temp_file.close()
-        if(response.status_code>400):
-           General.show_error("error al actualizar datos","error inesperado")
-           os.remove(archivo)
-           return 
-        os.remove(archivo)
-        time_object=tiempo()
-        cls.user.add_action_historial(["modificacion de formato",time_object.get_tiempo()])
-        conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-        data_hist=[ id_hist,cls.user.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar formato","",time_object.get_fecha()]
-        conexion_bd.add_data(data_hist)
-        General.show_message("actualizacion del contenido del formato realizada exitsamente","actualizacion exitosa")
-        cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1,cls.user)
-        cls.user.reset_data_process(0)
-        
-    #Request Update a format file of Server    
+    
+    #Request Update a Modified format (Format Gestion)
     @classmethod 
     def update_formato(cls):
-        pnl=cls.vent.panelActual
-        data_process=cls.user.get_data_process()
-        url=constantes.SERVER+data_process[0][3]
-        response=requests.get(url)
-        if(response.status_code>400):
-            General.show_error("error obteniendo data del servidor","error de data del server")
-            return
-        if(General.show_confirmDialog("modificar el contenido del formato?","modificar formato")!=True):
-            return 
-        old_file=data_process[0][3].split("/")[1]               
-        lista=pnl.get_comp_byName("cols_list")
-        valores=lista.get_all_values()
-        reference=data_process[1][0]
-        row=data_process[1][1]      
-        data=[valores,reference,row,cls.vent.panelActual_str]
-        file_dat=[response.content,old_file]
-        documento.request(cls.vent.raiz,file_dat,constantes.REQUEST_MODIFIC_EXCEL,data)
+        from Process_Manager import Process_Manager
+        Process_Manager.update_formato(cls.vent)
         
     #Determine and Execute the Actions in Planifications of Formats Process
     @classmethod 
-    def next_formatos(cls):
+    def format_gestion(cls):
         from Process_Manager import Process_Manager
         Process_Manager.Determine_Action_Planification_format(cls.user,cls.vent)
         
-    #Validate the Cronogram Values For Planification process   
+    #Try to Edit the Cronogram Dates
     @classmethod 
-    def validar_cronog(cls,parte):
+    def edit_cronog_dates(cls,parte):
         from Process_Manager import Process_Manager
-        Process_Manager.verify_cronogram(cls.user,cls.vent,parte)
+        Process_Manager.Process_Cronogram_Edit_Dates(cls.user,cls.vent,parte)
                 
     #Interprete the the Action  in  Cronogram Planification
     @classmethod 
     def set_cronog(cls):
         from Process_Manager import Process_Manager
-        Process_Manager.set_cronogram(cls.user,cls.vent)
+        Process_Manager.cronogram_gestion(cls.user,cls.vent)
      
     #Reset the Cronogram
     @classmethod 
@@ -952,83 +913,6 @@ class Event_manager:
          lista.insert_value(valor)
          combo.set_selected_index(0)
      
-    #Request to Remove a Column to the List of Modifications Over a Excel Format 
-    @classmethod 
-    def eliminar_columna(cls):
-       pnl=cls.vent.panelActual
-       field=pnl.get_comp_byName("val_delete_col")
-       valor=""
-       lista=None
-       valor=field.get_text()
-       lista=pnl.get_comp_byName("cols_list")
-       actuales=lista.get_all_values()
-       if(valor!="" and valor!=" "):
-            if(valor==cls.user.get_data_process()[1][0]):
-               General.show_message("no se puede eliminar la columna de referencia","columna no valida")
-               return
-            index=-1
-            for i in range(0,len(actuales)):
-               if(actuales[i]==valor):
-                   index=i
-                   break
-            new_list=[]
-            for i in range(0,len(actuales)):
-                if(i<index or i>index):
-                   new_list.append(actuales[i])
-            lista.set_values(new_list) 
-            field.set_text("")
-            pnl.get_comp_byName("val_col").set_text("") 
-            pnl.get_comp_byName("cols_edit").set_text("")                                 
-       else:
-          General.show_message("por seleccione una columna","columna no invalida")
-    
-    #Request to Modify a Column to the List of Modifications Over a Excel Format 
-    @classmethod 
-    def modif_col(cls):
-       pnl=cls.vent.panelActual
-       field=pnl.get_comp_byName("cols_edit")
-       new_val=field.get_text()
-       field_modif=pnl.get_comp_byName("val_delete_col")
-       select= field_modif.get_text() 
-       if(select!=""):          
-            if(select==cls.user.get_data_process()[1][0]):
-               General.show_message("no se puede modificar la columna de referencia","columna no valida")
-               return
-            if(new_val=="" or new_val==" "):
-               General.show_message("por favor escriba un valor valido para la columna","valor de columna no valido")
-               return               
-            lista=pnl.get_comp_byName("cols_list")
-            lista.modif_selected_item(select,new_val)
-            field.set_text("")
-            field_modif.set_text("")
-            pnl.get_comp_byName("val_col").set_text("")
-     
-    #Request to Add a Column to the List of Modifications Over a Excel Format 
-    @classmethod 
-    def agregar_columna(cls):
-       pnl=cls.vent.panelActual
-       field=pnl.get_comp_byName("val_col")
-       valor=""
-       valor=field.get_text()
-       if(valor==cls.user.get_data_process()[1][0]):
-               General.show_message("no se puede agregar una columna con el mismo valor que la de referencia","columna no valida")
-               return               
-       if(General.is_valid(valor,constantes.CADENA_ALFANUMERICA,False,1)==True):         
-          lista=pnl.get_comp_byName("cols_list")
-          field.set_text("")
-          pnl.get_comp_byName("val_delete_col").set_text("")
-          pnl.get_comp_byName("cols_edit").set_text("")
-          actuales=lista.get_all_values()
-          if(len(actuales)<=0):
-             actuales.append(valor)
-             lista.set_values(actuales)
-          else:                       
-              actuales=lista.get_all_values()
-              actuales.append(valor)
-              lista.set_values(actuales)
-       else:
-          General.show_message("por favor escriba una valor valido para el encabezado de la columna","encabezado de columna invalido")
-          
     #Activate or Desactivate a Component or Panel 
     @classmethod     
     def activar_element(cls,nombre,valor,only_comp=False):
@@ -1115,7 +999,7 @@ class Event_manager:
         datos[1]=field2.get_text()
         temp_user=usuario()
         valido=temp_user.login(datos[0],datos[1])
-        if(valido[0]==0):
+        if(valido[0]==True):
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
            data_report=[conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),datos[0],time_object.get_fecha(),time_object.get_tiempo(),"Loggin","inicio de sesion","",time_object.get_fecha()]
            conexion_bd.add_data(data_report,True)
@@ -1157,17 +1041,13 @@ class Event_manager:
                  else:
                     st_m=tk.DISABLED  
                  menus[i+1].entryconfig((j-1),state=st_m)
-        else:
-           #login fallido
-           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           data_report=[conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),datos[0],time_object.get_fecha(),time_object.get_tiempo(),"Loggin","inicio de sesion Fallido","",time_object.get_fecha()]
-           conexion_bd.add_data(data_report,True)
+        
            
     #Verify if The Cronogram is Finished
     @classmethod
     def verificar_caudicidad(cls):
         from Process_Manager import Process_Manager
-        Process_Manager.verificar_caudicidad(cls.user,cls.vent)    
+        Process_Manager.verify_expired_dates(cls.user,cls.vent)    
     
     #Donwload a Document from System                       
     @classmethod
@@ -1190,7 +1070,6 @@ class Event_manager:
         pantalla=cls.vent.panelActual_str
         from Process_Manager import Process_Manager
         if(pantalla==constantes.PANTALLA_UPDATE_ESTUDIANTE):
-              cls.user.reset_data_process(0)
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
         elif(pantalla==constantes.PANTALLA_RECUPERAR_PASSWORD):
            from Service_Manager import Service_Manager
@@ -1218,47 +1097,45 @@ class Event_manager:
                cls.set_data_estud(ci,True)   
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF):
                 cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA,cls.user)
-                temp_data=cls.user.get_data_process()
-                cls.user.reset_data_process(0)
+                temp_data=Process_Manager.get_data_process()
+                Process_Manager.clear_data_process()
                 pnl=cls.vent.panelActual
                 secciones=pnl.get_comp_byName("secciones_p1")
-                secciones.set_value(temp_data[0][3])
+                secciones.set_value(temp_data["Estudiante"]["Section"])
                 secciones.On_select(None)
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_MAT_PEND):
                 cls.vent.update_pantallas(constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND,cls.user)
-                temp_data=cls.user.get_data_process()
-                cls.user.reset_data_process(0)
+                temp_data=Process_Manager.get_data_process()
+                Process_Manager.clear_data_process()
                 pnl=cls.vent.panelActual
                 secciones=pnl.get_comp_byName("secciones")
-                secciones.set_value(temp_data[0][2])
+                secciones.set_value(temp_data["Estudiante"]["Section"])
                 secciones.On_select(None)
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA_PEND or pantalla==constantes.PANTALLA_RENDIMIENTO_IDENTIFIC_MATERIA):
                cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO,cls.user)
-               cls.user.reset_data_process(0)    
+               Process_Manager.clear_data_process()    
           elif(pantalla==constantes.PANTALLA_RENDIMIENTO_SABANA_NOTAS or pantalla==constantes.PANTALLA_RENDIMIENTO_GESTION_CALIF_FINALES):
                cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_RENDIMIENTO,cls.user)
-               cls.user.reset_data_process(0)               
+               Process_Manager.clear_data_process()          
           elif(pantalla==constantes.PANTALLA_PLANIF_FORMATO1):
                 cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,cls.user)
-                cls.user.reset_data_process(0) 
+                Process_Manager.clear_data_process()
           elif(pantalla==constantes.PANTALLA_PLANIF_FORMATO2 ):
                 cls.vent.update_pantallas(constantes.PANTALLA_PLANIF_FORMATO1,cls.user)
-                cls.user.reset_data_process(0)                  
+                Process_Manager.clear_data_process()                 
           elif(pantalla>=constantes.PANTALLA_PLANIFIC_CRONOG2 and pantalla<=constantes.PANTALLA_PLANIFIC_CRONOG6):
               cls.vent.update_pantallas(constantes.PANTALLA_PLANIFIC_CRONOG1,cls.user)                         
               cls.planificar_cronog(pantalla)
           elif(pantalla==constantes.PANTALLA_PLANIFIC_CRONOG1):
-              cls.user.reset_data_process(0)
+              Process_Manager.clear_data_process()
               cls.vent.update_pantallas(constantes.PANTALLA_PROCESO_PLANIFICACION,cls.user)                         
           elif(pantalla!=constantes.PANTALLA_PROCESO_INSCRIPCION and pantalla!=constantes.PANTALLA_PROCESO_PLANIFICACION and pantalla!=constantes.PANTALLA_PROCESO_RENDIMIENTO):
              next_p=-1
              Process_Manager.clear_data_process()
-             cls.user.reset_data_process(0)
              next_p=constantes.PANTALLA_WELCOME
              cls.vent.update_pantallas(next_p,cls.user)
           else:
               Process_Manager.clear_data_process()
-              cls.user.reset_data_process(0)
               cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,cls.user)
               cls.show_data_user()
     

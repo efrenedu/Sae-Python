@@ -1063,7 +1063,7 @@ class Consult_Manager:
                 replace.append(["periodo escolar:",data_cronog[0][0]])
            col_count=len(info[0])
            filename=tipo+" "+receive_data[2]+".xlsx"
-           ruta=constantes.FOLDER_DOCUMENTS+filename  
+           ruta=constantes.FOLDER_DOCUMENTS+filename            
            num_rows=len(info)              
            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_rows,info,"Nº",col_count,replace,False],True)
        elif(tipo=="notas finales"):
@@ -1079,12 +1079,10 @@ class Consult_Manager:
                else:
                    cedula_estud=f"E-{field_ced.get_text()}"
             res=estud.get_calif_certific(cedula_estud)
-            if(res==-1):
-                General.show_message("cedula del estudiante inexistente","cedula invalida")
+            if(res[0]==False):
+                General.show_message(res[1],"Error")
                 return
-            elif(res==-2):
-                General.show_message("estudiante sin calificaciones","calificaciones no registradas")
-                return
+            
             conexion_bd.set_tabla(constantes.TABLA_FORMATO) 
             cond_data={"conditions_Names":["tipo"],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                   
             data_formato=conexion_bd.get_allData(["src_form"],cond_data)
@@ -1099,18 +1097,18 @@ class Consult_Manager:
                 return
             data_form=response.content 
             replace=[]
-            replace.append(["Estudiante:",res[0][1]])
+            replace.append(["Estudiante:",res[1][1]])
             replace.append(["Fecha:",time_object.get_fecha()])
-            replace.append(["Cedula:",res[0][0]])
+            replace.append(["Cedula:",res[1][0]])
             col_count=2
             num_rows=10
             data_send=[]
-            for i in range(1,len(res)):
+            for i in range(2,len(res)):
                 data_send.append(res[i])   
             if(data_send==[]):
                 General.show_error("sin datos para reporte","datos inexistentes")
                 return
-            filename="notas finales-"+res[0][0]+".xlsx"
+            filename="notas finales-"+res[1][0]+".xlsx"
             ruta=constantes.FOLDER_DOCUMENTS+filename
             documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_NOTAS_CERTIFICADAS,[num_rows,data_send,["1 AÑO","2 AÑO","3 AÑO","4 AÑO","5 AÑO"],col_count,replace,False],True)
        elif(tipo=="reporte de usuarios"):

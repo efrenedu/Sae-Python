@@ -1,7 +1,7 @@
 from conexion_bd import conexion_bd
 from constantes import *
 
-#Base Class for Save User data and the information required for Execute the process of System
+#Base Class for Save User data 
 class usuario:
     def __init__(self):
         self.user=""
@@ -9,29 +9,8 @@ class usuario:
         self.historia=historial("")
         self.icon=""
         self.permiso=""
-        self.data_process=[]
-        self.data_expediente=[]
         self.token=""
-        
-    #Save data from Process of System
-    def recibe_data_process(self,dat):
-          self.data_process.append(dat)
-          
-    #Return the Data of Current Process of System
-    def get_data_process(self):  
-          return self.data_process   
-
-    #Reset the data saved from Process of System
-    def reset_data_process(self,last_item):
-        temp_data=[]
-        for i in range(0,last_item):
-            temp_data.append(self.data_process[i])
-        self.data_process=[]       
-        for i in range(0,last_item):
-            self.data_process.append(temp_data[i])
-        if(len(self.data_process)<=0 ):
-            self.data_expediente=[]       
-        
+     
     #Execute the Loggin Request from a User        
     def login(self,usr,passw):
         from General import General
@@ -45,7 +24,7 @@ class usuario:
         json_content=json.loads(response.content)
         if(json_content["status"]=="Error"):
             General.show_error(json_content["message"],"Error")
-            return [-1,None]
+            return [False,None]
         foto_user=json_content["Foto_User"]
         nivel_acceso=json_content["Acces_User"]
         self.user=usr 
@@ -53,7 +32,7 @@ class usuario:
         self.permiso=nivel_acceso  
         self.icon=foto_user
         self.token=json_content["TokenSession"]
-        return [0,self.permiso]        
+        return [True,self.permiso]        
 
     #Get the Credentials of User: Id, worker id, access level, icon , password
     def get_credentials(self):
@@ -71,67 +50,6 @@ class usuario:
     def add_action_historial(self,action_data):
        self.historia.add_action(action_data[0],action_data[1])
     
-    
-    #Validate Cronogram
-    def validar_cronograma(self,data):
-    
-        from tiempo import tiempo
-        from General import General
-        time_object=tiempo()
-        
-        if(len(data)<1):
-           return -1
-        conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
-        dat_cronog=conexion_bd.get_allData([])
-        init_cronog=""
-        if(dat_cronog!=[]): 
-            init_cronog=dat_cronog[0][1]
-        for i in range(0,len(data)):
-            inicio=data[i][0]
-            cierre=data[i][1]
-            strict=data[i][2]
-            if(init_cronog!=""):
-               if(time_object.is_previous(inicio,init_cronog)):
-                       return -5
-            if(General.is_valid(inicio,constantes.CADENA_FECHA,False)==False):
-               return -2
-            elif(General.is_valid(cierre,constantes.CADENA_FECHA,False)==False):
-               return -3
-            else:
-              if(time_object.is_previous(inicio,cierre,strict)==False):
-                  return -4 
-        return True
-        
-    #Verify if the Year of Cronogram is Valid   
-    def is_validYear(self,periodo,inicio,cierre):
-        from General import General
-        year=periodo.split("-")
-        if(len(year)!=2):
-           return -1
-        elif(General.is_valid(year[0],constantes.CADENA_SOLONUMERO,False,3)==False):
-           return -1
-        elif(General.is_valid(year[1],constantes.CADENA_SOLONUMERO,False,3)==False):
-           return -1
-        else:
-            if(len(year[0])!=4):
-                 return -1
-            elif(len(year[1])!=4):
-                 return -1            
-        if(General.is_valid(inicio,constantes.CADENA_FECHA,False)==False):
-           return -2
-        elif(General.is_valid(cierre,constantes.CADENA_FECHA,False)==False):
-           return -2
-        else:
-           from tiempo import tiempo
-           time_object=tiempo()
-           temp_inicio=inicio.split("/")
-           if(temp_inicio[1]!="09" and temp_inicio[1]!="9"):
-                return -4
-                
-           if(time_object.is_previous(inicio,cierre)!=True):
-              return -3
-        return True
-        
   
 #User with Access Level Coordinator       
 class coordinador(usuario):
