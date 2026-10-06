@@ -8,6 +8,7 @@ import random
 import json
 import time
 import requests
+import threading
 
 #Manage the Data Base Information
 class conexion_bd:
@@ -20,7 +21,8 @@ class conexion_bd:
     "pregunta_secreta","descarga_documentos","calificacion_final","calif_momento",
     "calificacion","disponibilidad_horario","materia_pendiente","calific_pendiente"]
     pendent_querys=[]
-
+    session_obj=requests.Session()
+  
     #Init the Connection
     @classmethod	
     def init(cls):
@@ -29,7 +31,7 @@ class conexion_bd:
         timestamp=str(int(time.time()))
         data_send={"request_type":"Verify_db","timestamp":timestamp,"data_request":"","token":""}
         try:
-           response=requests.post(url_target,data=data_send)
+           response=cls.session_obj.post(url_target,data=data_send)
            resp_json=json.loads(response.content)
            if(resp_json["status"]=="Error"):
                General.show_error(resp_json["message"],"Error al Conectar")
@@ -41,6 +43,23 @@ class conexion_bd:
            return False 
       
 
+    #Send Request to the Server
+    @classmethod
+    def send_requests(cls):
+        from event_manager import Event_manager
+        usr=Event_manager.user
+        token_user=usr.get_credentials()[4]
+        url_target=constantes.SERVER_BD_URL
+        timestamp=str(int(time.time()))
+        data_request={"query_list":cls.pendent_querys}
+        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
+        response=cls.session_obj.post(url_target,data=data_send)
+        resp_json=json.loads(response.content)
+        cls.pendent_querys=[]
+        if(resp_json["status"]=="Error"):
+            General.show_error(resp_json["message"],"Error Actualizando Datos")
+            return False
+     
     #set the Table Target for Operations    
     @classmethod
     def set_tabla(cls,table_index):
@@ -63,7 +82,7 @@ class conexion_bd:
         timestamp=str(int(time.time()))
         data_request={"fields":campos,"cond_dat":cond_data,"join_dat":join_data,"target_table":cls.tabla_selected,"as_dict":as_dict}
         data_send={"request_type":"Get Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":""}
-        response=requests.post(url_target,data=data_send)
+        response=cls.session_obj.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
         if(resp_json["status"]=="Error"):
             General.show_error(resp_json["message"],"Error Obteniendo Datos ")
@@ -84,20 +103,8 @@ class conexion_bd:
         cls.pendent_querys.append({"Type":"Add","Values":values,"Conditions":None,"Join":None,"Table":cls.tabla_selected,"from_dict":from_dict})
         if(do_commit==False):  
            return 0
-        
-        from event_manager import Event_manager
-        usr=Event_manager.user
-        token_user=usr.get_credentials()[4]
-        url_target=constantes.SERVER_BD_URL
-        timestamp=str(int(time.time()))
-        
-        data_request={"query_list":cls.pendent_querys}
-        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
-        response=requests.post(url_target,data=data_send)
-        resp_json=json.loads(response.content)
-        cls.pendent_querys=[]
-        if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Actualizando Datos")
+           
+        if(cls.send_requests()==False):
             return -1
         return 0
         
@@ -108,20 +115,8 @@ class conexion_bd:
         if(do_commit==False):   
             return 0
             
-        from event_manager import Event_manager
-        usr=Event_manager.user
-        token_user=usr.get_credentials()[4]
-        url_target=constantes.SERVER_BD_URL
-        timestamp=str(int(time.time()))
-    
-        data_request={"query_list":cls.pendent_querys}
-        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
-        response=requests.post(url_target,data=data_send)
-        resp_json=json.loads(response.content)
-        cls.pendent_querys=[]
-        if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Actualizando Datos")
-            return -1
+        if(cls.send_requests()==False):
+               return -1
         return 0
 
     #delete a Register of the Table target
@@ -132,19 +127,8 @@ class conexion_bd:
         if(do_commit==False):  
            return 0
            
-        from event_manager import Event_manager
-        usr=Event_manager.user
-        token_user=usr.get_credentials()[4]
-        url_target=constantes.SERVER_BD_URL
-        timestamp=str(int(time.time()))
-        data_request={"query_list":cls.pendent_querys}
-        data_send={"request_type":"Modify Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
-        response=requests.post(url_target,data=data_send)
-        resp_json=json.loads(response.content)
-        cls.pendent_querys=[]
-        if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Actualizando Datos")
-            return -1
+        if(cls.send_requests()==False):
+               return -1
         return 0
      
     #Return True if the Table is Empty     
@@ -154,7 +138,7 @@ class conexion_bd:
        timestamp=str(int(time.time()))
        data_request={"target_table":cls.tabla_selected}
        data_send={"request_type":"Is_Empty","timestamp":timestamp,"data_request":json.dumps(data_request),"token":""}
-       response=requests.post(url_target,data=data_send)
+       response=cls.session_obj.post(url_target,data=data_send)
        resp_json=json.loads(response.content)
        if(resp_json["status"]=="Error"):
             General.show_error(resp_json["message"],"Error Obteniendo Datos")
@@ -163,22 +147,7 @@ class conexion_bd:
            return True
        
        return False
-       
-       
-    #generate a Ket Field Id Based in number of Registers    
-    @classmethod
-    def generate_id(cls,hard_verific=False,id_name=""):
-        url_target=constantes.SERVER_BD_URL
-        timestamp=str(int(time.time()))
-        data_request={"target_table":cls.tabla_selected,"field_required":id_name,"Id_Request":"Generate Id"}
-        data_send={"request_type":"Id Manager","timestamp":timestamp,"data_request":json.dumps(data_request),"token":""}
-        response=requests.post(url_target,data=data_send)
-        resp_json=json.loads(response.content)
-        if(resp_json["status"]=="Error"):
-            General.show_error(resp_json["message"],"Error Obteniendo Datos")
-            return "-1"
-        return resp_json["message"]
-               
+      
     #Return True if the Id  withe Indicated Value exist in the Table     
     @classmethod
     def id_exist(cls,id_name,id_value):
@@ -189,7 +158,7 @@ class conexion_bd:
         timestamp=str(int(time.time()))
         data_request={"target_table":cls.tabla_selected,"field_required":id_name,"Id_Request":"Exists Id","field_Value":id_value}
         data_send={"request_type":"Id Manager","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
-        response=requests.post(url_target,data=data_send)
+        response=cls.session_obj.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
         if(resp_json["status"]=="Error"):
             General.show_error(resp_json["message"],"Error Obteniendo Datos")
@@ -208,7 +177,7 @@ class conexion_bd:
        Event_manager.set_comp_values("cargando","Leyendo Copia de Seguridad : 0%")
        with open(f"{constantes.FOLDER_RESPALDOS}{filename}","rb") as temp_file:
           file_dict={'source':temp_file}
-          with requests.post(url_target,data=data_send,files=file_dict,stream=True) as response:
+          with cls.session_obj.post(url_target,data=data_send,files=file_dict,stream=True) as response:
              for line in response.iter_lines():
                  cls.verify_lineStream_restorBd(line)
                
@@ -218,7 +187,7 @@ class conexion_bd:
               
        Event_manager.user.add_action_historial(["restaurar BD",time_object.get_tiempo()])            
        cls.set_tabla(constantes.TABLA_REPORTE)
-       id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+       id_hist=f"reporte_{usr.user}_{time_object.get_full_time_str()}"
        data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"base de datos","restaurar","",time_object.get_fecha()]
        cls.add_data(data_hist,True)
       
@@ -233,7 +202,6 @@ class conexion_bd:
        token_user=usr.get_credentials()[4]
        data_request={"Action":"Restore"}
        data_send={"request_type":"Security Copies","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user}
-       import threading
        thread_object=threading.Thread(target=cls.restore_bd,args=(filename,data_send,url_target,usr))
        thread_object.start() 
        
@@ -262,14 +230,14 @@ class conexion_bd:
         token_user=usr.get_credentials()[4]
         data_request={"Action":"Repald"}
         data_send={"request_type":"Security Copies","timestamp":timestamp,"data_request":json.dumps(data_request),"token":token_user,"file_send":""}
-        response=requests.post(url_target,data=data_send)
+        response=cls.session_obj.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
         if(resp_json["status"]=="Error"):
             Event_manager.set_comp_values("cargando","")
             General.show_error(resp_json["message"],"Error Obteniendo Datos")
             return -1
         url_zip=f"{constantes.SERVER}{resp_json['data']}"
-        response=requests.get(url_zip)
+        response=cls.session_obj.get(url_zip)
         if(response.status_code>400):
             General.show_error("error obteniendo data del Respaldo del servidor","error del server")
             return -1
@@ -279,5 +247,6 @@ class conexion_bd:
              zip_file.write(raw_data)
              
         General.show_message(resp_json["message"],"Respaldo Creado")
+        Event_manager.set_comp_values("cargando","")
         return 0
     

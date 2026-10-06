@@ -151,11 +151,7 @@ function set_seed_data($conexion,$nomb_base,$seed_data,$primary_keys){
 					   $tabl_temp=$val_field[0];
 					   $primarkey_temp=$primary_keys[$tabl_temp];
 					   $temp_dat=$val_field[1];
-					   $id_dat=generate_id($conexion,$nomb_base,$tabl_temp,$primarkey_temp);
-					   if($id_dat["status"]=="Error"){
-						  return $id_dat;
-					   }
-					   $temp_dat[$primarkey_temp]=$id_dat["message"]; 
+					  
 					   foreach($temp_dat as $temp_field=>$temp_fieldVal){
 						   if($temp_fieldVal=="Calculate_date"){
 							   $temp_dat[$temp_field]=$fecha;
@@ -212,59 +208,6 @@ function id_exist($conexion,$nomb_base,$tabl,$id_field,$id_name){
           $err=$e->getCode().":".$e->getMessage();
 	      return ["status"=>"Error","message"=>$err];
      }	
-}
-
-//generate a Id based on the numbers of Registers on the Table
-function generate_id ($conexion,$nomb_base,$tabl,$nomb_field){
-	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-	$num_rows=0;
-	if($conexion==null || $conexion==false){
-		return ["status"=>"Error","message"=>"Conexion Invalida"];
-	}
-	$field_dat=get_fields([$tabl]);
-	if($field_dat["status"]=="Error"){
-		mysqli_rollback($conexion);
-		return $field_dat;
-	}
-	$list_fields=$field_dat["message"];
-	$exist=false;
-	for($i=0;$i<count($list_fields);$i++){
-		if($list_fields[$i]==$nomb_field){
-			$exist=true;
-			$i=count($list_fields);
-		}
-	}
-	if($exist==false){
-		mysqli_rollback($conexion);
-		return ["status"=>"Error","message"=>"El campo Solicitado {$nomb_field} es Inexistente en la Tabla Indicada{$tabl}"];
-	}
-	try{
-		$query="SELECT COUNT(*) FROM {$nomb_base}.{$tabl};";
-		$data=mysqli_query($conexion,$query);
-		if( mysqli_data_seek($data,0)){
-           $row=mysqli_fetch_row($data);
-	       $num_rows=(int)$row[0];
-	    }
-        if($num_rows==0){
-			return ["status"=>"Success","message"=>"0"];
-		}
-		for($i=0;$i<$num_rows;$i++){
-			$exist_dat=id_exist($conexion,$nomb_base,$tabl,$nomb_field,strval($i));
-			if($exist_dat["status"]=="Error"){
-				mysqli_rollback($conexion);
-				return $exist_dat;
-			}
-			if($exist_dat["message"]=="False"){
-				return ["status"=>"Success","message"=>strval($i)];
-			}
-		}
-		return ["status"=>"Success","message"=>strval($num_rows)];
-    }
-	catch(mysqli_sql_exception $e){
-		 mysqli_rollback($conexion);
-		 $err=$e->getCode().":".$e->getMessage();
-	     return ["status"=>"Error","message"=>$err];
-	}
 }
 
 

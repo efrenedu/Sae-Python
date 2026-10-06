@@ -26,13 +26,14 @@ from tiempo import tiempo
 import requests
 from usuario import *
 from estudiante import estudiante
+import threading
 
 
 #Manage the Events of System
 class Event_manager:
     user=usuario()                          #user data
     vent=None                               #windows with the panels data
-    
+     
     #Trigger the actions Based in Event type
     @classmethod	  
     def determine_event(cls,type_e,pantalla=0):
@@ -563,7 +564,7 @@ class Event_manager:
              cls.generar_reporte(form,None,seccion)
              ti=tiempo()
              conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
-             data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), id_trabaj,form,ti.get_fecha(),ti.get_tiempo(),"formato",ti.get_fecha()]
+             data_descarga=[f"download_{id_trabaj}_{ti.get_full_time_str()}", id_trabaj,form,ti.get_fecha(),ti.get_tiempo(),"formato",ti.get_fecha()]
              conexion_bd.add_data(data_descarga)
           else:          
             General.show_message("por favor seleccione una seccion","seccion no valida")
@@ -586,7 +587,7 @@ class Event_manager:
           temp_file.write(raw)
           temp_file.close()         
           conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
-          data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), id_trabaj,form,time_object.get_fecha(),time_object.get_tiempo(),"formato",time_object.get_fecha()]
+          data_descarga=[f"download_{id_trabaj}_{time_object.get_full_time_str()}", id_trabaj,form,time_object.get_fecha(),time_object.get_tiempo(),"formato",time_object.get_fecha()]
           conexion_bd.add_data(data_descarga,True)
           os.startfile(ruta)  
        else:
@@ -986,43 +987,41 @@ class Event_manager:
         msg=pnl.get_comp_byName("mensaje")
         msg.set_text("Usuario:"+cred[0]+"\n Tipo de Usuario:"+cred[2])
           
-    #User Loggin
-    @classmethod            		 
-    def login(cls):
-        pnl=cls.vent.panelActual
-        pantalla=cls.vent.panelActual_str
-        datos=["",""]
-        time_object=tiempo()
-        field1=pnl.get_comp_byName("usuario_login")
-        field2=pnl.get_comp_byName("pass_login")
-        datos[0]=field1.get_text()
-        datos[1]=field2.get_text()
-        temp_user=usuario()
-        valido=temp_user.login(datos[0],datos[1])
-        if(valido[0]==True):
+    
+    #Interprete Login Data from a User
+    @classmethod
+    def Interprete_Login(cls,res,temp_user):
+       time_object=tiempo()
+       if(cls.user.get_credentials()[0]!=""):
+          return
+          
+       if(res[0]==True ):
+           cred=temp_user.get_credentials()
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           data_report=[conexion_bd.generate_id(True,constantes.CLAVE_REPORTE),datos[0],time_object.get_fecha(),time_object.get_tiempo(),"Loggin","inicio de sesion","",time_object.get_fecha()]
+           id_report=f"InicioSession-{cred[0]}-{time_object.get_full_time_str()}"
+           data_report=[id_report,cred[0],time_object.get_fecha(),time_object.get_tiempo(),"Loggin","inicio de sesion","",time_object.get_fecha()]
            conexion_bd.add_data(data_report,True)
            #login Succes
+          
            if(cls.vent.update_pantallas(constantes.PANTALLA_WELCOME,temp_user)<0):
               cls.logout(True)
               return
-           cred=temp_user.get_credentials()
-           if(valido[1]=="admin"):
+           if(res[1]=="admin"):
                 cls.user=admin()
                 cls.user.set_login(cred)         
-           elif(valido[1]=="coordinador"):
+           elif(res[1]=="coordinador"):
                cls.user=coordinador()
                cls.user.set_login(cred)
-           elif(valido[1]=="directivo"):
+           elif(res[1]=="directivo"):
                 cls.user=directivo()
                 cls.user.set_login(cred)
-           elif(valido[1]=="secretaria"):
+           elif(res[1]=="secretaria"):
                 cls.user=secretaria()
                 cls.user.set_login(cred)
            mat_permiso=cls.user.get_permiso_matrix()
            cls.verificar_caudicidad()
-           pnl=cls.vent.panelActual         
+           pnl=cls.vent.panelActual 
+                
            cls.show_data_user()
            menus=cls.vent.get_menu()
            pnl.set_active(True)
@@ -1041,6 +1040,21 @@ class Event_manager:
                  else:
                     st_m=tk.DISABLED  
                  menus[i+1].entryconfig((j-1),state=st_m)
+        
+    #User Loggin
+    @classmethod            		 
+    def login(cls):
+        pnl=cls.vent.panelActual
+        pantalla=cls.vent.panelActual_str
+        datos=["",""]
+        time_object=tiempo()
+        field1=pnl.get_comp_byName("usuario_login")
+        field2=pnl.get_comp_byName("pass_login")
+        datos[0]=field1.get_text()
+        datos[1]=field2.get_text()
+        temp_user=usuario()
+        temp_user.login(cls.vent.raiz,datos[0],datos[1])
+      
         
            
     #Verify if The Cronogram is Finished

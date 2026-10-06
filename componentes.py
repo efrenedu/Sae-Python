@@ -1098,8 +1098,9 @@ class Label_Image(componente):
                  self.temp_images.append(img_file.copy())
             else:
               #Server Image
+              from conexion_bd import conexion_bd
               import requests
-              response=requests.get(next_source)
+              response=conexion_bd.session_obj.get(next_source)
               if(response.status_code>400):
                  continue    
               data=response.content

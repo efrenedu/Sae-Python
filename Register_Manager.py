@@ -65,7 +65,7 @@ class Register_Manager:
              conexion_bd.add_data(data)
              user.add_action_historial(["registro de desiponib. horario",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+             id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
              data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","disponib. horario","",time_object.get_fecha()]
              res_add=conexion_bd.add_data(data_hist,True)
              if(res_add<0):
@@ -86,7 +86,7 @@ class Register_Manager:
              conexion_bd.update_data(vals_update,cond_data)
              user.add_action_historial(["actualizar disponib. horario",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+             id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
              data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","disponib. horario","",time_object.get_fecha()]
              res_add=conexion_bd.add_data(data_hist,True)
              if(res_add<0):
@@ -142,7 +142,7 @@ class Register_Manager:
             conexion_bd.add_data(data)
             user.add_action_historial(["registrar formato",time_object.get_tiempo()])
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+            id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
             data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","formato","",time_object.get_fecha()]
             res_add=conexion_bd.add_data(data_hist,True) 
             if(res_add<0):
@@ -173,7 +173,7 @@ class Register_Manager:
              conexion_bd.update_data(values,cond_data)
              user.add_action_historial(["actualizar formato",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+             id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
              data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","formato","",time_object.get_fecha()]
              res_add=conexion_bd.add_data(data_hist,True)
              if(res_add<0):
@@ -211,7 +211,7 @@ class Register_Manager:
        if(res==True):
           user.add_action_historial(["registro de calificacion",time_object.get_tiempo()])
           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-          id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+          id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
           data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","nueva calificacion","Registro de Evaluacion",time_object.get_fecha()]
           conexion_bd.add_data(data_hist,True)
           tabl=pnl.get_comp_byName("table_califics")
@@ -288,14 +288,14 @@ class Register_Manager:
                if(General.show_confirmDialog("registrar area de formacion?","registrar")!=True):
                    return
                conexion_bd.set_tabla(constantes.TABLA_AÑOS_INCORPORADOS)
-               data_disp_areas[constantes.CLAVE_AÑOS_INCORPORADOS]=conexion_bd.generate_id(True,constantes.CLAVE_AÑOS_INCORPORADOS)
+               data_disp_areas[constantes.CLAVE_AÑOS_INCORPORADOS]=f"year_incorp_{data[constantes.CLAVE_AREA_FORMACION]}"
                conexion_bd.add_data(data_disp_areas)
                data[constantes.CLAVE_AÑOS_INCORPORADOS]=data_disp_areas[constantes.CLAVE_AÑOS_INCORPORADOS]
                conexion_bd.set_tabla(constantes.TABLA_AREA_FORMACION)
                conexion_bd.add_data(data)
                user.add_action_historial(["registro de area de formacion",time_object.get_tiempo()])
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-               id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+               id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","area form.","",time_object.get_fecha()]
                res_add=conexion_bd.add_data(data_hist,True) 
                if(res_add<0):
@@ -323,7 +323,7 @@ class Register_Manager:
                conexion_bd.update_data(fields_values,cond_data,join_data)
                user.add_action_historial(["actualizar area de formacion",time_object.get_tiempo()])
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-               id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+               id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","area form.","",time_object.get_fecha()]
                res_add=conexion_bd.add_data(data_hist,True) 
                if(res_add<0):
@@ -416,7 +416,7 @@ class Register_Manager:
             conexion_bd.update_data({constantes.CLAVE_HORARIO:data[constantes.CLAVE_HORARIO],"modificado":time_object.get_fecha()},cond_data)
             user.add_action_historial(["registrar horario",time_object.get_tiempo()])
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+            id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
             data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","horario","",time_object.get_fecha()]
             res_add=conexion_bd.add_data(data_hist,True)
             if(res_add<0):
@@ -450,7 +450,7 @@ class Register_Manager:
             conexion_bd.update_data(values_fields,cond_data)
             user.add_action_historial(["actualizar horario",time_object.get_tiempo()])
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+            id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
             data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","horario","",time_object.get_fecha()]
             res_add=conexion_bd.add_data(data_hist,True)
             if(res_add<0):
@@ -512,7 +512,7 @@ class Register_Manager:
         time_object=tiempo()
         if(update==False and is_teacher==True):
               conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-              data_prof={constantes.CLAVE_PROFESOR:conexion_bd.generate_id(True,constantes.CLAVE_PROFESOR),constantes.CLAVE_TRABAJADOR:data_worker[constantes.CLAVE_TRABAJADOR],"seccion_guia":"default","modificado":time_object.get_fecha()}
+              data_prof={constantes.CLAVE_PROFESOR:f"profesor_{data_worker[constantes.CLAVE_TRABAJADOR]}",constantes.CLAVE_TRABAJADOR:data_worker[constantes.CLAVE_TRABAJADOR],"seccion_guia":"default","modificado":time_object.get_fecha()}
               conexion_bd.add_data(data_prof) 
               conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
               for i in range(0,len(areas_teacher)):
@@ -525,7 +525,7 @@ class Register_Manager:
               initial_teacher=True
            if(initial_teacher==False and is_teacher==True):
                 conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-                data_prof={constantes.CLAVE_PROFESOR:conexion_bd.generate_id(True,constantes.CLAVE_PROFESOR),constantes.CLAVE_TRABAJADOR:data_worker[constantes.CLAVE_TRABAJADOR],"seccion_guia":"default","modificado":time_object.get_fecha()}
+                data_prof={constantes.CLAVE_PROFESOR:f"profesor_{data_worker[constantes.CLAVE_TRABAJADOR]}",constantes.CLAVE_TRABAJADOR:data_worker[constantes.CLAVE_TRABAJADOR],"seccion_guia":"default","modificado":time_object.get_fecha()}
                 conexion_bd.add_data(data_prof) 
                 conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
                 for i in range(0,len(areas_teacher)):
@@ -756,7 +756,7 @@ class Register_Manager:
                      return  
                user.add_action_historial(["registro de personal",time_object.get_tiempo()])
                conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-               id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+               id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
                data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"registro","personal","",time_object.get_fecha()]
                if(conexion_bd.add_data(data_hist,True)<0):
                   return
@@ -785,7 +785,7 @@ class Register_Manager:
                     return                
                 user.add_action_historial(["actualizar personal",time_object.get_tiempo()])
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+                id_hist=f"report_{user.user}_{time_object.get_full_time_str()}"
                 data_hist=[ id_hist,user.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","personal","",time_object.get_fecha()]
                 if(conexion_bd.add_data(data_hist,True)<0):
                    return

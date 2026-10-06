@@ -227,21 +227,17 @@ else if($request_type=="Id Manager"){
 	$tabl_target=$request_dat["target_table"];
 	$id_request=$request_dat["Id_Request"];
 	$res=array();
-	if($id_request=="Generate Id"){
-		$res=generate_id ($conexion,$db,$tabl_target,$field_verify);
-	}
-	else{
-		//Id Exist Request
-		$valid_token=validar_token($token_user,$data_secretKey["Token"]);
-        if($valid_token["Valido"]=="False"){
+	//Id Exist Request
+	$valid_token=validar_token($token_user,$data_secretKey["Token"]);
+    if($valid_token["Valido"]=="False"){
 	        http_response_code(400);
             header("Content-Type:application/json;charset=utf-8");
             echo json_encode(["status"=>"Error","message"=>$valid_token["Message"]]);
             exit;
-        }
-		$field_value=$request_dat["field_Value"];
-		$res=id_exist($conexion,$db,$tabl_target,$field_verify,$field_value);
-	}
+    }
+	$field_value=$request_dat["field_Value"];
+	$res=id_exist($conexion,$db,$tabl_target,$field_verify,$field_value);
+	
 	http_response_code(400);
     header("Content-Type:application/json;charset=utf-8");
 	echo json_encode($res);

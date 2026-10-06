@@ -147,14 +147,8 @@ if($access==""){
    exit;
 }
 $password_hash=password_hash($password_register,PASSWORD_BCRYPT);
-$id_intentos_dat=generate_id($conexion,$db,"intentos_usuario","id_intentos");
-if($id_intentos_dat["status"]=="Error"){
-		http_response_code(400);
-        header("Content-Type:application/json;charset=utf-8");
-        echo json_encode($id_intentos_dat);
-	    exit;
-}	
-$dat_intentos=array("id_intentos"=>$id_intentos_dat["message"],"num_intentos"=>"0","last_fecha"=>"","last_hora"=>"","modificado"=>$fecha_str);
+$id_intentos="IntentosUser_{$user_register}";	
+$dat_intentos=array("id_intentos"=>$id_intentos,"num_intentos"=>"0","last_fecha"=>"","last_hora"=>"","modificado"=>$fecha_str);
 $register_res=add_data($conexion,$db,"intentos_usuario",$dat_intentos,true);
 if($register_res["status"]=="Error"){
 	http_response_code(400);
@@ -177,14 +171,8 @@ foreach($secrets_questions_list as $number_Question=>$dat_Question){
 	$join_data=array();
 	$question=$dat_Question["pregunta"];
 	$answer=$dat_Question["respuesta"];
-	$id_preg_dat=generate_id($conexion,$db,"pregunta_secreta","id_pregunta");
-	if($id_preg_dat["status"]=="Error"){
-		http_response_code(400);
-        header("Content-Type:application/json;charset=utf-8");
-        echo json_encode($id_preg_dat);
-	    exit;
-	}
-	$dat_preg=array("id_pregunta"=>$id_preg_dat["message"],"pregunta"=>$question,"respuesta"=>$answer,"usuario"=>$user_register,"numero"=>$number_Question,"modificado"=>$fecha_str);
+	$id_preg="SecretQuestion_{$user_register}_Question {$number_Question}";
+	$dat_preg=array("id_pregunta"=>$id_preg,"pregunta"=>$question,"respuesta"=>$answer,"usuario"=>$user_register,"numero"=>$number_Question,"modificado"=>$fecha_str);
 	$res_add=add_data($conexion,$db,"pregunta_secreta",$dat_preg,true);
 	if($res_add["status"]=="Error"){
 		http_response_code(400);
@@ -195,15 +183,9 @@ foreach($secrets_questions_list as $number_Question=>$dat_Question){
 }
 
 //Make Report
-$id_report=generate_id($conexion,$db,"reporte","id_reporte");
-if($id_report["status"]=="Error"){
-	http_response_code(400);
-    header("Content-Type:application/json;charset=utf-8");
-    echo json_encode($id_report);
-    exit;
-}
 $hora_str=strval(date("H:i:s"));
-$data_report=array("id_reporte"=>$id_report["message"],"usuario"=>$user_client,"fecha"=>$fecha_str,"hora"=>$hora_str,"tipo"=>"Actualizacion de Usuario","razon"=>"Cambio de Configuracion del Usuario","motivo"=>"","modificado"=>$fecha_str);
+$id_report="report_{$user_client}_{$fecha_str}{$hora_str}";
+$data_report=array("id_reporte"=>$id_report,"usuario"=>$user_client,"fecha"=>$fecha_str,"hora"=>$hora_str,"tipo"=>"Actualizacion de Usuario","razon"=>"Cambio de Configuracion del Usuario","motivo"=>"","modificado"=>$fecha_str);
 $res_add=add_data($conexion,$db,"reporte",$data_report,true,true);
 if($res_add["status"]!="Error"){
 	$res["status"]="Success";

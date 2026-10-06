@@ -273,10 +273,7 @@ class Process_Manager:
                        return
                        
                  conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                 id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-                 if(id_hist=="-1"):
-                       General.show_error("Error Generando Reporte","Error de Conexion")
-                       return
+                 id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
                  data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
                  if(conexion_bd.add_data(data_hist,True)<0):
                      return                   
@@ -299,7 +296,7 @@ class Process_Manager:
                return
            
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+            id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
             data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","inscripcion","",time_object.get_fecha()]
             if(conexion_bd.add_data(data_hist,True)<0):
                 return                     
@@ -451,7 +448,7 @@ class Process_Manager:
             return
          msg_res=estud.mat_pendiente(data_pendiente,time_object.get_fecha())
          conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-         id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+         id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
          data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","mat. pendiente",motivo,time_object.get_fecha()]
          res_add=conexion_bd.add_data(data_hist,True)  
          if(res_add<0):
@@ -491,7 +488,7 @@ class Process_Manager:
         if(valido[0]==True):
            usr.add_action_historial(["borrar calificacion",time_object.get_tiempo()])
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+           id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar calificacion",motivo,time_object.get_fecha()]
            conexion_bd.add_data(data_hist,True)
            
@@ -547,7 +544,7 @@ class Process_Manager:
         if(valido[0]==True):
            usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+           id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar calificacion",motivo,time_object.get_fecha()]
            conexion_bd.add_data(data_hist,True) 
            tabl_califics.reset()
@@ -598,7 +595,7 @@ class Process_Manager:
          if(valido[0]==True):
             usr.add_action_historial(["modificacion de calificacion",time_object.get_tiempo()])
             conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-            id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+            id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
             data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","calificacion estimulada",motivo,time_object.get_fecha()]
             conexion_bd.add_data(data_hist,True)
             estimul_prom_field.set_text("")
@@ -654,6 +651,14 @@ class Process_Manager:
             return
              
        res=estud.modific_calif_final(data_estud,time_object.get_fecha())        
+       usr.add_action_historial(["modificacion de calificacion final",time_object.get_tiempo()])
+       conexion_bd.set_tabla(constantes.TABLA_REPORTE)
+       id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
+       data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar calificacion final","actualizar notas faltantes del estudiante provenientes de otra institucion",time_object.get_fecha()]
+       res_add=conexion_bd.add_data(data_hist,True)
+       if(res_add<0):
+          return 
+          
        flds=pnl.get_comps_byTag("field")
        for fl in flds:
           if(fl.get_id()=="area" or fl.get_id()=="year" or fl.get_id()=="calif"):
@@ -661,23 +666,17 @@ class Process_Manager:
        tabla.reset()
        conexion_bd.set_tabla(constantes.TABLA_CALIFICACION_FINAL)
        cond_data={"conditions_Names":[constantes.CLAVE_ESTUDIANTE],"condition_Types":["and"],"conditions_Values":[cedula_estud],"conditions_Verify":["="]}      
-       data_calif=conexion_bd.get_allData([],cond_data)
+       data_calif=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION,"año","valor"],cond_data,None,True)
        for i in range(0,len(data_calif)):
-          tabla.add_row([data_calif[i][3],data_calif[i][2],data_calif[i][4]])
-       #registramos historial 
-       usr.add_action_historial(["modificacion de calificacion final",time_object.get_tiempo()])
-       conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-       id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
-       data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar calificacion final","actualizar notas faltantes del estudiante provenientes de otra institucion",time_object.get_fecha()]
-       res_add=conexion_bd.add_data(data_hist,True)
-       if(res_add<0):
-          return 
-          
+          tabla.add_row([data_calif[i][constantes.CLAVE_AREA_FORMACION],data_calif[i]["año"],data_calif[i]["valor"]])
+       
        if(res==False):
            General.show_message("Calificacion Modificada, Actualizacion de Calificacion Pendientes del Estudiante ","Actualizacion finalizada")
        else:
            General.show_message("calificacion final modificada exitosamente","calificacion final modificada")
      
+      
+       
             
     #Generate the Document 'Sabana de Notas'
     @classmethod
@@ -852,28 +851,35 @@ class Process_Manager:
         data_dates=cls.get_date_fields_cronogram_values(vent,parte)
         pnl=vent.panelActual
         data_send=data_dates[0]
-
+        inicio_moment=data_dates[1] 
+        end_moment=data_dates[2] 
+        
         time_object=tiempo()
+        target_moment="momento 1"
+        if(parte.startswith("momento")):
+           target_moment=parte
+           if(cls.verify_moments_registers(parte,inicio_moment,end_moment)==False):
+               return
         if(Process_Validator_Manager.validate_cronogram_Dates(data_send)==False):
             return
         if(General.show_confirmDialog("modificar el cronograma?","modificar crongrama")!=True):
             return
         conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
         dat_cronog=conexion_bd.get_allData([constantes.CLAVE_CRONOGRAMA],None,None,True)
-        target_moment=parte if parte.startswith("momento") else "momento 1"
         
+            
         for i in range(0,len(data_send)):
           date_init=data_send[i]["Inicio"]
           date_end=data_send[i]["Cierre"]    
           if(parte=="mat pendiente"):          
               date_end=time_object.get_next_date2(date_end,4)
           if(parte.startswith("momento")):
+             
              if(data_send[i]["Razon"]=="inicio"):
+                 conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
+                 cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":[target_moment],"conditions_Verify":["="]}    
+                 conexion_bd.update_data({"fecha_limite":end_moment,"fecha_inicio":inicio_moment,"modificado":time_object.get_fecha()},cond_data) 
                  continue
-             inicio_moment=data_dates[1] 
-             end_moment=data_dates[2] 
-             if(cls.verify_moments_registers(parte,inicio_moment,end_moment)==False):
-                     return
           data_register={constantes.CLAVE_FECHA:dat_cronog[0][constantes.CLAVE_CRONOGRAMA]+f"-{target_moment}-"+data_send[i]["Razon"],constantes.CLAVE_MOMENTO:target_moment,constantes.CLAVE_CRONOGRAMA:dat_cronog[0][constantes.CLAVE_CRONOGRAMA],"razon":data_send[i]["Razon"],"fecha":date_init,"fecha_cierre":date_end,"modificado":time_object.get_fecha()}
           conexion_bd.set_tabla(constantes.TABLA_FECHA)
           if(conexion_bd.id_exist(constantes.CLAVE_FECHA,data_register[constantes.CLAVE_FECHA])==False):
@@ -884,7 +890,7 @@ class Process_Manager:
         
         usr.add_action_historial(["editar cronograma",time_object.get_tiempo()])
         conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
         data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","editar cronograma","",time_object.get_fecha()]
         conexion_bd.add_data(data_hist,True) 
         General.show_message("cronograma actualizado exitosamente","cronograma actualizado") 
@@ -911,11 +917,12 @@ class Process_Manager:
            conexion_bd.set_tabla(constantes.TABLA_CRONOGRAMA)
            conexion_bd.add_data(data_cronog)
            conexion_bd.set_tabla(constantes.TABLA_MOMENTO)
-           data_mom=["momento 1","true","false",time_object.get_fecha(),"","",""]
+           
+           data_mom=["momento 1","true","false",time_object.get_fecha(),cierre,"00:00:00",inicio]
            conexion_bd.add_data(data_mom)
            usr.add_action_historial(["registrar cronograma",time_object.get_fecha()])
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+           id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","crear cronograma","",time_object.get_fecha()]
            conexion_bd.add_data(data_hist,True) 
            General.show_message("Cronograma Registrado Satisfactoriamente","cronograma registrado")
@@ -927,7 +934,7 @@ class Process_Manager:
           conexion_bd.update_data({"inicio":inicio,"cierre":cierre,"modificado":time_object.get_fecha()},cond_data)
           usr.add_action_historial(["modificar cronograma",time_object.get_fecha()])
           conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-          id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+          id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
           data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar cronograma","",time_object.get_fecha()]
           conexion_bd.add_data(data_hist,True) 
           General.show_message("cronograma actualizado satisfactoriamente","cronograma registrado")
@@ -936,6 +943,7 @@ class Process_Manager:
     #Try Remove the Cronogram if is Possible
     @classmethod
     def remove_cronogram(cls,usr,vent):
+        time_object=tiempo()
         last_moment_close=False
         pnl=vent.panelActual
         id_cronog=pnl.get_comp_byName("año_escolar").get_text()
@@ -973,7 +981,7 @@ class Process_Manager:
             return         
         usr.add_action_historial(["borrar cronograma",time_object.get_fecha()])
         conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
         data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar cronograma","",time_object.get_fecha()]
         conexion_bd.add_data(data_hist,True) 
         General.show_message("cronograma borrado exitosamente","cronograma borrado")
@@ -1014,8 +1022,12 @@ class Process_Manager:
             dat_cronog= conexion_bd.get_allData(["inicio","cierre"],None,None,True)
             inicio=pnl.get_comp_byName("inicio")
             cierre=pnl.get_comp_byName("cierre")
+            inicio.set_state("normal")
+            cierre.set_state("normal")
             inicio.set_text(dat_cronog[0]["inicio"])
             cierre.set_text(dat_cronog[0]["cierre"])
+            inicio.set_state("readonly")
+            cierre.set_state("readonly")
         conexion_bd.set_tabla(constantes.TABLA_FECHA)     
         for i in range(0,len(razones_requerid)):
             cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO,"razon"],"condition_Types":["and","and"],"conditions_Values":[momento,razones_requerid[i]],"conditions_Verify":["=","="]}    
@@ -1183,7 +1195,7 @@ class Process_Manager:
             cond_data={"conditions_Names":[constantes.CLAVE_MOMENTO],"condition_Types":["and"],"conditions_Values":["momento "+str(i+1)],"conditions_Verify":["="]} 
             conexion_bd.delete_data(cond_data)
         conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
         data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"Modificacion del Cronograma","Cronograma Reseteado","",time_object.get_fecha()]
         return conexion_bd.add_data(data_hist,True)        
                
@@ -1248,7 +1260,7 @@ class Process_Manager:
                 lista.set_values(nombres) 
                 usr.add_action_historial(["eliminar formato",time_object.get_tiempo()])
                 conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-                id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+                id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
                 data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","borrar formato","",time_object.get_fecha()]
                 conexion_bd.add_data(data_hist,True)
                 General.show_message("formato borrado satisfactoriamente","formato borrado")
@@ -1329,7 +1341,7 @@ class Process_Manager:
         time_object=tiempo()
         usr.add_action_historial(["modificacion de formato",time_object.get_tiempo()])
         conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
         data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"proceso","modificar formato","",time_object.get_fecha()]
         conexion_bd.add_data(data_hist,True)
         General.show_message("actualizacion del contenido del formato realizada exitsamente","actualizacion exitosa")

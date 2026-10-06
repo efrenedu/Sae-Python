@@ -117,33 +117,33 @@ class Consult_Manager:
            data_form=response.content
            conexion_bd.set_tabla(constantes.TABLA_SECCION)
            cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[clave],"conditions_Verify":["="]}              
-           curso=conexion_bd.get_allData(["año"],cond_data)[0][0]
+           join_data={}
+           join_data["horario"]={"query_field":["turno"],"share_fields":{"field":constantes.CLAVE_HORARIO,"table_reference":"seccion"},"Conditions_join":None} 
+           dat_curso=conexion_bd.get_allData([],cond_data,join_data,True)
+           if(len(dat_curso)<=0):
+               General.show_error("Error Obteniendo Datos de la Seccion","Seccion Inexistente")
+               return
+           turno=dat_curso[0]["turno"]
            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
            cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[clave],"conditions_Verify":["="]}                 
-           data_seccion=conexion_bd.get_allData([],cond_data)
-           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           if(data_seccion==[]):
+           join_data={}
+           join_data["nombre"]={"query_field":["nombre","s_nombre","apellido","s_apellido"],"share_fields":{"field":constantes.CLAVE_NOMBRE,"table_reference":"estudiante"},"Conditions_join":None}
+           data_seccion=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE],cond_data,join_data,True)
+           if(len(data_seccion)<=0):
                General.show_message("seccion sin estudiantes registrados","seccion vacia o inexistente")
                return
            num_estud=len(data_seccion)
-           data_nomina=[]
+           data_estuds=[]
            for i in range(0,num_estud):
-               ci=data_seccion[i][0]
-               cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_seccion[i][1]],"conditions_Verify":["="]}              
-               data_nombre=conexion_bd.get_allData(["apellido","s_apellido","nombre","s_nombre"],cond_data)
+               ci=data_seccion[i][constantes.CLAVE_ESTUDIANTE]
                fullname=""
-               for j in range(0,4):
-                   if(data_nombre[0][j]!="" and data_nombre[0][j]!=" "):
-                       fullname+=data_nombre[0][j]+" "
-               data_nomina.append([ci,fullname])     
-           s=clave.split("(")
-           nomb_secc=s[0]
-           turno=""
-           letra=s[1].split(")")[0]
-           if(letra.lower()=="t"):
-               turno="tarde"
-           else:
-               turno="mañana"
+               search_fields=["nombre","s_nombre","apellido","s_apellido"]
+               for j in range(0,len(search_fields)):
+                   target_field=search_fields[j]
+                   if(data_seccion[0][target_field]!="" and data_seccion[0][target_field]!=" "):
+                       fullname+=data_seccion[0][target_field]+" "
+               data_estuds.append([ci,fullname])     
+           nomb_secc=clave
            data_replace=[]
            data_replace.append(["Seccion:",nomb_secc])
            data_replace.append(["Turno:",turno])
@@ -155,7 +155,7 @@ class Consult_Manager:
            filename=tipo+" "+clave+".xlsx"
            path=constantes.FOLDER_DOCUMENTS+filename
            msg_end=False
-           documento.request(pnl.win,[path,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_estud,data_nomina,"Nº",2,data_replace,msg_end],True)    
+           documento.request(pnl.win,[path,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[num_estud,data_estuds,"Nº",2,data_replace,msg_end],True)    
        elif(tipo=="inscripcion"):
           conexion_bd.set_tabla(constantes.TABLA_FORMATO)
           cond_data={"conditions_Names":[constantes.CLAVE_FORMATO],"condition_Types":["and"],"conditions_Values":[tipo],"conditions_Verify":["="]}                 
@@ -389,12 +389,9 @@ class Consult_Manager:
            secc=""
            if(data_estud[0][3].lower()=="default"):
               secc=""
-           elif(data_estud[0][3].endswith("(M)")):
-               temp_secc=data_estud[0][3].split("(M)")[0]
-               secc=temp_secc+" "+"(Mañana)"
            else:
-                temp_secc=data_estud[0][3].split("(T)")[0]
-                secc=temp_secc+" "+"(Tarde)"
+               secc=data_estud[0][3]
+           
            data_modif.append(["SECCION:",secc])
            conexion_bd.set_tabla(constantes.TABLA_SECCION)
            cond_data={"conditions_Names":[constantes.CLAVE_SECCION],"condition_Types":["and"],"conditions_Values":[data_estud[0][3]],"conditions_Verify":["="]}                 
@@ -572,11 +569,6 @@ class Consult_Manager:
                data_modif.append(["CORREO:",data_trabaj[0][2]])
            if(data_trabaj[0][3]!="" and data_trabaj[0][3]!="..."):
                data_modif.append(["TELEFONO:",data_trabaj[0][3]])  
-           conexion_bd.set_tabla(constantes.TABLA_USUARIO)
-           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][0]],"conditions_Verify":["="]}                
-           data_user=conexion_bd.get_allData([],cond_data)
-           if(data_user!=[]):
-               data_modif.append(["USUARIO ASIGNADO:",data_user[0][0]])
            conexion_bd.set_tabla(constantes.TABLA_CARGO)
            cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][6]],"conditions_Verify":["="]}                     
            data_cargo=conexion_bd.get_allData([],cond_data)
@@ -1026,13 +1018,14 @@ class Consult_Manager:
                          if(is_out==True):
                              #Document Request is not from a User
                              conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
-                             data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"constancia",time_object.get_fecha()]
+                             data_descarga=[f"download_{data_trabaj[0][0]}_{time_object.get_full_time_str()}", data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"constancia",time_object.get_fecha()]
                              conexion_bd.add_data(data_descarga,True)
               new_date=dia+" de "+mes+" del "+año
               replace.append(["Aguas Calientes,",new_date,12,"bold"])
               replace.append(["a los",new_date,12,"bold"])
               ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"              
-              documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)         
+              ref_cell="UNIDAD EDUCATIVA 28 DE OCTUBRE"
+              documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],ref_cell,0,replace,False],True)         
        elif(tipo=="sabana de notas" or tipo=="notas finales del año"):
            if(receive_data==None):
                General.show_error("sin data para reporte","sin data")           
@@ -1302,13 +1295,13 @@ class Consult_Manager:
                         new_data=[dat_areas]
                         for evaluation_index in range(0,constantes.MAXIMO_EVALUACIONES):
                             new_data.append("") 
-                        new_data.append("05")
+                        new_data.append("01")
                         info.append(new_data)   
                 else:
                     new_data=[dat_areas]
                     for evaluation_index in range(0,constantes.MAXIMO_EVALUACIONES):
                         new_data.append("") 
-                    new_data.append("05")
+                    new_data.append("01")
                     info.append(new_data)                    
             replace=[]
             replace.append(["Nombres y apellidos:",fullname])
@@ -1485,7 +1478,7 @@ class Consult_Manager:
                 if(is_out==True):
                     #Carnet Request is Not from User
                     conexion_bd.set_tabla(constantes.TABLA_DESCARGA_DOCUMENTO)
-                    data_descarga=[conexion_bd.generate_id(True,constantes.CLAVE_DESCARGA_DOCUMENTO), data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"carnet",time_object.get_fecha()]
+                    data_descarga=[f"download_{data_trabaj[0][0]}_{time_object.get_full_time_str()}", data_trabaj[0][0],tipo,time_object.get_fecha(),time_object.get_tiempo(),"carnet",time_object.get_fecha()]
                     conexion_bd.add_data(data_descarga,True)   
                 ruta=constantes.FOLDER_DOCUMENTS+tipo+"-"+cedula+".xlsx"
                 documento.request(raiz,[ruta,raw_data],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"UNIDAD EDUCATIVA 28 DE OCTUBRE",0,replace,False],True)

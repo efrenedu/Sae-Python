@@ -226,10 +226,7 @@ class estudiante:
            estado=data_inscrip["estudiante"]["estatus"]
            if(estado=="irregular"):
               estado="activo"
-           id_estatus= conexion_bd.generate_id(True,constantes.CLAVE_ESTATUS_ESTUD)
-           if(id_estatus=="-1"):
-              General.show_error("Error generando Id para el Estatus del Estudiante","Error")
-              return False
+           id_estatus= f"estatus_{data_inscrip['estudiante']['CI_estudiante']}"
            data_estatus={constantes.CLAVE_ESTATUS_ESTUD:id_estatus,"estatus":estado,"salud":data_inscrip["estudiante"]["salud"],"cedulado":data_inscrip["estudiante"]["cedulado"],"last_year":data_inscrip["estudiante"]["year_estud"],"fecha_inscrip":time_object.get_fecha(),"fecha_ingreso":time_object.get_fecha(),"plantel_procedencia":data_inscrip["estudiante"]["plantel"],"modificado":time_object.get_fecha()}
            conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
            estud={constantes.CLAVE_ESTUDIANTE:data_inscrip["estudiante"]["CI_estudiante"],constantes.CLAVE_NOMBRE:id_nombre,constantes.CLAVE_ESTATUS_ESTUD:id_estatus,constantes.CLAVE_SECCION:id_secc,constantes.CLAVE_EXPEDIENTE:id_exp,constantes.CLAVE_REPRESENTANTE:data_inscrip["representante"]["CI_representante"],"genero":data_inscrip["estudiante"]["genero"],"nacimiento":data_inscrip["estudiante"]["año_nacimiento"],constantes.CLAVE_DIRECCION:id_dire,"parentesco":data_inscrip["estudiante"]["parentesco"],"modificado":time_object.get_fecha()}
@@ -389,7 +386,7 @@ class estudiante:
                  areas_pendiente=data_inscrip["materia_pendiente"]["List"]
                  conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE) 
                  for i in range(0,len(areas_pendiente)):
-                    id_mat_pend=f"MateriaPendiente_{areas_pendiente[i][0]}-{areas_pendiente[i][1]}Year-{data_inscrip['estudiante']['CI_estudiante']}"
+                    id_mat_pend=f"MateriaPendiente_{areas_pendiente[i][0]}_{areas_pendiente[i][1]}Year_{data_inscrip['estudiante']['CI_estudiante']}"
                     next_mat_pendiente={constantes.CLAVE_MATERIA_PENDIENTE:id_mat_pend,constantes.CLAVE_ESTUDIANTE:data_inscrip["estudiante"]["CI_estudiante"],"max_calif":"0","nomb_area":areas_pendiente[i][0],"año":areas_pendiente[i][1],"modificado":time_object.get_fecha()}
                     materias_pendientes.append(next_mat_pendiente)
         
@@ -693,7 +690,7 @@ class estudiante:
            conexion_bd.delete_data(cond_data)                    
        if(val<10):
           conexion_bd.set_tabla(constantes.TABLA_MATERIA_PENDIENTE)
-          data_pend=[conexion_bd.generate_id(True,constantes.CLAVE_MATERIA_PENDIENTE),dat[0],"0.0",area,year,fecha]
+          data_pend={constantes.CLAVE_MATERIA_PENDIENTE:f"materiaPendiente_{area}_{year}Year_{dat[0]}",constantes.CLAVE_ESTUDIANTE:dat[0],"max_calif":"0.0",constantes.CLAVE_AREA_FORMACION:area,"año":year,"modificado":fecha}
           conexion_bd.add_data(data_pend)    
        
        if(len(pendientes_modify)<=0):
@@ -877,8 +874,8 @@ class estudiante:
             res_msg_title="estudiante aprobado"
         else:
             conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
-            codigo_c=conexion_bd.generate_id(True,constantes.CLAVE_CALIF_PENDIENTE)
-            valores=[codigo_c,data_m_pen[0][constantes.CLAVE_MATERIA_PENDIENTE],data["Intento_Id"],calif,fecha,fecha]
+            codigo_c=f"califMatPendiente_{data_m_pen[0][constantes.CLAVE_MATERIA_PENDIENTE]}_{data['Intento_Id']}"
+            valores={constantes.CLAVE_CALIF_PENDIENTE:codigo_c,constantes.CLAVE_MATERIA_PENDIENTE:data_m_pen[0][constantes.CLAVE_MATERIA_PENDIENTE],"intento":data["Intento_Id"],"valor":calif,"fecha":fecha,"modificado":fecha}
             conexion_bd.set_tabla(constantes.TABLA_CALIF_PENDIENTE)
             conexion_bd.add_data(valores)
             max_calif=data_m_pen[0]["max_calif"]
@@ -962,7 +959,7 @@ class estudiante:
            #Estudent without Calification On the Formation Area
            id_calif_f= data["Id_Estud"]+"-"+ data["Area"]+ data["Year"]
            data_calific_final={constantes.CLAVE_CALIFICACION_FINAL:id_calif_f,constantes.CLAVE_ESTUDIANTE:data["Id_Estud"],"año":data["Year"],constantes.CLAVE_AREA_FORMACION:data["Area"],"valor":"01","modificado":fecha}
-           res_add=conexion_bd.add_data(data_f,True)
+           res_add=conexion_bd.add_data(data_calific_final,True)
            if(res_add<0):
               return False
         
@@ -974,7 +971,7 @@ class estudiante:
         estimul=""
         if(len(data_calific_mom)<=0):
             #Estudent without Califications On the Academic Moment
-            id_calif_mom=conexion_bd.generate_id(True,constantes.CLAVE_CALIF_MOM)
+            id_calif_mom=f"MomentCalification_{id_calif_f}_{data['Momento']}_{data['Year']}"
             data_mom=[ id_calif_mom,data["Momento"],id_calif_f,"1.0","01","0",data["Year"],fecha]
             estimul="0"
             res_add=conexion_bd.add_data(data_mom,True)
@@ -1004,7 +1001,7 @@ class estudiante:
             if(len(calif_register)<2):
                calif_register="0"+calif_register
         data_register["valor"]=calif_register
-        data_register[constantes.CLAVE_CALIFICACION]=conexion_bd.generate_id(True,constantes.CLAVE_CALIFICACION)
+        data_register[constantes.CLAVE_CALIFICACION]=f"calificacion_{data_register['numero']}_{id_calif_mom}"
         data_register["modificado"]=fecha
         res_add=conexion_bd.add_data(data_register,True)
         if(res_add<0):

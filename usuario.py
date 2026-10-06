@@ -1,5 +1,6 @@
 from conexion_bd import conexion_bd
 from constantes import *
+import threading
 
 #Base Class for Save User data 
 class usuario:
@@ -10,21 +11,20 @@ class usuario:
         self.icon=""
         self.permiso=""
         self.token=""
+        self.response_login=None
      
-    #Execute the Loggin Request from a User        
-    def login(self,usr,passw):
-        from General import General
-        import time
+    #Request User Data to the Server 
+    def request_login(self,usr,url_login,data_send,root):
         import requests
         import json
-        url_login=f"{constantes.SERVER}login.php"
-        timestamp=str(int(time.time()))
-        data_send={"password":passw,"timestamp":timestamp,"user_client":usr}
-        response=requests.post(url_login,data=data_send)
-        json_content=json.loads(response.content)
+        from General import General
+        from conexion_bd import conexion_bd
+        response=conexion_bd.session_obj.post(url_login,data=data_send)
+        json_content=json.loads(response.content) 
         if(json_content["status"]=="Error"):
             General.show_error(json_content["message"],"Error")
-            return [False,None]
+            self.response_login=[False,None]
+            return 
         foto_user=json_content["Foto_User"]
         nivel_acceso=json_content["Acces_User"]
         self.user=usr 
@@ -32,7 +32,29 @@ class usuario:
         self.permiso=nivel_acceso  
         self.icon=foto_user
         self.token=json_content["TokenSession"]
-        return [True,self.permiso]        
+        self.response_login=[True,self.permiso]
+    
+    #check when the User Data is Ready    
+    def check_login(self,root,thread):
+       if(thread.is_alive() or self.response_login==None):
+           root.after(100,self.check_login,root,thread)
+       else:
+          from event_manager import Event_manager
+          Event_manager.Interprete_Login(self.response_login,self)
+          self.response_login=None
+          
+    #Execute the Loggin Request from a User        
+    def login(self,root,usr,passw):
+        import time
+        import requests
+        url_login=f"{constantes.SERVER}login.php"
+        timestamp=str(int(time.time()))
+        data_send={"password":passw,"timestamp":timestamp,"user_client":usr}
+        thread_object=threading.Thread(target=self.request_login,args=(usr,url_login,data_send,root))
+        thread_object.start() 
+        self.check_login(root,thread_object)
+        
+              
 
     #Get the Credentials of User: Id, worker id, access level, icon , password
     def get_credentials(self):

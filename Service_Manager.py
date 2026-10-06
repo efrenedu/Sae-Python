@@ -546,10 +546,8 @@ class Service_Manager:
                 return 
           timestamp=str(int(time.time()))
           data_register={"user_register":user_val,"token_user":token_user,"timestamp":timestamp,"password_register":val_pass,"preguntas_secretas":json.dumps(preguntas),"ci_worker":ci_worker}
-          print(data_register)
           url_register=f"{constantes.SERVER}register_user.php"
           response=requests.post(url_register,data=data_register)
-          print(response.content)
           json_content=json.loads(response.content)
           if(json_content["status"]=="Error"):
              General.show_error(json_content["message"],"Error")
@@ -846,7 +844,7 @@ class Service_Manager:
              conexion_bd.update_data({"abierto":"false","modificado":time_object.get_fecha(),"fecha_limite":actual_date,"hora_limite":actual_time},cond_data)           
              usr.add_action_historial(["restablecer momento",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+             id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"servicio","reestablecer momento","",time_object.get_fecha()]
              conexion_bd.add_data(data_hist,True)
              General.show_message("se ha reestablecido el momento exitosamente","momento reestablecido exitosamente")
@@ -917,7 +915,7 @@ class Service_Manager:
              conexion_bd.update_data({"abierto":"true","modificado":time_object.get_fecha(),"fecha_limite":nueva_fecha,"hora_limite":nuevo_tiempo},cond_data)
              usr.add_action_historial(["reactivar momento",time_object.get_tiempo()])
              conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-             id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+             id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
              data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"servicio","reactivar momento","",time_object.get_fecha()]
              conexion_bd.add_data(data_hist,True)
              General.show_message("se ha reactivado el momento por "+valor_t+" minutos exitosamente","reactivacion exitosa")   
@@ -1053,7 +1051,7 @@ class Service_Manager:
         time_object=tiempo()
         usr.add_action_historial(["organizar secciones",time_object.get_tiempo()])
         conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-        id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+        id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
         data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"servicio","organizar secciones",motivo,time_object.get_fecha()]
         conexion_bd.add_data(data_hist,True)
         pnl.get_comp_byName("secc_main_list").set_selected_index(0)
@@ -1354,7 +1352,7 @@ class Service_Manager:
            conexion_bd.update_data(values,cond_data)
            usr.add_action_historial(["actualizar estudiante",time_object.get_tiempo()])
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
-           id_hist=conexion_bd.generate_id(True,constantes.CLAVE_REPORTE)
+           id_hist=f"report_{usr.user}_{time_object.get_full_time_str()}"
            data_hist=[ id_hist,usr.user,time_object.get_fecha(),time_object.get_tiempo(),"actualizacion","estudiante","",time_object.get_fecha()]
            conexion_bd.add_data(data_hist,True)
            General.show_message("actualizacion del estudiante realizada exitosamnte","estudiante actualizado")

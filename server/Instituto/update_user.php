@@ -232,16 +232,10 @@ foreach($secrets_questions_list as $number_Question=>$dat_Question){
 }
 
 //Make Report
-$id_report=generate_id($conexion,$db,"reporte","id_reporte");
-if($id_report["status"]=="Error"){
-	http_response_code(400);
-    header("Content-Type:application/json;charset=utf-8");
-    echo json_encode($id_report);
-    exit;
-}
 $fecha_str=strval(date("d/m/Y"));
 $hora_str=strval(date("H:i:s"));
-$data_report=array("id_reporte"=>$id_report["message"],"usuario"=>$user_client,"fecha"=>$fecha_str,"hora"=>$hora_str,"tipo"=>"Actualizacion de Usuario","razon"=>"Cambio de Configuracion del Usuario","motivo"=>"","modificado"=>$fecha_str);
+$id_report="report_{$user_client}_{$fecha_str}{$hora_str}";
+$data_report=array("id_reporte"=>$id_report,"usuario"=>$user_client,"fecha"=>$fecha_str,"hora"=>$hora_str,"tipo"=>"Actualizacion de Usuario","razon"=>"Cambio de Configuracion del Usuario","motivo"=>"","modificado"=>$fecha_str);
 $res_add=add_data($conexion,$db,"reporte",$data_report,true,true);
 if($res_add["status"]!="Error"){
 	$res["status"]="Success";

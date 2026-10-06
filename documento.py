@@ -389,7 +389,9 @@ class documento:
             end_col=len(columns)
             found=False
             reference_indexs=[]
-             
+            requiere_reference=True
+            if(len(content[1])<=0):
+                requiere_reference=False
             #Read a Max of 100 Rows
             for i in range(1,100):
                for j in range(0,end_col):
@@ -401,24 +403,25 @@ class documento:
                       for k in range(0,num_replaces):                    
                          if(val==data_replace[k][0]):
                             cls.replace_cell_of_format(val,data_replace[k][1],columns[j-1],columns[j],i,pages_file) 
-                      if(val==reference_cell and found==False):
+                      if(val==reference_cell and found==False and requiere_reference==True):
                           reference_indexs.append(str(i+1))
                           for k in range(0,col_count):
                             reference_indexs.append(columns[j+(1+k)])
                           found=True
-            if(found==False):
-               cls.estatus=0
-               cls.result=constantes.REQUEST_RESULT_ERROR_REFERENCE_EXCEL
-               return  constantes.REQUEST_RESULT_ERROR_REFERENCE_EXCEL  
+            if(requiere_reference==True):
+               if(found==False):
+                  cls.estatus=0
+                  cls.result=constantes.REQUEST_RESULT_ERROR_REFERENCE_EXCEL
+                  return  constantes.REQUEST_RESULT_ERROR_REFERENCE_EXCEL  
             
-            row_count=content[0]
-            row_init=0
-            if(reference_indexs!=[]):
-                row_init=int(reference_indexs[0])
-            for row in range(0,row_count):
-                for col in range(0,col_count):
-                   celda_index=reference_indexs[col+1]+str(row_init+row)
-                   pages_file[celda_index]=content[1][row][col].upper()      
+               row_count=content[0]
+               row_init=0
+               if(reference_indexs!=[]):
+                   row_init=int(reference_indexs[0])
+               for row in range(0,row_count):
+                   for col in range(0,col_count):
+                      celda_index=reference_indexs[col+1]+str(row_init+row)
+                      pages_file[celda_index]=content[1][row][col].upper()      
           
 
             file_name[0]=file_name[0].replace("ñ","n")

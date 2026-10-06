@@ -180,7 +180,13 @@ class tiempo:
        elif(numero==12):
            return "Diciembre"
 
-    #get Full Date as a string (time and Date) with a offset of Minutes       
+
+    #get the full Date as a String
+    def get_full_time_str(self):
+       temp_date=self.get_full_time()
+       return f"{temp_date[0]}{temp_date[1]}"
+       
+    #get Full Date as a List (time and Date) with a offset of Minutes       
     def get_full_time(self,addicional_minutes=0):
     
         fecha=["",""]
