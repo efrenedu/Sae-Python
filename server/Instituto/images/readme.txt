@@ -1,1 +1,10 @@
-The files of This Folder are Used for Show Images or Logos 
+----------------------------------------------------------------------------------------
+                               English
+----------------------------------------------------------------------------------------
+   The files of This Folder are Used for Show Images or Logos On the System
+
+----------------------------------------------------------------------------------------
+                               Español
+----------------------------------------------------------------------------------------
+   Los Archviso de esta Carpeta son Usados para mostrar imagenes o logos en el Sistema
+   

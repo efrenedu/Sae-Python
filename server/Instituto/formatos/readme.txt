@@ -1,1 +1,10 @@
-In this Folder the System Store the Formats Uploaded
+----------------------------------------------------------------------------------------
+                                  English
+----------------------------------------------------------------------------------------
+    In this Folder the System Store the Formats Uploaded for the Users
+
+----------------------------------------------------------------------------------------
+                                  Español
+----------------------------------------------------------------------------------------
+   En esta Carpeta el Sistema Guarda los Formatos Subidos por los Usuaruis
+   

@@ -226,7 +226,7 @@ class Consult_Manager:
           fech=time_object.get_fecha()
           fech=list(fech.split("/"))
           fech[1]=time_object.get_mes(int(fech[1]))
-          replace.append(["Inscripcion Realizada a los:","Inscripcion Realizada a los "+fech[0]+" dias "+"del mes de "+fech[1]+" del Año "+fech[2]])
+          replace.append(["Inscripcion Realizada a los:",fech[0]+" dias "+"del mes de "+fech[1]+" del Año "+fech[2]])
           secc=receive_data["seccion"]["data"]["id_secc"]
          
           num_replace=len(replace)
@@ -460,6 +460,7 @@ class Consult_Manager:
                 return
            dire=data_dir[0][1]+","+data_dir[0][2]+","+data_dir[0][3]
            data_modif.append(["DIRECCION:",dire])
+           data_modif.append(["Fecha:",time_object.get_fecha()])
            filename=tipo+" "+str(clave)+".xlsx"
            ruta=constantes.FOLDER_DOCUMENTS+filename
            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"CEDULA:",0,data_modif,False],True)
@@ -629,6 +630,7 @@ class Consult_Manager:
                   data_modif.append(["FOTO:",constantes.SERVER+data_exp[0][2]]) 
                else:
                   data_modif.append(["FOTO:","not found"])  
+           data_modif.append(["Fecha:",time_object.get_fecha()])
            filename=tipo+" "+str(clave)+".xlsx"
            ruta=constantes.FOLDER_DOCUMENTS+filename
            documento.request(raiz,[ruta,data_form],constantes.REQUEST_WRITE_EXCEL_FROM_EXISTENT_FORMAT,[0,[],"CEDULA:",0,data_modif,False],True)
@@ -864,7 +866,7 @@ class Consult_Manager:
               if(found_dire==False):
                   General.show_message("no existe director rgistrado en el sistem","director inexistente")
                   return 
-              replace.append(["     Quien suscribe Prof(a),",apellido_directivo+" "+nombre_directivo,12,"bold"])
+              replace.append(["   Quien suscribe Prof(a),",apellido_directivo+" "+nombre_directivo,12,"bold"])
               replace.append(["Directivo",apellido_directivo+" "+nombre_directivo,12,"bold"])
               replace.append(["identidad ,",cedula_directivo,12,"bold"])
               replace.append(["CI dire",cedula_directivo,12,"bold"])                
@@ -1124,16 +1126,8 @@ class Consult_Manager:
             info=[]
             conexion_bd.set_tabla(constantes.TABLA_USUARIO)
             for i in range(0,len(data_reporte)):
-                cond_data={"conditions_Names":[constantes.CLAVE_USUARIO],"condition_Types":["and"],"conditions_Values":[data_reporte[i][1]],"conditions_Verify":["="]}              
-                data_user=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR],cond_data)
+                
                 data_row=[]
-                if(data_user!=[]):
-                    if(data_user[0][0]!="000" and  data_user[0][0]!="001"):
-                        #prevent append Work id of Default User of Admin User
-                        data_row.append(data_user[0][0])
-                    else:
-                        data_row.append("")
-
                 data_row.append(data_reporte[i][1])
                 data_row.append(data_reporte[i][5])
                 data_row.append(data_reporte[i][2])

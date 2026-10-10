@@ -1,1 +1,11 @@
-Folder to Store the Json Files with the Data of each Panel of System.
+---------------------------------------------------------------------------------------
+                                English
+--------------------------------------------------------------------------------------
+
+     Folder to Store the Json Files with the Data of each Panel of System.
+
+----------------------------------------------------------------------------------------
+                                Español
+-----------------------------------------------------------------------------------------
+
+   Carpeta para Guardar los Archivos Json con la Informacion de Cada Panel del Sistema

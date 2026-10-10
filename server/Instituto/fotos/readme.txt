@@ -1,1 +1,9 @@
-In this Folder the System Save the Photos of Users and Expedents
+----------------------------------------------------------------------------------------
+                                  English
+----------------------------------------------------------------------------------------
+    In this Folder the System Save the Photos of Users and Expedents
+
+----------------------------------------------------------------------------------------
+                                  Español
+----------------------------------------------------------------------------------------
+    En esta Carpeta el Sistema guarda las Fotos de Usuarios y Expedientes
