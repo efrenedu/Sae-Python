@@ -6,5 +6,5 @@
 ----------------------------------------------------------------------------------------
                                   Español
 ----------------------------------------------------------------------------------------
-   En esta Carpeta el Sistema Guarda los Formatos Subidos por los Usuaruis
+   En esta Carpeta el Sistema Guarda los Formatos Subidos por los Usuarios
    

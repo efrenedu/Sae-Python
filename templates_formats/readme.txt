@@ -9,7 +9,7 @@ Instructions:
      2- you can Modify the Header of Format But dont Modify the cell with texts as "periodo escolar","fecha","estudiante","seccion",...
      3-some cells will be fill with data from the system have it on count before write texts on the cells
   How Upload the format:
-     1-Login on the System with "admin" or "Coordinador" User 
+     1-Login on the System as "admin" or "Coordinador" User 
      2-go to Menu: Registro/ Registro de Formato 
      3-select on the List of Formats Types the required and assign the file correspondent
  
@@ -26,8 +26,8 @@ Instrucciones:
      2-Puedes Modificar el Encabezado del Formato pero no Modifiques celdas con textos como "periodo escolar","fecha","estudiante","seccion", entre otros
      3-Algunas celdas seran llenadas con datos del Sistema, por Favor tener eso en Cuenta antes de Escribir texto en las celdas
   Como Subir Un Formato:
-     1- Ingresa al Sistema con un Usuario "admin" o "Coordinador"
+     1- Ingresa al Sistema como Usuario "admin" o "Coordinador"
      2- Dirigete al menu Registro/Registro de Formato
      3- Selecciona el formato requerido en la lista de tipos de formato y asigna el archivo correpondiente
 
-Advertencia!!: Algunas Funciones del Sistema no trabajan su el formato Requerido no esta Registrado
+Advertencia!!: Algunas Funciones del Sistema no trabajan si el formato Requerido no esta Registrado

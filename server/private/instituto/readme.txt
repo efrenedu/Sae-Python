@@ -15,7 +15,7 @@ Instructions:
 -----------------------------------------------------------------------------------------
 
   Carpeta con los Scripts Privados de PHP y ejemplos/Plantillas para los Tokens del Servidor
-y Configuracion de Informacion de la Base de Datos
+y  Datos de Configuracion de la Base de Datos
 
 Instrucciones:
    1-Renombra Todos los Archivos .json.example a .json

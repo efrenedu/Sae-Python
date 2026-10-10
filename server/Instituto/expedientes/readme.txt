@@ -1,10 +1,10 @@
 ----------------------------------------------------------------------------------------
                                     English
 ----------------------------------------------------------------------------------------
-In this Folder the System Save the Expedents as Zip Files
+In this Folder the System Save the Expedents ( Zip Files )
 
 ----------------------------------------------------------------------------------------
                                     Español
 ----------------------------------------------------------------------------------------
 
-   En esta Carpeta el Sistema guarda los Expedientes como Archivos Zip
+   En esta Carpeta el Sistema guarda los Expedientes ( Archivos Zip )
