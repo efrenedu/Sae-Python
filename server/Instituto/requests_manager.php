@@ -270,7 +270,10 @@ else if($request_type=="Get Data"){
 		$fields=$request_dat["fields"];
 		$cond_dat=$request_dat["cond_dat"];
 		$as_dict=$request_dat["as_dict"];
-	    $res=get_data($conexion,$db,$tabl,$fields,$cond_dat,$join_dat,$as_dict);
+		$limit=$request_dat["limit"];
+		$offset=$request_dat["offset"];
+		$order=$request_dat["order"];
+	    $res=get_data($conexion,$db,$tabl,$fields,$cond_dat,$join_dat,$as_dict,$limit,$offset,$order);
 		http_response_code(400);
 	    header("Content-Type:application/json;charset=utf-8");
 	    echo json_encode($res);

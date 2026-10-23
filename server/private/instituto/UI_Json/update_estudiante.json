@@ -302,7 +302,7 @@
         ],
         "Corner_Radious": "8",
         "Id": "estudiantes",
-        "Ev": "15",
+        "Ev": "constantes.COMBOBOX_LOAD_STUDENTS",
         "Panel_Id": "update_estudiante",
         "Master": "Main_Box",
         "Initial_state": "True",

@@ -17,6 +17,7 @@ class componente:
            self.default_state=state
            self.state=state
            self.parent=parent
+           self.block_events=False
  
       #get the Id of Component           
       def get_id(self):
@@ -858,7 +859,6 @@ class Combo_box(componente):
     def __init__(self,pos,parent,items,fuente,nombre,tag,colors,default_state,evento,force_width,select_firstOnActive):
          super().__init__(nombre,tag,default_state,parent)
          self.combo=ctk.CTkComboBox(parent,state="readonly",values=items,font=fuente,dropdown_font=fuente , command=self.On_select,fg_color=colors["Fg"],text_color=colors["Text"],button_color=colors["Button"],hover=False ,dropdown_fg_color=colors["Fg_Item"],dropdown_hover_color=colors["Hover"],dropdown_text_color=colors["Text_Item"],text_color_disabled=colors["Disabled_Text"])
-         
          self.count=len(items)
          self.items_list=items
          self.pos=pos
@@ -866,11 +866,24 @@ class Combo_box(componente):
          self.ev=evento
          self.colors=colors
          self.combo._canvas.bind("<ButtonPress-1>",self.automatic_Scroll,add="+")
-         
+         self.data_items={}
          if(force_width!=None):
              self.combo.configure(width=force_width)
          self.set_selected_index(0)
-         
+    
+    #set data on Items
+    def set_data_items(self,new_data):
+       if(len(new_data)<self.count):
+           return
+       self.data_items=new_data
+       
+    #get the data of a Item
+    def get_data_item(self,id):
+        if(id in self.data_items):
+             return self.data_items[id]
+        return {} 
+       
+       
     #Automatic Scroll When Mouse Button is Pressed
     def automatic_Scroll(self,event):
        pos_y=event.y
@@ -921,7 +934,8 @@ class Combo_box(componente):
     def On_select(self,event):
        from UI_Event import UI_Event
        if(self.ev!=None):
-          UI_Event.interprete_Combobox_Event("Select",self.get_id(),self.ev,self.get_selected_value(),self.get_state())             
+          data_send=self.get_selected_value() if len(self.data_items)<=0 else self.data_items[self.get_selected_value()]
+          UI_Event.interprete_Combobox_Event("Select",self.get_id(),self.ev,data_send,self.get_state())             
     
     #get the selected value            
     def get_selected_value(self):

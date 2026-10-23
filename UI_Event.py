@@ -551,42 +551,25 @@ class UI_Event:
                 Event_manager.activar_element("registrar_rdh",True,True)
        elif(ev_value>=constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER and ev_value<=constantes.COMBOBOX_CHANGE_RESPUESTA_SECRETAS):
           if(ev_value==constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER):
-              if(comp_value!="elejir" and comp_value!="elegir" and comp_value!="nuevo"):
-                 temp_v=comp_value.split("-")
-                 valor=""
-                 if(len(temp_v)==3):
-                     valor=temp_v[0]+"-"+temp_v[1]
-                 elif(len(temp_v)==2):
-                     valor=temp_v[0]
-                
+              
+              if(len(comp_value)>0):
                  Event_manager.activar_element("estatus_label",True,True)
                  Event_manager.activar_element("estatus",True,True)
                  Event_manager.activar_element("actualizar_rp",True,True)
                  Event_manager.activar_element("registrar_rp",False,True)
-                 Event_manager.load_data_trabajador(valor)
+                 Event_manager.load_data_trabajador(comp_value)
               else:
                  Event_manager.activar_element("estatus_label",False,True)
                  Event_manager.activar_element("estatus",False,True)
                  Event_manager.activar_element("actualizar_rp",False,True)
                  Event_manager.activar_element("registrar_rp",True,True)
-                 Event_manager.activar_element("caja_areas",False,False)
-                 Event_manager.activar_element("caja3_rp",False,False)
-                 Event_manager.load_data_trabajador("")
+                 #Event_manager.activar_element("caja_areas",False,False)
+                 #Event_manager.activar_element("caja3_rp",False,False)
+                 Event_manager.load_data_trabajador(comp_value)
            
           elif(ev_value==constantes.COMBOBOX_LOAD_STUDENTS):
+             Event_manager.load_data_estudiante(comp_value) 
              
-              if(comp_value!="elejir" and comp_value!="elegir"):
-                 valor=comp_value.split("-")
-                 if(len(valor)==3):
-                    valor=valor[0]+"-"+valor[1]
-                 elif(len(valor)==2):
-                    valor=valor[0]
-                 else:
-                    valor=""
-                 Event_manager.load_data_estudiante(valor)
-              else:
-                 Event_manager.load_data_estudiante("")
-           
           elif(ev_value==constantes.COMBOBOX_LOAD_SECCION):
                Event_manager.set_comp_values("secc2",[])
                Event_manager.set_comp_values("secc_sec_list",["elegir"])
@@ -1044,19 +1027,67 @@ class UI_Event:
            if(ev_value==constantes.COMBOBOX_LOAD_WORKERS_FOR_REGISTER):
                #carga lista de trabajadores en pantalla de registro de trbajadores
                conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               data_trabaj=conexion_bd.get_allData([])
+               join_data={}
+               join_data["nombre"]={"query_field":["nombre","s_nombre","apellido","s_apellido"],"share_fields":{"field":constantes.CLAVE_NOMBRE,"table_reference":"trabajador"},"Conditions_join":None}
+               join_data["expediente"]={"query_field":["src_foto","src_exp"],"share_fields":{"field":constantes.CLAVE_EXPEDIENTE,"table_reference":"trabajador"},"Conditions_join":None}
+               join_data["cargo"]={"query_field":["cargo","cargo_ministerio","codigo_cargo"],"share_fields":{"field":constantes.CLAVE_CARGO,"table_reference":"trabajador"},"Conditions_join":None}
+               join_data["estatus_trabaj"]={"query_field":["estatus","fecha_ingreso"],"share_fields":{"field":constantes.CLAVE_ESTATUS_TRABAJ,"table_reference":"trabajador"},"Conditions_join":None}
+              
+               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR,constantes.CLAVE_TRABAJADOR],"condition_Types":["and","and"],"conditions_Values":["000","001"],"conditions_Verify":["!=","!="]}      
+       
+               data_trabaj=conexion_bd.get_allData([constantes.CLAVE_TRABAJADOR,"correo","telefono"],cond_data,join_data,True)
                new_data=["nuevo"]
+               data_items={"nuevo":{}}
                for i in range(0,len(data_trabaj)):
-                   if(data_trabaj[i][0]!="000" and data_trabaj[i][0]!="001" ):
-                     #prevent to include the worker assign to the default admin
-                     conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                     cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[i][1]],"conditions_Verify":["="]}
-                     data_nomb=conexion_bd.get_allData(["apellido","nombre"],cond_data)
-                     nombre=data_nomb[0][0].capitalize()+" "+data_nomb[0][1].capitalize()   
-                     new_data.append(data_trabaj[i][0]+"-"+nombre)
+                  nombre=data_trabaj[i]["nombre"].capitalize()+" "+data_trabaj[i]["apellido"].capitalize()   
+                  new_data.append(data_trabaj[i][constantes.CLAVE_TRABAJADOR]+"-"+nombre)
+                  if(data_trabaj[0]["cargo_ministerio"].lower().startswith("docente")):
+                      conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
+                      cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[data_trabaj[i][constantes.CLAVE_TRABAJADOR]],"conditions_Verify":["="]}      
+                      join_data={}
+                      join_data["area_dictada_docentes"]={"query_field":[constantes.CLAVE_AREA_FORMACION],"share_fields":{"field":constantes.CLAVE_PROFESOR,"table_reference":"profesor"},"Conditions_join":None}
+                      data_prof=conexion_bd.get_allData([],cond_data,join_data,True)
+                      areas=[]
+                      for area_target in data_prof:
+                          areas.append(area_target[constantes.CLAVE_AREA_FORMACION])
+                      data_trabaj[i]["Areas_Docente"]=areas
+                  data_items[new_data[i+1]]=data_trabaj[i]                 
+               comp.set_data_items(data_items)
                comp.set_values(new_data)    
            elif(ev_value==constantes.COMBOBOX_LOAD_STUDENTS):
-               Event_manager.load_estuds_combobox()
+               conexion_bd.set_tabla(constantes.TABLA_ESTUDIANTE)
+               join_data={}
+               join_data["nombre"]={"query_field":["nombre","s_nombre","apellido","s_apellido"],"share_fields":{"field":constantes.CLAVE_NOMBRE,"table_reference":"estudiante"},"Conditions_join":None}
+               join_data["expediente"]={"query_field":["src_exp","src_foto"],"share_fields":{"field":constantes.CLAVE_EXPEDIENTE,"table_reference":"estudiante"},"Conditions_join":None}
+               join_data["estatus_estud"]={"query_field":["estatus","salud","cedulado"],"share_fields":{"field":constantes.CLAVE_ESTATUS_ESTUD,"table_reference":"estudiante"},"Conditions_join":None}
+               join_data["direccion"]={"query_field":["sector","parroquia","casa"],"share_fields":{"field":constantes.CLAVE_DIRECCION,"table_reference":"estudiante"},"Conditions_join":None}
+               
+               estuds=conexion_bd.get_allData([constantes.CLAVE_ESTUDIANTE,"parentesco","genero","nacimiento",constantes.CLAVE_REPRESENTANTE],None,join_data,True)
+               new_data=["elegir"]
+               hidden_data={"elegir":{}}
+               conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
+               sharefield_student_representant=["nombre","s_nombre","apellido","s_apellido","sector","parroquia","casa"]
+               for i in range(0,len(estuds)):
+                  cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[estuds[i][constantes.CLAVE_REPRESENTANTE]],"conditions_Verify":["="]}
+                  join_data={}
+                  join_data["nombre"]={"query_field":["nombre","s_nombre","apellido","s_apellido"],"share_fields":{"field":constantes.CLAVE_NOMBRE,"table_reference":"representante"},"Conditions_join":None}
+                  join_data["direccion"]={"query_field":["sector","parroquia","casa"],"share_fields":{"field":constantes.CLAVE_DIRECCION,"table_reference":"representante"},"Conditions_join":None}
+               
+                  data_repres=conexion_bd.get_allData(["telef","correo","ocupacion"],cond_data,join_data,True)
+                  if(len(data_repres)>0):
+                       for key in data_repres[0]:
+                             target_key=key
+                             if(key in sharefield_student_representant):
+                                 target_key=f"representant_{key}"
+                             estuds[i][target_key]=data_repres[0][key]
+                             
+                  dat=estuds[i][constantes.CLAVE_ESTUDIANTE]+"-"+estuds[i]["nombre"].capitalize()+" "+estuds[i]["apellido"].capitalize()
+                  new_data.append(dat)
+                  hidden_data[dat]=estuds[i]
+               comp.set_data_items(hidden_data)   
+               comp.set_values(new_data)
+               
+               
            elif(ev_value==constantes.COMBOBOX_LOAD_SECCION):
               conexion_bd.set_tabla(constantes.TABLA_SECCION)
               data_secc=conexion_bd.get_allData([])

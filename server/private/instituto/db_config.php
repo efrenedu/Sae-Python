@@ -310,17 +310,19 @@ function delete_data($conexion,$base_name,$tabl,$cond_dat,$join_dat,$do_commit=f
 		 $query=$res_join["message"];
 	}
 	$total_conds=array();
-	if($cond_dat!=null){
-		
-       if(count($cond_dat)>0){
+	if($cond_dat!=null){		
+        if(count($cond_dat)>0){
 		   $total_conds[$tabl]=$cond_dat;
-		   $values_list=$cond_dat["conditions_Values"];
-	
-	   }
+		   $values_list=$cond_dat["conditions_Values"];	
+	    }
 	}
 	foreach($join_conds_list as $cond_tabl_join=>$cond_dat_join){
 		if(count($cond_dat_join)>0){
 			$total_conds[$cond_tabl_join]=$cond_dat_join;
+			$values_list_join=$cond_dat_join["conditions_Values"];
+		    for($i=0;$i<count($values_list_join);$i++){
+				 $values_list[]=$values_list_join[$i];
+			 }	
 		}
 	}
 	if(count($total_conds)<=0){
@@ -444,7 +446,7 @@ function update_data($conexion,$base_name,$tabl,$fields_update,$cond_dat,$join_d
 		if(count($cond_dat)>0){
 			$total_conds[$tabl]=$cond_dat;
 			$list_conds=$cond_dat["conditions_Values"];
-	        foreach ($list_conds as $key=>$value){
+	        foreach ($list_conds as $value){
 		        $values_list[]=$value;
 	        }
 		}
@@ -500,7 +502,7 @@ function update_data($conexion,$base_name,$tabl,$fields_update,$cond_dat,$join_d
 	
 }
 //get the data of requireds tables as dict/Associative Array or list/Array
-function get_data($conexion,$base_name,$tabl,$fields,$cond_dat,$join_dat,$as_dict=false){
+function get_data($conexion,$base_name,$tabl,$fields,$cond_dat,$join_dat,$as_dict=false,$limit=null,$offset=null,$order=null){
 	if($conexion==null || $conexion==false){
 		return ["status"=>"Error","message"=>"Conexion Invalida"];
 	}
@@ -583,10 +585,14 @@ function get_data($conexion,$base_name,$tabl,$fields,$cond_dat,$join_dat,$as_dic
 		 $query=$res_join["message"];
 	}
 	
-	if($cond_dat!=null){
+	if($cond_dat!=null || count($join_conds_list)>0){
 		 $total_conds=array();
-		 $total_conds[$tabl]=$cond_dat;
-		 $values_list=$cond_dat["conditions_Values"];
+		 if($cond_dat!=null){
+			 if(count($cond_dat)>0){
+		         $total_conds[$tabl]=$cond_dat;			 
+		         $values_list=$cond_dat["conditions_Values"];
+			 }
+		 }
 		 foreach ($join_conds_list as $tabl_join=>$dat_cond_join){
 			 $total_conds[$tabl_join]=$dat_cond_join;
 			 $values_list_join=$dat_cond_join["conditions_Values"];
@@ -599,6 +605,19 @@ function get_data($conexion,$base_name,$tabl,$fields,$cond_dat,$join_dat,$as_dic
 			 return $res_conds;
 		 }
 		 $query=$res_conds["message"];
+	}
+	if($order!=null){
+		$target_field=$order["field"];
+		$order_type=$order["type"];
+	}
+	if($limit!=null ){
+		if($offset==null){
+			$offset=0;
+		}
+		$limit_res="not null=>{$limit},{offset}";
+		$query=$query." LIMIT ? OFFSET ?";
+		$values_list[]=$limit;
+        $values_list[]=$offset;      	
 	}
 	$query=$query.";";
 	$res=null;

@@ -369,9 +369,11 @@ class ventana:
         if(user_data==None and from_menu==True):
             user_data=Event_manager.user
         if(next_p!=""): 
+           from Consult_Manager import Consult_Manager
            if(next_p==constantes.PANTALLA_WELCOME and self.panelActual_str!=constantes.PANTALLA_INICIO):
-               from conexion_bd import conexion_bd
+               from conexion_bd import conexion_bd              
                conexion_bd.cancel_requests()
+           
            self.loading_panel=True
            if(self.panelActual!=None):
               self.panelActual.free_Memory() 
@@ -382,7 +384,8 @@ class ventana:
            res=UI.read_Jsondata(next_p,user_data)           
            self.raiz.update_idletasks()     
            self.raiz.event_generate("<Configure>")  
-           
+           if(next_p in Consult_Manager.consult_limits_targets):
+              Consult_Manager.get_limit_pages(next_p,self.panelActual)
            self.raiz.after(100,self.hide_load_Panel)
            if(self.panelActual_str==constantes.PANTALLA_WELCOME):
               Event_manager.show_data_user()

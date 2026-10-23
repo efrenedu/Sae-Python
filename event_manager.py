@@ -136,7 +136,12 @@ class Event_manager:
             elif(type_e==constantes.EV_ACTIVAR_DOWNLOAD_CARNETS):
                 cls.activar_download(1)
             elif(type_e==constantes.EV_ACTIVAR_DOWNLOAD_CONSTANCIAS):
-                cls.activar_download(2)          
+                cls.activar_download(2)   
+            elif(type_e==constantes.EV_NEXT_PAGE_CONSULT or type_e==constantes.EV_PREV_PAGE_CONSULT):
+               next_page=True if type_e==constantes.EV_NEXT_PAGE_CONSULT  else False
+               from Consult_Manager import Consult_Manager
+               Consult_Manager.change_ConsultPage(next_page)
+                         
         elif(type_e>=constantes.EV_CONSULTAR_PERSONAL and type_e<=constantes.EV_CONSULTAR_MAT_PEND):
            #Consult Event
            from Consult_Manager import Consult_Manager
@@ -162,7 +167,8 @@ class Event_manager:
            elif(type_e==constantes.EV_CONSULTAR_DESCARGAS):
               opcion=Consult_Manager.CONSULT_DOWNLOADS
            if(opcion!=-1):
-              Consult_Manager.interprete_consult(cls.vent,cls.user,opcion)           
+              cls.consultar(opcion)
+         
         elif(type_e>=constantes.EV_FINALIZAR_PROCESO and type_e<=constantes.EV_SEARCH_ESTUD):
            #General process Event
            if(type_e==constantes.EV_SEARCH_ESTUD):
@@ -257,8 +263,8 @@ class Event_manager:
                cls.download_doc(Consult_Manager.DOCUMENT_TIMETABLES_WORKER)     
            elif(type_e==constantes.EV_DESCARGAR_HORARIO_SECCION):
                cls.download_doc(Consult_Manager.DOCUMENT_TIMETABLES_SECTION)   
-           elif(type_e==constantes.EV_DESCARGAR_CONSTANCIA):
-               cls.generar_reporte("constancias")        
+           elif(type_e==constantes.EV_DESCARGAR_CONSTANCIA):              
+               cls.generar_reporte("constancia de prestacion de servicios")                  
            elif(type_e==constantes.EV_DESCARGA_CARNET):
               cls.generar_reporte("carnet")
            elif(type_e==constantes.EV_REPORTE_DESCARGAS):
@@ -720,9 +726,10 @@ class Event_manager:
    
     #Make a Consult to the Data Base Information        
     @classmethod 
-    def consultar(cls,opcion):
+    def consultar(cls,option):
         from Consult_Manager import Consult_Manager
-        Consult_Manager.consultar(cls.vent,opcion)
+        thread_object=threading.Thread(target=Consult_Manager.interprete_consult,args=(cls.vent,cls.user,option),daemon=True)
+        thread_object.start() 
 
     #Load the Data of Student and set it On a ComboBox
     @classmethod 
@@ -994,7 +1001,6 @@ class Event_manager:
        time_object=tiempo()
        if(cls.user.get_credentials()[0]!=""):
           return
-          
        if(res[0]==True ):
            cred=temp_user.get_credentials()
            conexion_bd.set_tabla(constantes.TABLA_REPORTE)
@@ -1238,138 +1244,119 @@ class Event_manager:
     
     #Load the Data of a Student and Set it on the Required Components    
     @classmethod 
-    def load_data_estudiante(cls,id_e): 
+    def load_data_estudiante(cls,data_estud): 
        pnl=cls.vent.panelActual
        fields=pnl.get_comps_byTag("field") 
        combos=pnl.get_comps_byTag("combo")   
        fecha=pnl.get_comp_byName("fecha")
-       if(id_e!=""):           
-            estud=estudiante()           
-            dat=estud.get_data_estud(id_e,"")          
-            if(dat!=[]):
-              if(len(dat)==3 or len(dat)==2):
-                data_estud=dat[0]
-                data_repres=[]
-                data_exp=[]
-                dire=""                
-                if(len(dat)==3):                   
-                   data_repres=dat[1]
-                   data_exp=dat[2][0]
-                else:
-                   data_exp=dat[1][0]                   
-                   conexion_bd.set_tabla(constantes.TABLA_REPRESENTANTE)
-                   cond_data={"conditions_Names":[constantes.CLAVE_REPRESENTANTE],"condition_Types":["and"],"conditions_Values":[data_estud[8]],"conditions_Verify":["="]}
-                   data_repres=conexion_bd.get_allData([],cond_data)[0]
-                conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[data_estud[11]],"conditions_Verify":["="]}  
-                data_dire=conexion_bd.get_allData([],cond_data)[0]
-                dire=data_dire[1]+","+data_dire[2]+","+data_dire[3]
-                conexion_bd.set_tabla(constantes.TABLA_ESTATUS_ESTUD)
-                cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_ESTUD],"condition_Types":["and"],"conditions_Values":[data_estud[5]],"conditions_Verify":["="]} 
-                data_estatus=conexion_bd.get_allData([],cond_data)[0]
-                conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-                cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_repres[1]],"conditions_Verify":["="]}  
-                nombr_r=conexion_bd.get_allData(["nombre","s_nombre","apellido","s_apellido"],cond_data)
-                fields=pnl.get_comps_byTag("field")
-                for i in range(0,len(fields)):                    
-                    if(fields[i].get_id()=="cedula_estud"):
-                         fields[i].set_text(data_estud[0])
-                    elif(fields[i].get_id()=="nombre"):                         
-                          if(data_estud[2]!=""):
-                             fields[i].set_text(data_estud[1]+" "+data_estud[2])
-                          else:
-                             fields[i].set_text(data_estud[1])                             
-                    elif(fields[i].get_id()=="apellido"):
-                          if(data_estud[4]!=""):
-                             fields[i].set_text(data_estud[3]+" "+data_estud[4])
-                          else:
-                             fields[i].set_text(data_estud[3])                             
-                    elif(fields[i].get_id()=="CIrepres"):
-                          fields[i].set_text(data_repres[0])
-                          if(data_estatus[3]=="False"):
-                              fields[i].set_state("readonly")
-                          else:
-                              fields[i].set_state("normal")                                                     
-                    elif(fields[i].get_id()=="telef"):
-                          fields[i].set_text(data_repres[2])                             
-                    elif(fields[i].get_id()=="nombre_repres"):
-                          temp_n=nombr_r[0][0]
-                          if(nombr_r[0][1]!="" and nombr_r[0][1]!="..."):
-                             temp_n=temp_n+" "+nombr_r[0][1]
-                          fields[i].set_text(temp_n)                          
-                    elif(fields[i].get_id()=="apellido_repres"):
-                          temp_a=nombr_r[0][2]
-                          if(nombr_r[0][3]!="" and nombr_r[0][3]!="..."):
-                             temp_a=temp_a+" "+nombr_r[0][3]
-                          fields[i].set_text( temp_a)                                                 
-                    elif(fields[i].get_id()=="destino_file"):
-                          if(data_exp[1]!="" and data_exp[1]!="..."):
-                             fields[i].set_text(data_exp[1])
-                          else:
-                            fields[i].set_text("")
-                    elif(fields[i].get_id()=="destino_foto"):
-                          if(data_exp[2]!="" and data_exp[2]!="..."):
-                             fields[i].set_text(data_exp[2])
-                          else:
-                            fields[i].set_text("")
-                    elif(fields[i].get_id()=="direccion"):
-                         fields[i].set_text(dire)
-                    elif(fields[i].get_id()=="estatus"):
-                         fields[i].set_text(data_estatus[1])
-                    elif(fields[i].get_id()=="correo"):
-                         fields[i].set_text(data_repres[3])                      
-                    elif(fields[i].get_id()=="dir_representante"):                        
-                         dire_r=data_repres[5]
-                         conexion_bd.set_tabla(constantes.TABLA_DIRECCION)
-                         cond_data={"conditions_Names":[constantes.CLAVE_DIRECCION],"condition_Types":["and"],"conditions_Values":[dire_r],"conditions_Verify":["="]}
-                         temp_dire_r=conexion_bd.get_allData([],cond_data)[0]
-                         direccion_r=temp_dire_r[1]+","+temp_dire_r[2]+","+temp_dire_r[3]
-                         fields[i].set_text(direccion_r)
-                    elif(fields[i].get_id()=="parentesco"):
-                         fields[i].set_text(data_estud[12])
-                    elif(fields[i].get_id()=="ocupacion"):
-                         fields[i].set_text(data_repres[4])
-                if(fecha!=None):
-                    fecha.set_text(data_estud[10])                         
-                combos=pnl.get_comps_byTag("combo")
-                for j in range(0,len(combos)):
-                    id_c=combos[j].get_id()
-                    if(id_c=="salud"):
-                           combos[j].set_value(data_estatus[2]) 
-                    elif(id_c=="estatus2"):
-                           combos[j].set_value("elegir")                    
-                radio= pnl.get_comp_byName("genero") 
-                radio.set_value(data_estud[9])                 
-                cedulado=data_estatus[3].lower()
-                if(cedulado=="false" or  cedulado=="no"):
-                   pnl.get_comp_byName("cedulado_label").set_active(True)
-                   pnl.get_comp_byName("cedulado").set_active(True)
-                   pnl.get_comp_byName("nacionalidad").set_active(True)
-                else:
-                  pnl.get_comp_byName("cedulado_label").set_active(False)
-                  pnl.get_comp_byName("cedulado").set_active(False)
-                  pnl.get_comp_byName("nacionalidad").set_active(False)          
+       genero=pnl.get_comp_byName("genero")
+       if(fields==None or fecha==None or combos==None or genero==None):
+           General.show_error("Faltan Elementos en el formulario","UI Error")
+           return
+           
+       if(len(data_estud)>0):           
+          for i in range(0,len(fields)): 
+             id_field=fields[i].get_id()          
+             if(id_field=="cedula_estud"):
+                 fields[i].set_text(data_estud[constantes.CLAVE_ESTUDIANTE])
+             elif(id_field=="nombre" or id_field=="nombre_repres"):                         
+                     val_list_name=[]
+                     target_keys=["nombre","s_nombre"] if fields[i].get_id()=="nombre" else ["representant_nombre","representant_s_nombre"]
+                     for target in target_keys:
+                        if(data_estud[target]!="" and data_estud[target]!=" "):
+                            val_list_name.append(data_estud[target])
+                     val_name=" ".join(val_list_name)
+                     fields[i].set_text(val_list_name)                         
+             elif(id_field=="apellido" or id_field=="apellido_repres"):
+                     val_list_name=[]
+                     target_keys=["apellido","s_apellido"] if fields[i].get_id()=="apellido" else ["representant_apellido","representant_s_apellido"]
+                     for target in target_keys:
+                        if(data_estud[target]!="" and data_estud[target]!=" "):
+                            val_list_name.append(data_estud[target])
+                     val_name=" ".join(val_list_name)
+                     fields[i].set_text(val_list_name)                              
+             elif(id_field=="CIrepres"):
+                 fields[i].set_text(data_estud[constantes.CLAVE_REPRESENTANTE])
+                 if(data_estud["cedulado"]=="False"):
+                     fields[i].set_state("readonly")
+                 else:
+                     fields[i].set_state("normal")                                                     
+             elif(id_field=="telef"):
+                  fields[i].set_text(data_estud["telef"])                                                  
+             elif(id_field=="destino_file"):
+                  if(data_estud["src_exp"]!="" and data_estud["src_exp"]!="..."):
+                      fields[i].set_text(data_estud["src_exp"])
+                  else:
+                     fields[i].set_text("")
+             elif(id_field=="destino_foto"):
+                  if(data_estud["src_foto"]!="" and data_estud["src_foto"]!="..."):
+                     fields[i].set_text(data_estud["src_foto"])
+                  else:
+                    fields[i].set_text("")
+             elif(id_field=="direccion"):
+                  dir_list=[data_estud["sector"],data_estud["parroquia"],data_estud["casa"]]
+                  val_dir=",".join(dir_list)
+                  fields[i].set_text(val_dir)
+             elif(id_field=="estatus"):
+                 fields[i].set_text(data_estud["estatus"])
+             elif(id_field=="correo"):
+                 fields[i].set_text(data_estud["correo"])                      
+             elif(id_field=="dir_representante"):                        
+                  dir_list=[data_estud["representant_sector"],data_estud["representant_parroquia"],data_estud["representant_casa"]]
+                  val_dir=",".join(dir_list)
+                  fields[i].set_text(val_dir)
+             elif(id_field=="parentesco"):
+                fields[i].set_text(data_estud["parentesco"])
+             elif(id_field=="ocupacion"):
+                fields[i].set_text(data_estud["ocupacion"])
+          fecha.set_text(data_estud["nacimiento"])                         
+          for j in range(0,len(combos)):
+             id_c=combos[j].get_id()
+             if(id_c=="salud"):
+                combos[j].set_value(data_estud["salud"]) 
+             elif(id_c=="estatus2"):
+                  combos[j].set_value("elegir")                    
+          
+          genero.set_value(data_estud["genero"])                 
+          cedulado=data_estud["cedulado"].lower()
+          if(cedulado=="false" or  cedulado=="no"):
+               pnl.get_comp_byName("cedulado_label").set_active(True)
+               pnl.get_comp_byName("cedulado").set_active(True)
+               pnl.get_comp_byName("nacionalidad").set_active(True)
+          else:
+              pnl.get_comp_byName("cedulado_label").set_active(False)
+              pnl.get_comp_byName("cedulado").set_active(False)
+              pnl.get_comp_byName("nacionalidad").set_active(False)          
        else:       
          for i in range(0,len(fields)):
            fields[i].set_text("")
-         if(fecha!=None):
-            fecha.set_text("")
+         fecha.set_text("")
          for j in range(0,len(combos)):
            id_c=combos[j].get_id()
            if(id_c!="estudiantes"):
              combos[j].set_selected_index(0)
+         genero.set_value("masculino")    
          pnl.get_comp_byName("cedulado_label").set_active(False)             
          pnl.get_comp_byName("cedulado").set_active(False)
          pnl.get_comp_byName("nacionalidad").set_active(False)
     
     #Load the Data of a Worker and set It on the Required Components    
     @classmethod		   
-    def load_data_trabajador(cls,id_t):
+    def load_data_trabajador(cls,data_trabaj):
         pnl=cls.vent.panelActual
         fields=pnl.get_comps_byTag("field") 
         id_comp=pnl.get_comp_byName("cedula")
-       
-        if(id_t!=""):
+        combos=pnl.get_comps_byTag("combo")  
+        list_materias=pnl.get_comp_byName("lista_areas")
+        for field in fields:
+           field.field.grid_propagate(False)
+        for element in combos:
+           element.combo.grid_propagate(False)
+        list_materias.lista.grid_propagate(False)
+        id_comp.field.grid_propagate(False)
+        
+        if(len(data_trabaj)>0):
+           id_t=data_trabaj[constantes.CLAVE_TRABAJADOR]
            nacionalidad=""    
            nacionalidad_comp=pnl.get_comp_byName("nacionalidad") 
            if(id_t.lower().startswith("v")):
@@ -1383,25 +1370,7 @@ class Event_manager:
            if(len(id_list)<2):
               return
            number_id=id_list[1]
-           conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-           cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[full_id],"conditions_Verify":["="]}         
-           data_trabaj=conexion_bd.get_allData([],cond_data)
-           conexion_bd.set_tabla(constantes.TABLA_CARGO)
-           cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][6]],"conditions_Verify":["="]}         
-           data_cargo=conexion_bd.get_allData([],cond_data)
-           conexion_bd.set_tabla(constantes.TABLA_EXPEDIENTE)
-           cond_data={"conditions_Names":[constantes.CLAVE_EXPEDIENTE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][4]],"conditions_Verify":["="]} 
-           data_exp=conexion_bd.get_allData([],cond_data)
-           docente=False
-           conexion_bd.set_tabla(constantes.TABLA_NOMBRE)
-           cond_data={"conditions_Names":[constantes.CLAVE_NOMBRE],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][1]],"conditions_Verify":["="]}
-           data_nombre=conexion_bd.get_allData([],cond_data)
-           conexion_bd.set_tabla(constantes.TABLA_ESTATUS_TRABAJ)
-           cond_data={"conditions_Names":[constantes.CLAVE_ESTATUS_TRABAJ],"condition_Types":["and"],"conditions_Values":[data_trabaj[0][7]],"conditions_Verify":["="]}
-           data_estatus=conexion_bd.get_allData([],cond_data)           
-           conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-           if(conexion_bd.id_exist(constantes.CLAVE_TRABAJADOR,full_id)):
-             docente=True
+           
            id_comp.set_text(number_id)  
            nacionalidad_comp.set_value(nacionalidad)
            if(nacionalidad=="venezolano"):
@@ -1413,118 +1382,86 @@ class Event_manager:
            for i in range(0,len(fields)):
               id_f=fields[i].get_id()             
               if(id_f=="nombre"):
-                  nomb=data_nombre[0][1].capitalize()
-                  if(data_nombre[0][2]!=""):
-                     nomb=nomb+" "+data_nombre[0][2].capitalize()
+                  nomb=data_trabaj["nombre"].capitalize()
+                  if(data_trabaj["s_nombre"]!=""):
+                     nomb=nomb+" "+data_trabaj["s_nombre"].capitalize()
                   fields[i].set_text(nomb)
               elif(id_f=="apellido"):
-                  apell=data_nombre[0][3].capitalize()
-                  if(data_nombre[0][4]!=""):
-                     apell=apell+" "+data_nombre[0][4].capitalize()
+                  apell=data_trabaj["apellido"].capitalize()
+                  if(data_trabaj["s_apellido"]!=""):
+                     apell=apell+" "+data_trabaj["s_apellido"].capitalize()
                   fields[i].set_text(apell)
               elif(id_f=="cargo_cod"):
-                  fields[i].set_text(data_cargo[0][4])              
+                  fields[i].set_text(data_trabaj["codigo_cargo"])              
               elif(id_f=="destino_file"):
-                 if(data_exp[0][1]!="" and data_exp[0][1]!="..." ):
-                    fields[i].set_text(data_exp[0][1])
+                 if(data_trabaj["src_exp"]!="" and data_trabaj["src_exp"]!="..." ):
+                    fields[i].set_text(data_trabaj["src_exp"])
                  else:
                   fields[i].set_text("")
               elif(id_f=="destino_foto"):
-                 if(data_exp[0][2]!="" and data_exp[0][2]!="..." ):
-                    fields[i].set_text(data_exp[0][2])
+                 if(data_trabaj["src_foto"]!="" and data_trabaj["src_foto"]!="..." ):
+                    fields[i].set_text(data_trabaj["src_foto"])
                  else:
                   fields[i].set_text("")
               elif(id_f=="telefono"):
-                 if(data_trabaj[0][3]!="" and data_trabaj[0][3]!="..."):
-                     fields[i].set_text(data_trabaj[0][3])
+                 if(data_trabaj["telefono"]!="" and data_trabaj["telefono"]!="..."):
+                     fields[i].set_text(data_trabaj["telefono"])
                  else:
                    fields[i].set_text("")
               elif(id_f=="correo"):
-                 if(data_trabaj[0][2]!="" and data_trabaj[0][2]!="..."):
-                     fields[i].set_text(data_trabaj[0][2])
+                 if(data_trabaj["correo"]!="" and data_trabaj["correo"]!="..."):
+                     fields[i].set_text(data_trabaj["correo"])
                  else:
                    fields[i].set_text("")
            fecha_ingreso=pnl.get_comp_byName("service_years")
            if(fecha_ingreso!=None):
-             fecha_ingreso.set_text(data_estatus[0][3])
-           combos=pnl.get_comps_byTag("combo")   
+             fecha_ingreso.set_text(data_trabaj["fecha_ingreso"])
+            
            personal_type_comp=pnl.get_comp_byName("personal_tipo")
            box_titulo=pnl.get_comp_byName("caja3_rp",False)
            box_docente=pnl.get_comp_byName("caja_areas",False)
-           list_materias=pnl.get_comp_byName("lista_areas")
+           
            values=[]
-           have_director=False
-           cargo_t=data_cargo[0][1]
-           minist_t=data_cargo[0][2]
+           cargo_t=data_trabaj["cargo"]
+           minist_t=data_trabaj["cargo_ministerio"]
            personal_type_comp.set_state("normal")
+           docente=True if(minist_t.lower().startswith("docente")==True) else False
+           is_director=True if cargo_t.lower()=="director" else False
            if(docente==True):
                personal_type_comp.set_value("docente")
-               box_docente.set_active(True)
-               box_titulo.set_active(True)
-               conexion_bd.set_tabla(constantes.TABLA_PROFESOR)
-               cond_data={"conditions_Names":[constantes.CLAVE_TRABAJADOR],"condition_Types":["and"],"conditions_Values":[id_t],"conditions_Verify":["="]}
-               id_prof=conexion_bd.get_allData([constantes.CLAVE_PROFESOR],cond_data)[0][0]
-               conexion_bd.set_tabla(constantes.TABLA_AREA_DOCENTE)
-               cond_data={"conditions_Names":[constantes.CLAVE_PROFESOR],"condition_Types":["and"],"conditions_Values":[id_prof],"conditions_Verify":["="]}
-               data_areas=conexion_bd.get_allData([constantes.CLAVE_AREA_FORMACION],cond_data)
-               areas=[]
-               if(data_areas!=[]):
-                  for j in range(0,len(data_areas)):
-                      areas.append(data_areas[j][0])
+               areas=data_trabaj["Areas_Docente"]
                list_materias.set_values(areas)
                
-               values=["elegir","Docente","Docente de Aula",]
-               conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-               lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO,constantes.CLAVE_TRABAJADOR])
-               posibles=["Coordinador de Evaluacion","Coordinador de Orientacion","Sub Director Academico","Sub Director Administrativo"]
-               conexion_bd.set_tabla(constantes.TABLA_CARGO)         
-               for posibl in posibles:
-                  valid_carg=True                
-                  for worker in lista_trabaj: 
-                       cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[worker[0]],"conditions_Verify":["="]}        
-                       data_carg=conexion_bd.get_allData([constantes.CLAVE_CARGO,"cargo","cargo_ministerio"],cond_data)                     
-                       if(data_carg==[]):
-                           continue
-                       if(id_t!=worker[1]):
-                           if(data_carg[0][1].lower()==posibl.lower()):
-                              valid_carg=False
-                       else:                               
-                           if(data_carg[0][1].lower()=="director" and have_director==False):
-                               #tiene cargo de director
-                               have_director=True
-                               values.append(data_carg[0][1])                                                 
-                  if(valid_carg==True):
-                      values.append(posibl) 
            else:
               personal_type_comp.set_value("no docente")
-              box_docente.set_active(False)
-              box_titulo.set_active(False)
               list_materias.set_values([])
-              values=["elegir","Obrero","Secretaria"]
-           if(have_director):
+           if(is_director):
                personal_type_comp.set_state("disabled")
            for i in range(0,len(combos)):
                 id_comb=combos[i].get_id()
                 if(id_comb!="empleado" and id_comb!="areas" and id_comb!="estatus"):              
                    if(docente==True):
-                      if(id_comb!="cargo_minist"):              
+                      if(id_comb!="cargo_minist"):  
                            combos[i].set_state("normal")
-                           combos[i].set_values(values)
+                           values=["Coordinador de Evaluacion","Coordinador de Orientacion","Docente","Docente de Aula","Sub Director Academico","Sub Director Administrativo"]
+                           if(is_director):
+                              values.append("Director")
+                           combos[i].set_values(values)                      
                            combos[i].set_value(cargo_t)  
-                           if(have_director):
+                           if(is_director):
                                 #Is the Director
                                 combos[i].set_state("disabled")                         
                       else:
                            combos[i].set_state("normal")
                            combos[i].set_values(["elegir","Docente I","Docente II","Docente III","Docente IV","Docente V","Docente VI"])
                            combos[i].set_value(minist_t)
-                           if(have_director):
+                           if(is_director):
                                 #Is the Director
                                 combos[i].set_state("disabled")
                    else:
                       #Not is a Teacher
                       if(id_comb!="cargo_minist"): 
-                          combos[i].set_values(values)
+                          combos[i].set_values(["elegir","Obrero","Secretaria"])
                           combos[i].set_state("normal")
                           combos[i].set_value(cargo_t)  
                       else:
@@ -1532,7 +1469,7 @@ class Event_manager:
                            combos[i].set_state("normal")
                            combos[i].set_value(minist_t)
                 elif(id_comb=="estatus"):
-                     combos[i].set_value(data_estatus[0][1])                     
+                     combos[i].set_value(data_trabaj["estatus"])                     
         else:
            id_comp.set_state("normal")
            for i in range(0,len(fields)):
@@ -1544,36 +1481,29 @@ class Event_manager:
            nacionalidad_comp.set_value("venezolano")
            combos=pnl.get_comps_byTag("combo") 
            fecha_ingreso=pnl.get_comp_byName("service_years")
+           list_materias.set_values([])
            if(fecha_ingreso!=None):
                 fecha_ingreso.set_text("")           
            for i in range(0,len(combos)):
                 id_comb=combos[i].get_id()
                 if(id_comb!="empleado" and id_comb!="areas" and id_comb!="estatus"):
                     if(id_comb!="cargo_minist"):
-                       values=["elegir","Docente","Docente de Aula",]
-                       conexion_bd.set_tabla(constantes.TABLA_TRABAJADOR)
-                       lista_trabaj=conexion_bd.get_allData([constantes.CLAVE_CARGO])
-                       posibles=["Coordinador de Evaluacion","Coordinador de Orientacion","Sub Director Academico","Sub Director Administrativo"]
-                       conexion_bd.set_tabla(constantes.TABLA_CARGO)
-                       for temp_cargo in posibles:
-                          valid_carg=True                
-                          for temp_trabaj in lista_trabaj:
-                             cond_data={"conditions_Names":[constantes.CLAVE_CARGO],"condition_Types":["and"],"conditions_Values":[temp_trabaj[0]],"conditions_Verify":["="]}                         
-                             data_cargo=conexion_bd.get_allData(["cargo"],cond_data)
-                             if(data_cargo!=[]):          
-                                 if(data_cargo[0][0].lower()==temp_cargo.lower()):
-                                      valid_carg=False
-                          if(valid_carg==True):
-                               values.append(temp_cargo)    
-                       combos[i].set_values(values)
+                       combos[i].set_state("normal")
+                       combos[i].set_values(["elegir"])
                        combos[i].set_selected_index(0)
-                       combos[i].set_state("readonly")
                        personal_type_comp.set_state("normal")
-                    else:                     
-                       combos[i].set_values(["elegir","Docente I","Docente II","Docente III","Docente IV","Docente V","Docente VI"])
+                    else:  
+                       combos[i].set_state("normal")                    
+                       combos[i].set_values(["elegir"])
                        combos[i].set_selected_index(0)
-                       combos[i].set_state("readonly")
-    
+        
+        for field in fields:
+           field.field.grid_propagate(True)
+        id_comp.field.grid_propagate(True)
+        list_materias.lista.grid_propagate(True)
+        for element in combos:
+           element.combo.grid_propagate(True)
+        cls.vent.raiz.update_idletasks()
     #Load the Data of TimeTables Disponibilty of Worker and Set it on the Required Components    
     @classmethod		   
     def load_data_disp(cls,id_t): 

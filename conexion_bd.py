@@ -77,10 +77,10 @@ class conexion_bd:
         
     #get all Data of Table as List    
     @classmethod
-    def get_allData(cls,campos,cond_data=None,join_data=None,as_dict=False):
+    def get_allData(cls,campos,cond_data=None,join_data=None,as_dict=False,limit=None,offset=None,order=None):
         url_target=constantes.SERVER_BD_URL
         timestamp=str(int(time.time()))
-        data_request={"fields":campos,"cond_dat":cond_data,"join_dat":join_data,"target_table":cls.tabla_selected,"as_dict":as_dict}
+        data_request={"fields":campos,"cond_dat":cond_data,"join_dat":join_data,"target_table":cls.tabla_selected,"as_dict":as_dict,"limit":limit,"offset":offset,"order":order}
         data_send={"request_type":"Get Data","timestamp":timestamp,"data_request":json.dumps(data_request),"token":""}
         response=cls.session_obj.post(url_target,data=data_send)
         resp_json=json.loads(response.content)
